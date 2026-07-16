@@ -1,0 +1,16 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Intel 8251 USART",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Programmable async serial interface — TXD, RXD, status, command. Hooked into Velxio's vx_uart_attach so bytes are routed to and from the simulator's Serial monitor.",
+  "pins": [
+    "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
+    "RD", "WR", "CS", "CD", "RESET", "CLK",
+    "TXD", "RXD",
+    "TXRDY", "RXRDY", "TXEMPTY",
+    "DSR", "DTR", "CTS", "RTS",
+    "VCC", "GND"
+  ],
+  "attributes": []
+}

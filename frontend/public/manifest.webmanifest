@@ -1,0 +1,51 @@
+{
+  "name": "CircuitMuse — Circuit & Arduino Simulator with AI",
+  "short_name": "CircuitMuse",
+  "description": "Fully local circuit and Arduino simulator with AI agent. ESP32, RP2040, ATtiny85, SPICE analog simulation, 100+ components. Free and open source.",
+  "start_url": "/editor",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0d0d0f",
+  "theme_color": "#007acc",
+  "categories": ["developer", "education", "productivity"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.svg",
+      "sizes": "1200x630",
+      "type": "image/svg+xml",
+      "label": "CircuitMuse Arduino Simulator"
+    }
+  ]
+}

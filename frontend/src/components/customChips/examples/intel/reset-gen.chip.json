@@ -1,0 +1,8 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Power-on Reset",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Power-on reset generator: holds RESET low then pulses it high, and ties WAIT/BUSREQ/INT/NMI high. Boots a Z80 bus computer on Run.",
+  "pins": ["RESET", "WAIT", "BUSREQ", "INT", "NMI"]
+}

@@ -1,0 +1,250 @@
+/* Velxio global styles.
+ *
+ * Tokens live in ./tokens/. Component utilities (.ap-*) below depend on
+ * those tokens. Legacy aliases (--accent, --bg, etc.) are kept inside
+ * tokens/colors.css so existing components keep working until they migrate
+ * to the typed primitives in ./components/ui/.
+ */
+
+@import './tokens/index.css';
+
+:root {
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  color: var(--color-fg-default);
+  background-color: var(--color-bg-canvas);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--color-bg-canvas);
+  color: var(--color-fg-default);
+  font-family: var(--font-sans);
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ── Auth / page utility classes (legacy — migrate to <Button>, <Card>, <Input>) ─ */
+
+.ap-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-canvas);
+  padding: var(--space-9) var(--space-6);
+}
+
+.ap-card {
+  background: var(--color-bg-surface-1);
+  border-radius: var(--radius-xl);
+  padding: var(--space-11) var(--space-10);
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ap-card-title {
+  margin: 0 0 var(--space-4);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-fg-default);
+  letter-spacing: var(--tracking-tight);
+  text-align: center;
+}
+
+.ap-card-sub {
+  margin: 0 0 var(--space-9);
+  font-size: 15px;
+  color: var(--color-fg-muted);
+  text-align: center;
+}
+
+.ap-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin-bottom: var(--space-7);
+}
+
+.ap-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.ap-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-fg-muted);
+  letter-spacing: 0.1px;
+}
+
+.ap-input {
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  color: var(--color-fg-default);
+  font-size: 15px;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color var(--duration-base) var(--ease-out);
+}
+
+.ap-input:focus {
+  border-color: var(--color-action-primary);
+}
+
+.ap-btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  width: 100%;
+  padding: 13px;
+  background: var(--color-action-primary);
+  color: var(--color-action-primary-fg);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition:
+    filter var(--duration-base) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+  letter-spacing: -0.1px;
+  margin-top: var(--space-3);
+}
+
+.ap-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: scale(1.01);
+}
+
+.ap-btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ap-btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  width: 100%;
+  padding: 13px;
+  background: var(--color-action-secondary);
+  color: var(--color-fg-default);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition:
+    background var(--duration-base) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+  letter-spacing: -0.1px;
+}
+
+.ap-btn-secondary:hover {
+  background: var(--color-action-secondary-hover);
+  transform: scale(1.01);
+}
+
+.ap-btn-white {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  width: 100%;
+  padding: 13px;
+  background: #ffffff;
+  color: #1d1d1f;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: filter var(--duration-base) var(--ease-out);
+}
+
+.ap-btn-white:hover {
+  filter: brightness(0.95);
+}
+
+.ap-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin: var(--space-6) 0;
+  color: var(--color-fg-subtle);
+  font-size: 13px;
+}
+
+.ap-divider::before,
+.ap-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border-strong);
+}
+
+.ap-error {
+  background: #2d0e0e;
+  border: 1px solid #7f1d1d;
+  border-radius: var(--radius-sm);
+  color: #f87171;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: var(--space-6);
+}
+
+.ap-success {
+  background: #0e2d18;
+  border: 1px solid #1d7f3a;
+  border-radius: var(--radius-sm);
+  color: #4ade80;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: var(--space-6);
+}
+
+.ap-footer {
+  color: var(--color-fg-muted);
+  font-size: 14px;
+  text-align: center;
+  margin: var(--space-7) 0 0;
+}
+
+.ap-link {
+  color: var(--color-action-primary);
+  text-decoration: none;
+}
+
+.ap-link:hover {
+  text-decoration: underline;
+}

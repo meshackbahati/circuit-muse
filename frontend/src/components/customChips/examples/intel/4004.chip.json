@@ -1,0 +1,14 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Intel 4004",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Clean-room Intel 4004 (1971) — world's first commercial microprocessor. 4-bit ISA, 46 instructions, ~92 KIPS at 740 kHz. Multiplexed nibble bus on D0..D3.",
+  "pins": [
+    "D0", "D1", "D2", "D3",
+    "SYNC", "RESET", "TEST", "CMROM",
+    "CMRAM0", "CMRAM1", "CMRAM2", "CMRAM3",
+    "CLK1", "CLK2", "VDD", "VSS"
+  ],
+  "attributes": []
+}

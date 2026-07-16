@@ -1,0 +1,14 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "27C256 ROM (32 KB)",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Generic 32 KB EPROM. 15-bit address bus, 8-bit data bus, /CE chip enable, /OE output enable. Pairs cleanly with the 8080/Z80 for retro computer builds.",
+  "pins": [
+    "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7",
+    "A8", "A9", "A10", "A11", "A12", "A13", "A14",
+    "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
+    "CE", "OE", "VCC", "GND"
+  ],
+  "attributes": []
+}

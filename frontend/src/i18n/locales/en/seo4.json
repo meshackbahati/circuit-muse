@@ -1,0 +1,251 @@
+{
+  "seo": {
+    "attiny85": {
+      "hero": {
+        "title": "Free ATtiny85 Simulator",
+        "accent": "Cycle-accurate AVR emulation in your browser",
+        "subtitle": "Write Arduino code for the ATtiny85 and run it instantly — every AVR opcode is emulated faithfully. All 6 I/O pins, USI for I²C/SPI, Timer0/Timer1 PWM, 10-bit ADC, watchdog. Wire it to real SPICE analog circuits. Free, no install, no account.",
+        "ctaPrimary": "Open ATtiny85 Simulator",
+        "ctaSecondary": "Browse ATtiny85 Examples",
+        "trust": "Free & open-source · cycle-accurate avr8js · No signup"
+      },
+      "specs": {
+        "heading": "ATtiny85 specs in the simulator",
+        "lead": "Everything you need to develop ATtiny85 firmware without a programmer or breadboard.",
+        "coreTitle": "Core",
+        "coreBody": "AVR 8-bit RISC, 8 KB flash, 512 B SRAM, 512 B EEPROM. DIP-8 pinout (PB0–PB5 plus VCC/GND).",
+        "gpioTitle": "GPIO",
+        "gpioBody": "6 I/O pins on PORTB. Configurable as input / output / pull-up. Pin-change interrupts (PCINT0–PCINT5) and external INT0.",
+        "timersTitle": "Timers & PWM",
+        "timersBody": "Timer0 (8-bit) with two PWM channels on PB0/PB1. Timer1 (8-bit) with high-speed mode and two PWM channels on PB1/PB4 — useful for higher-frequency PWM.",
+        "adcTitle": "ADC",
+        "adcBody": "10-bit ADC with 4 input channels (ADC0 on PB5, ADC1 on PB2, ADC2 on PB4, ADC3 on PB3). Internal 1.1 V reference.",
+        "usiTitle": "USI",
+        "usiBody": "Universal Serial Interface — bit-bangs I²C (TWI) and SPI. Compatible with TinyWireM / TinyWireS and standard SPI libraries.",
+        "wdtTitle": "Watchdog & sleep",
+        "wdtBody": "Watchdog timer with reset and interrupt modes. Power-down, ADC noise reduction, and idle sleep modes — handy for low-power demos."
+      },
+      "build": {
+        "heading": "What can you build?",
+        "lead": "ATtiny85 projects shine when they're small, low-power, and analog-aware — exactly Velxio's strength with the SPICE solver wired in.",
+        "blinkTitle": "Blink & PWM fade",
+        "blinkBody": "The classic intros — hardware-PWM-driven LED fading on PB1 via Timer0, and high-speed Timer1 PWM on PB4.",
+        "buttonTitle": "Button-driven LEDs",
+        "buttonBody": "Read a button on PB2 with internal pull-up, debounce in firmware, drive an LED on PB0.",
+        "ntcTitlePrefix": "NTC temperature",
+        "ntcBodyPrefix": "Read an NTC thermistor / fixed-resistor divider on ADC1 — the SPICE solver returns the real divided voltage to ",
+        "ntcBodyCode": "analogRead()",
+        "ntcBodySuffix": ".",
+        "i2cTitle": "I²C peripherals via USI",
+        "i2cBody": "Talk to an OLED, an EEPROM, or an RTC on PB0/PB2 using TinyWireM. Bus traffic is emulated end-to-end.",
+        "spiTitle": "SPI WS2812 / shift",
+        "spiBody": "Bit-bang via USI to drive a WS2812 string or a 74HC595 shift register on a couple of pins.",
+        "analogTitle": "Analog switching",
+        "analogBody": "Drive a MOSFET gate from PB1 PWM through a SPICE-modelled gate-charge curve — see the slew-rate effect on the load."
+      },
+      "faq": {
+        "heading": "Frequently Asked Questions",
+        "q1": "Is this a real ATtiny85 emulator?",
+        "a1": "Yes. Velxio uses avr8js — the cycle-accurate AVR8 emulator — to execute compiled ATtiny85 firmware byte-for-byte exactly as it would run on a real DIP-8 chip.",
+        "q2": "Which ATtiny85 features are supported?",
+        "a2": "All 6 GPIO pins (PB0–PB5), Timer0 (8-bit) with PWM, Timer1 (8-bit) with PWM and high-speed mode, the watchdog timer, 10-bit ADC with 4 input channels (ADC0–ADC3), USI peripheral for I²C (TWI) and SPI bit-banging, pin-change interrupts, and external interrupts (INT0).",
+        "q3": "How do I program the ATtiny85 in Velxio?",
+        "a3": "Write your sketch in the Monaco editor in C/C++ (Arduino syntax). Velxio compiles it via the bundled arduino-cli using the ATTinyCore board package and produces a real .hex file — the same one you would flash via USBasp.",
+        "q4": "Can I use Arduino-compatible libraries?",
+        "a4": "Yes. The Library Manager indexes the full Arduino library registry. Many libraries work on ATtiny85 with appropriate pin assignments — TinyWireM for I²C, SoftwareSerial via USI, TinyServo, etc.",
+        "q5": "Can I wire it to analog circuits?",
+        "a5": "Yes. Velxio includes a real-time SPICE solver — wire the ATtiny85 ADC pin to a voltage divider, an op-amp output, or an NTC thermistor bridge and analogRead() will return the actual SPICE-solved voltage at that pin.",
+        "q6": "Is it free?",
+        "a6": "Yes — Velxio is fully free and open-source under GNU AGPLv3. No account required."
+      },
+      "bottom": {
+        "title": "Develop ATtiny85 firmware without hardware",
+        "body": "Open the editor and start coding — compile, simulate, and probe in seconds.",
+        "cta": "Launch ATtiny85 Simulator"
+      }
+    },
+    "arduinoEmu": {
+      "hero": {
+        "title": "Arduino Emulator",
+        "accent": "Real AVR8 & RP2040 Emulation, Free",
+        "subtitle": "Velxio is a cycle-accurate Arduino emulator running entirely in your browser. Every AVR opcode is faithfully executed at 16 MHz — the same silicon behavior as real hardware, without buying hardware.",
+        "ctaPrimary": "Open Emulator",
+        "ctaSecondary": "Emulation Details",
+        "trust": "Free & open-source · Built on avr8js & rp2040js · No signup required"
+      },
+      "accuracy": {
+        "heading": "Emulation accuracy",
+        "leadPrefix": "Velxio uses ",
+        "leadAvr": "avr8js",
+        "leadMid": " for AVR8 and ",
+        "leadRp": "rp2040js",
+        "leadSuffix": " for RP2040 — open-source libraries developed by the Wokwi team that provide genuine hardware fidelity.",
+        "isaTitle": "AVR8 Instruction Set",
+        "isaBody": "All 135 AVR instructions emulated including MUL, MULSU, FMUL, LPM, SPM, and all branch/skip instructions. 16 MHz clock.",
+        "timersTitle": "Hardware Timers",
+        "timersBodyPrefix": "Timer0, Timer1, Timer2 with prescaler support, overflow interrupts, and Output Compare — enabling ",
+        "timersBodyCode1": "delay()",
+        "timersBodyMid": ", ",
+        "timersBodyCode2": "millis()",
+        "timersBodySuffix": ", and PWM.",
+        "usartTitle": "USART Serial",
+        "usartBodyPrefix": "Full USART emulation with configurable baud rate and TX/RX interrupts. ",
+        "usartBodyCode": "Serial.print()",
+        "usartBodySuffix": " works exactly as on real Arduino hardware.",
+        "adcTitle": "10-bit ADC",
+        "adcBodyPrefix": "Analog-to-digital converter emulation with analog reference support. ",
+        "adcBodyCode": "analogRead()",
+        "adcBodySuffix": " returns accurate values from simulated sensors.",
+        "rpTitle": "RP2040 Dual-Core ARM",
+        "rpBody": "Cortex-M0+ emulation via rp2040js. Runs Arduino-pico and PlatformIO sketches for Raspberry Pi Pico and Pico W.",
+        "riscvTitle": "RISC-V (ESP32-C3)",
+        "riscvBody": "RV32IMC emulation for ESP32-C3 at 160 MHz via the QEMU lcgamboa fork (libqemu-riscv32, esp32c3-picsimlab machine)."
+      },
+      "boards": {
+        "heading": "Supported boards",
+        "lead": "19 boards across 5 CPU architectures — AVR8, ARM Cortex-M0+, RISC-V, Xtensa LX6/LX7, and ARM Cortex-A53.",
+        "avrTitle": "AVR8 — avr8js",
+        "avrBody": "Arduino Uno (ATmega328P), Arduino Nano, Arduino Mega 2560 (ATmega2560), ATtiny85, Arduino Leonardo (ATmega32u4), Arduino Pro Mini.",
+        "rpTitle": "RP2040 — rp2040js",
+        "rpBody": "Raspberry Pi Pico, Raspberry Pi Pico W — dual ARM Cortex-M0+ at 133 MHz.",
+        "riscvTitle": "RISC-V — QEMU",
+        "riscvBody": "ESP32-C3 DevKit, XIAO ESP32-C3, ESP32-C3 SuperMini, CH32V003 — RV32IMC at 160 MHz via libqemu-riscv32.",
+        "xtensaTitle": "Xtensa — QEMU",
+        "xtensaBody": "ESP32 DevKit V1/C V4, ESP32-S3, ESP32-CAM, Seeed XIAO ESP32-S3, Arduino Nano ESP32 — Xtensa LX6/LX7 at 240 MHz.",
+        "armTitle": "ARM Cortex-A53 — QEMU",
+        "armBody": "Raspberry Pi 3B — quad-core 1.2 GHz, full Linux, Python 3. Run real OS-level programs in the browser."
+      },
+      "faq": {
+        "heading": "Frequently Asked Questions",
+        "q1": "What is an Arduino emulator?",
+        "a1": "An Arduino emulator reproduces the behavior of a physical Arduino microcontroller in software — CPU instruction execution, peripheral registers (GPIO, USART, ADC, timers, PWM), and interrupts — with no hardware required.",
+        "q2": "How accurate is Velxio's Arduino emulation?",
+        "a2": "Velxio uses avr8js, which provides cycle-accurate AVR8 instruction emulation. Every AVR opcode is faithfully emulated at 16 MHz, making it reliable for developing and debugging real firmware before flashing to hardware.",
+        "q3": "Which Arduino boards can Velxio emulate?",
+        "a3": "Arduino Uno (ATmega328P), Arduino Nano, Arduino Mega 2560 (ATmega2560), ATtiny85 (AVR8), Arduino Leonardo (ATmega32u4), Arduino Pro Mini, Raspberry Pi Pico and Pico W (RP2040), and multiple ESP32/RISC-V boards. 19 boards across 5 CPU architectures.",
+        "q4": "What peripherals are emulated?",
+        "a4": "GPIO ports (PORTB, PORTC, PORTD), hardware timers (Timer0, Timer1, Timer2), 8/16-bit PWM, USART serial, 10-bit ADC (analog inputs), SPI, and I2C. All standard Arduino library functions work correctly.",
+        "q5": "How is Velxio different from Wokwi?",
+        "a5": "Velxio is fully self-hosted and open-source under GNU AGPLv3. It uses the same avr8js emulation library as Wokwi but runs entirely on your own machine — no cloud dependency, no registration, no subscription."
+      },
+      "bottom": {
+        "title": "Start emulating Arduino today",
+        "body": "Open the editor and execute your firmware against a real emulated CPU — no hardware purchase, no cloud, no limits.",
+        "cta": "Launch Emulator"
+      }
+    },
+    "esp32": {
+      "hero": {
+        "title": "Free ESP32 Simulator",
+        "accent": "Xtensa LX6 Emulation in Your Browser",
+        "subtitle": "Write Arduino code for ESP32 and simulate it instantly — real Xtensa LX6 emulation at 240 MHz via QEMU. 48+ interactive components, Serial Monitor, no install required.",
+        "ctaPrimary": "Open ESP32 Simulator",
+        "ctaSecondary": "ESP32 Examples",
+        "trust": "Free & open-source · No signup · QEMU-powered emulation",
+        "imageAlt": "ESP32 DevKit V1 board"
+      },
+      "boards": {
+        "heading": "Supported ESP32 boards",
+        "lead": "Velxio emulates the full ESP32 family — Xtensa LX6 (ESP32), Xtensa LX7 (ESP32-S3), and RISC-V (ESP32-C3). Each board runs with real CPU emulation, not approximations.",
+        "devkitTitle": "ESP32 DevKit V1 / C V4",
+        "devkitBody": "Xtensa LX6 dual-core at 240 MHz. WiFi + Bluetooth. 34 GPIO pins, 12-bit ADC, 2× DAC, SPI, I2C, UART.",
+        "s3Title": "ESP32-S3 DevKitC",
+        "s3Body": "Xtensa LX7 dual-core at 240 MHz. USB OTG, vector instructions, 45 GPIO pins.",
+        "camTitle": "ESP32-CAM",
+        "camBody": "ESP32 with OV2640 camera module. 240 MHz Xtensa LX6, onboard microSD slot.",
+        "nanoTitle": "Arduino Nano ESP32",
+        "nanoBody": "ESP32-S3 in Arduino Nano form factor. USB-C, 14 digital + 8 analog pins, compatible with Arduino shields.",
+        "xiaoTitle": "XIAO ESP32-S3",
+        "xiaoBody": "Seeed Studio compact board. Xtensa LX7, 11 GPIO, ultra-small 21×17.5 mm form factor.",
+        "c3Title": "ESP32-C3 (RISC-V)",
+        "c3BodyPrefix": "Single-core RISC-V RV32IMC at 160 MHz, emulated via the same QEMU backend as Xtensa ESP32 (libqemu-riscv32, esp32c3-picsimlab machine). ",
+        "c3Link": "Learn more"
+      },
+      "examples": {
+        "heading": "ESP32 example projects",
+        "lead": "Jump straight into simulation with ready-to-run ESP32 examples — from basic LED blink to sensor integrations.",
+        "blinkTitle": "ESP32 Blink LED",
+        "blinkBody": "Classic blink sketch adapted for ESP32 GPIO. Toggle an LED on pin 2 at 1 Hz.",
+        "echoTitle": "ESP32 Serial Echo",
+        "echoBody": "Read input from Serial Monitor and echo it back — test UART communication at 115200 baud.",
+        "dhtTitle": "ESP32 DHT22 Sensor",
+        "dhtBody": "Read temperature and humidity from a DHT22 sensor and display values in the Serial Monitor.",
+        "sonarTitle": "ESP32 HC-SR04 Ultrasonic",
+        "sonarBody": "Measure distance with an ultrasonic sensor. Trigger/echo timing with real GPIO emulation.",
+        "servoTitle": "ESP32 Servo Motor",
+        "servoBody": "Sweep a servo motor from 0° to 180° using ESP32 PWM — uses the ESP32Servo library.",
+        "segTitle": "ESP32 7-Segment Display",
+        "segBody": "Drive a 7-segment display counting 0–9. Demonstrates digital output pin mapping on ESP32.",
+        "viewAll": "View All 68+ Examples"
+      },
+      "faq": {
+        "heading": "Frequently Asked Questions",
+        "q1": "Is this ESP32 simulator free?",
+        "a1": "Yes. Velxio is completely free and open-source (GNU AGPLv3). Simulate ESP32 code in your browser or self-host the entire platform with one Docker command — no account, no payment.",
+        "q2": "How does the ESP32 emulation work?",
+        "a2": "Velxio uses QEMU (lcgamboa fork) to emulate the Xtensa LX6 CPU at 240 MHz. Your Arduino sketch is compiled with the official ESP32 Arduino core and the resulting firmware runs on the emulated hardware — same as real silicon.",
+        "q3": "Which ESP32 boards are supported?",
+        "a3": "Velxio supports ESP32 DevKit V1, ESP32 DevKit C V4, ESP32-CAM, Arduino Nano ESP32, ESP32-S3 DevKitC, XIAO ESP32-S3, ESP32-C3 DevKit, XIAO ESP32-C3, and ESP32-C3 SuperMini.",
+        "q4": "Can I simulate ESP32 with sensors and displays?",
+        "a4": "Yes. Connect 48+ interactive components: DHT22, HC-SR04 ultrasonic, MPU6050 IMU, servo motors, ILI9341 TFT display, LEDs, buttons, 7-segment displays, and more.",
+        "q5": "Does it support Serial Monitor for ESP32?",
+        "a5": "Yes. The Serial Monitor works with ESP32 just like Arduino — auto baud-rate detection, real-time TX/RX output, and send commands back to your running sketch."
+      },
+      "bottom": {
+        "title": "Ready to simulate your ESP32?",
+        "body": "Open the editor, select an ESP32 board, and start coding — no setup, no install, no account needed.",
+        "cta": "Launch ESP32 Simulator"
+      }
+    },
+    "esp32s3": {
+      "hero": {
+        "title": "Free ESP32-S3 Simulator",
+        "accent": "Xtensa LX7 · Dual-Core · 240 MHz",
+        "subtitle": "Simulate ESP32-S3 firmware in your browser — real Xtensa LX7 dual-core emulation via QEMU. USB OTG, vector extensions, 45 GPIOs. Write, compile, and run in seconds.",
+        "ctaPrimary": "Open ESP32-S3 Simulator",
+        "ctaSecondary": "Browse Examples",
+        "trust": "Free & open-source · QEMU Xtensa LX7 · No account needed",
+        "imageAlt": "ESP32-S3 DevKitC-1 board"
+      },
+      "boards": {
+        "heading": "Supported ESP32-S3 boards",
+        "lead": "Velxio emulates three ESP32-S3 boards. Each runs the official ESP32 Arduino core compiled via arduino-cli.",
+        "devkitTitle": "ESP32-S3 DevKitC-1",
+        "devkitBody": "Official Espressif development board. Dual-core Xtensa LX7 at 240 MHz, 45 GPIO, USB OTG, 512 KB SRAM.",
+        "xiaoTitle": "XIAO ESP32-S3",
+        "xiaoBody": "Seeed Studio ultra-compact board (21×17.5 mm). 11 GPIO, USB-C, ideal for wearables and IoT.",
+        "nanoTitle": "Arduino Nano ESP32",
+        "nanoBody": "ESP32-S3 in Arduino Nano form factor. USB-C, 14 digital + 8 analog pins, Arduino ecosystem compatibility."
+      },
+      "diff": {
+        "heading": "ESP32-S3 vs ESP32 — What's new?",
+        "cpuTitle": "Xtensa LX7 CPU",
+        "cpuBody": "Newer architecture with improved performance per clock. Same 240 MHz dual-core, but more efficient instruction pipeline.",
+        "usbTitle": "USB OTG",
+        "usbBody": "Native USB device and host support — no external USB-to-UART chip needed. HID, CDC, MSC device classes.",
+        "vectorTitle": "Vector Instructions",
+        "vectorBody": "Hardware-accelerated vector operations for AI/ML inference at the edge. TensorFlow Lite Micro optimized.",
+        "gpioTitle": "More GPIO",
+        "gpioBody": "45 programmable GPIOs (vs 34 on ESP32). More ADC channels, touch pins, and peripheral options."
+      },
+      "faq": {
+        "heading": "Frequently Asked Questions",
+        "q1": "What is the ESP32-S3?",
+        "a1": "The ESP32-S3 is an Xtensa LX7 dual-core microcontroller by Espressif running at 240 MHz. It adds USB OTG, vector instructions for AI/ML, and up to 45 GPIO pins compared to the original ESP32.",
+        "q2": "Is the ESP32-S3 simulator free?",
+        "a2": "Yes. Velxio is 100% free and open-source. Simulate ESP32-S3 code in your browser with real Xtensa LX7 emulation via QEMU — no cloud, no subscription.",
+        "q3": "Which ESP32-S3 boards are supported?",
+        "a3": "Velxio supports ESP32-S3 DevKitC-1, Seeed XIAO ESP32-S3, and Arduino Nano ESP32 (which uses the ESP32-S3 chip).",
+        "q4": "Can I use Arduino libraries with ESP32-S3?",
+        "a4": "Yes. Velxio compiles your sketch with the official ESP32 Arduino core. Install any library from the Arduino Library Manager and use it in your ESP32-S3 project.",
+        "q5": "What is the difference between ESP32 and ESP32-S3?",
+        "a5": "The ESP32-S3 uses the newer Xtensa LX7 architecture (vs LX6), adds USB OTG for native USB device support, includes vector instructions for AI workloads, and has more GPIO pins (45 vs 34)."
+      },
+      "bottom": {
+        "title": "Ready to simulate ESP32-S3?",
+        "body": "Open the editor, select an ESP32-S3 board, and run your code instantly.",
+        "cta": "Launch ESP32-S3 Simulator"
+      }
+    }
+  }
+}

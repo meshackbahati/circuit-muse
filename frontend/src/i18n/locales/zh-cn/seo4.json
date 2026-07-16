@@ -1,0 +1,251 @@
+{
+  "seo": {
+    "attiny85": {
+      "hero": {
+        "title": "免费ATtiny85模拟器",
+        "accent": "浏览器中的周期精确AVR仿真",
+        "subtitle": "为ATtiny85编写Arduino代码并立即运行——每个AVR操作码都忠实仿真。所有6个I/O引脚、用于I²C/SPI的USI、Timer0/Timer1 PWM、10位ADC、看门狗。连接到真实的SPICE模拟电路。免费，无需安装，无需账户。",
+        "ctaPrimary": "打开ATtiny85模拟器",
+        "ctaSecondary": "浏览ATtiny85示例",
+        "trust": "免费开源 · 周期精确的avr8js · 无需注册"
+      },
+      "specs": {
+        "heading": "模拟器中的ATtiny85规格",
+        "lead": "无需编程器或面包板即可开发ATtiny85固件所需的一切。",
+        "coreTitle": "核心",
+        "coreBody": "AVR 8位RISC，8 KB闪存，512 B SRAM，512 B EEPROM。DIP-8引脚排列（PB0–PB5加VCC/GND）。",
+        "gpioTitle": "GPIO",
+        "gpioBody": "PORTB上的6个I/O引脚。可配置为输入/输出/上拉。引脚变化中断（PCINT0–PCINT5）和外部INT0。",
+        "timersTitle": "定时器与PWM",
+        "timersBody": "Timer0（8位）在PB0/PB1上有两个PWM通道。Timer1（8位）具有高速模式和两个PWM通道（PB1/PB4）——适用于更高频率的PWM。",
+        "adcTitle": "ADC",
+        "adcBody": "10位ADC，4个输入通道（ADC0在PB5，ADC1在PB2，ADC2在PB4，ADC3在PB3）。内部1.1 V参考电压。",
+        "usiTitle": "USI",
+        "usiBody": "通用串行接口——位碰撞实现I²C（TWI）和SPI。兼容TinyWireM / TinyWireS和标准SPI库。",
+        "wdtTitle": "看门狗与睡眠",
+        "wdtBody": "看门狗定时器，支持复位和中断模式。掉电、ADC降噪和空闲睡眠模式——适用于低功耗演示。"
+      },
+      "build": {
+        "heading": "你能构建什么？",
+        "lead": "ATtiny85项目在小型、低功耗和模拟感知方面表现出色——这正是Velxio结合SPICE求解器的优势。",
+        "blinkTitle": "闪烁与PWM渐变",
+        "blinkBody": "经典入门——通过Timer0在PB1上实现硬件PWM驱动的LED渐变，以及PB4上的高速Timer1 PWM。",
+        "buttonTitle": "按钮驱动LED",
+        "buttonBody": "在PB2上读取带内部上拉的按钮，固件去抖，驱动PB0上的LED。",
+        "ntcTitlePrefix": "NTC温度",
+        "ntcBodyPrefix": "在ADC1上读取NTC热敏电阻/固定电阻分压器——SPICE求解器将实际分压电压返回给",
+        "ntcBodyCode": "analogRead()",
+        "ntcBodySuffix": "。",
+        "i2cTitle": "通过USI的I²C外设",
+        "i2cBody": "使用TinyWireM与PB0/PB2上的OLED、EEPROM或RTC通信。总线流量端到端仿真。",
+        "spiTitle": "SPI WS2812 / 移位",
+        "spiBody": "通过USI位碰撞驱动WS2812灯带或74HC595移位寄存器，仅需几个引脚。",
+        "analogTitle": "模拟开关",
+        "analogBody": "通过SPICE建模的栅极充电曲线，从PB1 PWM驱动MOSFET栅极——观察负载上的压摆率效应。"
+      },
+      "faq": {
+        "heading": "常见问题",
+        "q1": "这是真正的ATtiny85仿真器吗？",
+        "a1": "是的。Velxio使用avr8js——周期精确的AVR8仿真器——逐字节执行编译后的ATtiny85固件，就像在真实DIP-8芯片上运行一样。",
+        "q2": "支持哪些ATtiny85特性？",
+        "a2": "所有6个GPIO引脚（PB0–PB5）、带PWM的Timer0（8位）、带PWM和高速模式的Timer1（8位）、看门狗定时器、带4个输入通道（ADC0–ADC3）的10位ADC、用于I²C（TWI）和SPI位碰撞的USI外设、引脚变化中断和外部中断（INT0）。",
+        "q3": "如何在Velxio中编程ATtiny85？",
+        "a3": "在Monaco编辑器中用C/C++（Arduino语法）编写草图。Velxio通过捆绑的arduino-cli使用ATTinyCore板级支持包编译，生成真实的.hex文件——与通过USBasp烧录的文件相同。",
+        "q4": "我可以使用Arduino兼容库吗？",
+        "a4": "是的。库管理器索引了完整的Arduino库注册表。许多库在ATtiny85上通过适当的引脚分配工作——用于I²C的TinyWireM、通过USI的SoftwareSerial、TinyServo等。",
+        "q5": "我可以将其连接到模拟电路吗？",
+        "a5": "是的。Velxio包含实时SPICE求解器——将ATtiny85 ADC引脚连接到分压器、运放输出或NTC热敏电阻桥，analogRead()将返回该引脚的实际SPICE求解电压。",
+        "q6": "它是免费的吗？",
+        "a6": "是的——Velxio完全免费开源，采用GNU AGPLv3许可。无需账户。"
+      },
+      "bottom": {
+        "title": "无需硬件开发ATtiny85固件",
+        "body": "打开编辑器开始编码——编译、仿真、探测，只需几秒钟。",
+        "cta": "启动ATtiny85模拟器"
+      }
+    },
+    "arduinoEmu": {
+      "hero": {
+        "title": "Arduino仿真器",
+        "accent": "真实的AVR8和RP2040仿真，免费",
+        "subtitle": "Velxio是一个周期精确的Arduino仿真器，完全在浏览器中运行。每个AVR操作码在16 MHz下忠实执行——与真实硬件相同的硅行为，无需购买硬件。",
+        "ctaPrimary": "打开仿真器",
+        "ctaSecondary": "仿真详情",
+        "trust": "免费开源 · 基于avr8js和rp2040js · 无需注册"
+      },
+      "accuracy": {
+        "heading": "仿真精度",
+        "leadPrefix": "Velxio使用",
+        "leadAvr": "avr8js",
+        "leadMid": "用于AVR8和",
+        "leadRp": "rp2040js",
+        "leadSuffix": "用于RP2040——由Wokwi团队开发的开源库，提供真正的硬件保真度。",
+        "isaTitle": "AVR8指令集",
+        "isaBody": "所有135条AVR指令均已仿真，包括MUL、MULSU、FMUL、LPM、SPM以及所有分支/跳转指令。16 MHz时钟。",
+        "timersTitle": "硬件定时器",
+        "timersBodyPrefix": "Timer0、Timer1、Timer2，支持预分频器、溢出中断和输出比较——实现",
+        "timersBodyCode1": "delay()",
+        "timersBodyMid": "、",
+        "timersBodyCode2": "millis()",
+        "timersBodySuffix": "和PWM。",
+        "usartTitle": "USART串口",
+        "usartBodyPrefix": "完整的USART仿真，可配置波特率和TX/RX中断。",
+        "usartBodyCode": "Serial.print()",
+        "usartBodySuffix": "与真实Arduino硬件上的工作方式完全相同。",
+        "adcTitle": "10位ADC",
+        "adcBodyPrefix": "模数转换器仿真，支持模拟参考电压。",
+        "adcBodyCode": "analogRead()",
+        "adcBodySuffix": "从模拟传感器返回精确值。",
+        "rpTitle": "RP2040双核ARM",
+        "rpBody": "通过rp2040js进行Cortex-M0+仿真。运行Raspberry Pi Pico和Pico W的Arduino-pico和PlatformIO草图。",
+        "riscvTitle": "RISC-V (ESP32-C3)",
+        "riscvBody": "通过QEMU lcgamboa分支（libqemu-riscv32，esp32c3-picsimlab机器）在160 MHz下对ESP32-C3进行RV32IMC仿真。"
+      },
+      "boards": {
+        "heading": "支持的开发板",
+        "lead": "5种CPU架构下的19块开发板——AVR8、ARM Cortex-M0+、RISC-V、Xtensa LX6/LX7和ARM Cortex-A53。",
+        "avrTitle": "AVR8 — avr8js",
+        "avrBody": "Arduino Uno (ATmega328P)、Arduino Nano、Arduino Mega 2560 (ATmega2560)、ATtiny85、Arduino Leonardo (ATmega32u4)、Arduino Pro Mini。",
+        "rpTitle": "RP2040 — rp2040js",
+        "rpBody": "Raspberry Pi Pico、Raspberry Pi Pico W——双核ARM Cortex-M0+，133 MHz。",
+        "riscvTitle": "RISC-V — QEMU",
+        "riscvBody": "ESP32-C3 DevKit、XIAO ESP32-C3、ESP32-C3 SuperMini、CH32V003——通过libqemu-riscv32在160 MHz下运行RV32IMC。",
+        "xtensaTitle": "Xtensa — QEMU",
+        "xtensaBody": "ESP32 DevKit V1/C V4、ESP32-S3、ESP32-CAM、Seeed XIAO ESP32-S3、Arduino Nano ESP32——Xtensa LX6/LX7，240 MHz。",
+        "armTitle": "ARM Cortex-A53 — QEMU",
+        "armBody": "Raspberry Pi 3B——四核1.2 GHz，完整Linux，Python 3。在浏览器中运行真实的操作系统级程序。"
+      },
+      "faq": {
+        "heading": "常见问题",
+        "q1": "什么是Arduino仿真器？",
+        "a1": "Arduino仿真器在软件中再现物理Arduino微控制器的行为——CPU指令执行、外设寄存器（GPIO、USART、ADC、定时器、PWM）和中断——无需硬件。",
+        "q2": "Velxio的Arduino仿真有多精确？",
+        "a2": "Velxio使用avr8js，提供周期精确的AVR8指令仿真。每个AVR操作码在16 MHz下忠实仿真，使其在烧录到硬件之前可靠地开发和调试真实固件。",
+        "q3": "Velxio可以仿真哪些Arduino开发板？",
+        "a3": "Arduino Uno (ATmega328P)、Arduino Nano、Arduino Mega 2560 (ATmega2560)、ATtiny85 (AVR8)、Arduino Leonardo (ATmega32u4)、Arduino Pro Mini、Raspberry Pi Pico和Pico W (RP2040)，以及多个ESP32/RISC-V开发板。5种CPU架构下的19块开发板。",
+        "q4": "仿真了哪些外设？",
+        "a4": "GPIO端口（PORTB、PORTC、PORTD）、硬件定时器（Timer0、Timer1、Timer2）、8/16位PWM、USART串口、10位ADC（模拟输入）、SPI和I2C。所有标准Arduino库函数都能正常工作。",
+        "q5": "Velxio与Wokwi有何不同？",
+        "a5": "Velxio完全自托管且开源，采用GNU AGPLv3许可。它使用与Wokwi相同的avr8js仿真库，但完全在您自己的机器上运行——无云依赖、无注册、无订阅。"
+      },
+      "bottom": {
+        "title": "今天开始仿真Arduino",
+        "body": "打开编辑器，在真实的仿真CPU上执行您的固件——无需购买硬件、无需云、无限制。",
+        "cta": "启动仿真器"
+      }
+    },
+    "esp32": {
+      "hero": {
+        "title": "免费ESP32模拟器",
+        "accent": "浏览器中的Xtensa LX6仿真",
+        "subtitle": "为ESP32编写Arduino代码并立即模拟——通过QEMU在240 MHz下进行真实的Xtensa LX6仿真。48+个交互组件、串口监视器，无需安装。",
+        "ctaPrimary": "打开ESP32模拟器",
+        "ctaSecondary": "ESP32示例",
+        "trust": "免费开源 · 无需注册 · QEMU驱动的仿真",
+        "imageAlt": "ESP32 DevKit V1开发板"
+      },
+      "boards": {
+        "heading": "支持的ESP32开发板",
+        "lead": "Velxio仿真完整的ESP32系列——Xtensa LX6 (ESP32)、Xtensa LX7 (ESP32-S3)和RISC-V (ESP32-C3)。每块开发板都运行真实的CPU仿真，而非近似。",
+        "devkitTitle": "ESP32 DevKit V1 / C V4",
+        "devkitBody": "Xtensa LX6双核240 MHz。WiFi + 蓝牙。34个GPIO引脚、12位ADC、2× DAC、SPI、I2C、UART。",
+        "s3Title": "ESP32-S3 DevKitC",
+        "s3Body": "Xtensa LX7双核240 MHz。USB OTG、向量指令、45个GPIO引脚。",
+        "camTitle": "ESP32-CAM",
+        "camBody": "带OV2640摄像头模块的ESP32。240 MHz Xtensa LX6，板载microSD插槽。",
+        "nanoTitle": "Arduino Nano ESP32",
+        "nanoBody": "Arduino Nano尺寸的ESP32-S3。USB-C、14个数字+8个模拟引脚，兼容Arduino扩展板。",
+        "xiaoTitle": "XIAO ESP32-S3",
+        "xiaoBody": "Seeed Studio紧凑型开发板。Xtensa LX7、11个GPIO，超小尺寸21×17.5 mm。",
+        "c3Title": "ESP32-C3 (RISC-V)",
+        "c3BodyPrefix": "单核RISC-V RV32IMC，160 MHz，通过与Xtensa ESP32相同的QEMU后端仿真（libqemu-riscv32，esp32c3-picsimlab机器）。",
+        "c3Link": "了解更多"
+      },
+      "examples": {
+        "heading": "ESP32示例项目",
+        "lead": "直接跳转到可运行的ESP32示例进行模拟——从基本的LED闪烁到传感器集成。",
+        "blinkTitle": "ESP32 LED闪烁",
+        "blinkBody": "为ESP32 GPIO改编的经典闪烁草图。以1 Hz切换引脚2上的LED。",
+        "echoTitle": "ESP32串口回显",
+        "echoBody": "从串口监视器读取输入并回显——测试115200波特率的UART通信。",
+        "dhtTitle": "ESP32 DHT22传感器",
+        "dhtBody": "从DHT22传感器读取温度和湿度，并在串口监视器中显示数值。",
+        "sonarTitle": "ESP32 HC-SR04超声波",
+        "sonarBody": "使用超声波传感器测量距离。通过真实GPIO仿真实现触发/回波时序。",
+        "servoTitle": "ESP32舵机",
+        "servoBody": "使用ESP32 PWM将舵机从0°扫到180°——使用ESP32Servo库。",
+        "segTitle": "ESP32 7段数码管",
+        "segBody": "驱动7段数码管计数0–9。演示ESP32上的数字输出引脚映射。",
+        "viewAll": "查看全部68+示例"
+      },
+      "faq": {
+        "heading": "常见问题",
+        "q1": "这个ESP32模拟器免费吗？",
+        "a1": "是的。Velxio完全免费开源（GNU AGPLv3）。在浏览器中模拟ESP32代码，或通过一个Docker命令自托管整个平台——无需账户、无需付费。",
+        "q2": "ESP32仿真如何工作？",
+        "a2": "Velxio使用QEMU（lcgamboa分支）在240 MHz下仿真Xtensa LX6 CPU。您的Arduino草图使用官方ESP32 Arduino核心编译，生成的固件在仿真硬件上运行——与真实硅片相同。",
+        "q3": "支持哪些ESP32开发板？",
+        "a3": "Velxio支持ESP32 DevKit V1、ESP32 DevKit C V4、ESP32-CAM、Arduino Nano ESP32、ESP32-S3 DevKitC、XIAO ESP32-S3、ESP32-C3 DevKit、XIAO ESP32-C3和ESP32-C3 SuperMini。",
+        "q4": "我可以模拟带传感器和显示屏的ESP32吗？",
+        "a4": "是的。连接48+个交互组件：DHT22、HC-SR04超声波、MPU6050 IMU、舵机、ILI9341 TFT显示屏、LED、按钮、7段数码管等。",
+        "q5": "它支持ESP32的串口监视器吗？",
+        "a5": "是的。串口监视器与ESP32配合使用，就像Arduino一样——自动波特率检测、实时TX/RX输出，并向运行中的草图发送命令。"
+      },
+      "bottom": {
+        "title": "准备好模拟您的ESP32了吗？",
+        "body": "打开编辑器，选择ESP32开发板，开始编码——无需设置、无需安装、无需账户。",
+        "cta": "启动ESP32模拟器"
+      }
+    },
+    "esp32s3": {
+      "hero": {
+        "title": "免费ESP32-S3模拟器",
+        "accent": "Xtensa LX7 · 双核 · 240 MHz",
+        "subtitle": "在浏览器中模拟ESP32-S3固件——通过QEMU进行真实的Xtensa LX7双核仿真。USB OTG、向量扩展、45个GPIO。编写、编译、运行，只需几秒钟。",
+        "ctaPrimary": "打开ESP32-S3模拟器",
+        "ctaSecondary": "浏览示例",
+        "trust": "免费开源 · QEMU Xtensa LX7 · 无需账户",
+        "imageAlt": "ESP32-S3 DevKitC-1开发板"
+      },
+      "boards": {
+        "heading": "支持的ESP32-S3开发板",
+        "lead": "Velxio仿真三块ESP32-S3开发板。每块都运行通过arduino-cli编译的官方ESP32 Arduino核心。",
+        "devkitTitle": "ESP32-S3 DevKitC-1",
+        "devkitBody": "乐鑫官方开发板。双核Xtensa LX7，240 MHz，45个GPIO，USB OTG，512 KB SRAM。",
+        "xiaoTitle": "XIAO ESP32-S3",
+        "xiaoBody": "Seeed Studio超紧凑型开发板（21×17.5 mm）。11个GPIO，USB-C，适用于可穿戴设备和物联网。",
+        "nanoTitle": "Arduino Nano ESP32",
+        "nanoBody": "Arduino Nano尺寸的ESP32-S3。USB-C，14个数字+8个模拟引脚，Arduino生态系统兼容性。"
+      },
+      "diff": {
+        "heading": "ESP32-S3 vs ESP32 — 新特性",
+        "cpuTitle": "Xtensa LX7 CPU",
+        "cpuBody": "更新的架构，每时钟性能提升。相同的240 MHz双核，但指令流水线更高效。",
+        "usbTitle": "USB OTG",
+        "usbBody": "原生USB设备和主机支持——无需外部USB转UART芯片。支持HID、CDC、MSC设备类。",
+        "vectorTitle": "向量指令",
+        "vectorBody": "硬件加速向量运算，用于边缘AI/ML推理。TensorFlow Lite Micro已优化。",
+        "gpioTitle": "更多GPIO",
+        "gpioBody": "45个可编程GPIO（ESP32为34个）。更多ADC通道、触摸引脚和外设选项。"
+      },
+      "faq": {
+        "heading": "常见问题",
+        "q1": "什么是ESP32-S3？",
+        "a1": "ESP32-S3是乐鑫推出的Xtensa LX7双核微控制器，运行频率240 MHz。与原始ESP32相比，它增加了USB OTG、用于AI/ML的向量指令以及多达45个GPIO引脚。",
+        "q2": "ESP32-S3模拟器免费吗？",
+        "a2": "是的。Velxio 100%免费开源。通过QEMU在浏览器中模拟ESP32-S3代码，进行真实的Xtensa LX7仿真——无需云、无需订阅。",
+        "q3": "支持哪些ESP32-S3开发板？",
+        "a3": "Velxio支持ESP32-S3 DevKitC-1、Seeed XIAO ESP32-S3和Arduino Nano ESP32（使用ESP32-S3芯片）。",
+        "q4": "我可以在ESP32-S3上使用Arduino库吗？",
+        "a4": "是的。Velxio使用官方ESP32 Arduino核心编译您的草图。从Arduino库管理器安装任何库，并在您的ESP32-S3项目中使用。",
+        "q5": "ESP32和ESP32-S3有什么区别？",
+        "a5": "ESP32-S3使用更新的Xtensa LX7架构（vs LX6），增加了USB OTG以支持原生USB设备，包含用于AI工作负载的向量指令，并拥有更多GPIO引脚（45 vs 34）。"
+      },
+      "bottom": {
+        "title": "准备好模拟ESP32-S3了吗？",
+        "body": "打开编辑器，选择ESP32-S3开发板，立即运行您的代码。",
+        "cta": "启动ESP32-S3模拟器"
+      }
+    }
+  }
+}

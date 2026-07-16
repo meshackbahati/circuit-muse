@@ -1,0 +1,17 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Intel 8086",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Clean-room Intel 8086 (1978) — 16-bit ISA, 1 MB addressable via segments, multiplexed AD0..AD15 bus latched by ALE. Minimum mode by default. Boots a memory-mapped UART hello-world end-to-end.",
+  "pins": [
+    "AD0", "AD1", "AD2", "AD3", "AD4", "AD5", "AD6", "AD7",
+    "AD8", "AD9", "AD10", "AD11", "AD12", "AD13", "AD14", "AD15",
+    "A16", "A17", "A18", "A19",
+    "ALE", "RD", "WR", "MIO", "DTR", "DEN", "BHE",
+    "HOLD", "HLDA", "INTR", "INTA", "NMI", "RESET",
+    "READY", "TEST", "CLK", "MNMX",
+    "VCC", "GND"
+  ],
+  "attributes": []
+}

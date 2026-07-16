@@ -1,0 +1,10 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "MCP3008",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "8-channel 10-bit SPI ADC.",
+  "pins": ["CS", "SCK", "MOSI", "MISO", "CH0", "CH1", "CH2", "CH3",
+           "CH4", "CH5", "CH6", "CH7", "GND", "VCC", "VREF", "AGND"],
+  "attributes": []
+}

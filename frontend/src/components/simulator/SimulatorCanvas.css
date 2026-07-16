@@ -1,0 +1,474 @@
+.simulator-canvas-container {
+  display: flex;
+  height: 100%;
+  position: relative;
+}
+
+.simulator-canvas {
+  flex: 1;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Canvas header ───────────────────────────────── */
+.canvas-header {
+  height: 46px;
+  padding: 0 10px;
+  background: #252526;
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+/* When portaled into the unified top toolbar, drop the standalone chrome
+   (border + background) and shrink to match the editor toolbar height so
+   the two halves read as a single bar. Also drop space-between so the
+   left/right groups sit adjacent to each other inside the slot. */
+.canvas-header--portaled {
+  height: 38px;
+  padding: 0 8px;
+  background: transparent;
+  border-bottom: none;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.canvas-header-left,
+.canvas-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Status LED dot ──────────────────────────────── */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition:
+    background 0.3s,
+    box-shadow 0.3s;
+}
+
+.status-dot.running {
+  background: #4caf50;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.7);
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+.status-dot.stopped {
+  background: #555;
+  box-shadow: none;
+}
+
+@keyframes pulse-green {
+  0%,
+  100% {
+    box-shadow: 0 0 4px rgba(76, 175, 80, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.9);
+  }
+}
+
+/* ── Board Selector ──────────────────────────────── */
+.board-selector {
+  padding: 4px 8px;
+  background: #1e2a38;
+  color: #c9d1d9;
+  border: 1px solid #3a4a5a;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  height: 32px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  padding-right: 22px;
+}
+
+.board-selector:hover:not(:disabled) {
+  border-color: #007acc;
+}
+
+.board-selector:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Serial Monitor button ───────────────────────── */
+.canvas-serial-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid #3a4a5a;
+  border-radius: 5px;
+  color: #9d9d9d;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    color 0.15s;
+  white-space: nowrap;
+}
+
+.canvas-serial-btn:hover {
+  border-color: #007acc;
+  color: #ccc;
+}
+
+.canvas-serial-btn-active {
+  background: #0e3a5a;
+  border-color: #007acc;
+  color: #4fc3f7;
+}
+
+/* ── Canvas icon-only buttons (undo/redo, …) ─────── */
+.canvas-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid #3a4a5a;
+  border-radius: 5px;
+  color: #9d9d9d;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    color 0.15s,
+    opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.canvas-icon-btn:hover:not(:disabled) {
+  border-color: #007acc;
+  color: #ccc;
+}
+
+.canvas-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Component count ─────────────────────────────── */
+.component-count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* ── Add Component button ────────────────────────── */
+.add-component-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  height: 32px;
+  background: #007acc;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.add-component-btn:hover:not(:disabled) {
+  background: #1a8bd4;
+}
+
+.add-component-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Canvas content (viewport) ───────────────────── */
+.canvas-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 19px,
+      rgba(255, 255, 255, 0.025) 19px,
+      rgba(255, 255, 255, 0.025) 20px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 19px,
+      rgba(255, 255, 255, 0.025) 19px,
+      rgba(255, 255, 255, 0.025) 20px
+    );
+  user-select: none;
+  touch-action: none; /* Disable browser scroll/zoom so JS handlers take full control */
+}
+
+/* ── Infinite canvas world ───────────────────────── */
+.canvas-world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  width: 4000px;
+  height: 3000px;
+}
+
+/* ── Components area ─────────────────────────────── */
+.components-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* ── Zoom controls ───────────────────────────────── */
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: 5px;
+  padding: 0 2px;
+  height: 28px;
+}
+
+.zoom-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: #9d9d9d;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.zoom-btn:hover {
+  background: #3a3a3a;
+  color: #ccc;
+}
+
+.zoom-level {
+  min-width: 42px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  color: #9d9d9d;
+  font-size: 11px;
+  font-family: monospace;
+  cursor: pointer;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+.zoom-level:hover {
+  background: #3a3a3a;
+  color: #ccc;
+}
+
+.component-label {
+  font-size: 11px;
+  background-color: #252526;
+  padding: 3px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+  margin-top: 5px;
+  text-align: center;
+  color: #aaa;
+}
+
+/* ── Wire creation mode banner ──────────────────── */
+.wire-mode-banner {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: rgba(0, 122, 204, 0.92);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+  pointer-events: auto;
+}
+
+.wire-mode-banner button {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  padding: 4px 14px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+
+.wire-mode-banner button:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Mobile-friendly adjustments ────────────────── */
+@media (max-width: 768px) {
+  .canvas-header {
+    height: 42px;
+    padding: 0 6px;
+  }
+
+  .canvas-header-left,
+  .canvas-header-right {
+    gap: 4px;
+  }
+
+  .canvas-serial-btn {
+    padding: 0 6px;
+    font-size: 0; /* hide text, show icon only */
+  }
+
+  .canvas-serial-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .add-component-btn {
+    padding: 0 8px;
+    font-size: 0; /* hide text, show icon only */
+  }
+
+  .add-component-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .board-selector {
+    font-size: 11px;
+    max-width: 90px;
+    padding: 4px 20px 4px 6px;
+  }
+
+  .zoom-controls {
+    display: none; /* Use pinch-to-zoom on mobile */
+  }
+
+  .component-count {
+    display: none;
+  }
+
+  .wire-mode-banner {
+    font-size: 12px;
+    padding: 6px 12px;
+    gap: 8px;
+    bottom: 8px;
+  }
+}
+
+/* ── WiFi / BLE status badges ─────────────────────────────────────────── */
+.canvas-wifi-badge,
+.canvas-ble-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: default;
+  vertical-align: middle;
+}
+
+.canvas-wifi-badge svg,
+.canvas-ble-badge svg {
+  display: block;
+}
+
+/* WiFi status colours */
+.canvas-wifi-initializing {
+  color: #f59e0b;
+}
+.canvas-wifi-connected {
+  color: #f59e0b;
+}
+.canvas-wifi-got_ip {
+  color: #22c55e;
+}
+.canvas-wifi-disconnected {
+  color: #6b7280;
+}
+
+.canvas-wifi-clickable {
+  cursor: pointer !important;
+  transition:
+    transform 0.2s,
+    filter 0.2s;
+}
+
+.canvas-wifi-clickable:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.canvas-wifi-clickable:active {
+  transform: scale(0.95);
+}
+
+/* BLE status colours */
+.canvas-ble-initialized {
+  color: #3b82f6;
+}
+.canvas-ble-advertising {
+  color: #6366f1;
+}
+
+/* ── Selection action bar (floating toolbar for selected wire/component/board) ─── */
+.selection-action-bar button:hover {
+  background: #2a2d2e !important;
+  border-color: #3c3c3c !important;
+}
+.selection-action-bar button:active {
+  transform: scale(0.97);
+}
+.selection-action-bar button:focus-visible {
+  outline: 2px solid #007acc;
+  outline-offset: 1px;
+}
+
+/* Hide button labels on narrow viewports — keep just the icons */
+@media (max-width: 520px) {
+  .selection-action-bar .selection-action-bar__label {
+    display: none;
+  }
+}

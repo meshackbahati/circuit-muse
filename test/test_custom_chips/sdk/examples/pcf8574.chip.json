@@ -1,0 +1,10 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "PCF8574",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "8-bit I2C I/O expander (base address 0x20, A0..A2 set low bits).",
+  "pins": ["A0", "A1", "A2", "P0", "P1", "P2", "P3", "P4",
+           "P5", "P6", "P7", "INT", "GND", "VCC", "SCL", "SDA"],
+  "attributes": []
+}

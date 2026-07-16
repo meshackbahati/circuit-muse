@@ -1,0 +1,16 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Zilog Z80",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Clean-room Zilog Z80 (1976) — 8080-compatible ISA plus IX/IY, shadow registers, block ops, IM 0/1/2 interrupts, NMI. Validated against Frank Cringle's ZEXDOC test ROM (1994).",
+  "pins": [
+    "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7",
+    "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15",
+    "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
+    "M1", "MREQ", "IORQ", "RD", "WR", "RFSH",
+    "HALT", "WAIT", "INT", "NMI", "RESET",
+    "BUSREQ", "BUSACK", "CLK", "VCC", "GND"
+  ],
+  "attributes": []
+}

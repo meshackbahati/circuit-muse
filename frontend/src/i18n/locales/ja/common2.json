@@ -1,0 +1,398 @@
+{
+  "editor": {
+    "toolbar": {
+      "languageMode": "言語モード",
+      "compile": {
+        "addBoard": "コンパイルするボードを追加",
+        "loading": "読み込み中…",
+        "loadMicropython": "MicroPythonを読み込む",
+        "compile": "コンパイル (Ctrl+B)"
+      },
+      "run": {
+        "addBoard": "実行するボードを追加",
+        "runMicropython": "MicroPythonを実行",
+        "run": "実行 (必要に応じて自動コンパイル)"
+      },
+      "stop": "停止",
+      "reset": "リセット",
+      "compileAll": "すべてのボードをコンパイル",
+      "runAll": "すべてのボードを実行",
+      "libraries": {
+        "title": "Arduinoライブラリを検索してインストール",
+        "label": "ライブラリ"
+      },
+      "import": "プロジェクトをインポート（.vlx Velxio または .zip Wokwi）",
+      "export": "現在のプロジェクトを.zipファイルとしてエクスポート",
+      "uploadFirmware": "ファームウェアをアップロード (.hex, .bin, .elf, .ihex) してコンパイルをスキップ",
+      "toggleConsole": "出力コンソールの表示/非表示",
+      "libHint": {
+        "message": "ライブラリがありませんか？",
+        "cta": "ライブラリマネージャー",
+        "dismiss": "閉じる"
+      }
+    },
+    "fileExplorer": {
+      "workspace": "ワークスペース",
+      "newWorkspace": "新規ワークスペース (ボード、コンポーネント、配線、ファイルをクリア)",
+      "saveProject": "プロジェクトを保存 (Ctrl+S)",
+      "clickToEdit": "クリックして編集",
+      "collapse": "折りたたむ",
+      "expand": "展開",
+      "newFileInBoard": "このボードに新規ファイル",
+      "unsavedChanges": "未保存の変更",
+      "unsavedSuffix": "未保存",
+      "emptyState": "キャンバスにボードを追加してコード編集を開始してください。",
+      "confirmDelete": "このファイルを削除しますか？",
+      "status": {
+        "running": "実行中",
+        "compiled": "コンパイル済み",
+        "idle": "待機中"
+      },
+      "contextMenu": {
+        "rename": "名前変更",
+        "delete": "削除"
+      }
+    },
+    "fileTabs": {
+      "unsavedChanges": "未保存の変更",
+      "close": "閉じる",
+      "confirmClose": "未保存の変更があるファイルを閉じますか？",
+      "closeAnyway": "閉じる",
+      "cancel": "キャンセル"
+    },
+    "loginPrompt": {
+      "title": "サインインしてプロジェクトを保存",
+      "body": "無料アカウントを作成してプロジェクトを保存・共有しましょう。",
+      "createAccount": "アカウント作成",
+      "cancel": "キャンセル"
+    },
+    "saveProject": {
+      "titleSave": "プロジェクトを保存",
+      "titleUpdate": "プロジェクトを更新",
+      "nameLabel": "プロジェクト名 *",
+      "namePlaceholder": "私の素晴らしいプロジェクト",
+      "descriptionLabel": "説明",
+      "descriptionPlaceholder": "任意",
+      "save": "保存",
+      "update": "更新",
+      "saving": "保存中…",
+      "cancel": "キャンセル",
+      "visibility": {
+        "public": "公開",
+        "publicHint": "リンクを知っている人は誰でも閲覧可",
+        "private": "非公開",
+        "privateHint": "あなただけが閲覧可"
+      },
+      "errors": {
+        "nameRequired": "プロジェクト名は必須です。",
+        "unreachable": "サーバーに接続できません。接続を確認して再試行してください。",
+        "notAuth": "認証されていません。ログインして再試行してください。",
+        "failedStatus": "保存に失敗しました ({{status}})。"
+      }
+    },
+    "share": {
+      "title": "プロジェクトを共有",
+      "public": "公開",
+      "private": "非公開",
+      "publicHint": "リンクを知っている人は誰でもこのプロジェクトを閲覧可",
+      "privateHint": "あなただけがこのプロジェクトを閲覧可",
+      "makePrivate": "非公開にする",
+      "makePublic": "公開にする",
+      "copy": "コピー",
+      "privateWarning": "このプロジェクトは非公開です。他の人がこのリンクを開くと403エラーが表示されます。",
+      "close": "閉じる"
+    },
+    "canvas": {
+      "status": {
+        "running": "実行中",
+        "stopped": "停止中"
+      },
+      "activeBoard": "アクティブなボード",
+      "noBoard": "ボードなし",
+      "noBoardHint": "キャンバスにボードがありません — 「追加」ボタンでボードを追加してコードをコンパイル・実行",
+      "undo": {
+        "label": "元に戻す",
+        "title": "元に戻す: {{description}} (Ctrl+Z)",
+        "empty": "元に戻す操作はありません"
+      },
+      "redo": {
+        "label": "やり直す",
+        "title": "やり直す: {{description}} (Ctrl+Y)",
+        "empty": "やり直す操作はありません"
+      },
+      "toggleSerialMonitor": "シリアルモニタの表示/非表示",
+      "serial": "シリアル",
+      "toggleScope": "オシロスコープ/ロジックアナライザの表示/非表示",
+      "scope": "スコープ",
+      "zoomIn": "拡大",
+      "zoomOut": "縮小",
+      "resetView": "ビューをリセット (クリックでリセット)",
+      "componentCount_one": "{{count}} コンポーネント",
+      "componentCount_other": "{{count}} コンポーネント",
+      "addComponentTitle": "コンポーネントを追加",
+      "add": "追加",
+      "dismiss": "閉じる",
+      "removeBoard": "ボードを削除",
+      "wireCount_one": "{{count}} 配線",
+      "wireCount_other": "{{count}} 配線",
+      "removeConfirm": {
+        "boardFallback": "ボード",
+        "title": "{{label}} を削除しますか？",
+        "body": "このボードをワークスペースから削除します。この操作は元に戻せません。",
+        "bodyWithWires_one": "このボードと{{count}}本の接続配線をワークスペースから削除します。この操作は元に戻せません。",
+        "bodyWithWires_other": "このボードと{{count}}本の接続配線をワークスペースから削除します。この操作は元に戻せません。",
+        "cancel": "キャンセル",
+        "remove": "削除"
+      }
+    },
+    "componentPicker": {
+      "title": "コンポーネントを追加",
+      "close": "閉じる",
+      "searchPlaceholder": "コンポーネントを検索...",
+      "clearSearch": "検索をクリア",
+      "allComponents": "すべてのコンポーネント",
+      "boards": "ボード",
+      "loading": "コンポーネントを読み込み中...",
+      "noResults": "コンポーネントが見つかりません",
+      "clearFilters": "フィルターをクリア"
+    },
+    "libraryManager": {
+      "title": "ライブラリマネージャー",
+      "searchTab": "検索",
+      "installedTab": "インストール済み",
+      "filterPlaceholder": "検索を絞り込む...",
+      "searchingFor": "\"{{query}}\" を検索中…",
+      "loadingLibraries": "ライブラリを読み込み中…",
+      "noResults": "利用可能なライブラリがありません",
+      "noResultsFor": "\"{{query}}\" に一致するライブラリが見つかりません",
+      "byAuthor": "作者: {{author}}",
+      "install": "インストール",
+      "installing": "インストール中...",
+      "uninstall": "アンインストール",
+      "uninstalling": "アンインストール中...",
+      "loadingInstalled": "インストール済みライブラリを読み込み中...",
+      "noneInstalled": "まだライブラリがインストールされていません。",
+      "useSearchTab": "検索タブを使用してライブラリをインストールしてください。"
+    },
+    "installLibs": {
+      "title": "必要なライブラリ",
+      "installingProgress": "{{done}} / {{total}} をインストール中…",
+      "allDone": "すべてのライブラリが正常にインストールされました",
+      "required_one": "このプロジェクトには{{count}}個のライブラリが必要です。正しくコンパイルするためにインストールしてください。",
+      "required_other": "このプロジェクトには{{count}}個のライブラリが必要です。正しくコンパイルするためにインストールしてください。",
+      "wokwiHosted": "Wokwiホストライブラリ",
+      "pending": "保留中",
+      "installing": "インストール中…",
+      "installed": "インストール済み",
+      "errorStatus": "エラー",
+      "close": "閉じる",
+      "skip": "スキップ",
+      "installAll": "すべてインストール ({{count}})",
+      "installingShort": "インストール中…"
+    },
+    "shell": {
+      "code": "コード",
+      "both": "両方",
+      "circuit": "回路",
+      "showExplorer": "ファイルエクスプローラを表示",
+      "hideExplorer": "ファイルエクスプローラを非表示",
+      "viewMode": "表示モード",
+      "dragResize": "ドラッグしてサイズ変更"
+    },
+    "oscilloscope": {
+      "title": "オシロスコープ",
+      "addChannelTitle": "ピンチャンネルを追加",
+      "addChannel": "チャンネル追加",
+      "timeDiv": "時間/div:",
+      "pauseTitle": "キャプチャを一時停止",
+      "resumeTitle": "キャプチャを再開",
+      "pause": "一時停止",
+      "run": "実行",
+      "clearTitle": "キャプチャしたサンプルをすべてクリア",
+      "clear": "クリア",
+      "noChannels": "チャンネルが追加されていません。",
+      "noChannelsHint": "\"+ チャンネル追加\" をクリックしてピンを監視します。",
+      "removeChannel": "{{label}} を削除"
+    },
+    "componentProps": {
+      "close": "閉じる",
+      "tapToConnect": "接続するピンをタップ:",
+      "tapToWire": "配線するピンをタップ:",
+      "pinRoles": "ピンの役割:",
+      "arduinoPin": "Arduino ピン:",
+      "confirmDelete": "{{name}} を削除しますか？",
+      "confirmDeleteTitle": "削除の確認",
+      "deleteTitle": "コンポーネントを削除",
+      "rotate90": "90°回転",
+      "rotate": "回転",
+      "delete": "削除",
+      "cancel": "キャンセル"
+    },
+    "selectionBar": {
+      "label": "選択アクション",
+      "rotate90": "90°回転",
+      "rotate": "回転",
+      "delete": "削除",
+      "deselect": "選択解除",
+      "changeColor": "色を変更",
+      "deleteKind": {
+        "wire": "配線を削除",
+        "component": "コンポーネントを削除",
+        "board": "ボードを削除"
+      }
+    },
+    "console": {
+      "title": "出力",
+      "errorCount_one": "{{count}} エラー",
+      "errorCount_other": "{{count}} エラー",
+      "warningCount_one": "{{count}} 警告",
+      "warningCount_other": "{{count}} 警告",
+      "filterAll": "すべて",
+      "filterErrors": "エラー",
+      "filterWarnings": "警告",
+      "auto": "自動",
+      "clear": "出力をクリア",
+      "close": "閉じる",
+      "empty": "まだコンパイル出力がありません。「コンパイル」をクリックして開始してください。"
+    },
+    "boardPicker": {
+      "title": "ボードを追加"
+    },
+    "pinPicker": {
+      "close": "閉じる",
+      "filterPins": "ピンをフィルター…",
+      "noMatch": "一致するピンがありません。",
+      "rotate": "回転",
+      "delete": "削除"
+    },
+    "pi": {
+      "connected": "接続済み",
+      "starting": "起動中…",
+      "offline": "オフライン",
+      "powerOnTitle": "Raspberry Pi の電源を入れる",
+      "startPi": "Pi を起動",
+      "connectTitle": "端末を Pi に接続",
+      "connect": "接続",
+      "disconnectTitle": "端末を切断",
+      "disconnect": "切断",
+      "terminal": "端末",
+      "close": "閉じる",
+      "offlineTitle": "Raspberry Pi 3B の電源がオフです",
+      "offlineSubtitle": "Pi を起動して端末を開き、Linux システムと対話します。",
+      "offlineNote1": "注: ファイルエクスプローラはステージング領域を表示します。",
+      "offlineNote2": "起動後、「Pi にアップロード」を使用してファイルを実行中の Pi に転送します。",
+      "loadingTerminal": "端末を読み込み中…",
+      "selectFile": "エクスプローラからファイルを選択して編集します。"
+    },
+    "sensorPanel": {
+      "close": "閉じる"
+    },
+    "customChip": {
+      "title": "カスタムチップ — {{chipName}}",
+      "tabExamples": "例",
+      "tabEditor": "エディタ",
+      "attributes": "属性",
+      "compiling": "コンパイル中…",
+      "compile": "コンパイル",
+      "compiledOk": "✓ コンパイル完了 — {{kb}} KB",
+      "compileFailed": "コンパイル失敗",
+      "cancel": "キャンセル",
+      "savePlace": "保存して配置",
+      "compileFirst": "先にコンパイルしてください"
+    },
+    "serial": {
+      "title": "シリアルモニタ",
+      "addBoard": "ボードを追加してシリアルモニタを開始します。",
+      "autoscroll": "自動スクロール",
+      "clearTitle": "このボードの出力をクリア",
+      "clear": "クリア",
+      "send": "送信",
+      "iotGatewayTitle": "クリックしてIoTゲートウェイ経由で開く",
+      "openIotGateway": "IoTゲートウェイを開く",
+      "waitingData": "シリアルデータを待機中...",
+      "startSim": "シミュレーションを開始してシリアル出力を確認します。",
+      "placeholderText": "送信するメッセージを入力...",
+      "placeholderPython": "Python式を入力... (Ctrl+Cで中断)",
+      "lineEnd": {
+        "none": "行末なし",
+        "nl": "改行",
+        "cr": "復帰",
+        "both": "改行と復帰の両方"
+      }
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "Velxioについて",
+      "subtitle": "無料でオープンソースの組み込みシステムエミュレータ — ハードウェアとオープンソースに情熱を持つ一人の開発者によって作られました。"
+    },
+    "story": {
+      "heading": "ストーリー",
+      "p1": "Velxioは、マイクロコントローラエミュレータが内部でどのように動作するか — CPU命令、メモリ管理、ペリフェラルのタイミング、低レベルアーキテクチャ — を個人的に探求することから始まりました。休暇中の学習プロジェクトとして始まったものが、すぐに大きなものに成長しました。",
+      "p2": "アイデアはシンプルでした: <strong>もし誰でもArduino、ESP32、Raspberry Piボードをブラウザ上で直接シミュレーションできたら？ハードウェアを購入せず、ツールチェーンをインストールせず、クラウドアカウントも不要で。</strong>",
+      "p3": "Velxio v1はProduct HuntとHacker Newsでローンチされ、Arduino UnoとRaspberry Pi Picoをサポートしました。メーカーや組み込みコミュニティからのフィードバックは素晴らしく、プロジェクトを前進させました。",
+      "p4": "<strong>Velxio 2.0</strong>では、QEMU（lcgamboaフォーク）によるESP32エミュレーション、実際のLinuxを実行するRaspberry Pi 3、ESP32-C3とCH32V003のRISC-Vサポート、リアルなセンサーシミュレーション（DHT22、HC-SR04、WS2812B NeoPixel）、そして5つのCPUアーキテクチャにわたる19のボードを搭載 — すべて実際のコンパイル済みコードを実行します。",
+      "p5": "v2のローンチは<strong>Hacker Newsのトップページに20時間以上掲載</strong>され、24時間以内に約600のGitHubスターと数千人の訪問者を獲得しました。現在、世界中の学生、教授、メーカーによって使用されています。"
+    },
+    "howItWorks": {
+      "heading": "仕組み",
+      "avrRp2040Body": "サイクル精度のエミュレーションがブラウザ内で完全に実行されます（avr8jsおよびrp2040jsを使用）。シミュレーションにバックエンドは不要です。",
+      "esp32Body": "Xtensa ESP32およびESP32-S3は、バックエンドのQEMU（lcgamboaフォーク）で実行され、実際のフラッシュイメージ、GPIO、ADC、タイマーを備えています。",
+      "riscvBody": "ESP32-C3（DevKit、XIAO、SuperMini）およびCH32V003は、QEMU lcgamboaフォークとlibqemu-riscv32を介してエミュレートされ、Xtensa ESP32と同じバックエンドパターンです。",
+      "raspiBody": "QEMU raspi3bを介した完全なARM Cortex-A53 Linux — 実際のRaspberry Pi OSを起動し、RPi.GPIOを使用してPythonを実行します。"
+    },
+    "openSource": {
+      "heading": "オープンソースの哲学",
+      "lead": "Velxioは<strong>100%オープンソース</strong>で、AGPLv3ライセンスの下で提供されています。クラウド依存なし、学生アカウント不要、データがネットワーク外に出ることはありません。大学やブートキャンプは、単一のDockerコマンドで自社サーバーにデプロイし、すべての学生に完全な組み込み開発環境を無料で提供できます。",
+      "creditsIntro": "このプロジェクトは、コミュニティからの素晴らしいオープンソースの成果に基づいています:",
+      "credits": {
+        "avr8js": "WokwiによるAVR8 CPUエミュレーション",
+        "rp2040js": "WokwiによるRP2040エミュレーション",
+        "wokwiElements": "Wokwiによる48以上の視覚的電子コンポーネント",
+        "qemuLcgamboa": "ESP32およびRaspberry PiのQEMUエミュレーション",
+        "arduinoCli": "Arduinoコンパイルツールチェーン"
+      },
+      "inspiredBy": "Velxioは<a>Wokwi</a>に触発されました。Wokwiは素晴らしいツールです。Velxioの目標は、別の道を進むことです: 完全にオープンソースで、セルフホスト可能、同じ回路内で複数の異種ボードをサポートします。"
+    },
+    "creator": {
+      "heading": "クリエイター",
+      "role": "IBM アプリケーションアーキテクト · モンテビデオ、ウルグアイ",
+      "bio1": "10年以上の経験を持つアプリケーションアーキテクトで、大規模エンタープライズエコシステムの開発をリード。生成AI（LLM、RAG、LangChain）、クラウドネイティブアーキテクチャ（OpenShift、Kubernetes）のスペシャリストであり、認定Odoo ERPエキスパート。現在はIBMでウルグアイ州保険銀行（BSE）向けのエンタープライズアプリケーションに従事。",
+      "bio2": "キューバのUniversidad de Orienteでコンピュータサイエンス工学を学び（2012-2017）、その後ウルグアイに移住。Quanam（政府機関向けOdoo実装）やIBM（BPSおよびBSE向けエンタープライズアーキテクチャ）でのキャリアを築く。",
+      "bio3": "プログラミングとロボット工学の愛好家。他のオープンソースプロジェクトのクリエイターでもあり、<a>ESP32で動作する3Dレーシングゲーム</a>（Redditで40K以上のビューを獲得）やRaspberry Pi用のiPod Classicクローンなどがある。",
+      "techStack": "技術スタック"
+    },
+    "releases": {
+      "heading": "最近のリリース",
+      "latest": "最新",
+      "v25Tagline": "ArduinoとSPICEがブラウザで出会う",
+      "v25Blurb": "ngspice-WASMによるリアルタイムアナログ回路シミュレーション。Arduino、ESP32、Raspberry Pi Picoに配線可能。100以上のSPICE精度のコンポーネント、ライブ電流計・電圧計、40の新しいアナログ/ハイブリッド例 — ファームウェアと共にシミュレーション。",
+      "v2Tagline": "マルチボードキャンバス、ESP32、Raspberry Pi 3",
+      "v2Blurb": "WiFi/BLE対応の完全なQEMU駆動ESP32エミュレーション、Raspberry Pi 3B Linux、Pico/ESP32でのMicroPythonサポート、カスタムWASMチップ、マルチボード共同シミュレーションを備えた再設計されたキャンバス。",
+      "readNotes": "ローンチノートを読む →"
+    },
+    "quote": {
+      "p1": "\"私は2012年から2017年までキューバでコンピュータサイエンスを学びました。ウルグアイに移住したとき、最もよく聞かれた質問は: <em>'インターネットもコンピュータもYouTubeもなしでどうやってエンジニアとして卒業したの？'</em>",
+      "p2": "答えはたった4つの言葉でした: <strong>忍耐！忍耐！忍耐！忍耐！</strong>",
+      "p3": "計画Bがないことほど良いモチベーションはありません。\""
+    },
+    "community": {
+      "heading": "コミュニティとプレス",
+      "stats": {
+        "githubStars": "GitHubスター",
+        "countries": "国",
+        "supportedBoards": "サポートボード数",
+        "cpuArchitectures": "CPUアーキテクチャ"
+      },
+      "featuredOn": "掲載メディア:",
+      "press": {
+        "hackerNews": "Hacker News (トップページ)"
+      }
+    },
+    "cta": {
+      "title": "Velxioを試してみませんか？",
+      "subtitle": "サインアップ不要。100%ブラウザで動作。無料でオープンソース。",
+      "openEditor": "エディタを開く"
+    }
+  }
+}

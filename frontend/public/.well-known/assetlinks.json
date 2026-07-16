@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "dev.velxio.twa",
+      "sha256_cert_fingerprints": [
+        "DC:B2:A0:74:66:7C:16:75:40:64:3E:EC:BD:2C:03:14:48:6D:59:1B:34:22:C0:AE:41:D8:5C:E1:1C:6B:9E:0F"
+      ]
+    }
+  }
+]

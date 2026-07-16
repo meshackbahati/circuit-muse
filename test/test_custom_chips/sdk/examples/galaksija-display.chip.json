@@ -1,0 +1,9 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Galaksija Display (32x16)",
+  "author": "Velxio (CHRGEN font: Galaksija project, public domain)",
+  "license": "MIT (chip) / public-domain (char generator)",
+  "description": "Galaksija 32x16 text video display. Passive bus snoop: watches WR + address + data and renders writes to the 0x2800 video RAM with the public-domain CHRGEN font into a 256x128 framebuffer. Phase 3 chip-to-chip bus proof.",
+  "display": { "width": 256, "height": 128 },
+  "pins": ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "WR"]
+}

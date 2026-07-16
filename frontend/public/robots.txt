@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Auth pages — no useful content for search engines
+Disallow: /login
+Disallow: /register
+
+# UUID-based duplicate of /:username/:slug — keep crawlers on the canonical
+# user-friendly URL instead of the opaque /project/<uuid> alternate.
+Disallow: /project/
+Disallow: /admin
+
+# Prevent crawling of API endpoints
+Disallow: /api/
+
+# Sitemap (static build-time routes + dynamic public projects)
+Sitemap: https://velxio.dev/sitemap.xml
+Sitemap: https://velxio.dev/sitemap-projects.xml

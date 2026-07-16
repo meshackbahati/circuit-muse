@@ -1,0 +1,52 @@
+# Development Docker Compose — same image as production for full parity.
+# Usage: docker compose up --build
+# Access: http://localhost:3080
+#
+# backend/.env is OPTIONAL. If missing, the entrypoint generates a random
+# SECRET_KEY so the app boots out-of-the-box. Create backend/.env (copy
+# backend/.env.example) only when you need OAuth or want a fixed SECRET_KEY.
+services:
+  velxio:
+    build:
+      context: .
+      dockerfile: Dockerfile.standalone
+    container_name: velxio-dev
+    restart: unless-stopped
+    ports:
+      - "3080:80"
+    env_file:
+      - path: ./backend/.env
+        required: false
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:////app/data/velxio.db
+      - DATA_DIR=/app/data
+      - IDF_PATH=/opt/esp-idf
+      - IDF_TOOLS_PATH=/root/.espressif
+      - ARDUINO_ESP32_PATH=/opt/arduino-esp32
+      # ccache for ESP-IDF compiles — the named volume below persists hits
+      # across container restarts and image rebuilds. Set IDF_CCACHE_ENABLE=0
+      # to disable without changing the Dockerfile.
+      - IDF_CCACHE_ENABLE=1
+      - CCACHE_DIR=/var/cache/ccache
+      # Persistent ESP-IDF build dir (one per board target). Lets ninja's
+      # incremental cache + ccache hits combine across compiles, taking warm
+      # builds from ~5-7 min to ~5-30s. Set VELXIO_PERSISTENT_BUILD_DIR=0
+      # to disable without rebuilding the image (fallback to per-compile
+      # tempfile.TemporaryDirectory behaviour).
+      - VELXIO_PERSISTENT_BUILD_DIR=1
+    volumes:
+      - ./data:/app/data
+      - arduino-libs:/root/.arduino15
+      - ccache:/var/cache/ccache
+      - velxio-build:/var/lib/velxio-build
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+
+volumes:
+  arduino-libs:
+  ccache:
+  velxio-build:

@@ -1,0 +1,534 @@
+/**
+ * Component Picker Modal
+ *
+ * Modal interface for searching and selecting components from the wokwi-elements library.
+ * Features:
+ * - Search bar with real-time filtering
+ * - Category tabs for filtering
+ * - Grid layout with component thumbnails
+ * - Click to select and add component
+ */
+
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ComponentRegistry } from '../services/ComponentRegistry';
+import type { ComponentMetadata, ComponentCategory } from '../types/component-metadata';
+import type { BoardKind } from '../types/board';
+import { BOARD_KIND_LABELS } from '../types/board';
+import { isProBoardKind } from '../lib/proBoardGate';
+import raspberryPi3Svg from '../assets/Raspberry_Pi_3_illustration.svg';
+import { Attiny85 } from './velxio-components/Attiny85';
+import './velxio-components/Esp32Element'; // registers velxio-esp32
+import './velxio-components/PiPicoWElement'; // registers velxio-pi-pico-w
+import './velxio-components/Stm32BluePillElement'; // registers velxio-stm32-bluepill
+// Register every wokwi tag that the picker might try to instantiate as a
+// thumbnail. The picker calls `document.createElement(tagName)`, so any tag
+// that isn't already a registered custom element renders as an empty
+// HTMLUnknownElement (blank card preview).
+import '@wokwi/elements';
+import '../velxio-elements';
+import './ComponentPickerModal.css';
+
+interface ComponentPickerModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSelectComponent: (metadata: ComponentMetadata) => void;
+  onSelectBoard?: (kind: BoardKind) => void;
+}
+
+const BOARD_DESCRIPTIONS: Record<BoardKind, string> = {
+  'arduino-uno': '8-bit AVR, 32KB flash, 14 digital I/O',
+  'arduino-nano': 'Compact 8-bit AVR, same as Uno',
+  'arduino-mega': '8-bit AVR, 256KB flash, 54 digital I/O',
+  'raspberry-pi-pico': 'RP2040 dual-core Cortex-M0+',
+  'pi-pico-w': 'RP2040 + WiFi/BT, same emulator as Pico',
+  'raspberry-pi-3': 'ARM64 Cortex-A53 quad-core, Linux/Python (QEMU)',
+  'raspberry-pi-4': 'ARM64 Cortex-A72 quad-core, Linux/Python (QEMU)',
+  'raspberry-pi-5': 'ARM64 Cortex-A76 quad-core + RP1 I/O, Linux/Python (QEMU)',
+  esp32: 'Xtensa LX6 dual-core, WiFi+BT, 38 GPIO (QEMU)',
+  'esp32-devkit-c-v4': 'ESP32 DevKit C V4, official Espressif (QEMU)',
+  'esp32-cam': 'ESP32 + 2MP camera, microSD (QEMU)',
+  'wemos-lolin32-lite': 'Compact ESP32, LiPo battery support (QEMU)',
+  'esp32-s3': 'Xtensa LX7 dual-core, WiFi+BT, AI accel (QEMU)',
+  'xiao-esp32-s3': 'Seeed XIAO tiny form, 8MB flash+PSRAM (QEMU)',
+  'arduino-nano-esp32': 'Nano form-factor, ESP32-S3, RGB LED (QEMU)',
+  'esp32-c3': 'RISC-V single-core, WiFi+BLE, 22 GPIO (QEMU)',
+  'xiao-esp32-c3': 'Seeed XIAO ESP32-C3 mini board (QEMU)',
+  'aitewinrobot-esp32c3-supermini': 'ESP32-C3 SuperMini (QEMU)',
+  'stm32-bluepill': 'STM32F103C8 Cortex-M3, 64KB flash, 37 GPIO (QEMU)',
+  'stm32-blackpill': 'STM32F411CE Cortex-M4, 512KB flash, 50 GPIO (QEMU)',
+  'stm32-bluepill-f103cb': 'STM32F103CB Cortex-M3, 128KB flash, 37 GPIO (QEMU)',
+  'stm32-blackpill-f401': 'STM32F401CE Cortex-M4, 512KB flash, 50 GPIO (QEMU)',
+  'stm32-f4-discovery': 'STM32F407VG Cortex-M4, 1MB flash, 4 onboard LEDs (QEMU)',
+  'stm32-olimex-h405': 'Olimex STM32-H405, F405RG Cortex-M4, 1MB flash (QEMU)',
+  'stm32-netduino-plus2': 'Netduino Plus 2, STM32F405 Cortex-M4 (QEMU)',
+  'stm32-netduino2': 'Netduino 2, STM32F205 Cortex-M3 (QEMU, serial)',
+  attiny85: '8-bit AVR, 8KB flash, 6 GPIO (browser)',
+};
+
+const ALL_BOARDS: BoardKind[] = [
+  'arduino-uno',
+  'arduino-nano',
+  'arduino-mega',
+  'raspberry-pi-pico',
+  'pi-pico-w',
+  'raspberry-pi-3',
+  'raspberry-pi-4',
+  'raspberry-pi-5',
+  'esp32',
+  'esp32-devkit-c-v4',
+  'esp32-cam',
+  'wemos-lolin32-lite',
+  'esp32-s3',
+  'xiao-esp32-s3',
+  'arduino-nano-esp32',
+  'esp32-c3',
+  'xiao-esp32-c3',
+  'aitewinrobot-esp32c3-supermini',
+  'stm32-bluepill',
+  'stm32-blackpill',
+  'stm32-bluepill-f103cb',
+  'stm32-blackpill-f401',
+  'stm32-f4-discovery',
+  'stm32-olimex-h405',
+  'stm32-netduino-plus2',
+  'stm32-netduino2',
+  'attiny85',
+];
+
+export const ComponentPickerModal: React.FC<ComponentPickerModalProps> = ({
+  isOpen,
+  onClose,
+  onSelectComponent,
+  onSelectBoard,
+}) => {
+  const { t } = useTranslation();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<ComponentCategory | 'all' | 'boards'>(
+    'all',
+  );
+  const [registry] = useState(() => ComponentRegistry.getInstance());
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Wait for registry to load
+  useEffect(() => {
+    const loadRegistry = async () => {
+      await registry.load();
+      setIsLoading(false);
+    };
+    loadRegistry();
+  }, [registry]);
+
+  // Filter components based on search and category
+  const filteredComponents = useMemo(() => {
+    if (isLoading) return [];
+
+    let components = searchQuery ? registry.search(searchQuery) : registry.getAllComponents();
+
+    if (selectedCategory !== 'all') {
+      components = components.filter((c) => c.category === selectedCategory);
+    }
+
+    return components;
+  }, [searchQuery, selectedCategory, registry, isLoading]);
+
+  // Get available categories
+  const categories = useMemo(() => {
+    if (isLoading) return [];
+    return registry.getCategories();
+  }, [registry, isLoading]);
+
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+
+    if (isOpen) {
+      window.addEventListener('keydown', handleEsc);
+      return () => window.removeEventListener('keydown', handleEsc);
+    }
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="component-picker-overlay" onClick={onClose}>
+      <div className="component-picker-modal" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="modal-header">
+          <h2>{t('editor.componentPicker.title')}</h2>
+          <button className="close-btn" onClick={onClose} aria-label={t('editor.componentPicker.close')}>
+            X
+          </button>
+        </div>
+
+        {/* Search Bar */}
+        <div className="search-section">
+          <div className="search-input-wrapper">
+            <input
+              type="text"
+              className="search-input"
+              placeholder={t('editor.componentPicker.searchPlaceholder')}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
+            />
+            {searchQuery && (
+              <button
+                className="clear-search-btn"
+                onClick={() => setSearchQuery('')}
+                aria-label={t('editor.componentPicker.clearSearch')}
+              >
+                X
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Category Tabs */}
+        <div className="category-tabs">
+          <button
+            className={`category-tab ${selectedCategory === 'all' ? 'active' : ''}`}
+            onClick={() => setSelectedCategory('all')}
+          >
+            {t('editor.componentPicker.allComponents')}
+          </button>
+          {categories
+            .filter((c) => c !== 'boards')
+            .map((category) => (
+              <button
+                key={category}
+                className={`category-tab ${selectedCategory === category ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {ComponentRegistry.getCategoryDisplayName(category)}
+              </button>
+            ))}
+          {onSelectBoard && (
+            <button
+              className={`category-tab ${selectedCategory === 'boards' ? 'active' : ''}`}
+              onClick={() => setSelectedCategory('boards')}
+            >
+              {t('editor.componentPicker.boards')}
+            </button>
+          )}
+        </div>
+
+        {/* Boards Panel */}
+        {selectedCategory === 'boards' ? (
+          <div className="components-grid">
+            {ALL_BOARDS.map((kind) => (
+              <BoardCard
+                key={kind}
+                kind={kind}
+                onSelect={() => {
+                  onSelectBoard?.(kind);
+                  onClose();
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <>
+            {/* Single scrollable area wrapping both the boards row (only in
+                "All Components" view) and the components grid, so the modal
+                shows ONE scrollbar instead of two stacked ones. */}
+            <div className="components-scroll">
+              {selectedCategory === 'all' && onSelectBoard && (
+                <div
+                  className="components-grid components-grid--inline"
+                  style={{ borderBottom: '1px solid #333', paddingBottom: 8, marginBottom: 4 }}
+                >
+                  {ALL_BOARDS.filter(
+                    (k) =>
+                      !searchQuery ||
+                      BOARD_KIND_LABELS[k].toLowerCase().includes(searchQuery.toLowerCase()),
+                  ).map((kind) => (
+                    <BoardCard
+                      key={kind}
+                      kind={kind}
+                      onSelect={() => {
+                        onSelectBoard(kind);
+                        onClose();
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+
+              <div className="components-grid components-grid--inline">
+                {isLoading ? (
+                  <div className="loading-state">
+                    <div className="spinner"></div>
+                    <p>{t('editor.componentPicker.loading')}</p>
+                  </div>
+                ) : filteredComponents.length === 0 ? (
+                  <div className="no-results">
+                    <p>{t('editor.componentPicker.noResults')}</p>
+                    {searchQuery && (
+                      <button
+                        className="clear-filters-btn"
+                        onClick={() => {
+                          setSearchQuery('');
+                          setSelectedCategory('all');
+                        }}
+                      >
+                        {t('editor.componentPicker.clearFilters')}
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  filteredComponents.map((component) => (
+                    <ComponentCard
+                      key={component.id}
+                      component={component}
+                      onSelect={() => {
+                        // Pro overlays can intercept clicks on pro_only
+                        // components by setting window.__velxio_pro_gate__.
+                        // Returning true means "handled — do not pass through".
+                        if (component.pro_only) {
+                          const gate = (window as unknown as {
+                            __velxio_pro_gate__?: (c: typeof component) => boolean;
+                          }).__velxio_pro_gate__;
+                          if (gate && gate(component)) return;
+                        }
+                        onSelectComponent(component);
+                      }}
+                    />
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Footer Info */}
+            <div className="modal-footer">
+              <span className="component-count">
+                {filteredComponents.length} component{filteredComponents.length !== 1 ? 's' : ''}{' '}
+                available
+              </span>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Component Card - Individual component display in the grid
+ */
+interface ComponentCardProps {
+  component: ComponentMetadata;
+  onSelect: () => void;
+}
+
+// Passive components (resistor / capacitor / inductor) come with metadata
+// thumbnails that already encode the preset value (color bands for resistors,
+// value labels for caps/inductors). The live wokwi elements either ignore
+// `value` visually or render it identically across presets, so for these we
+// short-circuit to the SVG. Everything else still uses the live element so
+// LEDs, displays, etc. preview correctly.
+const PASSIVE_TAGS = new Set([
+  'wokwi-resistor',
+  'wokwi-capacitor',
+  'velxio-capacitor-electrolytic',
+  'wokwi-inductor',
+]);
+
+const ComponentCard: React.FC<ComponentCardProps> = ({ component, onSelect }) => {
+  const thumbnailRef = React.useRef<HTMLDivElement>(null);
+  const usePresetSvg =
+    PASSIVE_TAGS.has(component.tagName) &&
+    typeof component.thumbnail === 'string' &&
+    component.thumbnail.trim().startsWith('<svg');
+
+  // Render actual web component as thumbnail
+  React.useEffect(() => {
+    if (!thumbnailRef.current) return;
+    if (usePresetSvg) return; // SVG is rendered via dangerouslySetInnerHTML below
+
+    // Create the actual wokwi element
+    const element = document.createElement(component.tagName);
+
+    // Scale factors for different component types
+    let scale = 0.5;
+    if (component.tagName.includes('arduino') || component.tagName.includes('esp32')) {
+      scale = 0.35; // Boards are larger, scale them down more
+    } else if (component.tagName.includes('lcd') || component.tagName.includes('display')) {
+      scale = 0.4; // Displays need a bit more space
+    }
+
+    (element as HTMLElement).style.transform = `scale(${scale})`;
+    (element as HTMLElement).style.transformOrigin = 'center center';
+
+    // Pass the preset's default value through so value-sensitive elements
+    // (e.g. wokwi-resistor color bands) render the right look in the picker.
+    if (component.defaultValues?.value !== undefined) {
+      (element as any).value = component.defaultValues.value;
+    }
+
+    // Set default properties for better preview appearance
+    if (component.tagName === 'wokwi-led') {
+      (element as any).value = true; // Turn on LED
+      (element as any).color = component.defaultValues?.color || 'red';
+    } else if (component.tagName === 'wokwi-rgb-led') {
+      (element as any).red = true;
+      (element as any).green = true;
+      (element as any).blue = true;
+    } else if (component.tagName === 'wokwi-pushbutton') {
+      (element as any).color = component.defaultValues?.color || 'red';
+    } else if (component.tagName === 'wokwi-lcd1602' || component.tagName === 'wokwi-lcd2004') {
+      (element as any).text = 'Hello World!';
+    }
+
+    thumbnailRef.current.innerHTML = '';
+    thumbnailRef.current.appendChild(element);
+
+    return () => {
+      if (thumbnailRef.current) {
+        thumbnailRef.current.innerHTML = '';
+      }
+    };
+  }, [component.tagName, component.defaultValues, usePresetSvg]);
+
+  return (
+    <button className="component-card" onClick={onSelect}>
+      <div className="card-thumbnail">
+        {usePresetSvg ? (
+          <div
+            className="component-preview"
+            dangerouslySetInnerHTML={{ __html: component.thumbnail }}
+          />
+        ) : (
+          <div ref={thumbnailRef} className="component-preview" />
+        )}
+      </div>
+      <div className="card-content">
+        <div className="card-name">{component.name}</div>
+        {component.description && <div className="card-description">{component.description}</div>}
+        <div className="card-meta">
+          <span className="card-category">{component.category}</span>
+          {component.pinCount > 0 && <span className="card-pins">{component.pinCount} pins</span>}
+        </div>
+      </div>
+    </button>
+  );
+};
+
+// Tag name used to render a thumbnail for each board kind.
+// Boards without a tag will show a generic chip icon.
+const BOARD_TAG: Partial<Record<BoardKind, string>> = {
+  'arduino-uno': 'wokwi-arduino-uno',
+  'arduino-nano': 'wokwi-arduino-nano',
+  'arduino-mega': 'wokwi-arduino-mega',
+  'raspberry-pi-pico': 'wokwi-nano-rp2040-connect',
+  'pi-pico-w': 'velxio-pi-pico-w',
+  esp32: 'velxio-esp32',
+  'esp32-devkit-c-v4': 'velxio-esp32',
+  'esp32-cam': 'velxio-esp32',
+  'wemos-lolin32-lite': 'velxio-esp32',
+  'esp32-s3': 'velxio-esp32',
+  'xiao-esp32-s3': 'velxio-esp32',
+  'arduino-nano-esp32': 'velxio-esp32',
+  'esp32-c3': 'velxio-esp32',
+  'xiao-esp32-c3': 'velxio-esp32',
+  'aitewinrobot-esp32c3-supermini': 'velxio-esp32',
+  'stm32-bluepill': 'velxio-stm32-bluepill',
+  'stm32-blackpill': 'velxio-stm32-blackpill',
+  'stm32-bluepill-f103cb': 'velxio-stm32-bluepill-f103cb',
+  'stm32-blackpill-f401': 'velxio-stm32-blackpill-f401',
+  'stm32-f4-discovery': 'velxio-stm32-f4-discovery',
+  'stm32-olimex-h405': 'velxio-stm32-olimex-h405',
+  'stm32-netduino-plus2': 'velxio-stm32-netduino-plus2',
+  'stm32-netduino2': 'velxio-stm32-netduino2',
+};
+
+interface BoardCardProps {
+  kind: BoardKind;
+  onSelect: () => void;
+}
+
+const BoardCard: React.FC<BoardCardProps> = ({ kind, onSelect }) => {
+  const thumbnailRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!thumbnailRef.current) return;
+    // React-rendered boards and Pi family handled below: Pi 3 has a custom
+    // illustration SVG; Pi 4 / Pi 5 instantiate their own velxio-* custom
+    // element directly because they don't go through BOARD_TAG.
+    if (kind === 'raspberry-pi-3' || kind === 'attiny85') return;
+    if (kind === 'raspberry-pi-4' || kind === 'raspberry-pi-5') {
+      const tagName = kind === 'raspberry-pi-4' ? 'velxio-raspberry-pi-4' : 'velxio-raspberry-pi-5';
+      const el = document.createElement(tagName) as HTMLElement;
+      el.style.transform = 'scale(0.35)';
+      el.style.transformOrigin = 'center center';
+      thumbnailRef.current.innerHTML = '';
+      thumbnailRef.current.appendChild(el);
+      return () => {
+        if (thumbnailRef.current) thumbnailRef.current.innerHTML = '';
+      };
+    }
+
+    const tag = BOARD_TAG[kind];
+    if (!tag) return;
+
+    const el = document.createElement(tag) as HTMLElement;
+    // Use setAttribute so observedAttributes + connectedCallback read the correct value
+    el.setAttribute('board-kind', kind);
+    el.style.transform = 'scale(0.28)';
+    el.style.transformOrigin = 'center center';
+
+    thumbnailRef.current.innerHTML = '';
+    thumbnailRef.current.appendChild(el);
+
+    return () => {
+      if (thumbnailRef.current) thumbnailRef.current.innerHTML = '';
+    };
+  }, [kind]);
+
+  const reactThumbnail =
+    kind === 'raspberry-pi-3' ? (
+      <img
+        src={raspberryPi3Svg}
+        alt="Raspberry Pi 3"
+        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+      />
+    ) : kind === 'attiny85' ? (
+      <div style={{ transform: 'scale(0.55)', transformOrigin: 'center center' }}>
+        <Attiny85 />
+      </div>
+    ) : null;
+
+  return (
+    <button className="component-card" onClick={onSelect} style={{ position: 'relative' }}>
+      {isProBoardKind(kind) && (
+        <span
+          title="Pro feature — paid plan or Velxio Desktop"
+          style={{
+            position: 'absolute',
+            top: 6,
+            right: 6,
+            zIndex: 1,
+            padding: '1px 6px',
+            borderRadius: 4,
+            fontSize: 9,
+            fontWeight: 700,
+            letterSpacing: 0.5,
+            color: '#1a1205',
+            background: 'linear-gradient(180deg,#ffd566,#f5a623)',
+          }}
+        >
+          PRO
+        </span>
+      )}
+      <div className="card-thumbnail">
+        {reactThumbnail ? reactThumbnail : <div ref={thumbnailRef} className="component-preview" />}
+      </div>
+      <div className="card-content">
+        <div className="card-name">{BOARD_KIND_LABELS[kind]}</div>
+        <div className="card-description">{BOARD_DESCRIPTIONS[kind]}</div>
+      </div>
+    </button>
+  );
+};

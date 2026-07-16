@@ -1,0 +1,409 @@
+{
+  "header": {
+    "skipToContent": "Salta al contenuto",
+    "openMenu": "Apri menu",
+    "closeMenu": "Chiudi menu",
+    "nav": {
+      "home": "Home",
+      "documentation": "Documentazione",
+      "examples": "Esempi",
+      "editor": "Editor",
+      "about": "Informazioni",
+      "pricing": "Prezzi",
+      "download": "Scarica",
+      "blog": "Blog",
+      "github": "GitHub",
+      "discord": "Discord",
+      "classroom": "Per le scuole"
+    },
+    "auth": {
+      "signIn": "Accedi",
+      "signUp": "Registrati",
+      "myProjects": "I miei progetti",
+      "signOut": "Esci"
+    },
+    "language": "Lingua",
+    "search": "Cerca"
+  },
+  "footer": {
+    "about": "Velxio è un simulatore gratuito e open-source di circuiti e microcontrollori che funziona interamente nel tuo browser. Arduino, ESP32, RP2040 e ATtiny85, con co-simulazione analogica SPICE accurata. Creato per maker, studenti e ingegneri embedded che imparano facendo. AGPLv3."
+  },
+  "landing": {
+    "hero": {
+      "titleLine1": "Arduino, ESP32 e Raspberry Pi.",
+      "titleAccent": "Direttamente nel tuo browser.",
+      "subtitle": "Scrivi codice, collega componenti, premi esegui. 19 schede, 48+ parti, emulazione CPU reale — nessun hardware, nessuna installazione, nessun cloud.",
+      "ctaPrimary": "Prova il simulatore online gratis →",
+      "ctaGithub": "Vedi su GitHub",
+      "trustLine": "Nessuna registrazione richiesta · Funziona al 100% nel browser · Gratuito e open-source",
+      "imageAlt": "Editor Velxio con circuito semaforico Arduino Uno"
+    },
+    "boards": {
+      "label": "Hardware supportato",
+      "titleLine1": "Ogni architettura.",
+      "titleLine2": "Un solo strumento.",
+      "subtitle": "19 schede su 5 architetture CPU — AVR8, ARM Cortex-M0+, RISC-V, Xtensa e Linux. Tutte in esecuzione localmente, senza cloud."
+    },
+    "features": {
+      "label": "Funzionalità",
+      "title": "Tutto ciò che ti serve.",
+      "subtitle": "Un IDE completo, compilatore e simulatore multi-architettura — in esecuzione locale senza servizi esterni.",
+      "spice": {
+        "title": "Analogico SPICE in tempo reale",
+        "desc": "Motore ngspice-WASM — analisi nodale modificata completa a ~60 Hz. Resistenze, condensatori, amplificatori operazionali, BJT, MOSFET, regolatori si comportano come silicio reale, non modelli idealizzati."
+      },
+      "engines": {
+        "title": "5 motori di emulazione",
+        "desc": "AVR8 (ATmega328P, ATmega2560, ATtiny85), RP2040 (ARM Cortex-M0+), RV32IMC (ESP32-C3, CH32V003 tramite QEMU), Xtensa LX6/LX7 (ESP32 tramite QEMU) e ARM Cortex-A53 (Raspberry Pi 3 Linux)."
+      },
+      "customChips": {
+        "title": "Chip personalizzati",
+        "desc": "Crea i tuoi circuiti integrati in C, Rust o AssemblyScript usando l'API Wokwi Custom Chips. Compila in WebAssembly e riutilizzali tra i progetti."
+      },
+      "components": {
+        "title": "100+ componenti",
+        "desc": "Parti analogiche SPICE accurate più 48+ componenti visivi wokwi — LED, LCD, TFT ILI9341, servo, buzzer, sensori a ultrasuoni, tastierini, strisce NeoPixel."
+      },
+      "instruments": {
+        "title": "Strumenti live",
+        "desc": "Oscilloscopio multicanale, voltmetro, amperometro, generatore di segnali. Posiziona su qualsiasi nodo e guarda le forme d'onda aggiornarsi in tempo reale mentre la simulazione è in esecuzione."
+      },
+      "monaco": {
+        "title": "Editor Monaco + arduino-cli",
+        "desc": "Editor C++ di livello VS Code con area di lavoro multi-file. arduino-cli locale compila in file .hex / .uf2 / .bin reali — nessun round-trip sul cloud."
+      }
+    },
+    "support": {
+      "title": "Supporta il progetto",
+      "subtitle": "Velxio è gratuito e open source. Se ti fa risparmiare tempo, considera di supportarne lo sviluppo.",
+      "ctaSponsors": "GitHub Sponsors",
+      "ctaPaypal": "Dona tramite PayPal"
+    },
+    "licensing": {
+      "label": "Licenze",
+      "title": "Gratuito, con opzione commerciale.",
+      "subtitle": "AGPLv3 per la versione open-source. Licenza commerciale per i team che devono integrare Velxio in prodotti closed-source.",
+      "opensource": {
+        "title": "Open source — AGPLv3",
+        "desc": "Gratis per sempre per uso personale, formazione, ricerca e self-hosting. Modifica, fai il fork e ridistribuisci — le tue modifiche restano sotto AGPLv3.",
+        "cta": "Vedi sorgenti su GitHub →"
+      },
+      "commercial": {
+        "badge": "Commerciale",
+        "title": "Licenza commerciale",
+        "desc": "Per prodotti closed-source, SaaS proprietari o uso interno aziendale dove la reciprocità AGPLv3 non è compatibile con il tuo modello di business.",
+        "cta": "Contatta per prezzi →"
+      }
+    },
+    "ai": {
+      "label": "Agente IA",
+      "title": "Alimentato da agenti IA.",
+      "subtitle": "Un agente multi-step gira dentro l’editor. Legge il tuo canvas, scrive codice, posiziona componenti e li collega — tutto tramite linguaggio naturale. Supportato da LLM di frontiera instradati automaticamente per costo e disponibilità.",
+      "cards": {
+        "wire": {
+          "title": "Posiziona e collega",
+          "desc": "Chiedi \"aggiungi un pulsante su D2 con pull-up a 5V\". L’agente sceglie i componenti, li mette sul canvas, collega ogni pin ed etichetta i fili."
+        },
+        "code": {
+          "title": "Sketch funzionanti",
+          "desc": "Descrivi cosa deve fare la scheda e l’agente scrive il codice Arduino / MicroPython, lo compila e lo carica — niente copia-incolla dalla chat."
+        },
+        "debug": {
+          "title": "Diagnostica circuiti dal vivo",
+          "desc": "Bloccato su un bug di cablaggio? Manda lo screenshot del canvas e l’agente legge lo schema, esegue la sim e ti dice quale pin è sbagliato."
+        }
+      }
+    },
+    "pricing": {
+      "label": "Prezzi",
+      "title": "Gratis per i circuiti. Paghi per l’IA.",
+      "subtitle": "Il simulatore resta gratis per sempre. I piani alzano solo la quota dell’agente IA — i crediti si rinnovano ogni giorno.",
+      "popular": "Più popolare",
+      "tiers": {
+        "free": {
+          "name": "Free",
+          "tagline": "Scopri il simulatore + aiuto IA leggero.",
+          "f1": "20 crediti IA giornalieri (fino a 600/mese)",
+          "f2": "Oltre 30 schede + 48+ componenti",
+          "f3": "Emulazione CPU reale, progetti pubblici",
+          "cta": "Inizia"
+        },
+        "maker": {
+          "name": "Maker",
+          "tagline": "Per i maker che realizzano circuiti reali con l'aiuto dell'IA.",
+          "f1": "500 crediti IA al giorno (fino a 15.000/mese)",
+          "f2": "Progetti non elencati + Velxio Desktop (offline)",
+          "f3": "Tempo di simulazione illimitato per ESP32, STM32 e Raspberry Pi",
+          "cta": "Inizia con Maker"
+        },
+        "pro": {
+          "name": "Pro",
+          "tagline": "Progetti privati, sincronizzazione GitHub ed esportazioni BOM.",
+          "f1": "2.000 crediti IA al giorno (fino a 60.000/mese)",
+          "f2": "Progetti privati + BOM CSV + schema PNG",
+          "f3": "GitHub Sync + embed senza watermark",
+          "cta": "Abbonati a Pro"
+        }
+      },
+      "classroomBanner": "Stai portando Velxio in un corso? Velxio for Classroom dà a ogni studente accesso Pro da $40/anno.",
+      "classroomCta": "Vedi i piani per classi →"
+    }
+  },
+  "profile": {
+    "newProject": "Nuovo progetto",
+    "loading": "Caricamento…",
+    "empty": "Nessun progetto pubblico ancora.",
+    "private": "Privato",
+    "copyLink": "Copia link condivisibile",
+    "notFound": "Utente non trovato."
+  },
+  "pricing": {
+    "title": "Prezzi",
+    "selfHosted": "Questa istanza di Velxio è auto-ospitata dall'immagine open-source — tutte le funzionalità sono gratuite per chiunque la utilizzi.",
+    "hostedVersion": "La versione ospitata su <link>velxio.dev</link> offre un livello Pro opzionale che aiuta a finanziare lo sviluppo.",
+    "sourceCode": "Il codice sorgente è <link>concesso in licenza MIT su GitHub</link>."
+  },
+  "admin": {
+    "loading": "Caricamento…",
+    "panel": "Pannello di amministrazione",
+    "logout": "Esci",
+    "tabs": {
+      "dashboard": "Dashboard",
+      "users": "Utenti",
+      "projects": "Progetti",
+      "boards": "Schede"
+    },
+    "errors": {
+      "save": "Salvataggio fallito."
+    },
+    "editUser": {
+      "title": "Modifica utente",
+      "username": "Nome utente",
+      "email": "Email",
+      "newPassword": "Nuova password (lascia vuoto per mantenere)",
+      "passwordPlaceholder": "Min. 8 caratteri",
+      "admin": "Amministratore",
+      "active": "Attivo",
+      "cancel": "Annulla",
+      "save": "Salva",
+      "saving": "Salvataggio…"
+    },
+    "setup": {
+      "title": "Configurazione amministratore",
+      "body": "Non esiste ancora un account amministratore. Crea il primo utente amministratore per procedere.",
+      "password": "Password",
+      "confirmPassword": "Conferma password",
+      "passwordMismatch": "Le password non coincidono.",
+      "creating": "Creazione…",
+      "createAdmin": "Crea amministratore",
+      "failed": "Creazione amministratore fallita."
+    },
+    "notAdmin": {
+      "title": "Accesso amministratore richiesto",
+      "body": "Devi aver effettuato l'accesso come amministratore per accedere a questo pannello.",
+      "goLogin": "Vai al login"
+    },
+    "users": {
+      "loadFailed": "Caricamento utenti fallito.",
+      "deleteFailed": "Eliminazione utente fallita.",
+      "confirmDelete": "Eliminare l'utente \"{{username}}\" e tutti i suoi progetti? Questa operazione non può essere annullata.",
+      "searchPlaceholder": "Cerca per nome utente o email…",
+      "count_one": "{{count}} utente",
+      "count_other": "{{count}} utenti",
+      "noResults": "Nessun utente trovato.",
+      "col": {
+        "username": "Nome utente",
+        "email": "Email",
+        "role": "Ruolo",
+        "status": "Stato",
+        "projects": "Progetti",
+        "compiles": "Compilazioni",
+        "runs": "Esecuzioni",
+        "boards": "Schede",
+        "country": "Paese",
+        "lastActive": "Ultima attività",
+        "joined": "Iscritto",
+        "actions": "Azioni"
+      },
+      "actions": {
+        "activity": "Attività",
+        "edit": "Modifica",
+        "delete": "Elimina",
+        "resetAgentUsage": "Reimposta agente",
+        "resetAgentUsageTooltip": "Cancella l'utilizzo odierno dell'agente per consentire all'utente di continuare."
+      },
+      "confirmResetAgentUsage": "Reimpostare la quota dell'agente per \"{{username}}\" (oggi, UTC)?",
+      "resetAgentUsageDone": "Quota reimpostata per {{username}} — liberati {{cycles}} cicli su {{rows}} eventi.",
+      "resetAgentUsageFailed": "Impossibile reimpostare l'utilizzo dell'agente."
+    },
+    "boards": {
+      "loadFailed": "Caricamento metriche schede fallito.",
+      "range": "Intervallo:",
+      "byFamily": "Per famiglia di schede",
+      "byFqbn": "Per FQBN esatto",
+      "noData": "Nessun dato.",
+      "col": {
+        "family": "Famiglia",
+        "fqbn": "FQBN",
+        "compiles": "Compilazioni",
+        "errors": "Errori",
+        "successRate": "Tasso di successo",
+        "runs": "Esecuzioni",
+        "distinctUsers": "Utenti distinti",
+        "distinctProjects": "Progetti distinti"
+      }
+    },
+    "dashboard": {
+      "loadFailed": "Caricamento metriche fallito.",
+      "loadingMetrics": "Caricamento metriche…",
+      "unknown": "Sconosciuto",
+      "kpi": {
+        "totalUsers": "Utenti totali",
+        "totalProjects": "Progetti totali",
+        "compilesAllTime": "Compilazioni (totali)",
+        "runsAllTime": "Esecuzioni (totali)",
+        "newIn30d": "+{{count}} in 30gg",
+        "successPct": "{{pct}}% successo",
+        "dau": "attivi nelle ultime 24h",
+        "wau": "attivi negli ultimi 7gg",
+        "mau": "attivi negli ultimi 30gg",
+        "publicPrivate": "Pubblici / Privati"
+      },
+      "charts": {
+        "activityOverTime": "Attività nel tempo",
+        "noActivity": "Nessuna attività in questo intervallo.",
+        "compilesByFamily": "Compilazioni per famiglia di schede ({{days}}gg)",
+        "diversityTitle": "Quante famiglie di schede per utente",
+        "diversitySubtitle": "Segnale di prezzo — gli utenti multi-scheda probabilmente giustificano livelli a pagamento.",
+        "boardCount_one": "{{count}} scheda",
+        "boardCount_other": "{{count}} schede",
+        "noDataYet": "Nessun dato ancora.",
+        "topFqbn": "Schede principali per FQBN ({{days}}gg)",
+        "topCountries": "Paesi principali ({{days}}gg)",
+        "countriesSubtitle": "Dall'intestazione CF-IPCountry di Cloudflare. \"Utenti\" = paese di residenza attuale, \"Iscrizioni\" = dove si sono registrati, \"Attivi\" = utenti distinti con attività in questo intervallo.",
+        "noCountryData": "Nessun dato paese ancora (probabilmente in esecuzione al di fuori di Cloudflare).",
+        "topUsers": "Utenti principali per compilazioni",
+        "topProjects": "Progetti principali per compilazioni"
+      },
+      "col": {
+        "country": "Paese",
+        "users": "Utenti",
+        "signups": "Iscrizioni",
+        "activeRange": "Attivi ({{days}}gg)",
+        "user": "Utente"
+      }
+    },
+    "activity": {
+      "loadFailed": "Caricamento attività fallito.",
+      "title": "Attività giornaliera — {{username}}",
+      "subtitle": "Conteggi di compilazioni ed esecuzioni per giorno e per progetto per questo utente.",
+      "noActivity": "Nessuna attività nell'intervallo selezionato.",
+      "projectCount_one": "{{count}} progetto",
+      "projectCount_other": "{{count}} progetti",
+      "deletedProject": "(progetto eliminato)",
+      "noProject": "(nessun progetto)",
+      "col": {
+        "date": "Data",
+        "saves": "Salvataggi"
+      }
+    },
+    "projects": {
+      "loadFailed": "Caricamento progetti fallito.",
+      "deleteFailed": "Eliminazione progetto fallita.",
+      "confirmDelete": "Eliminare il progetto \"{{name}}\"? Questa operazione non può essere annullata.",
+      "searchPlaceholder": "Cerca per nome o proprietario…",
+      "count_one": "{{count}} progetto",
+      "count_other": "{{count}} progetti",
+      "noResults": "Nessun progetto trovato.",
+      "private": "privato",
+      "public": "pubblico",
+      "privateTitle": "Progetto privato (vista amministratore)",
+      "col": {
+        "name": "Nome",
+        "owner": "Proprietario",
+        "board": "Scheda",
+        "visibility": "Visibilità",
+        "compiles": "Compilazioni",
+        "runs": "Esecuzioni",
+        "updates": "Aggiornamenti",
+        "lastCompile": "Ultima compilazione",
+        "updated": "Aggiornato"
+      }
+    }
+  },
+  "examples": {
+    "heading": "Progetti in evidenza",
+    "subtitle": "Esplora ed esegui progetti di esempio — organizzati per scheda",
+    "searchPlaceholder": "Cerca esempi — prova 'esp32 oled', 'blink', 'dht'…",
+    "searchLabel": "Cerca esempi",
+    "clearSearch": "Cancella ricerca",
+    "clear": "Cancella",
+    "matchCount_one": "{{count}} corrispondenza",
+    "matchCount_other": "{{count}} corrispondenze",
+    "filters": {
+      "categoryLabel": "Categoria:",
+      "difficultyLabel": "Difficoltà:",
+      "category": {
+        "all": "Tutte",
+        "basics": "Base",
+        "sensors": "Sensori",
+        "displays": "Display",
+        "communication": "Comunicazione",
+        "games": "Giochi",
+        "robotics": "Robotica",
+        "circuits": "Circuiti"
+      },
+      "difficulty": {
+        "all": "Tutte",
+        "beginner": "Principiante",
+        "intermediate": "Intermedio",
+        "advanced": "Avanzato"
+      }
+    },
+    "copyLink": "Copia link condivisibile",
+    "empty": "Nessun esempio trovato con i filtri selezionati",
+    "emptyForQuery": "Nessun esempio trovato per \"{{query}}\" con i filtri selezionati",
+    "resetFilters": "Reimposta filtri",
+    "installing": "Installazione librerie ({{done}}/{{total}})",
+    "loadingExample": "Caricamento esempio...",
+    "notFound": "Esempio \"{{id}}\" non trovato.",
+    "browseAll": "Sfoglia tutti gli esempi"
+  },
+  "starBanner": {
+    "ariaLabel": "Metti una stella a Velxio su GitHub",
+    "title": "Ti piace Velxio?",
+    "body": "Una ⭐ su GitHub aiuta più sviluppatori a scoprire il progetto — ci vogliono solo 2 secondi!",
+    "cta": "Metti stella su GitHub",
+    "dismiss": "Ignora"
+  },
+  "auth": {
+    "login": {
+      "title": "Accedi",
+      "subtitle": "per continuare su Velxio",
+      "email": "Email",
+      "password": "Password",
+      "signIn": "Accedi",
+      "signingIn": "Accesso in corso…",
+      "or": "oppure",
+      "continueGoogle": "Continua con Google",
+      "noAccount": "Non hai un account?",
+      "failed": "Accesso fallito."
+    },
+    "register": {
+      "title": "Crea account",
+      "subtitle": "Inizia a creare gratuitamente",
+      "username": "Nome utente",
+      "usernamePlaceholder": "es. alice",
+      "passwordPlaceholder": "Almeno 8 caratteri",
+      "create": "Crea account",
+      "creating": "Creazione account…",
+      "haveAccount": "Hai già un account?",
+      "errors": {
+        "reserved": "Questo nome utente è riservato.",
+        "usernameRules": "Il nome utente deve essere di 3-30 caratteri (a-z, 0-9, _, -)",
+        "passwordTooShort": "La password deve essere di almeno 8 caratteri.",
+        "failed": "Registrazione fallita."
+      }
+    }
+  }
+}

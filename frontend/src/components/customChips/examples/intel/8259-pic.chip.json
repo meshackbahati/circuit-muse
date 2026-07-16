@@ -1,0 +1,16 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Intel 8259 PIC",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Programmable Interrupt Controller — single-master, 8 IRQ lines, full ICW/OCW programming model. Drives INT to the CPU and resolves the vector on INTA.",
+  "pins": [
+    "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
+    "IRQ0", "IRQ1", "IRQ2", "IRQ3", "IRQ4", "IRQ5", "IRQ6", "IRQ7",
+    "A0", "CS", "RD", "WR",
+    "INT", "INTA",
+    "CAS0", "CAS1", "CAS2", "SPEN",
+    "VCC", "GND"
+  ],
+  "attributes": []
+}

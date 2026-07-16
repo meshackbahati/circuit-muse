@@ -1,0 +1,132 @@
+{
+  "v2": {
+    "versionBadge": "Version 2.0",
+    "heroAccent": "Multi-Platform Embedded Simulator",
+    "heroSubtitle": "Simulate Arduino, ESP32, Raspberry Pi Pico, and Raspberry Pi 3 in your browser. 19 boards, 68+ ready-to-run examples, realistic sensor simulation. Free, open-source, no install needed.",
+    "tryV2": "Try Velxio 2.0",
+    "joinDiscord": "Join Discord",
+    "boardsHeading": "19 boards. 5 architectures. One tool.",
+    "boardsLead": "From 8-bit AVR to quad-core ARM Linux — Velxio 2.0 emulates every major embedded platform in a single browser tab.",
+    "multipleBoards": "Multiple boards in one circuit",
+    "mixArchitectures": "Mix architectures",
+    "mixArchitecturesBody": "Connect an ESP32 to a Raspberry Pi 3, wire three Arduinos together, or combine a Pico with an ESP32-C3. Any combination works.",
+    "realInterBoard": "Real inter-board communication",
+    "realInterBoardBody": "Boards communicate through wired connections — UART, I2C, SPI, or simple GPIO signals, just like real hardware.",
+    "uniqueFeature": "No other simulator does this",
+    "uniqueFeatureBody": "Traditional simulators emulate one board in isolation. Velxio simulates entire systems with multiple boards running simultaneously.",
+    "whatsNew": "What's new in 2.0",
+    "whatsNewLead": "A complete transformation into a multi-platform embedded systems simulator — more boards, more accurate emulation, better developer experience.",
+    "examplesHeading": "68+ ready-to-run examples",
+    "examplesLead": "From basic LED blink to multi-board communication — examples for every platform and skill level.",
+    "examples": {
+      "arduino": {
+        "title": "Arduino (17 examples)",
+        "body": "Blink, traffic light, button, fade, RGB LED, Simon Says game, TFT display, LCD, I2C scanner, SPI loopback, and more."
+      },
+      "pico": {
+        "title": "Raspberry Pi Pico (18 examples)",
+        "body": "Blink, serial, I2C (scanner, RTC, EEPROM), SPI, ADC read, DHT22, HC-SR04, servo, joystick, NTC sensor."
+      },
+      "esp32": {
+        "title": "ESP32 (9 examples)",
+        "body": "Blink, serial echo, 7-segment, DHT22, HC-SR04, MPU6050 IMU, PIR motion, servo, joystick."
+      },
+      "esp32c3": {
+        "title": "ESP32-C3 RISC-V (9 examples)",
+        "body": "Blink, serial, RGB LED, button + LED, serial echo, DHT22, HC-SR04, PIR, servo."
+      },
+      "mega": {
+        "title": "Arduino Mega (5 examples)",
+        "body": "Blink, LED chase, serial echo, serial control, 7-segment display."
+      },
+      "nano": {
+        "title": "Arduino Nano (4 examples)",
+        "body": "Blink, button LED, fade, serial echo. Plus multi-board Pi-to-Arduino control."
+      }
+    },
+    "outcomeHeading": "The outcome",
+    "outcomeLead": "Velxio 2.0 transforms the project into a complete, scalable multi-platform embedded systems simulator.",
+    "outcome": {
+      "realistic": "More realistic emulation",
+      "realisticBody": "QEMU-based Xtensa, RISC-V and ARM emulation. Cycle-accurate AVR8 via avr8js. Real firmware execution, not approximations.",
+      "broader": "Broader hardware support",
+      "broaderBody": "19 boards across 5 CPU architectures. From 8-bit ATtiny85 to quad-core Raspberry Pi 3B running full Linux.",
+      "devEx": "Better developer experience",
+      "devExBody": "Monaco editor, multi-file workspace, library manager, oscilloscope, sensor control panel, mobile-responsive design."
+    },
+    "builtOnOss": "Built on open-source",
+    "builtOnOssLead": "Velxio is powered by these open-source projects. Without them, none of this would be possible.",
+    "bottom": {
+      "title": "Try Velxio 2.0 now",
+      "body": "Open the editor and start simulating — 19 boards, 68+ examples, zero setup.",
+      "cta": "Launch Simulator"
+    }
+  },
+  "v25": {
+    "versionBadge": "Version 2.5",
+    "heroAccent": "Arduino meets SPICE in your browser",
+    "heroSubtitle": "Real-time analog circuit simulation via ngspice-WASM, wired to Arduino, ESP32, and Raspberry Pi Pico. Resistors, capacitors, op-amps, transistors, live ammeters and voltmeters — co-simulated with your firmware. Free, open-source, no install.",
+    "tryV25": "Try Velxio 2.5",
+    "fullEmulation": "From digital-only to full circuit emulation",
+    "fullEmulationLead": "Velxio 2.0 simulated your firmware perfectly. Velxio 2.5 simulates the circuit around it — with the same ngspice engine used by professional EDA tools, running entirely in your browser tab.",
+    "notLinear": "Not a linear approximation",
+    "notLinearBody": "Velxio solves the full Modified Nodal Analysis every tick. Non-linear devices — diodes, BJTs, MOSFETs, op-amps with saturation — behave like the real thing, not like textbook idealisations.",
+    "realFirmware": "Real firmware. Real circuit. Same canvas.",
+    "realFirmwareBody": "GPIO pins drive SPICE nets as voltage sources. ADC inputs read solved node voltages. analogRead() returns what the circuit actually produces — not a simulated shortcut.",
+    "browserOffline": "100% browser, 100% offline",
+    "browserOfflineBody": "ngspice compiled to WebAssembly via the open-source eecircuit-engine. No server, no cloud, no account. Works offline after the first load. Your circuits never leave your machine.",
+    "catalogHeading": "100+ SPICE-accurate components",
+    "catalogLead": "A complete electronics catalogue — passives, semiconductors, logic, instruments — every one of them modelled with real ngspice device cards, not behavioural stand-ins.",
+    "coSimHeading": "Hybrid digital + analog co-simulation",
+    "coSimLead": "Most browser simulators run either your firmware OR a circuit — never both together. Velxio 2.5 solves them on the same clock.",
+    "driveMotor": "Drive a motor from an Arduino pin",
+    "driveMotorBody": "Pin HIGH → MOSFET gate → drain current through a real inductive load → back-EMF through a flyback diode. All SPICE-solved. Scope the gate and drain voltages side by side.",
+    "readSensor": "Read a sensor through a real op-amp",
+    "readSensorBody": "Photodiode → transimpedance op-amp → ADC. Adjust the lux slider and watch analogRead() respond through the actual amplifier stage — saturation, slew rate, and all.",
+    "liveInstruments": "Debug with live instruments",
+    "liveInstrumentsBody": "Drop an ammeter between any two nodes, a voltmeter on any net. The oscilloscope captures digital pins and analog nodes together. No \"what if\" — just measurements.",
+    "examplesHeading": "40 new analog & hybrid examples",
+    "examplesLead": "Pre-wired circuits you can open in one click — from textbook fundamentals to realistic Arduino+analog systems.",
+    "examples": {
+      "fundamentals": {
+        "title": "Fundamentals",
+        "body": "Voltage divider, RC low-pass filter, RC high-pass filter, LR circuit, capacitor charging, RLC resonance, Wheatstone bridge."
+      },
+      "diodes": {
+        "title": "Diodes & rectifiers",
+        "body": "Half-wave rectifier, full-wave bridge rectifier, Zener regulator, clamper, clipper, voltage doubler."
+      },
+      "opamps": {
+        "title": "Op-amp circuits",
+        "body": "Inverting amplifier, non-inverting amplifier, summing amp, differential amp, integrator, differentiator, Schmitt trigger, comparator."
+      },
+      "transistors": {
+        "title": "Transistor circuits",
+        "body": "Common-emitter amplifier, transistor switch, Darlington pair, MOSFET driver, H-bridge, current mirror."
+      },
+      "arduino": {
+        "title": "Arduino + analog",
+        "body": "PWM-driven LED with RC smoothing, Arduino-controlled MOSFET motor driver, opto-isolated relay, photodiode + op-amp + ADC pipeline."
+      },
+      "sensors": {
+        "title": "Sensors",
+        "body": "NTC thermistor bridge, photoresistor light meter, photodiode transimpedance, potentiometer dimmer, flame detector."
+      }
+    },
+    "outcomeHeading": "The outcome",
+    "outcomeLead": "Velxio 2.5 closes the loop between firmware and hardware: the same tool that runs your sketch now solves the circuit around it.",
+    "outcome": {
+      "teach": "Teach & learn electronics",
+      "teachBody": "A free, browser-based SPICE playground for students — with the added benefit of driving real microcontroller firmware. No license, no install, no lab booking.",
+      "prototype": "Prototype before soldering",
+      "prototypeBody": "Validate analog front-ends, power stages, and sensor pipelines end-to-end before you order a single part. The scope and DMM are already on the bench.",
+      "openSource": "Still 100% open source",
+      "openSourceBody": "AGPL-3.0 on GitHub. Built on ngspice, eecircuit-engine, avr8js, rp2040js, QEMU, and wokwi-elements. Fork it, host it, extend it."
+    },
+    "builtOnOssLead": "Velxio 2.5 stands on the shoulders of decades of electronics tooling. Huge thanks to the maintainers of every project below.",
+    "bottom": {
+      "title": "Try Velxio 2.5 now",
+      "body": "Open the editor and start simulating — firmware and analog circuit, same canvas, zero setup."
+    }
+  }
+}

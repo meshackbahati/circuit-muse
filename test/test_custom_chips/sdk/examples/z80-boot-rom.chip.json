@@ -1,0 +1,9 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Z80 Boot ROM (JP+HALT)",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "A rom-32k variant holding a tiny Z80 boot program (JP 0x0006; HALT). Fixture for the Phase 0-2 live proof that a real Z80 boots from a ROM over a chip-to-chip bus.",
+  "pins": ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "CE", "OE", "VCC", "GND"],
+  "attributes": []
+}

@@ -1,0 +1,231 @@
+{
+  "seo": {
+    "spice": {
+      "hero": {
+        "title": "免费在线SPICE仿真器",
+        "accent": "真正的ngspice，就在你的浏览器中",
+        "subtitle": "Velxio运行编译为WebAssembly的开源ngspice引擎。真实的器件模型，完整的改进节点分析，实时瞬态仿真——并且你可以将其连接到真实的Arduino / ESP32 / RP2040固件。免费，无需安装，无需账户。",
+        "ctaPrimary": "打开SPICE仿真器",
+        "ctaSecondary": "查看Velxio 2.5版本发布",
+        "trust": "真正的ngspice · 免费开源 · 100%在浏览器中运行"
+      },
+      "why": {
+        "heading": "为什么选择Velxio进行SPICE仿真？",
+        "lead": "浏览器中的SPICE历来要么根本没有SPICE（线性近似器），要么是需要账户的托管工具。Velxio免费在本地运行真正的引擎。",
+        "realTitle": "真正的ngspice",
+        "realBody": "与专业EDA工作流相同的引擎，通过eecircuit-engine编译为WebAssembly。没有简化求解器——完整的MNA，完整的器件库。",
+        "noServerTitle": "无需服务器，无需账户",
+        "noServerBody": "求解器在你的浏览器标签页中运行。你的电路永远不会离开你的机器。首次加载后可离线工作。",
+        "coTitle": "与固件协同仿真",
+        "coBody": "Arduino / ESP32 / RP2040 / ATtiny85的GPIO驱动SPICE源，ADC读取求解的节点电压。这是其他浏览器内工具无法提供的独特组合。"
+      },
+      "devices": {
+        "heading": "器件库",
+        "lead": "画布上的每个组件都映射到真实的ngspice器件卡——而不是行为替代品。",
+        "passivesTitle": "无源器件",
+        "passivesBody": "电阻、电容（电解/陶瓷/极性感知）、电感、电位器、光敏电阻（LDR）、光电二极管、NTC热敏电阻。",
+        "diodesTitle": "二极管",
+        "diodesBody": "1N4148、1N4007、1N5817 / 1N5819（肖特基）、齐纳1N4733——具有正确的正向压降、反向击穿和恢复特性。",
+        "bjtTitle": "双极型晶体管",
+        "bjtBody": "2N2222、2N3055（大电流NPN）、2N3906、BC547、BC557——具有截止区、放大区和饱和区行为。",
+        "mosfetTitle": "MOSFET",
+        "mosfetBody": "2N7000（小信号N沟道）、IRF540（功率N沟道）、IRF9540（功率P沟道）、FQP27P06——Level 3模型。",
+        "opampTitle": "运算放大器",
+        "opampBody": "LM358、LM741、TL072、LM324、理想——具有真实的饱和轨，使输出削波看起来正确。",
+        "regulatorsTitle": "线性稳压器",
+        "regulatorsBody": "7805、7812、7905、LM317——具有压差。在画布上构建完整的电源。",
+        "logicTitle": "逻辑IC",
+        "logicBody": "74HC系列DIP-14封装、基本门（AND/OR/NAND/NOR/XOR/XNOR/NOT）、边沿触发的D/T/JK触发器、SR锁存器。",
+        "powerTitle": "功率级器件",
+        "powerBody": "L293D双H桥、光耦（4N25、PC817，带CTR）、SPDT继电器，带线圈电感、迟滞和续流二极管。",
+        "sourcesTitle": "源与仪器",
+        "sourcesBody": "9V / AA / 纽扣电池，带真实ESR、信号发生器（正弦/方波/直流）、示波器、电压表、电流表。"
+      },
+      "faq": {
+        "heading": "常见问题",
+        "q1": "这是真正的ngspice在我的浏览器中运行吗？",
+        "a1": "是的。Velxio通过开源eecircuit-engine加载编译为WebAssembly的ngspice。驱动专业EDA工作流的相同SPICE引擎在你的浏览器标签页中运行——无需服务器，无需安装。",
+        "q2": "它运行哪种分析？",
+        "a2": "实时瞬态分析。求解器在每个时钟周期（约60 Hz）运行改进节点分析，因此你可以看到波形随电路运行而演变。非线性器件在每一步迭代至收敛。",
+        "q3": "支持哪些SPICE器件模型？",
+        "a3": "电阻、电容、电感、理想电压源和电流源、二极管（1N4148、1N4007、1N5817、1N5819、齐纳1N4733）、双极型晶体管（2N2222、2N3055、2N3906、BC547、BC557）、MOSFET（2N7000、IRF540、IRF9540、FQP27P06——Level 3模型）、运算放大器（LM358、LM741、TL072、LM324、理想）带饱和轨、线性稳压器（7805、7812、7905、LM317）、光耦（4N25、PC817）和带电感的继电器线圈。",
+        "q4": "我可以编写原始的SPICE网表吗？",
+        "a4": "Velxio根据原理图为你构建网表——在画布上连接组件，仿真器生成SPICE卡。你不必手写网表，但底层引擎是完整的ngspice，接受标准器件卡。",
+        "q5": "它包含仪器吗？",
+        "a5": "是的——多通道示波器、电压表、电流表和信号发生器（正弦/方波/直流，可配置频率、幅度、偏移）。所有仪器探测实时的SPICE节点电压和支路电流。",
+        "q6": "SPICE可以与微控制器通信吗？",
+        "a6": "是的。这是独特的功能。Arduino / ESP32 / RP2040 / ATtiny85的GPIO驱动SPICE电压源；ADC输入读取求解的节点电压。在一个工具中构建端到端的真实固件驱动模拟信号链。"
+      },
+      "bottom": {
+        "title": "运行真正的SPICE——无需安装，无需账户",
+        "body": "打开编辑器，几秒钟内开始求解真实电路。",
+        "cta": "启动SPICE仿真器"
+      }
+    },
+    "mega": {
+      "hero": {
+        "title": "Arduino Mega 2560仿真器",
+        "accent": "免费在线AVR8仿真",
+        "subtitle": "在浏览器中模拟Arduino Mega 2560草图，具有完整的ATmega2560仿真——256 KB闪存、54个数字引脚、16个模拟输入、4个串行端口和6个定时器。免费开源。",
+        "ctaPrimary": "打开Mega 2560仿真器",
+        "ctaSecondary": "浏览示例",
+        "trust": "免费开源 · 无需注册 · 完整的ATmega2560仿真"
+      },
+      "specs": {
+        "heading": "Arduino Mega 2560——完整规格仿真",
+        "lead": "ATmega2560是Arduino系列中最强大的AVR8微控制器。Velxio仿真其完整的外设集，使每个Mega特有的功能在仿真器中都能工作。",
+        "flashTitle": "256 KB闪存",
+        "flashBody": "比Arduino Uno多8倍的程序存储空间。运行大型草图、复杂状态机和数据密集型应用，无需担心存储限制。",
+        "gpioTitle": "54个数字引脚",
+        "gpioBody": "完整的PORTA到PORTL仿真。比Uno多40个I/O引脚——非常适合多路复用显示器、大型按钮矩阵和多模块项目。",
+        "adcTitle": "16个模拟输入",
+        "adcBody": "10位ADC，16个通道（A0–A15）。在仿真中同时连接多个传感器、电位器和模拟组件。",
+        "serialTitle": "4个硬件串行端口",
+        "serialBody": "Serial（USART0–3）全部仿真。Serial1、Serial2、Serial3出现在串行监视器中——测试多设备串行通信项目。",
+        "timersTitle": "6个硬件定时器",
+        "timersBody": "Timer0/1/2/3/4/5。比Uno多三个16位定时器（Timer3、Timer4、Timer5）——更多PWM输出和精确定时通道。",
+        "pwmTitle": "15个PWM输出",
+        "pwmBody": "15个引脚支持通过analogWrite()进行硬件PWM。非常适合电机控制、舵机阵列、LED调光和音频输出项目。"
+      },
+      "uses": {
+        "heading": "Mega 2560的用途",
+        "lead": "Arduino Mega 2560是复杂创客项目的首选板。无需硬件即可全部仿真。",
+        "printerTitle": "3D打印机固件",
+        "printerBody": "Marlin和RAMPS 1.4扩展板运行在ATmega2560上。在仿真器中原型设计和调试打印机控制逻辑。",
+        "cncTitle": "CNC与机器人",
+        "cncBody": "GRBL CNC控制器和多舵机机械臂受益于Mega的额外I/O引脚和定时器。",
+        "ledTitle": "大型LED矩阵",
+        "ledBody": "驱动8×8或16×16 LED矩阵需要许多引脚。Mega的54个数字输出使其成为理想选择。",
+        "sensorTitle": "多传感器系统",
+        "sensorBody": "16个模拟输入允许同时读取温度、压力、湿度和光照传感器，无需多路复用。"
+      },
+      "faq": {
+        "heading": "常见问题",
+        "q1": "什么是Arduino Mega 2560？",
+        "a1": "Arduino Mega 2560是一款基于ATmega2560的微控制器板。它提供256 KB闪存、8 KB SRAM、54个数字I/O引脚（15个PWM）、16个模拟输入和4个硬件USART通道——使其成为大型复杂Arduino项目的首选板。",
+        "q2": "我可以在浏览器中模拟Arduino Mega 2560代码吗？",
+        "a2": "是的。Velxio提供完整的ATmega2560 AVR8仿真。在板选择器中选择“Arduino Mega 2560”，编写你的草图，编译并仿真——所有54个数字引脚和16个模拟输入均可用。",
+        "q3": "Arduino Mega 2560仿真准确吗？",
+        "a3": "Velxio使用avr8js进行周期精确的AVR8指令仿真。ATmega2560与ATmega328P共享相同的AVR8内核，但具有扩展的内存、更多端口（PORTA–PORTL）和额外的定时器（Timer3、Timer4、Timer5）——全部仿真。",
+        "q4": "Mega比Arduino Uno多了哪些功能？",
+        "a4": "Arduino Mega 2560增加了：8倍闪存（256 KB vs 32 KB）、4倍SRAM（8 KB vs 2 KB）、40个额外数字引脚、10个额外模拟输入、3个额外硬件串行端口（Serial1、Serial2、Serial3）和3个额外16位定时器（Timer3、Timer4、Timer5）。",
+        "q5": "Mega仿真器支持多个串行端口吗？",
+        "a5": "是的。Serial（USART0）、Serial1（USART1）、Serial2（USART2）和Serial3（USART3）全部仿真。每个都出现在串行监视器标签中，因此你可以监控多串行通信项目。"
+      },
+      "bottom": {
+        "title": "模拟你的Arduino Mega项目",
+        "body": "在编辑器中选择Mega 2560板并开始仿真——完整的ATmega2560仿真，无需购买硬件。",
+        "cta": "启动Mega 2560仿真器"
+      }
+    },
+    "rpi": {
+      "hero": {
+        "title": "免费Raspberry Pi 3仿真器",
+        "accent": "完整的Linux · Python · GPIO —— 在你的浏览器中",
+        "subtitle": "直接在浏览器中运行完整的Raspberry Pi 3B和Raspberry Pi OS——通过QEMU进行ARM Cortex-A53四核仿真。编写Python，控制GPIO，安装软件包。无需硬件。",
+        "ctaPrimary": "打开Pi 3仿真器",
+        "ctaSecondary": "阅读文档",
+        "trust": "免费开源 · QEMU ARM64 · 完整的Raspberry Pi OS",
+        "imageAlt": "Raspberry Pi 3板示意图"
+      },
+      "what": {
+        "heading": "你能用Pi 3仿真器做什么？",
+        "lead": "Velxio仿真完整的Raspberry Pi 3B——不仅仅是GPIO引脚，而是整个Linux操作系统。它是你浏览器中的一台完整计算机。",
+        "pythonTitle": "运行Python脚本",
+        "pythonBody": "Python 3预装在Raspberry Pi OS上。运行脚本，使用pip，导入库——完整的Python环境。",
+        "gpioTitle": "GPIO控制",
+        "gpioBody": "使用RPi.GPIO或gpiozero控制LED、读取按钮、驱动电机——QEMU中的真实GPIO仿真。",
+        "linuxTitle": "Linux终端",
+        "linuxBody": "完整的bash终端，带有apt、nano、git和所有标准Linux工具。安装软件包，编辑文件，运行服务。",
+        "armTitle": "ARM Cortex-A53",
+        "armBody": "通过QEMU raspi3b机器，四核64位ARM CPU，1.2 GHz。运行官方的Raspberry Pi OS镜像。",
+        "sdTitle": "无需SD卡",
+        "sdBody": "操作系统镜像已预加载。无需刷写，无需SD卡，无需电源——只需打开浏览器即可开始编码。",
+        "multiTitle": "多板画布",
+        "multiBody": "在同一仿真画布上混合使用Raspberry Pi 3与Arduino和ESP32。通过串行从Pi控制Arduino。"
+      },
+      "compare": {
+        "heading": "Raspberry Pi Pico vs Pi 3——如何选择？",
+        "picoTitle": "Raspberry Pi Pico (RP2040)",
+        "picoBodyPrefix": "微控制器。ARM Cortex-M0+，133 MHz。运行Arduino C++代码。无操作系统，裸机。最适合嵌入式、物联网、传感器。",
+        "picoLink": "尝试Pico仿真器",
+        "pi3Title": "Raspberry Pi 3 (ARM Cortex-A53)",
+        "pi3Body": "完整的Linux计算机。四核1.2 GHz。运行Python、Node.js、bash。最适合自动化、服务器、GPIO脚本、教育。"
+      },
+      "faq": {
+        "heading": "常见问题",
+        "q1": "我可以在浏览器中模拟Raspberry Pi 3吗？",
+        "a1": "是的。Velxio使用QEMU raspi3b仿真完整的Raspberry Pi 3B——ARM Cortex-A53四核1.2 GHz，运行Raspberry Pi OS (Linux)。你得到一个真实的终端来运行Python、bash和系统命令。",
+        "q2": "这个Raspberry Pi仿真器免费吗？",
+        "a2": "是的。Velxio 100%免费开源（GNU AGPLv3）。无需账户，无需订阅——在浏览器中模拟Raspberry Pi 3代码，或使用Docker自行托管。",
+        "q3": "我可以在Raspberry Pi仿真器上运行Python脚本吗？",
+        "a3": "是的。仿真的Raspberry Pi 3运行完整的Raspberry Pi OS，预装Python 3。你可以运行Python脚本，使用RPi.GPIO进行GPIO控制，安装pip包等。",
+        "q4": "Pi Pico和Pi 3仿真有什么区别？",
+        "a4": "Raspberry Pi Pico (RP2040) 是微控制器——运行Arduino C++代码，无操作系统。Raspberry Pi 3是完整的Linux计算机——运行Python、bash和系统服务。Velxio两者都支持。",
+        "q5": "它支持Raspberry Pi 3上的GPIO吗？",
+        "a5": "是的。QEMU仿真的Raspberry Pi 3通过RPi.GPIO和gpiozero Python库支持GPIO。从Python控制LED、读取按钮并与传感器交互。"
+      },
+      "bottom": {
+        "title": "准备好模拟Raspberry Pi 3了吗？",
+        "body": "打开编辑器，选择Raspberry Pi 3，启动进入Linux——就在你的浏览器中。",
+        "cta": "启动Pi 3仿真器"
+      }
+    },
+    "pico": {
+      "hero": {
+        "title": "免费Raspberry Pi Pico仿真器",
+        "accent": "RP2040 ARM Cortex-M0+仿真",
+        "subtitle": "为Raspberry Pi Pico编写Arduino代码并在浏览器中仿真——真正的RP2040 ARM Cortex-M0+仿真，133 MHz。26个GPIO引脚，I2C，SPI，UART，ADC。无需硬件。",
+        "ctaPrimary": "打开Pico仿真器",
+        "ctaSecondary": "Pico示例",
+        "trust": "免费开源 · rp2040js仿真 · 无需账户",
+        "imageAlt": "Raspberry Pi Pico板"
+      },
+      "boards": {
+        "heading": "支持的RP2040板",
+        "lead": "两款官方Raspberry Pi Pico板均受支持，通过rp2040js进行完整的RP2040 CPU仿真。",
+        "picoTitle": "Raspberry Pi Pico",
+        "picoBody": "RP2040双核ARM Cortex-M0+，133 MHz。264 KB SRAM，2 MB闪存。26个GPIO，3个ADC，2× SPI，2× I2C，2× UART。",
+        "picoWTitle": "Raspberry Pi Pico W",
+        "picoWBody": "相同的RP2040芯片加上英飞凌CYW43439，支持WiFi 4和蓝牙5.2。与Pico引脚兼容。",
+        "specsTitle": "RP2040规格",
+        "specsBody": "双核Cortex-M0+，133 MHz，264 KB SRAM，硬件插值器，8个PIO状态机，DMA控制器。"
+      },
+      "examples": {
+        "heading": "Pico示例项目",
+        "lead": "18+个即用型Raspberry Pi Pico示例——从LED闪烁到I2C、SPI和传感器集成。",
+        "blinkTitle": "Pico闪烁",
+        "blinkBody": "切换板载LED（GP25）。RP2040最简单的起点。",
+        "echoTitle": "Pico串行回显",
+        "echoBody": "从串行读取并回显。测试RP2040上的UART通信。",
+        "i2cTitle": "Pico I2C扫描器",
+        "i2cBody": "扫描I2C总线并报告连接的设备。传感器项目的基础。",
+        "adcTitle": "Pico ADC读取",
+        "adcBody": "读取12位ADC——测量模拟电压、温度传感器或电位器。",
+        "dhtTitle": "Pico DHT22传感器",
+        "dhtBody": "从DHT22读取温度和湿度。串行输出带格式化的读数。",
+        "servoTitle": "Pico舵机",
+        "servoBody": "使用RP2040 PWM将舵机从0°扫到180°。平滑运动，可配置范围。",
+        "viewAll": "查看全部68+示例"
+      },
+      "faq": {
+        "heading": "常见问题",
+        "q1": "这个Raspberry Pi Pico仿真器免费吗？",
+        "a1": "是的。Velxio完全免费开源（GNU AGPLv3）。在浏览器中模拟RP2040代码——无需Raspberry Pi硬件，无需账户，无需付费。",
+        "q2": "RP2040仿真如何工作？",
+        "a2": "Velxio使用rp2040js——开源RP2040仿真器——模拟ARM Cortex-M0+ CPU，133 MHz。你的代码使用Earle Philhower的官方Arduino-Pico核心编译。",
+        "q3": "它支持Raspberry Pi Pico W吗？",
+        "a3": "是的。Raspberry Pi Pico和Pico W都受支持。RP2040核心仿真相同——WiFi功能计划在未来的更新中实现。",
+        "q4": "我可以将Arduino代码用于Raspberry Pi Pico吗？",
+        "a4": "是的。Velxio使用arduino-pico核心（Earle Philhower）编译你的.ino草图。标准的Arduino函数如Serial、digitalWrite、analogRead和I2C/SPI开箱即用。",
+        "q5": "哪些组件与Pico仿真兼容？",
+        "a5": "所有48+组件：LED、电阻、按钮、DHT22、HC-SR04、舵机、7段显示器、RGB LED、NTC传感器、摇杆等。将它们连接到26个GPIO引脚中的任何一个。"
+      },
+      "bottom": {
+        "title": "准备好模拟Raspberry Pi Pico了吗？",
+        "body": "打开编辑器，选择Pico板，开始编码——无需Raspberry Pi硬件。",
+        "cta": "启动Pico仿真器"
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+
+E:/Hardware/velxio-prod/velxio/frontend/src/__tests__/fixtures/esp32c3-blink/blink.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+42000000 <_start>:
+42000000:	60004737          	lui	x14,0x60004
+42000004:	1141                	addi	x2,x2,-16
+42000006:	00870613          	addi	x12,x14,8 # 60004008 <_start+0x1e004008>
+4200000a:	10000593          	li	x11,256
+4200000e:	10000513          	li	x10,256
+42000012:	03100693          	li	x13,49
+42000016:	c208                	sw	x10,0(x12)
+42000018:	c602                	sw	x0,12(x2)
+4200001a:	47b2                	lw	x15,12(x2)
+4200001c:	00f6db63          	bge	x13,x15,42000032 <_start+0x32>
+42000020:	c74c                	sw	x11,12(x14)
+42000022:	c402                	sw	x0,8(x2)
+42000024:	47a2                	lw	x15,8(x2)
+42000026:	fef6c8e3          	blt	x13,x15,42000016 <_start+0x16>
+4200002a:	47a2                	lw	x15,8(x2)
+4200002c:	0785                	addi	x15,x15,1
+4200002e:	c43e                	sw	x15,8(x2)
+42000030:	bfd5                	j	42000024 <_start+0x24>
+42000032:	47b2                	lw	x15,12(x2)
+42000034:	0785                	addi	x15,x15,1
+42000036:	c63e                	sw	x15,12(x2)
+42000038:	b7cd                	j	4200001a <_start+0x1a>

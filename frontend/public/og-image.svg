@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d0d0f"/>
+      <stop offset="100%" stop-color="#0a1520"/>
+    </linearGradient>
+    <linearGradient id="title-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#007acc"/>
+      <stop offset="100%" stop-color="#00c896"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Glow blob -->
+  <ellipse cx="600" cy="280" rx="380" ry="240" fill="#007acc" opacity="0.06" filter="url(#glow)"/>
+
+  <!-- Grid lines decoration -->
+  <g stroke="#1e1e2a" stroke-width="1" opacity="0.6">
+    <line x1="0" y1="105" x2="1200" y2="105"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="0" y1="525" x2="1200" y2="525"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+  </g>
+
+  <!-- Left decorative chip -->
+  <g transform="translate(80, 200)" opacity="0.15" stroke="#007acc" stroke-width="2" fill="none">
+    <rect x="0" y="0" width="80" height="80" rx="8"/>
+    <rect x="15" y="15" width="50" height="50" rx="4"/>
+    <line x1="20" y1="-15" x2="20" y2="0"/>
+    <line x1="60" y1="-15" x2="60" y2="0"/>
+    <line x1="20" y1="80" x2="20" y2="95"/>
+    <line x1="60" y1="80" x2="60" y2="95"/>
+    <line x1="-15" y1="20" x2="0" y2="20"/>
+    <line x1="-15" y1="60" x2="0" y2="60"/>
+    <line x1="80" y1="20" x2="95" y2="20"/>
+    <line x1="80" y1="60" x2="95" y2="60"/>
+  </g>
+
+  <!-- Right decorative chip -->
+  <g transform="translate(1020, 320)" opacity="0.12" stroke="#00c896" stroke-width="2" fill="none">
+    <rect x="0" y="0" width="60" height="60" rx="6"/>
+    <rect x="12" y="12" width="36" height="36" rx="3"/>
+    <line x1="15" y1="-12" x2="15" y2="0"/>
+    <line x1="45" y1="-12" x2="45" y2="0"/>
+    <line x1="15" y1="60" x2="15" y2="72"/>
+    <line x1="45" y1="60" x2="45" y2="72"/>
+    <line x1="-12" y1="15" x2="0" y2="15"/>
+    <line x1="-12" y1="45" x2="0" y2="45"/>
+    <line x1="60" y1="15" x2="72" y2="15"/>
+    <line x1="60" y1="45" x2="72" y2="45"/>
+  </g>
+
+  <!-- Top-right small chip -->
+  <g transform="translate(1050, 80)" opacity="0.10" stroke="#007acc" stroke-width="1.5" fill="none">
+    <rect x="0" y="0" width="44" height="44" rx="5"/>
+    <rect x="9" y="9" width="26" height="26" rx="2.5"/>
+    <line x1="11" y1="-10" x2="11" y2="0"/>
+    <line x1="33" y1="-10" x2="33" y2="0"/>
+    <line x1="11" y1="44" x2="11" y2="54"/>
+    <line x1="33" y1="44" x2="33" y2="54"/>
+    <line x1="-10" y1="11" x2="0" y2="11"/>
+    <line x1="-10" y1="33" x2="0" y2="33"/>
+    <line x1="44" y1="11" x2="54" y2="11"/>
+    <line x1="44" y1="33" x2="54" y2="33"/>
+  </g>
+
+  <!-- Badge pill -->
+  <rect x="480" y="140" width="240" height="34" rx="17" fill="none" stroke="#007acc" stroke-width="1.5" opacity="0.5"/>
+  <rect x="481" y="141" width="238" height="32" rx="16" fill="#007acc" opacity="0.1"/>
+  <text x="600" y="163" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#007acc" letter-spacing="2">OPEN SOURCE · FREE · LOCAL</text>
+
+  <!-- Main logo chip icon -->
+  <g transform="translate(548, 192)" stroke="#007acc" stroke-width="3" fill="none" stroke-linecap="round">
+    <rect x="0" y="0" width="44" height="44" rx="6"/>
+    <rect x="10" y="10" width="24" height="24" rx="3"/>
+    <line x1="14" y1="-10" x2="14" y2="0"/>
+    <line x1="30" y1="-10" x2="30" y2="0"/>
+    <line x1="14" y1="44" x2="14" y2="54"/>
+    <line x1="30" y1="44" x2="30" y2="54"/>
+    <line x1="-10" y1="14" x2="0" y2="14"/>
+    <line x1="-10" y1="30" x2="0" y2="30"/>
+    <line x1="44" y1="14" x2="54" y2="14"/>
+    <line x1="44" y1="30" x2="54" y2="30"/>
+  </g>
+
+  <!-- Title: VELXIO -->
+  <text x="600" y="340" text-anchor="middle"
+        font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+        font-size="96" font-weight="900" letter-spacing="-3"
+        fill="url(#title-grad)">VELXIO</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="400" text-anchor="middle"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="26" font-weight="400" fill="#7a7a8c">
+    Arduino Emulator — Real AVR8 · 48+ Components · Monaco Editor
+  </text>
+
+  <!-- Tags row -->
+  <g font-family="'Consolas', 'Courier New', monospace" font-size="15" fill="#007acc">
+    <!-- Tag 1 -->
+    <rect x="282" y="444" width="100" height="30" rx="6" fill="#007acc" opacity="0.12" stroke="#007acc" stroke-width="1" opacity2="0.3"/>
+    <text x="332" y="464" text-anchor="middle" fill="#007acc">arduino-cli</text>
+    <!-- Tag 2 -->
+    <rect x="398" y="444" width="80" height="30" rx="6" fill="#007acc" opacity="0.12" stroke="#007acc" stroke-width="1"/>
+    <text x="438" y="464" text-anchor="middle" fill="#007acc">avr8js</text>
+    <!-- Tag 3 -->
+    <rect x="494" y="444" width="90" height="30" rx="6" fill="#007acc" opacity="0.12" stroke="#007acc" stroke-width="1"/>
+    <text x="539" y="464" text-anchor="middle" fill="#007acc">rp2040js</text>
+    <!-- Tag 4 -->
+    <rect x="600" y="444" width="110" height="30" rx="6" fill="#007acc" opacity="0.12" stroke="#007acc" stroke-width="1"/>
+    <text x="655" y="464" text-anchor="middle" fill="#007acc">TypeScript</text>
+    <!-- Tag 5 -->
+    <rect x="726" y="444" width="70" height="30" rx="6" fill="#00c896" opacity="0.12" stroke="#00c896" stroke-width="1"/>
+    <text x="761" y="464" text-anchor="middle" fill="#00c896">FastAPI</text>
+    <!-- Tag 6 -->
+    <rect x="812" y="444" width="60" height="30" rx="6" fill="#00c896" opacity="0.12" stroke="#00c896" stroke-width="1"/>
+    <text x="842" y="464" text-anchor="middle" fill="#00c896">React</text>
+  </g>
+
+  <!-- Bottom border accent -->
+  <rect x="0" y="622" width="1200" height="8" fill="url(#title-grad)" opacity="0.8"/>
+
+  <!-- URL bottom -->
+  <text x="600" y="608" text-anchor="middle"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="16" fill="#444" letter-spacing="0.5">
+    github.com/davidmonterocrespo24/velxio
+  </text>
+</svg>

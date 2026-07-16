@@ -1,0 +1,132 @@
+{
+  "v2": {
+    "versionBadge": "Versão 2.0",
+    "heroAccent": "Simulador Embarcado Multiplataforma",
+    "heroSubtitle": "Simule Arduino, ESP32, Raspberry Pi Pico e Raspberry Pi 3 no seu navegador. 19 placas, 68+ exemplos prontos para executar, simulação realista de sensores. Gratuito, código aberto, sem instalação.",
+    "tryV2": "Experimente o Velxio 2.0",
+    "joinDiscord": "Entre no Discord",
+    "boardsHeading": "19 placas. 5 arquiteturas. Uma ferramenta.",
+    "boardsLead": "Do AVR de 8 bits ao ARM Linux quad-core — o Velxio 2.0 emula cada plataforma embarcada principal em uma única aba do navegador.",
+    "multipleBoards": "Múltiplas placas em um circuito",
+    "mixArchitectures": "Misture arquiteturas",
+    "mixArchitecturesBody": "Conecte um ESP32 a um Raspberry Pi 3, conecte três Arduinos ou combine um Pico com um ESP32-C3. Qualquer combinação funciona.",
+    "realInterBoard": "Comunicação real entre placas",
+    "realInterBoardBody": "As placas se comunicam através de conexões com fio — UART, I2C, SPI ou simples sinais GPIO, exatamente como hardware real.",
+    "uniqueFeature": "Nenhum outro simulador faz isso",
+    "uniqueFeatureBody": "Simuladores tradicionais emulam uma placa isoladamente. O Velxio simula sistemas inteiros com múltiplas placas rodando simultaneamente.",
+    "whatsNew": "O que há de novo na 2.0",
+    "whatsNewLead": "Uma transformação completa em um simulador de sistemas embarcados multiplataforma — mais placas, emulação mais precisa, melhor experiência do desenvolvedor.",
+    "examplesHeading": "68+ exemplos prontos para executar",
+    "examplesLead": "Do piscar LED básico à comunicação entre múltiplas placas — exemplos para cada plataforma e nível de habilidade.",
+    "examples": {
+      "arduino": {
+        "title": "Arduino (17 exemplos)",
+        "body": "Piscar LED, semáforo, botão, fade, LED RGB, jogo Simon Says, display TFT, LCD, scanner I2C, loopback SPI e mais."
+      },
+      "pico": {
+        "title": "Raspberry Pi Pico (18 exemplos)",
+        "body": "Piscar LED, serial, I2C (scanner, RTC, EEPROM), SPI, leitura ADC, DHT22, HC-SR04, servo, joystick, sensor NTC."
+      },
+      "esp32": {
+        "title": "ESP32 (9 exemplos)",
+        "body": "Piscar LED, eco serial, display 7 segmentos, DHT22, HC-SR04, IMU MPU6050, sensor PIR, servo, joystick."
+      },
+      "esp32c3": {
+        "title": "ESP32-C3 RISC-V (9 exemplos)",
+        "body": "Piscar LED, serial, LED RGB, botão + LED, eco serial, DHT22, HC-SR04, PIR, servo."
+      },
+      "mega": {
+        "title": "Arduino Mega (5 exemplos)",
+        "body": "Piscar LED, perseguição de LED, eco serial, controle serial, display 7 segmentos."
+      },
+      "nano": {
+        "title": "Arduino Nano (4 exemplos)",
+        "body": "Piscar LED, botão LED, fade, eco serial. Além de controle Pi-para-Arduino com múltiplas placas."
+      }
+    },
+    "outcomeHeading": "O resultado",
+    "outcomeLead": "O Velxio 2.0 transforma o projeto em um simulador de sistemas embarcados multiplataforma completo e escalável.",
+    "outcome": {
+      "realistic": "Emulação mais realista",
+      "realisticBody": "Emulação Xtensa, RISC-V e ARM baseada em QEMU. AVR8 preciso em ciclos via avr8js. Execução real de firmware, não aproximações.",
+      "broader": "Suporte de hardware mais amplo",
+      "broaderBody": "19 placas em 5 arquiteturas de CPU. Do ATtiny85 de 8 bits ao Raspberry Pi 3B quad-core rodando Linux completo.",
+      "devEx": "Melhor experiência do desenvolvedor",
+      "devExBody": "Editor Monaco, workspace multi-arquivo, gerenciador de bibliotecas, osciloscópio, painel de controle de sensores, design responsivo para dispositivos móveis."
+    },
+    "builtOnOss": "Construído sobre código aberto",
+    "builtOnOssLead": "O Velxio é alimentado por estes projetos de código aberto. Sem eles, nada disso seria possível.",
+    "bottom": {
+      "title": "Experimente o Velxio 2.0 agora",
+      "body": "Abra o editor e comece a simular — 19 placas, 68+ exemplos, zero configuração.",
+      "cta": "Iniciar Simulador"
+    }
+  },
+  "v25": {
+    "versionBadge": "Versão 2.5",
+    "heroAccent": "Arduino encontra SPICE no seu navegador",
+    "heroSubtitle": "Simulação de circuitos analógicos em tempo real via ngspice-WASM, conectada a Arduino, ESP32 e Raspberry Pi Pico. Resistores, capacitores, amplificadores operacionais, transistores, amperímetros e voltímetros ao vivo — co-simulados com seu firmware. Gratuito, código aberto, sem instalação.",
+    "tryV25": "Experimente o Velxio 2.5",
+    "fullEmulation": "De apenas digital para emulação completa de circuitos",
+    "fullEmulationLead": "O Velxio 2.0 simulava seu firmware perfeitamente. O Velxio 2.5 simula o circuito ao redor — com o mesmo mecanismo ngspice usado por ferramentas EDA profissionais, rodando inteiramente na sua aba do navegador.",
+    "notLinear": "Não é uma aproximação linear",
+    "notLinearBody": "O Velxio resolve a Análise Nodal Modificada completa a cada tick. Dispositivos não lineares — diodos, BJTs, MOSFETs, amplificadores operacionais com saturação — se comportam como os reais, não como idealizações de livro texto.",
+    "realFirmware": "Firmware real. Circuito real. Mesma tela.",
+    "realFirmwareBody": "Pinos GPIO acionam nets SPICE como fontes de tensão. Entradas ADC leem tensões de nó resolvidas. analogRead() retorna o que o circuito realmente produz — não um atalho simulado.",
+    "browserOffline": "100% navegador, 100% offline",
+    "browserOfflineBody": "ngspice compilado para WebAssembly via o mecanismo de código aberto eecircuit-engine. Sem servidor, sem nuvem, sem conta. Funciona offline após o primeiro carregamento. Seus circuitos nunca saem da sua máquina.",
+    "catalogHeading": "100+ componentes precisos SPICE",
+    "catalogLead": "Um catálogo completo de eletrônica — passivos, semicondutores, lógica, instrumentos — cada um modelado com cartões de dispositivo ngspice reais, não substitutos comportamentais.",
+    "coSimHeading": "Co-simulação híbrida digital + analógica",
+    "coSimLead": "A maioria dos simuladores de navegador executa seu firmware OU um circuito — nunca ambos juntos. O Velxio 2.5 resolve ambos no mesmo clock.",
+    "driveMotor": "Acione um motor a partir de um pino Arduino",
+    "driveMotorBody": "Pino HIGH → porta MOSFET → corrente de dreno através de uma carga indutiva real → força contraeletromotriz através de um diodo flyback. Tudo resolvido por SPICE. Veja as tensões de porta e dreno lado a lado.",
+    "readSensor": "Leia um sensor através de um amplificador operacional real",
+    "readSensorBody": "Fotodiodo → amplificador operacional transimpedância → ADC. Ajuste o controle deslizante de lux e veja analogRead() responder através do estágio amplificador real — saturação, slew rate e tudo mais.",
+    "liveInstruments": "Depure com instrumentos ao vivo",
+    "liveInstrumentsBody": "Coloque um amperímetro entre quaisquer dois nós, um voltímetro em qualquer net. O osciloscópio captura pinos digitais e nós analógicos juntos. Sem \"e se\" — apenas medições.",
+    "examplesHeading": "40 novos exemplos analógicos e híbridos",
+    "examplesLead": "Circuitos pré-conectados que você pode abrir com um clique — desde fundamentos de livro texto até sistemas realistas Arduino+analógico.",
+    "examples": {
+      "fundamentals": {
+        "title": "Fundamentos",
+        "body": "Divisor de tensão, filtro RC passa-baixa, filtro RC passa-alta, circuito LR, carga de capacitor, ressonância RLC, ponte de Wheatstone."
+      },
+      "diodes": {
+        "title": "Diodos e retificadores",
+        "body": "Retificador de meia onda, retificador de ponte completa, regulador Zener, grampeador, ceifador, dobrador de tensão."
+      },
+      "opamps": {
+        "title": "Circuitos com amplificadores operacionais",
+        "body": "Amplificador inversor, amplificador não inversor, amplificador somador, amplificador diferencial, integrador, diferenciador, trigger de Schmitt, comparador."
+      },
+      "transistors": {
+        "title": "Circuitos com transistores",
+        "body": "Amplificador emissor comum, chave transistorizada, par Darlington, driver MOSFET, ponte H, espelho de corrente."
+      },
+      "arduino": {
+        "title": "Arduino + analógico",
+        "body": "LED acionado por PWM com suavização RC, driver de motor MOSFET controlado por Arduino, relé optoacoplado, pipeline fotodiodo + amplificador operacional + ADC."
+      },
+      "sensors": {
+        "title": "Sensores",
+        "body": "Ponte NTC termistor, fotômetro com LDR, transimpedância com fotodiodo, dimmer com potenciômetro, detector de chama."
+      }
+    },
+    "outcomeHeading": "O resultado",
+    "outcomeLead": "O Velxio 2.5 fecha o ciclo entre firmware e hardware: a mesma ferramenta que executa seu sketch agora resolve o circuito ao redor.",
+    "outcome": {
+      "teach": "Ensine e aprenda eletrônica",
+      "teachBody": "Um playground SPICE gratuito e baseado em navegador para estudantes — com o benefício adicional de executar firmware de microcontrolador real. Sem licença, sem instalação, sem reserva de laboratório.",
+      "prototype": "Prototipe antes de soldar",
+      "prototypeBody": "Valide front-ends analógicos, estágios de potência e pipelines de sensor de ponta a ponta antes de pedir uma única peça. O osciloscópio e o multímetro já estão na bancada.",
+      "openSource": "Ainda 100% código aberto",
+      "openSourceBody": "AGPL-3.0 no GitHub. Construído sobre ngspice, eecircuit-engine, avr8js, rp2040js, QEMU e wokwi-elements. Faça fork, hospede, estenda."
+    },
+    "builtOnOssLead": "O Velxio 2.5 se apoia em décadas de ferramentas de eletrônica. Muito obrigado aos mantenedores de cada projeto abaixo.",
+    "bottom": {
+      "title": "Experimente o Velxio 2.5 agora",
+      "body": "Abra o editor e comece a simular — firmware e circuito analógico, mesma tela, zero configuração."
+    }
+  }
+}

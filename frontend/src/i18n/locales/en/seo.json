@@ -1,0 +1,208 @@
+{
+  "seo": {
+    "circuit": {
+      "hero": {
+        "title": "Free Online Circuit Simulator",
+        "accent": "SPICE-accurate analog, in your browser",
+        "subtitle": "Drop resistors, capacitors, op-amps, transistors, and regulators on the canvas — every part is solved by real ngspice running in WebAssembly. Wire it to Arduino, ESP32, or Raspberry Pi Pico firmware and watch them co-simulate. Free, no install, no account.",
+        "ctaPrimary": "Open Circuit Simulator",
+        "ctaSecondary": "Browse 40+ Analog Examples",
+        "trust": "Free & open-source · Real ngspice engine · Runs 100% in your browser"
+      },
+      "what": {
+        "heading": "What can you simulate?",
+        "lead": "Velxio runs the real ngspice solver — the same engine professional EDA tools use — on every tick. This is not a linear approximation. Diodes have proper forward drop, BJTs cut off and saturate, op-amps hit their rails, regulators have dropout."
+      },
+      "cards": {
+        "passive": {
+          "title": "Passive networks",
+          "body": "Voltage dividers, RC/RL/RLC filters, Wheatstone bridges, capacitor charging curves, resonant tank circuits."
+        },
+        "diodes": {
+          "title": "Diodes & rectifiers",
+          "body": "Half-wave, full-wave bridge rectifiers, Zener regulators, voltage doublers, clippers and clampers."
+        },
+        "bjt": {
+          "title": "Transistor circuits",
+          "body": "BJT common-emitter amplifiers, transistor switches, Darlington pairs, MOSFET drivers, H-bridge motor drives, current mirrors."
+        },
+        "opamp": {
+          "title": "Op-amp circuits",
+          "body": "Inverting/non-inverting amplifiers, summing amps, differential amps, integrators, differentiators, Schmitt triggers, comparators."
+        },
+        "logic": {
+          "title": "Logic & flip-flops",
+          "body": "AND/OR/NAND/NOR/XOR/XNOR/NOT gates, 74HC-series DIP-14 packages, edge-triggered D / T / JK flip-flops, SR latches."
+        },
+        "power": {
+          "title": "Power & sensors",
+          "body": "7805/7812/LM317 regulators, photodiode + transimpedance pipelines, NTC thermistor bridges, PIR/flame sensor sliders, optocouplers, relays."
+        }
+      },
+      "how": {
+        "heading": "How the analog simulation works",
+        "leadPrefix": "Velxio uses ",
+        "leadHighlight": "ngspice-WASM",
+        "leadMid": " via the open-source ",
+        "leadCode": "eecircuit-engine",
+        "leadSuffix": ". Every wire on the canvas becomes a SPICE net, every component becomes a SPICE device card, and the solver runs full Modified Nodal Analysis on each tick.",
+        "wireTitle": "1. Wire",
+        "wireBody": "Drop components, drag wires. Velxio union-finds the wire graph into SPICE nets in real time as you build.",
+        "solveTitle": "2. Solve",
+        "solveBody": "ngspice solves the full circuit at ~60 Hz. Non-linear devices iterate to convergence — no shortcuts, no idealisations.",
+        "probeTitle": "3. Probe",
+        "probeBody": "Drop voltmeters, ammeters, or oscilloscope channels on any node. Live readings update as the simulation runs."
+      },
+      "co": {
+        "heading": "The unique feature: hybrid digital + analog co-simulation",
+        "lead": "Most browser circuit simulators stop at passive analog. Velxio also runs the firmware on the microcontroller driving the circuit — on the same clock.",
+        "gpioTitle": "GPIO drives the circuit",
+        "gpioBodyPrefix": "",
+        "gpioBodyCode": "digitalWrite(HIGH)",
+        "gpioBodySuffix": " in your sketch sets a SPICE voltage source HIGH. Drive a MOSFET gate, switch a relay, charge a capacitor through a resistor — all from real firmware.",
+        "adcTitle": "ADC reads the circuit",
+        "adcBodyPrefix": "",
+        "adcBodyCode": "analogRead()",
+        "adcBodySuffix": " returns the SPICE-solved voltage at the input node — after the op-amp gain stage, after the divider, after the saturation. What you measure is what the circuit produces.",
+        "sameTitle": "Same canvas, same clock",
+        "sameBody": "Arduino + transistor + motor on the same board. ESP32 + photodiode + op-amp + ADC. CH32V003 + Zener + LED. Validate firmware and hardware together before soldering."
+      },
+      "faq": {
+        "heading": "Frequently Asked Questions",
+        "q1": "Is this circuit simulator really free?",
+        "a1": "Yes. Velxio is fully free and open-source under the GNU AGPLv3 license. No account required, no cloud subscription, no paywalled components — every part of the simulator runs in your browser.",
+        "q2": "What kind of analog simulation does Velxio use?",
+        "a2": "Velxio runs ngspice — the open-source SPICE simulator used by professional EDA tools — compiled to WebAssembly via eecircuit-engine. Each tick performs a full Modified Nodal Analysis solve, so non-linear devices (diodes, BJTs, MOSFETs, op-amps with saturation) behave like real silicon, not idealised approximations.",
+        "q3": "Can I connect a microcontroller to my circuit?",
+        "a3": "Yes — and this is the unique feature. GPIO pins drive SPICE nets as voltage sources, and ADC inputs read the solved analog node voltages back into your firmware. You can build a PWM-driven RC filter, a transistor switch, an op-amp signal chain, or a MOSFET motor driver and watch the firmware and circuit interact in real time.",
+        "q4": "What components are available?",
+        "a4": "Resistors, capacitors, inductors, potentiometers, photoresistors (LDR), photodiodes, NTC thermistors, batteries (9V/AA/coin), 5 BJTs (2N2222, 2N3055, 2N3906, BC547, BC557), 4 MOSFETs (2N7000, IRF540, IRF9540, FQP27P06), 5 op-amps (LM358, LM741, TL072, LM324, ideal), 4 linear regulators (7805, 7812, 7905, LM317), Zener and Schottky diodes, optocouplers (4N25, PC817), relays, L293D dual H-bridge driver, and 7 logic gates plus 7 74HC-series ICs as DIP-14 packages.",
+        "q5": "Does the simulator have an oscilloscope and voltmeter?",
+        "a5": "Yes. Velxio includes a multi-channel oscilloscope, voltmeter, ammeter, and signal generator (sine, square, DC) as live instruments you can drop on the canvas. They probe any node or wire and update in real time as the simulation runs.",
+        "q6": "Is this a Falstad / CircuitLab / Tinkercad alternative?",
+        "a6": "For analog circuits, yes — and a more accurate one, since Velxio runs the real ngspice engine instead of a simplified solver. Unlike those tools, Velxio also runs the firmware on the microcontroller driving the circuit, so you can validate firmware + hardware together without leaving the browser."
+      },
+      "bottom": {
+        "title": "Ready to simulate your circuit?",
+        "body": "Open the editor and drop your first SPICE component in seconds — zero setup.",
+        "cta": "Launch Circuit Simulator"
+      }
+    },
+    "atmega": {
+      "hero": {
+        "title": "ATmega328P Simulator",
+        "accent": "Free AVR8 Emulation in Your Browser",
+        "subtitle": "Simulate ATmega328P firmware exactly as it runs on Arduino Uno and Nano — real AVR8 instruction execution at 16 MHz with full GPIO, timer, ADC, and USART emulation. No hardware, no install.",
+        "ctaPrimary": "Open ATmega328P Simulator",
+        "ctaSecondary": "Technical Details",
+        "trust": "Free & open-source · Genuine AVR8 emulation · Runs 100% in your browser"
+      },
+      "specs": {
+        "heading": "ATmega328P specification — fully emulated",
+        "lead": "Everything about the ATmega328P is emulated: registers, peripherals, interrupts, and timing. Write bare-metal firmware or use the Arduino core library — both work identically in the simulator.",
+        "coreTitle": "CPU Core",
+        "coreBody": "AVR8 (8-bit RISC), 16 MHz, 135 instructions, 32 general-purpose registers, 2-stage pipeline.",
+        "flashTitle": "Flash Memory",
+        "flashBody": "32 KB program flash. Upload any sketch compiled by arduino-cli. Supports self-programming via SPM instruction.",
+        "gpioTitle": "GPIO Ports",
+        "gpioBody": "PORTB (pins 8–13), PORTC (A0–A5), PORTD (0–7). DDR, PORT, PIN registers all emulated. Interrupt-on-change via PCINT.",
+        "timersTitle": "Timers 0 / 1 / 2",
+        "timersBody": "8-bit Timer0 & Timer2, 16-bit Timer1. All PWM modes. Prescaler 1–1024. CTC, Fast PWM, Phase-correct PWM.",
+        "adcTitle": "10-bit ADC",
+        "adcBody": "6 analog input channels (A0–A5). Single conversion and free-running modes. Analog voltage from simulated components.",
+        "usartTitle": "USART0",
+        "usartBody": "Full duplex serial with configurable baud rate. TX, RX, and UDRE interrupts. Works with the built-in Serial Monitor."
+      },
+      "boards": {
+        "heading": "ATmega328P boards in Velxio",
+        "lead": "The ATmega328P powers several popular Arduino boards — all selectable in Velxio. The broader AVR8 family also includes ATmega2560 (Mega) and ATtiny85.",
+        "unoTitle": "Arduino Uno R3",
+        "unoBody": "The classic board. 14 digital I/O pins (6 PWM), 6 analog inputs, 32 KB flash. The most widely used ATmega328P board.",
+        "nanoTitle": "Arduino Nano",
+        "nanoBody": "Same ATmega328P in a compact 45×18mm form factor with mini-USB. Same pin count as Uno.",
+        "proTitle": "Arduino Pro Mini",
+        "proBody": "Bare-bones ATmega328P without USB chip. Available at 3.3 V/8 MHz and 5 V/16 MHz variants.",
+        "tinyTitle": "ATtiny85",
+        "tinyBody": "Ultra-compact 8-pin AVR. 8 KB flash, 6 I/O pins (PB0–PB5), USI (Wire), Timer0/1, 10-bit ADC. Ideal for embedded minimal projects.",
+        "megaTitle": "Arduino Mega 2560",
+        "megaBody": "ATmega2560 with 256 KB flash, 54 digital pins, 16 analog inputs, and 4 hardware USART channels."
+      },
+      "faq": {
+        "heading": "Frequently Asked Questions",
+        "q1": "What is the ATmega328P?",
+        "a1": "The ATmega328P is an 8-bit AVR microcontroller by Microchip (formerly Atmel). It is the heart of the Arduino Uno and Arduino Nano, running at 16 MHz with 32 KB flash, 2 KB SRAM, and 1 KB EEPROM.",
+        "q2": "Can I simulate ATmega328P register-level code?",
+        "a2": "Yes. Velxio's AVR8 emulation faithfully executes all ATmega328P registers: DDRB/C/D, PORTB/C/D, PINB/C/D, TCCR0/1/2, OCR0/1/2, UBRR, UDR, ADCL/ADCH, and all interrupt vectors — including direct register manipulation without the Arduino abstraction layer.",
+        "q3": "Does it emulate ATmega328P timers correctly?",
+        "a3": "Timer0 (8-bit), Timer1 (16-bit), and Timer2 (8-bit) are all emulated with full prescaler support, PWM modes, overflow interrupts, and Output Compare Match interrupts. millis(), delay(), analogWrite(), and tone() all work correctly.",
+        "q4": "Can I use analogRead() and analogWrite() in the simulator?",
+        "a4": "Yes. The 10-bit ADC (analogRead) and PWM output (analogWrite on pins 3, 5, 6, 9, 10, 11) are fully emulated. You can connect simulated sensors, potentiometers, and any wokwi-elements analog component.",
+        "q5": "Can I simulate USART / Serial on ATmega328P?",
+        "a5": "Yes. USART0 is fully emulated. Serial.begin(), Serial.print(), Serial.println(), and Serial.read() all work. The built-in Serial Monitor shows TX output and lets you send RX data to the running program."
+      },
+      "bottom": {
+        "title": "Simulate your ATmega328P code now",
+        "body": "Open the editor, paste your sketch, and click Simulate — no setup, no hardware purchase required.",
+        "cta": "Launch ATmega328P Simulator"
+      }
+    },
+    "esp32c3": {
+      "hero": {
+        "title": "Free ESP32-C3 Simulator",
+        "accent": "RISC-V Emulation via QEMU",
+        "subtitle": "Simulate ESP32-C3 and CH32V003 RISC-V code via the QEMU lcgamboa backend (libqemu-riscv32, esp32c3-picsimlab machine). RV32IMC at 160 MHz with 48+ interactive components.",
+        "ctaPrimary": "Open ESP32-C3 Simulator",
+        "ctaSecondary": "C3 Examples",
+        "trust": "Free & open-source · QEMU lcgamboa backend · libqemu-riscv32",
+        "imageAlt": "ESP32-C3 DevKitM-1 board"
+      },
+      "boards": {
+        "heading": "Supported RISC-V boards",
+        "lead": "Velxio emulates RISC-V microcontrollers through the QEMU lcgamboa fork — the same backend pattern used for Xtensa ESP32 / ESP32-S3, with libqemu-riscv32 instead of libqemu-xtensa.",
+        "devkitTitle": "ESP32-C3 DevKitM-1",
+        "devkitBody": "RISC-V RV32IMC at 160 MHz. WiFi + BLE 5.0, 22 GPIO, 400 KB SRAM. The official Espressif dev board.",
+        "xiaoTitle": "XIAO ESP32-C3",
+        "xiaoBody": "Seeed Studio compact RISC-V board. 11 GPIO, USB-C, battery charging IC. 21×17.5 mm.",
+        "superTitle": "ESP32-C3 SuperMini",
+        "superBody": "Aitewinrobot ultra-compact board. Same RISC-V core, minimal form factor for embedded projects.",
+        "chTitle": "CH32V003",
+        "chBody": "WCH RISC-V RV32EC at 48 MHz. Ultra-low-cost DIP-8 package, 2 KB SRAM, 16 KB flash. Just cents per chip."
+      },
+      "examples": {
+        "heading": "ESP32-C3 example projects",
+        "lead": "Ready-to-run examples for ESP32-C3 — from basic GPIO to sensor integrations.",
+        "blinkTitle": "C3 Blink LED",
+        "blinkBody": "Toggle an LED on GPIO 8. Classic blink sketch running on RISC-V.",
+        "rgbTitle": "C3 RGB LED",
+        "rgbBody": "Drive an RGB LED with three PWM channels — smooth color cycling on RISC-V.",
+        "buttonTitle": "C3 Button + LED",
+        "buttonBody": "Read a pushbutton on GPIO 9 and toggle an LED — digital input/output on ESP32-C3.",
+        "dhtTitle": "C3 DHT22 Sensor",
+        "dhtBody": "Read temperature and humidity from DHT22 on ESP32-C3. Serial Monitor output.",
+        "sonarTitle": "C3 HC-SR04 Ultrasonic",
+        "sonarBody": "Measure distance with ultrasonic sensor. Trigger/echo timing on RISC-V GPIO.",
+        "servoTitle": "C3 Servo Motor",
+        "servoBody": "Sweep a servo from 0° to 180° using ESP32-C3 PWM output.",
+        "viewAll": "View All 68+ Examples"
+      },
+      "faq": {
+        "heading": "Frequently Asked Questions",
+        "q1": "What is the ESP32-C3?",
+        "a1": "The ESP32-C3 is a RISC-V single-core microcontroller by Espressif running at 160 MHz (RV32IMC instruction set). It has WiFi + Bluetooth 5.0, 22 GPIO pins, and is one of the first RISC-V MCUs with a mature Arduino ecosystem.",
+        "q2": "Does the ESP32-C3 simulator run in the browser?",
+        "a2": "Yes. Unlike the Xtensa-based ESP32, the ESP32-C3 RISC-V emulation runs entirely in the browser — no QEMU backend needed. This makes it the fastest ESP32 variant to simulate.",
+        "q3": "Is this also a RISC-V simulator?",
+        "a3": "Yes. The ESP32-C3 uses the RISC-V RV32IMC instruction set. Velxio also supports the CH32V003 (RV32EC at 48 MHz) — another popular RISC-V microcontroller.",
+        "q4": "Which ESP32-C3 boards are supported?",
+        "a4": "Velxio supports ESP32-C3 DevKitM-1, Seeed XIAO ESP32-C3, and ESP32-C3 SuperMini (Aitewinrobot). All three use the same RISC-V core.",
+        "q5": "Can I use Arduino code with ESP32-C3?",
+        "a5": "Yes. Velxio compiles your .ino sketch using the official ESP32 Arduino core with the ESP32-C3 board target. All standard Arduino functions work — Serial, GPIO, analogRead, etc."
+      },
+      "bottom": {
+        "title": "Ready to simulate ESP32-C3?",
+        "body": "Open the editor, pick an ESP32-C3 board, and start coding — runs instantly in your browser.",
+        "cta": "Launch ESP32-C3 Simulator"
+      }
+    }
+  }
+}

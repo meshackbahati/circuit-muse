@@ -1,0 +1,29 @@
+/* Spacing tokens — 4-pt base scale.
+ *
+ * Use these for padding, margin, gap. Hard-coded pixel values in components
+ * are a smell — replace with the closest token.
+ *
+ * Naming: --space-N where N maps to the rough order of magnitude. Not a
+ * literal multiplier of 4 because the scale uses tighter steps at the small
+ * end where visual differences matter most.
+ */
+
+:root {
+  --space-0:   0;
+  --space-1:   2px;
+  --space-2:   4px;
+  --space-3:   6px;
+  --space-4:   8px;
+  --space-5:   12px;
+  --space-6:   16px;
+  --space-7:   20px;
+  --space-8:   24px;
+  --space-9:   32px;
+  --space-10:  40px;
+  --space-11:  48px;
+  --space-12:  64px;
+  --space-13:  80px;
+  --space-14:  96px;
+  --space-15:  128px;
+  --space-16:  160px;
+}

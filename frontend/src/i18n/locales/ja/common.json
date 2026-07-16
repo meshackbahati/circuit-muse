@@ -1,0 +1,409 @@
+{
+  "header": {
+    "skipToContent": "コンテンツにスキップ",
+    "openMenu": "メニューを開く",
+    "closeMenu": "メニューを閉じる",
+    "nav": {
+      "home": "ホーム",
+      "documentation": "ドキュメント",
+      "examples": "例",
+      "editor": "エディター",
+      "about": "概要",
+      "pricing": "料金",
+      "download": "ダウンロード",
+      "blog": "ブログ",
+      "github": "GitHub",
+      "discord": "Discord",
+      "classroom": "学校向け"
+    },
+    "auth": {
+      "signIn": "サインイン",
+      "signUp": "サインアップ",
+      "myProjects": "マイプロジェクト",
+      "signOut": "サインアウト"
+    },
+    "language": "言語",
+    "search": "検索"
+  },
+  "footer": {
+    "about": "Velxioは、ブラウザ上で完全に動作する無料のオープンソース回路・マイクロコントローラシミュレータです。Arduino、ESP32、RP2040、ATtiny85に対応し、SPICE精度のアナログ同時シミュレーションを提供します。メーカー、学生、組み込みエンジニアが実践的に学ぶために作られました。AGPLv3ライセンス。"
+  },
+  "landing": {
+    "hero": {
+      "titleLine1": "Arduino、ESP32、Raspberry Pi。",
+      "titleAccent": "ブラウザ上で。",
+      "subtitle": "コードを書き、部品を配線し、実行を押すだけ。19のボード、48以上の部品、リアルなCPUエミュレーション—ハードウェア不要、インストール不要、クラウド不要。",
+      "ctaPrimary": "シミュレータをオンラインで無料で試す →",
+      "ctaGithub": "GitHubで見る",
+      "trustLine": "サインアップ不要 · 100%ブラウザで動作 · 無料＆オープンソース",
+      "imageAlt": "Arduino Uno交通信号回路を使ったVelxioエディター"
+    },
+    "boards": {
+      "label": "対応ハードウェア",
+      "titleLine1": "すべてのアーキテクチャ。",
+      "titleLine2": "1つのツール。",
+      "subtitle": "5つのCPUアーキテクチャ（AVR8、ARM Cortex-M0+、RISC-V、Xtensa、Linux）にわたる19のボード。すべてローカルで動作し、クラウドは不要。"
+    },
+    "features": {
+      "label": "機能",
+      "title": "必要なものすべて。",
+      "subtitle": "完全なIDE、コンパイラ、マルチアーキテクチャシミュレータ—外部サービス不要でローカル動作。",
+      "spice": {
+        "title": "リアルタイムSPICEアナログ",
+        "desc": "ngspice-WASMエンジン—完全な修正節点解析を約60Hzで実行。抵抗、コンデンサ、オペアンプ、BJT、MOSFET、レギュレータは理想モデルではなく、実際のシリコンのように動作します。"
+      },
+      "engines": {
+        "title": "5つのエミュレーションエンジン",
+        "desc": "AVR8（ATmega328P、ATmega2560、ATtiny85）、RP2040（ARM Cortex-M0+）、RV32IMC（ESP32-C3、CH32V003 via QEMU）、Xtensa LX6/LX7（ESP32 via QEMU）、ARM Cortex-A53（Raspberry Pi 3 Linux）。"
+      },
+      "customChips": {
+        "title": "カスタムチップ",
+        "desc": "Wokwi Custom Chips APIを使用して、C、Rust、またはAssemblyScriptで独自の集積回路を作成。WebAssemblyにコンパイルしてプロジェクト間で再利用。"
+      },
+      "components": {
+        "title": "100以上のコンポーネント",
+        "desc": "SPICE精度のアナログ部品に加え、48以上のwokwiビジュアルコンポーネント—LED、LCD、ILI9341 TFT、サーボ、ブザー、超音波センサー、キーパッド、NeoPixelストリップ。"
+      },
+      "instruments": {
+        "title": "ライブ計測器",
+        "desc": "マルチチャンネルオシロスコープ、電圧計、電流計、信号発生器。任意のノードに配置し、シミュレーション実行中に波形がリアルタイムで更新されるのを確認。"
+      },
+      "monaco": {
+        "title": "Monaco Editor + arduino-cli",
+        "desc": "VS CodeグレードのC++エディター、マルチファイルワークスペース対応。ローカルのarduino-cliが実際の.hex/.uf2/.binファイルにコンパイル—クラウド往復なし。"
+      }
+    },
+    "support": {
+      "title": "プロジェクトを支援",
+      "subtitle": "Velxioは無料でオープンソースです。時間を節約できたなら、開発を支援することを検討してください。",
+      "ctaSponsors": "GitHub Sponsors",
+      "ctaPaypal": "PayPalで寄付"
+    },
+    "licensing": {
+      "label": "ライセンス",
+      "title": "無料、商用オプションあり。",
+      "subtitle": "オープンソース版はAGPLv3。クローズドソース製品にVelxioを組み込む必要があるチーム向けの商用ライセンスもあります。",
+      "opensource": {
+        "title": "オープンソース — AGPLv3",
+        "desc": "個人利用・教育・研究・セルフホスティングは永久無料。改変・フォーク・再配布も自由 — ただし変更内容もAGPLv3で公開する必要があります。",
+        "cta": "GitHubでソースを見る →"
+      },
+      "commercial": {
+        "badge": "商用",
+        "title": "商用ライセンス",
+        "desc": "クローズドソース製品、プロプライエタリSaaS、AGPLv3の相互ライセンス条件がビジネスモデルに合わない社内利用向け。",
+        "cta": "価格を問い合わせる →"
+      }
+    },
+    "ai": {
+      "label": "AIエージェント",
+      "title": "AIエージェントが動かしています。",
+      "subtitle": "マルチステップAIエージェントがエディタ内で動作。あなたのキャンバスを読み、コードを書き、部品を配置・配線します。自然言語ですべて完結。最先端LLMをコストと可用性で自動ルーティング。",
+      "cards": {
+        "wire": {
+          "title": "配置と配線",
+          "desc": "「D2にプルアップ抵抗付きのボタンを追加」と頼むだけ。エージェントが部品を選び、キャンバスに置き、各ピンを接続して配線にラベルを付けます。"
+        },
+        "code": {
+          "title": "動くスケッチを生成",
+          "desc": "やりたい動作を伝えると、エージェントがArduino / MicroPythonコードを書き、コンパイル、書き込みまで実行 — チャットからのコピペ不要。"
+        },
+        "debug": {
+          "title": "ライブ回路を診断",
+          "desc": "配線のバグで詰まった?キャンバスのスクリーンショットを送れば、エージェントが回路図を読み、シミュレートし、どのピンが間違っているか教えます。"
+        }
+      }
+    },
+    "pricing": {
+      "label": "料金",
+      "title": "回路は無料。AIだけ有料。",
+      "subtitle": "シミュレータは永年無料。プランはAIエージェントの上限を引き上げるだけ — クレジットは毎日リセット。",
+      "popular": "人気",
+      "tiers": {
+        "free": {
+          "name": "Free",
+          "tagline": "シミュレータと軽量AIアシストを体験。",
+          "f1": "1日20 AIクレジット(月最大600)",
+          "f2": "30種類以上のボード + 48+のコンポーネント",
+          "f3": "実機CPUエミュレーション、公開プロジェクト",
+          "cta": "始める"
+        },
+        "maker": {
+          "name": "Maker",
+          "tagline": "AI支援で実物の回路を作るメーカー向け。",
+          "f1": "AIクレジット1日500回（月15,000回まで）",
+          "f2": "非公開プロジェクト + Velxio Desktop（オフライン）",
+          "f3": "ESP32・STM32・Raspberry Pi のシミュレーション時間が無制限",
+          "cta": "Makerを始める"
+        },
+        "pro": {
+          "name": "Pro",
+          "tagline": "プライベートプロジェクト、GitHub同期、BOMエクスポート。",
+          "f1": "AIクレジット1日2,000回（月60,000回まで）",
+          "f2": "プライベートプロジェクト + BOM CSV + 回路図PNG",
+          "f3": "GitHub Sync + ウォーターマーク無しの埋め込み",
+          "cta": "Proを購読"
+        }
+      },
+      "classroomBanner": "コースでVelxioを使いますか？ Velxio for Classroomは年$40から学生全員にProアクセスを提供します。",
+      "classroomCta": "クラスプランを見る →"
+    }
+  },
+  "profile": {
+    "newProject": "新規プロジェクト",
+    "loading": "読み込み中…",
+    "empty": "公開プロジェクトはまだありません。",
+    "private": "非公開",
+    "copyLink": "共有リンクをコピー",
+    "notFound": "ユーザーが見つかりません。"
+  },
+  "pricing": {
+    "title": "料金",
+    "selfHosted": "このVelxioインスタンスはオープンソースイメージからセルフホストされています—すべての機能は利用者全員に無料です。",
+    "hostedVersion": "ホスト版（<link>velxio.dev</link>）では、開発資金を支援するオプションのProプランを提供しています。",
+    "sourceCode": "ソースコードは<link>GitHub上でMITライセンス</link>です。"
+  },
+  "admin": {
+    "loading": "読み込み中…",
+    "panel": "管理パネル",
+    "logout": "ログアウト",
+    "tabs": {
+      "dashboard": "ダッシュボード",
+      "users": "ユーザー",
+      "projects": "プロジェクト",
+      "boards": "ボード"
+    },
+    "errors": {
+      "save": "保存に失敗しました。"
+    },
+    "editUser": {
+      "title": "ユーザー編集",
+      "username": "ユーザー名",
+      "email": "メール",
+      "newPassword": "新しいパスワード（変更しない場合は空白）",
+      "passwordPlaceholder": "最低8文字",
+      "admin": "管理者",
+      "active": "アクティブ",
+      "cancel": "キャンセル",
+      "save": "保存",
+      "saving": "保存中…"
+    },
+    "setup": {
+      "title": "管理者設定",
+      "body": "管理者アカウントがまだ存在しません。最初の管理者ユーザーを作成して続行してください。",
+      "password": "パスワード",
+      "confirmPassword": "パスワード確認",
+      "passwordMismatch": "パスワードが一致しません。",
+      "creating": "作成中…",
+      "createAdmin": "管理者を作成",
+      "failed": "管理者の作成に失敗しました。"
+    },
+    "notAdmin": {
+      "title": "管理者アクセスが必要です",
+      "body": "このパネルにアクセスするには管理者としてログインする必要があります。",
+      "goLogin": "ログインへ"
+    },
+    "users": {
+      "loadFailed": "ユーザーの読み込みに失敗しました。",
+      "deleteFailed": "ユーザーの削除に失敗しました。",
+      "confirmDelete": "ユーザー「{{username}}」とそのすべてのプロジェクトを削除しますか？この操作は元に戻せません。",
+      "searchPlaceholder": "ユーザー名またはメールで検索…",
+      "count_one": "{{count}} ユーザー",
+      "count_other": "{{count}} ユーザー",
+      "noResults": "ユーザーが見つかりません。",
+      "col": {
+        "username": "ユーザー名",
+        "email": "メール",
+        "role": "役割",
+        "status": "ステータス",
+        "projects": "プロジェクト",
+        "compiles": "コンパイル数",
+        "runs": "実行数",
+        "boards": "ボード",
+        "country": "国",
+        "lastActive": "最終アクティブ",
+        "joined": "登録日",
+        "actions": "操作"
+      },
+      "actions": {
+        "activity": "アクティビティ",
+        "edit": "編集",
+        "delete": "削除",
+        "resetAgentUsage": "エージェントをリセット",
+        "resetAgentUsageTooltip": "本日のエージェント利用量をクリアし、ユーザーが利用を継続できるようにします。"
+      },
+      "confirmResetAgentUsage": "「{{username}}」のエージェント割り当てをリセットしますか（本日、UTC）？",
+      "resetAgentUsageDone": "{{username}} の割り当てをリセットしました — {{rows}} 件のイベントで {{cycles}} サイクル分を解放しました。",
+      "resetAgentUsageFailed": "エージェントの利用量をリセットできませんでした。"
+    },
+    "boards": {
+      "loadFailed": "ボードメトリクスの読み込みに失敗しました。",
+      "range": "範囲:",
+      "byFamily": "ボードファミリー別",
+      "byFqbn": "正確なFQBN別",
+      "noData": "データなし。",
+      "col": {
+        "family": "ファミリー",
+        "fqbn": "FQBN",
+        "compiles": "コンパイル数",
+        "errors": "エラー数",
+        "successRate": "成功率",
+        "runs": "実行数",
+        "distinctUsers": "ユニークユーザー数",
+        "distinctProjects": "ユニークプロジェクト数"
+      }
+    },
+    "dashboard": {
+      "loadFailed": "メトリクスの読み込みに失敗しました。",
+      "loadingMetrics": "メトリクスを読み込み中…",
+      "unknown": "不明",
+      "kpi": {
+        "totalUsers": "総ユーザー数",
+        "totalProjects": "総プロジェクト数",
+        "compilesAllTime": "コンパイル数（全期間）",
+        "runsAllTime": "実行数（全期間）",
+        "newIn30d": "30日間で+{{count}}",
+        "successPct": "成功率{{pct}}%",
+        "dau": "過去24時間のアクティブユーザー",
+        "wau": "過去7日間のアクティブユーザー",
+        "mau": "過去30日間のアクティブユーザー",
+        "publicPrivate": "公開 / 非公開"
+      },
+      "charts": {
+        "activityOverTime": "経時アクティビティ",
+        "noActivity": "この範囲ではまだアクティビティがありません。",
+        "compilesByFamily": "ボードファミリー別コンパイル数（{{days}}日）",
+        "diversityTitle": "ユーザーあたりのボードファミリー数",
+        "diversitySubtitle": "価格設定のシグナル—マルチボードユーザーは有料プランが適切である可能性があります。",
+        "boardCount_one": "{{count}} ボード",
+        "boardCount_other": "{{count}} ボード",
+        "noDataYet": "まだデータがありません。",
+        "topFqbn": "FQBN別トップボード（{{days}}日）",
+        "topCountries": "トップ国（{{days}}日）",
+        "countriesSubtitle": "CloudflareのCF-IPCountryヘッダーから取得。「ユーザー」＝現在の本国、「サインアップ」＝登録国、「アクティブ」＝この範囲でアクティビティのあるユニークユーザー。",
+        "noCountryData": "まだ国のデータがありません（Cloudflare外で実行している可能性があります）。",
+        "topUsers": "コンパイル数トップユーザー",
+        "topProjects": "コンパイル数トッププロジェクト"
+      },
+      "col": {
+        "country": "国",
+        "users": "ユーザー数",
+        "signups": "サインアップ数",
+        "activeRange": "アクティブ（{{days}}日）",
+        "user": "ユーザー"
+      }
+    },
+    "activity": {
+      "loadFailed": "アクティビティの読み込みに失敗しました。",
+      "title": "日次アクティビティ — {{username}}",
+      "subtitle": "このユーザーの日別・プロジェクト別のコンパイル数と実行数。",
+      "noActivity": "選択した範囲にアクティビティはありません。",
+      "projectCount_one": "{{count}} プロジェクト",
+      "projectCount_other": "{{count}} プロジェクト",
+      "deletedProject": "（削除されたプロジェクト）",
+      "noProject": "（プロジェクトなし）",
+      "col": {
+        "date": "日付",
+        "saves": "保存数"
+      }
+    },
+    "projects": {
+      "loadFailed": "プロジェクトの読み込みに失敗しました。",
+      "deleteFailed": "プロジェクトの削除に失敗しました。",
+      "confirmDelete": "プロジェクト「{{name}}」を削除しますか？この操作は元に戻せません。",
+      "searchPlaceholder": "名前または所有者で検索…",
+      "count_one": "{{count}} プロジェクト",
+      "count_other": "{{count}} プロジェクト",
+      "noResults": "プロジェクトが見つかりません。",
+      "private": "非公開",
+      "public": "公開",
+      "privateTitle": "非公開プロジェクト（管理者ビュー）",
+      "col": {
+        "name": "名前",
+        "owner": "所有者",
+        "board": "ボード",
+        "visibility": "公開設定",
+        "compiles": "コンパイル数",
+        "runs": "実行数",
+        "updates": "更新数",
+        "lastCompile": "最終コンパイル",
+        "updated": "更新日"
+      }
+    }
+  },
+  "examples": {
+    "heading": "注目のプロジェクト",
+    "subtitle": "サンプルプロジェクトを探索して実行—ボード別に整理",
+    "searchPlaceholder": "サンプルを検索 — 'esp32 oled', 'blink', 'dht'…",
+    "searchLabel": "サンプルを検索",
+    "clearSearch": "検索をクリア",
+    "clear": "クリア",
+    "matchCount_one": "{{count}} 件の一致",
+    "matchCount_other": "{{count}} 件の一致",
+    "filters": {
+      "categoryLabel": "カテゴリ:",
+      "difficultyLabel": "難易度:",
+      "category": {
+        "all": "すべて",
+        "basics": "基本",
+        "sensors": "センサー",
+        "displays": "ディスプレイ",
+        "communication": "通信",
+        "games": "ゲーム",
+        "robotics": "ロボット",
+        "circuits": "回路"
+      },
+      "difficulty": {
+        "all": "すべて",
+        "beginner": "初心者",
+        "intermediate": "中級",
+        "advanced": "上級"
+      }
+    },
+    "copyLink": "共有リンクをコピー",
+    "empty": "選択したフィルターに一致するサンプルはありません",
+    "emptyForQuery": "「{{query}}」に一致するサンプルは選択したフィルターでは見つかりませんでした",
+    "resetFilters": "フィルターをリセット",
+    "installing": "ライブラリをインストール中（{{done}}/{{total}}）",
+    "loadingExample": "サンプルを読み込み中...",
+    "notFound": "サンプル「{{id}}」が見つかりません。",
+    "browseAll": "すべてのサンプルを閲覧"
+  },
+  "starBanner": {
+    "ariaLabel": "GitHubでVelxioにスターを付ける",
+    "title": "Velxioを気に入っていますか？",
+    "body": "GitHubで⭐を付けると、より多くの開発者がこのプロジェクトを発見できます—たった2秒で完了します！",
+    "cta": "GitHubでスターを付ける",
+    "dismiss": "閉じる"
+  },
+  "auth": {
+    "login": {
+      "title": "サインイン",
+      "subtitle": "Velxioに続ける",
+      "email": "メール",
+      "password": "パスワード",
+      "signIn": "サインイン",
+      "signingIn": "サインイン中…",
+      "or": "または",
+      "continueGoogle": "Googleで続ける",
+      "noAccount": "アカウントをお持ちでないですか？",
+      "failed": "ログインに失敗しました。"
+    },
+    "register": {
+      "title": "アカウント作成",
+      "subtitle": "無料で作り始める",
+      "username": "ユーザー名",
+      "usernamePlaceholder": "例: alice",
+      "passwordPlaceholder": "最低8文字",
+      "create": "アカウント作成",
+      "creating": "アカウント作成中…",
+      "haveAccount": "すでにアカウントをお持ちですか？",
+      "errors": {
+        "reserved": "そのユーザー名は予約されています。",
+        "usernameRules": "ユーザー名は3〜30文字（a-z、0-9、_、-）である必要があります。",
+        "passwordTooShort": "パスワードは最低8文字必要です。",
+        "failed": "登録に失敗しました。"
+      }
+    }
+  }
+}

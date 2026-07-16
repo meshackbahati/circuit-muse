@@ -1,0 +1,62 @@
+# QEMU-optimized sdkconfig for ESP32 emulation (proven working 2026-03-31)
+# These settings match the lcgamboa QEMU fork requirements.
+
+# Flash settings — DIO mode required by esp32-picsimlab QEMU machine
+CONFIG_ESPTOOLPY_FLASHMODE_DIO=y
+CONFIG_ESPTOOLPY_FLASHFREQ_40M=y
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+
+# Bootloader — minimal logging to speed up QEMU boot
+CONFIG_BOOTLOADER_LOG_LEVEL_NONE=y
+
+# Default log level — WARN so users see only their Serial.print + real warnings.
+# Internal ESP-IDF info-level chatter (gpio:, wifi:, phy:) is suppressed.
+# Override per-tag with esp_log_level_set() at runtime if needed.
+CONFIG_LOG_DEFAULT_LEVEL_WARN=y
+CONFIG_LOG_DEFAULT_LEVEL=2
+
+# Watchdogs — disable for QEMU (timing is not real-time)
+CONFIG_ESP_TASK_WDT=n
+CONFIG_ESP_INT_WDT=n
+
+# Compiler
+CONFIG_COMPILER_OPTIMIZATION_SIZE=y
+
+# WiFi
+CONFIG_ESP_WIFI_ENABLED=y
+
+# mbedTLS — PSK ciphersuites must be enabled or arduino-esp32 v2.0.17's
+# ssl_client.cpp compiles to an empty translation unit (its body is wrapped
+# in `#if !defined(MBEDTLS_KEY_EXCHANGE_SOME_PSK_ENABLED) ... #else ... #endif`).
+# Without these, any sketch that pulls in HTTPClient or WiFiClientSecure
+# fails to link with undefined references to ssl_init / start_ssl_client /
+# stop_ssl_socket / send_ssl_data / get_ssl_receive / data_to_read.
+CONFIG_MBEDTLS_PSK_MODES=y
+CONFIG_MBEDTLS_KEY_EXCHANGE_PSK=y
+
+# LWIP — reassembly needed for slirp networking
+CONFIG_LWIP_IP4_REASSEMBLY=y
+CONFIG_LWIP_IP6_REASSEMBLY=y
+
+# FreeRTOS
+CONFIG_FREERTOS_HZ=1000
+
+# Console
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y
+
+# Arduino-as-component: we provide our own app_main (main.cpp)
+CONFIG_AUTOSTART_ARDUINO=n
+
+# Increase main task stack for Arduino sketches
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# Enable C++ exceptions (some Arduino libraries require it)
+CONFIG_COMPILER_CXX_EXCEPTIONS=y
+
+# Bluetooth for BLE examples — Bluedroid stack (the default arduino-esp32
+# BLEDevice.h library targets Bluedroid, not NimBLE). NimBLE-based sketches
+# (NimBLEDevice.h) will not compile under this config; flip stacks if needed.
+CONFIG_BT_ENABLED=y
+CONFIG_BT_BLUEDROID_ENABLED=y
+CONFIG_BTDM_CTRL_MODE_BR_EDR_BLE=y
+CONFIG_BT_BLE_ENABLED=y

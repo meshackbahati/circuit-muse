@@ -1,0 +1,493 @@
+/* ── Toolbar container ──────────────────────────────────────────────────────
+ * Single-row layout: [left actions] [file tabs flex] [right actions]
+ * The center slot (file tabs) flex-grows and scrolls horizontally so the
+ * action icons on either side stay pinned and visible no matter how narrow
+ * the editor pane gets when the user drags the editor/canvas divider.
+ *
+ * Uses CSS container queries so the Libraries label collapses based on the
+ * toolbar's *own* width (not the viewport) — which is what changes when the
+ * user drags the editor/canvas divider.
+ */
+.editor-toolbar-wrapper {
+  container-type: inline-size;
+  container-name: editor-toolbar;
+}
+.editor-toolbar {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0 6px;
+  height: 38px;
+  background: #252526;
+  border-bottom: 1px solid #333;
+  flex-shrink: 0;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* ── Groups ─────────────────────────────────────── */
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+.toolbar-group-right {
+  gap: 4px;
+}
+
+/* Center slot — fills the gap between left/right groups, allows file tabs
+   to scroll horizontally inside it without pushing the icons off-screen. */
+.toolbar-center-slot {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+.toolbar-center-slot > .file-tabs {
+  flex: 1;
+  min-width: 0;
+  border-bottom: none;
+  background: transparent;
+  min-height: 0;
+  height: 100%;
+}
+.toolbar-center-slot .file-tab {
+  height: 100%;
+  padding: 0 8px;
+  min-width: 70px;
+  max-width: 160px;
+  font-size: 11.5px;
+}
+.toolbar-center-slot .file-tab-active {
+  background: #1e1e1e;
+  border-top: 2px solid #4fc3f7;
+}
+
+/* ── Divider ─────────────────────────────────────── */
+.tb-divider {
+  width: 1px;
+  height: 18px;
+  background: #3a3a3a;
+  margin: 0 3px;
+  align-self: center;
+}
+
+/* ── Icon buttons ───────────────────────────────── */
+.tb-btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: transparent;
+  color: #9d9d9d;
+  transition:
+    background 0.12s,
+    color 0.12s;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.tb-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Compile */
+.tb-btn-compile {
+  color: #4fc3f7;
+}
+.tb-btn-compile:hover:not(:disabled) {
+  background: rgba(79, 195, 247, 0.12);
+  color: #81d4fa;
+}
+.tb-btn-compile:active:not(:disabled) {
+  background: rgba(79, 195, 247, 0.2);
+}
+
+/* Run */
+.tb-btn-run {
+  color: #4caf50;
+}
+.tb-btn-run:hover:not(:disabled) {
+  background: rgba(76, 175, 80, 0.12);
+  color: #66bb6a;
+}
+
+/* Stop */
+.tb-btn-stop {
+  color: #ef5350;
+}
+.tb-btn-stop:hover:not(:disabled) {
+  background: rgba(239, 83, 80, 0.12);
+  color: #f44336;
+}
+
+/* Reset */
+.tb-btn-reset:hover:not(:disabled) {
+  background: #2a2d2e;
+  color: #ccc;
+}
+
+/* Libraries button (always visible, with label) */
+.tb-btn-libraries {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 8px 0 7px;
+  border: 1px solid rgba(0, 184, 212, 0.3);
+  border-radius: 5px;
+  cursor: pointer;
+  background: rgba(0, 184, 212, 0.08);
+  color: #00e5ff;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: inherit;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+  flex-shrink: 0;
+  align-self: center;
+}
+.tb-btn-libraries:hover {
+  background: rgba(0, 184, 212, 0.18);
+  border-color: rgba(0, 184, 212, 0.5);
+  color: #fff;
+}
+.tb-libraries-label {
+  line-height: 1;
+}
+/* Hide the label when the toolbar is narrow — icon alone keeps the button
+   reachable without stealing horizontal space from the file tabs. The
+   container query reacts to the toolbar's own width, so it triggers when
+   the user drags the editor/canvas divider, not just on small viewports. */
+@container editor-toolbar (max-width: 600px) {
+  .tb-libraries-label {
+    display: none;
+  }
+  .tb-btn-libraries {
+    padding: 0 6px;
+  }
+}
+/* When even narrower, also collapse the board pill label. */
+@container editor-toolbar (max-width: 460px) {
+  .tb-board-pill-label {
+    display: none;
+  }
+  .tb-board-pill {
+    padding: 3px 6px;
+  }
+}
+
+/* ── Progressive overflow ──────────────────────────────────────────────
+   The overflow menu starts with three items (BOM, Schematic, Firmware)
+   plus two hidden ones (Import, Export) declared up top.  As the toolbar
+   narrows we drop inline buttons into the menu instead, so mobile users
+   always reach every action — they just open the "..." menu to find it.
+
+   Selectors are intentionally compound (.tb-overflow-menu .tb-…) to beat
+   the later-defined `.tb-overflow-item { display: flex }` baseline.
+   Container width thresholds reflect the editor pane width (toolbar lives
+   inside it), not the viewport — at a 50/50 desktop split a 1280px
+   viewport gives the toolbar ~376px to work with. */
+.tb-overflow-menu .tb-overflow-import,
+.tb-overflow-menu .tb-overflow-export {
+  display: none;
+}
+@container editor-toolbar (max-width: 320px) {
+  .tb-btn-import-inline {
+    display: none;
+  }
+  .tb-overflow-menu .tb-overflow-import {
+    display: flex;
+  }
+}
+@container editor-toolbar (max-width: 280px) {
+  .tb-btn-export-inline {
+    display: none;
+  }
+  .tb-overflow-menu .tb-overflow-export {
+    display: flex;
+  }
+}
+
+/* Legacy lib icon-only button (for overflow items) */
+.tb-btn-lib {
+  color: #00b8d4;
+}
+.tb-btn-lib:hover {
+  background: rgba(0, 184, 212, 0.1);
+  color: #00e5ff;
+}
+
+/* Missing library hint banner */
+.tb-lib-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(255, 152, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 152, 0, 0.25);
+  color: #ffb74d;
+  font-size: 12px;
+  font-family: inherit;
+}
+.tb-lib-hint svg {
+  flex-shrink: 0;
+  color: #ffa726;
+}
+.tb-lib-hint-btn {
+  background: rgba(0, 184, 212, 0.15);
+  border: 1px solid rgba(0, 184, 212, 0.4);
+  border-radius: 4px;
+  color: #00e5ff;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.tb-lib-hint-btn:hover {
+  background: rgba(0, 184, 212, 0.3);
+  color: #fff;
+}
+.tb-lib-hint-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.tb-lib-hint-close:hover {
+  color: #ccc;
+}
+
+/* Output Console toggle */
+.tb-btn-output {
+  color: #9d9d9d;
+}
+.tb-btn-output:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ccc;
+}
+.tb-btn-output-active {
+  color: #4fc3f7;
+  background: rgba(79, 195, 247, 0.1);
+}
+.tb-btn-output-active:hover {
+  background: rgba(79, 195, 247, 0.18);
+  color: #81d4fa;
+}
+
+/* ── Spin animation (compiling) ─────────────────── */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
+/* ── Status inline message ──────────────────────── */
+.tb-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tb-status-success {
+  color: #4caf50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.tb-status-error {
+  color: #ef5350;
+  background: rgba(239, 83, 80, 0.1);
+}
+
+.tb-status-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Compile All / Run All buttons ─────────────── */
+.tb-btn-compile-all {
+  color: #80cbc4;
+}
+.tb-btn-compile-all:hover:not(:disabled) {
+  background: rgba(128, 203, 196, 0.12);
+  color: #a7ffeb;
+}
+
+.tb-btn-run-all {
+  color: #aed581;
+}
+.tb-btn-run-all:hover:not(:disabled) {
+  background: rgba(174, 213, 129, 0.12);
+  color: #ccff90;
+}
+
+/* ── Board context pill ─────────────────────────── */
+.tb-board-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px 3px 7px;
+  border-radius: 20px;
+  border: 1px solid;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0.85;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.04);
+  max-width: 170px;
+  overflow: hidden;
+}
+
+.tb-board-pill-icon {
+  font-size: 9px;
+  flex-shrink: 0;
+}
+
+.tb-board-pill-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tb-board-pill-running {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4caf50;
+  flex-shrink: 0;
+  animation: pulse-run 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse-run {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* ── Overflow (…) menu ──────────────────────────── */
+.tb-overflow-wrap {
+  position: relative;
+}
+
+.tb-btn-overflow {
+  color: #9d9d9d;
+}
+.tb-btn-overflow:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #ccc;
+}
+.tb-btn-overflow-active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.tb-overflow-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 200;
+  background: #2a2a2c;
+  border: 1px solid #3a3a3c;
+  border-radius: 10px;
+  padding: 6px;
+  min-width: 180px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tb-overflow-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  color: #ccc;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.tb-overflow-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.tb-overflow-item svg {
+  flex-shrink: 0;
+  color: #00b8d4;
+}
+
+.tb-overflow-label {
+  flex: 1;
+  text-align: left;
+}
+
+/* Pro pill — signals premium items in the overflow menu BEFORE the user
+   clicks. Used in place of a hidden gate so free users aren't surprised
+   by an upgrade prompt on what looked like a free button. */
+.tb-overflow-pro {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, #ffd54f 0%, #ffb300 100%);
+  color: #1a1a1a;
+  flex-shrink: 0;
+}
+
+/* ── Error detail bar (for long compiler errors) ── */
+.toolbar-error-detail {
+  background: #1a0000;
+  border-bottom: 1px solid #5a1a1a;
+  color: #f48fb1;
+  font-size: 11px;
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  padding: 4px 12px;
+  max-height: 80px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  line-height: 1.4;
+}

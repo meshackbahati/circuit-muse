@@ -1,0 +1,9 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "i8080 Mini-Computer (Banner)",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Self-contained Intel 8080 with an internal 328-byte ROM that prints a banner and then prints 'uptime ticks: 0xNN' every ~50 ms forever — using a real DCR/JNZ busy-wait. Wire TX/RX to an Arduino and open the Serial Monitor to watch the 8080 execute real instructions. Clean-room CPU validated by CPUDIAG.",
+  "pins": ["RX", "TX", "VCC", "GND"],
+  "attributes": []
+}

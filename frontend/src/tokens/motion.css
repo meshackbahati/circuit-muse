@@ -1,0 +1,39 @@
+/* Motion tokens — durations and easings.
+ *
+ * Three durations for three intents:
+ *   fast — micro-interactions (hover, click feedback)
+ *   base — standard transitions (color, bg, border)
+ *   slow — meaningful state changes (modal open/close, tab switch)
+ *
+ * Easings:
+ *   ease-out — entries (modal opening, tooltip showing)
+ *   ease-in — exits (modal closing)
+ *   ease-in-out — symmetric movements (tab switch, accordion)
+ *   spring — drag/drop in canvas, playful bounces
+ */
+
+:root {
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+
+  --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:      cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out:  cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Common shortcuts */
+  --transition-color:     color var(--duration-base) var(--ease-out),
+                          background-color var(--duration-base) var(--ease-out),
+                          border-color var(--duration-base) var(--ease-out);
+  --transition-transform: transform var(--duration-base) var(--ease-out);
+  --transition-opacity:   opacity var(--duration-base) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 1ms;
+    --duration-base: 1ms;
+    --duration-slow: 1ms;
+  }
+}

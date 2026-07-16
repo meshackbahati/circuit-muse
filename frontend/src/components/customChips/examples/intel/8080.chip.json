@@ -1,0 +1,16 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Intel 8080",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Clean-room Intel 8080A (1975) — 8-bit ISA, 16-bit address bus, separate D0..D7 data bus, status byte on D during SYNC. Validated against the 1980 Microcosm CPUDIAG ROM (\"CPU IS OPERATIONAL\").",
+  "pins": [
+    "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7",
+    "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15",
+    "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
+    "SYNC", "DBIN", "WR", "INTE", "WAIT", "HLDA",
+    "READY", "HOLD", "INT", "RESET",
+    "PHI1", "PHI2", "VCC", "GND"
+  ],
+  "attributes": []
+}

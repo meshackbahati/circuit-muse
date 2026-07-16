@@ -1,0 +1,231 @@
+{
+  "seo": {
+    "spice": {
+      "hero": {
+        "title": "Simulatore SPICE gratuito online",
+        "accent": "ngspice reale, nel tuo browser",
+        "subtitle": "Velxio esegue il motore open-source ngspice compilato in WebAssembly. Modelli di dispositivi reali, analisi nodale modificata completa, simulazione transitoria in tempo reale — e puoi collegarlo al firmware reale di Arduino / ESP32 / RP2040. Gratuito, senza installazione, senza account.",
+        "ctaPrimary": "Apri il simulatore SPICE",
+        "ctaSecondary": "Vedi la release Velxio 2.5",
+        "trust": "ngspice reale · Gratuito e open-source · Funziona al 100% nel tuo browser"
+      },
+      "why": {
+        "heading": "Perché Velxio per SPICE?",
+        "lead": "Storicamente, SPICE nel browser significava o nessun SPICE (approssimatori lineari) o strumenti solo su server che richiedono un account. Velxio esegue il motore reale, localmente, gratuitamente.",
+        "realTitle": "ngspice reale",
+        "realBody": "Lo stesso motore dei flussi di lavoro EDA professionali, compilato in WebAssembly tramite eecircuit-engine. Nessun risolutore semplificato — MNA completo, libreria completa di dispositivi.",
+        "noServerTitle": "Nessun server, nessun account",
+        "noServerBody": "Il risolutore funziona nella scheda del tuo browser. I tuoi circuiti non lasciano mai la tua macchina. Funziona offline dopo il primo caricamento.",
+        "coTitle": "Co-simulazione con firmware",
+        "coBody": "I GPIO di Arduino / ESP32 / RP2040 / ATtiny85 pilotano le sorgenti SPICE, gli ADC leggono le tensioni dei nodi risolte. La combinazione unica che nessun altro strumento nel browser offre."
+      },
+      "devices": {
+        "heading": "Libreria dispositivi",
+        "lead": "Ogni componente sulla tela corrisponde a una scheda dispositivo ngspice reale — non un sostituto comportamentale.",
+        "passivesTitle": "Passivi",
+        "passivesBody": "Resistori, condensatori (elettrolitici / ceramici / con polarità), induttori, potenziometri, fotoresistori (LDR), fotodiodi, termistori NTC.",
+        "diodesTitle": "Diodi",
+        "diodesBody": "1N4148, 1N4007, 1N5817 / 1N5819 (Schottky), Zener 1N4733 — con caduta diretta, rottura inversa e recupero corretti.",
+        "bjtTitle": "BJT",
+        "bjtBody": "2N2222, 2N3055 (NPN ad alta corrente), 2N3906, BC547, BC557 — con comportamento di interdizione, regione attiva e saturazione.",
+        "mosfetTitle": "MOSFET",
+        "mosfetBody": "2N7000 (N-channel a piccolo segnale), IRF540 (N-channel di potenza), IRF9540 (P-channel di potenza), FQP27P06 — Modello di livello 3.",
+        "opampTitle": "Amplificatori operazionali",
+        "opampBody": "LM358, LM741, TL072, LM324, ideale — con saturazione realistica per un corretto clipping dell'uscita.",
+        "regulatorsTitle": "Regolatori lineari",
+        "regulatorsBody": "7805, 7812, 7905, LM317 — con tensione di dropout. Costruisci un alimentatore completo sulla tela.",
+        "logicTitle": "IC logici",
+        "logicBody": "74HC-series in package DIP-14, porte logiche di base (AND/OR/NAND/NOR/XOR/XNOR/NOT), flip-flop D/T/JK sensibili al fronte, latch SR.",
+        "powerTitle": "Componenti di potenza",
+        "powerBody": "L293D doppio ponte H, optoaccoppiatori (4N25, PC817 con CTR), relè SPDT con induttanza della bobina, isteresi e diodo flyback.",
+        "sourcesTitle": "Sorgenti e strumenti",
+        "sourcesBody": "Batterie da 9V / AA / a bottone con ESR realistico, generatore di segnale (sinusoidale / quadra / DC), oscilloscopio, voltmetro, amperometro."
+      },
+      "faq": {
+        "heading": "Domande frequenti",
+        "q1": "Questo è ngspice reale che gira nel mio browser?",
+        "a1": "Sì. Velxio carica ngspice compilato in WebAssembly tramite il motore open-source eecircuit-engine. Lo stesso motore SPICE che alimenta i flussi di lavoro EDA professionali gira nella scheda del tuo browser — nessun server, nessuna installazione.",
+        "q2": "Che tipo di analisi esegue?",
+        "a2": "Analisi transitoria in tempo reale. Il risolutore esegue l'analisi nodale modificata ad ogni tick (~60 Hz) così vedi le forme d'onda evolversi mentre il circuito funziona. I dispositivi non lineari iterano fino alla convergenza ad ogni passo.",
+        "q3": "Quali modelli di dispositivi SPICE sono supportati?",
+        "a3": "Resistori, condensatori, induttori, sorgenti di tensione e corrente ideali, diodi (1N4148, 1N4007, 1N5817, 1N5819, Zener 1N4733), BJT (2N2222, 2N3055, 2N3906, BC547, BC557), MOSFET (2N7000, IRF540, IRF9540, FQP27P06 — modello di livello 3), amplificatori operazionali (LM358, LM741, TL072, LM324, ideale) con saturazione, regolatori lineari (7805, 7812, 7905, LM317), optoaccoppiatori (4N25, PC817) e bobine di relè con induttanza.",
+        "q4": "Posso scrivere netlist SPICE grezze?",
+        "a4": "Velxio costruisce la netlist per te dallo schema — collega i componenti sulla tela e il simulatore genera le schede SPICE. Non devi scrivere netlist a mano, ma il motore sottostante è ngspice completo e accetta schede di dispositivi standard.",
+        "q5": "Include strumenti?",
+        "a5": "Sì — oscilloscopio multicanale, voltmetro, amperometro e generatore di segnale (sinusoidale / quadra / DC, frequenza, ampiezza e offset configurabili). Tutti gli strumenti sondano le tensioni dei nodi SPICE e le correnti di ramo in tempo reale.",
+        "q6": "SPICE può comunicare con un microcontrollore?",
+        "a6": "Sì. Questa è la caratteristica unica. I GPIO di Arduino / ESP32 / RP2040 / ATtiny85 pilotano le sorgenti di tensione SPICE; gli ingressi ADC leggono le tensioni dei nodi risolte. Costruisci una catena di segnale analogico reale guidata dal firmware end-to-end in un unico strumento."
+      },
+      "bottom": {
+        "title": "Esegui SPICE reale — nessuna installazione, nessun account",
+        "body": "Apri l'editor e inizia a risolvere circuiti reali in pochi secondi.",
+        "cta": "Avvia il simulatore SPICE"
+      }
+    },
+    "mega": {
+      "hero": {
+        "title": "Simulatore Arduino Mega 2560",
+        "accent": "Emulazione AVR8 gratuita online",
+        "subtitle": "Simula sketch Arduino Mega 2560 nel tuo browser con emulazione completa ATmega2560 — 256 KB di flash, 54 pin digitali, 16 ingressi analogici, 4 porte seriali e 6 timer. Gratuito e open-source.",
+        "ctaPrimary": "Apri il simulatore Mega 2560",
+        "ctaSecondary": "Sfoglia gli esempi",
+        "trust": "Gratuito e open-source · Nessuna registrazione richiesta · Emulazione completa ATmega2560"
+      },
+      "specs": {
+        "heading": "Arduino Mega 2560 — emulazione specifiche complete",
+        "lead": "L'ATmega2560 è il microcontrollore AVR8 più potente della linea Arduino. Velxio emula il suo set completo di periferiche in modo che ogni funzionalità specifica del Mega funzioni nel simulatore.",
+        "flashTitle": "256 KB Flash",
+        "flashBody": "8× più spazio di programma rispetto ad Arduino Uno. Esegui sketch grandi, macchine a stati complesse e applicazioni con molti dati senza vincoli di archiviazione.",
+        "gpioTitle": "54 Pin Digitali",
+        "gpioBody": "Emulazione completa PORTA–PORTL. 40 pin I/O extra rispetto all'Uno — ideale per display multiplexati, matrici di pulsanti grandi e progetti multi-modulo.",
+        "adcTitle": "16 Ingressi Analogici",
+        "adcBody": "ADC a 10 bit con 16 canali (A0–A15). Collega più sensori, potenziometri e componenti analogici simultaneamente nella simulazione.",
+        "serialTitle": "4 Seriali Hardware",
+        "serialBody": "Serial (USART0–3) tutti emulati. Serial1, Serial2, Serial3 appaiono nel Monitor Seriale — testa progetti di comunicazione seriale multi-dispositivo.",
+        "timersTitle": "6 Timer Hardware",
+        "timersBody": "Timer0/1/2/3/4/5. Tre timer a 16 bit extra (Timer3, Timer4, Timer5) rispetto all'Uno — più uscite PWM e canali di temporizzazione precisi.",
+        "pwmTitle": "15 Uscite PWM",
+        "pwmBody": "15 pin con supporto PWM hardware tramite analogWrite(). Ideale per controllo motori, array di servo, dimmerazione LED e progetti audio."
+      },
+      "uses": {
+        "heading": "A cosa serve il Mega 2560",
+        "lead": "Arduino Mega 2560 è la scheda preferita per progetti maker complessi. Simulali tutti senza hardware.",
+        "printerTitle": "Firmware Stampante 3D",
+        "printerBody": "Marlin e shield RAMPS 1.4 funzionano su ATmega2560. Prototipa e debugga la logica di controllo della stampante nel simulatore.",
+        "cncTitle": "CNC e Robotica",
+        "cncBody": "Il controller CNC GRBL e i bracci robotici multi-servo beneficiano dei pin I/O e dei timer extra del Mega.",
+        "ledTitle": "Grandi Matrici LED",
+        "ledBody": "Guidare matrici LED 8×8 o 16×16 richiede molti pin. Le 54 uscite digitali del Mega lo rendono ideale.",
+        "sensorTitle": "Sistemi Multi-Sensore",
+        "sensorBody": "16 ingressi analogici permettono la lettura simultanea di sensori di temperatura, pressione, umidità e luce senza multiplexing."
+      },
+      "faq": {
+        "heading": "Domande frequenti",
+        "q1": "Cos'è Arduino Mega 2560?",
+        "a1": "Arduino Mega 2560 è una scheda microcontrollore basata su ATmega2560. Offre 256 KB di memoria flash, 8 KB di SRAM, 54 pin I/O digitali (15 PWM), 16 ingressi analogici e 4 canali USART hardware — rendendola la scheda di riferimento per progetti Arduino grandi e complessi.",
+        "q2": "Posso simulare codice Arduino Mega 2560 nel mio browser?",
+        "a2": "Sì. Velxio fornisce emulazione AVR8 completa dell'ATmega2560. Seleziona \"Arduino Mega 2560\" nel selettore di schede, scrivi il tuo sketch, compila e simula — con tutti i 54 pin digitali e 16 ingressi analogici disponibili.",
+        "q3": "L'emulazione di Arduino Mega 2560 è accurata?",
+        "a3": "Velxio usa avr8js per l'emulazione delle istruzioni AVR8 a livello di ciclo. L'ATmega2560 condivide lo stesso core AVR8 dell'ATmega328P ma con memoria estesa, più porte (PORTA–PORTL) e timer aggiuntivi (Timer3, Timer4, Timer5) — tutti emulati.",
+        "q4": "Quali funzionalità aggiuntive ha il Mega rispetto ad Arduino Uno?",
+        "a4": "Arduino Mega 2560 aggiunge: 8× più flash (256 KB vs 32 KB), 4× più SRAM (8 KB vs 2 KB), 40 pin digitali extra, 10 ingressi analogici extra, 3 porte seriali hardware extra (Serial1, Serial2, Serial3) e 3 timer a 16 bit extra (Timer3, Timer4, Timer5).",
+        "q5": "Il simulatore Mega supporta più porte Seriali?",
+        "a5": "Sì. Serial (USART0), Serial1 (USART1), Serial2 (USART2) e Serial3 (USART3) sono tutti emulati. Ciascuno appare nella scheda Monitor Seriale così puoi monitorare progetti di comunicazione multi-seriale."
+      },
+      "bottom": {
+        "title": "Simula il tuo progetto Arduino Mega",
+        "body": "Seleziona la scheda Mega 2560 nell'editor e inizia a simulare — emulazione completa ATmega2560, nessun acquisto hardware necessario.",
+        "cta": "Avvia il simulatore Mega 2560"
+      }
+    },
+    "rpi": {
+      "hero": {
+        "title": "Simulatore gratuito Raspberry Pi 3",
+        "accent": "Linux completo · Python · GPIO — Nel tuo browser",
+        "subtitle": "Esegui un Raspberry Pi 3B completo con Raspberry Pi OS direttamente nel tuo browser — emulazione ARM Cortex-A53 quad-core tramite QEMU. Scrivi Python, controlla GPIO, installa pacchetti. Nessun hardware necessario.",
+        "ctaPrimary": "Apri il simulatore Pi 3",
+        "ctaSecondary": "Leggi la documentazione",
+        "trust": "Gratuito e open-source · QEMU ARM64 · Raspberry Pi OS completo",
+        "imageAlt": "Illustrazione della scheda Raspberry Pi 3"
+      },
+      "what": {
+        "heading": "Cosa puoi fare con il simulatore Pi 3?",
+        "lead": "Velxio emula un Raspberry Pi 3B completo — non solo pin GPIO, ma l'intero sistema operativo Linux. È un computer completo nel tuo browser.",
+        "pythonTitle": "Esegui script Python",
+        "pythonBody": "Python 3 preinstallato su Raspberry Pi OS. Esegui script, usa pip, importa librerie — ambiente Python completo.",
+        "gpioTitle": "Controllo GPIO",
+        "gpioBody": "Usa RPi.GPIO o gpiozero per controllare LED, leggere pulsanti, pilotare motori — emulazione GPIO reale in QEMU.",
+        "linuxTitle": "Terminale Linux",
+        "linuxBody": "Terminale bash completo con apt, nano, git e tutti gli strumenti Linux standard. Installa pacchetti, modifica file, esegui servizi.",
+        "armTitle": "ARM Cortex-A53",
+        "armBody": "CPU ARM a 64 bit quad-core a 1.2 GHz tramite macchina QEMU raspi3b. Esegue l'immagine ufficiale di Raspberry Pi OS.",
+        "sdTitle": "Nessuna scheda SD necessaria",
+        "sdBody": "L'immagine del sistema operativo è precaricata. Nessuna masterizzazione, nessuna scheda SD, nessun alimentatore — basta aprire il browser e iniziare a programmare.",
+        "multiTitle": "Tela multi-scheda",
+        "multiBody": "Combina Raspberry Pi 3 con Arduino e ESP32 sulla stessa tela di simulazione. Controlla Arduino dal Pi tramite seriale."
+      },
+      "compare": {
+        "heading": "Raspberry Pi Pico vs Pi 3 — quale scegliere?",
+        "picoTitle": "Raspberry Pi Pico (RP2040)",
+        "picoBodyPrefix": "Microcontrollore. ARM Cortex-M0+ a 133 MHz. Esegue codice C++ Arduino. Nessun sistema operativo, bare-metal. Ideale per embedded, IoT, sensori. ",
+        "picoLink": "Prova il simulatore Pico",
+        "pi3Title": "Raspberry Pi 3 (ARM Cortex-A53)",
+        "pi3Body": "Computer Linux completo. Quad-core a 1.2 GHz. Esegue Python, Node.js, bash. Ideale per automazione, server, scripting GPIO, educazione."
+      },
+      "faq": {
+        "heading": "Domande frequenti",
+        "q1": "Posso simulare un Raspberry Pi 3 nel mio browser?",
+        "a1": "Sì. Velxio emula un Raspberry Pi 3B completo usando QEMU raspi3b — ARM Cortex-A53 quad-core a 1.2 GHz che esegue Raspberry Pi OS (Linux). Ottieni un terminale reale per eseguire Python, bash e comandi di sistema.",
+        "q2": "Questo simulatore Raspberry Pi è gratuito?",
+        "a2": "Sì. Velxio è completamente gratuito e open-source (GNU AGPLv3). Nessun account, nessun abbonamento — simula codice Raspberry Pi 3 nel tuo browser o auto-ospita con Docker.",
+        "q3": "Posso eseguire script Python sul simulatore Raspberry Pi?",
+        "a3": "Sì. Il Raspberry Pi 3 emulato esegue Raspberry Pi OS completo con Python 3 preinstallato. Puoi eseguire script Python, usare RPi.GPIO per il controllo GPIO, installare pacchetti pip e altro.",
+        "q4": "Qual è la differenza tra la simulazione di Pi Pico e Pi 3?",
+        "a4": "Raspberry Pi Pico (RP2040) è un microcontrollore — esegue codice C++ Arduino, nessun sistema operativo. Raspberry Pi 3 è un computer Linux completo — esegue Python, bash e servizi di sistema. Velxio supporta entrambi.",
+        "q5": "Supporta GPIO su Raspberry Pi 3?",
+        "a5": "Sì. Il Raspberry Pi 3 emulato da QEMU supporta GPIO tramite le librerie Python RPi.GPIO e gpiozero. Controlla LED, leggi pulsanti e interfaccia con sensori da Python."
+      },
+      "bottom": {
+        "title": "Pronto a simulare Raspberry Pi 3?",
+        "body": "Apri l'editor, seleziona Raspberry Pi 3 e avvia Linux — direttamente nel tuo browser.",
+        "cta": "Avvia il simulatore Pi 3"
+      }
+    },
+    "pico": {
+      "hero": {
+        "title": "Simulatore gratuito Raspberry Pi Pico",
+        "accent": "Emulazione RP2040 ARM Cortex-M0+",
+        "subtitle": "Scrivi codice Arduino per Raspberry Pi Pico e simula nel tuo browser — emulazione reale RP2040 ARM Cortex-M0+ a 133 MHz. 26 pin GPIO, I2C, SPI, UART, ADC. Nessun hardware necessario.",
+        "ctaPrimary": "Apri il simulatore Pico",
+        "ctaSecondary": "Esempi Pico",
+        "trust": "Gratuito e open-source · Emulazione rp2040js · Nessun account necessario",
+        "imageAlt": "Scheda Raspberry Pi Pico"
+      },
+      "boards": {
+        "heading": "Schede RP2040 supportate",
+        "lead": "Entrambe le schede ufficiali Raspberry Pi Pico sono supportate con emulazione completa della CPU RP2040 tramite rp2040js.",
+        "picoTitle": "Raspberry Pi Pico",
+        "picoBody": "RP2040 dual-core ARM Cortex-M0+ a 133 MHz. 264 KB SRAM, 2 MB flash. 26 GPIO, 3 ADC, 2× SPI, 2× I2C, 2× UART.",
+        "picoWTitle": "Raspberry Pi Pico W",
+        "picoWBody": "Stesso chip RP2040 più Infineon CYW43439 per WiFi 4 e Bluetooth 5.2. Pin-compatibile con Pico.",
+        "specsTitle": "Specifiche RP2040",
+        "specsBody": "Dual-core Cortex-M0+ a 133 MHz, 264 KB SRAM, interpolatori hardware, 8 macchine a stati PIO, controller DMA."
+      },
+      "examples": {
+        "heading": "Progetti di esempio Pico",
+        "lead": "18+ esempi pronti all'uso per Raspberry Pi Pico — dal lampeggio LED a integrazioni I2C, SPI e sensori.",
+        "blinkTitle": "Lampeggio Pico",
+        "blinkBody": "Attiva/disattiva il LED integrato (GP25). Il punto di partenza più semplice per RP2040.",
+        "echoTitle": "Eco Seriale Pico",
+        "echoBody": "Leggi dalla Seriale e rimanda indietro. Testa la comunicazione UART su RP2040.",
+        "i2cTitle": "Scanner I2C Pico",
+        "i2cBody": "Scansiona il bus I2C e segnala i dispositivi connessi. Fondamentale per progetti con sensori.",
+        "adcTitle": "Lettura ADC Pico",
+        "adcBody": "Leggi l'ADC a 12 bit — misura tensione analogica, sensore di temperatura o potenziometro.",
+        "dhtTitle": "Sensore DHT22 Pico",
+        "dhtBody": "Leggi temperatura e umidità da DHT22. Uscita seriale con letture formattate.",
+        "servoTitle": "Servomotore Pico",
+        "servoBody": "Spazza un servo da 0° a 180° usando PWM RP2040. Movimento fluido con range configurabile.",
+        "viewAll": "Vedi tutti i 68+ esempi"
+      },
+      "faq": {
+        "heading": "Domande frequenti",
+        "q1": "Questo simulatore Raspberry Pi Pico è gratuito?",
+        "a1": "Sì. Velxio è completamente gratuito e open-source (GNU AGPLv3). Simula codice RP2040 nel tuo browser — nessun hardware Raspberry Pi necessario, nessun account, nessun pagamento.",
+        "q2": "Come funziona l'emulazione RP2040?",
+        "a2": "Velxio usa rp2040js — l'emulatore open-source RP2040 — per simulare la CPU ARM Cortex-M0+ a 133 MHz. Il tuo codice viene compilato con il core ufficiale Arduino-Pico di Earle Philhower.",
+        "q3": "Supporta Raspberry Pi Pico W?",
+        "a3": "Sì. Sono supportati sia Raspberry Pi Pico che Pico W. L'emulazione del core RP2040 è identica — le funzionalità WiFi sono previste per un aggiornamento futuro.",
+        "q4": "Posso usare codice Arduino con Raspberry Pi Pico?",
+        "a4": "Sì. Velxio compila il tuo sketch .ino usando il core arduino-pico (di Earle Philhower). Le funzioni standard di Arduino come Serial, digitalWrite, analogRead e I2C/SPI funzionano immediatamente.",
+        "q5": "Quali componenti funzionano con la simulazione Pico?",
+        "a5": "Tutti i 48+ componenti: LED, resistori, pulsanti, DHT22, HC-SR04, servomotori, display a 7 segmenti, LED RGB, sensori NTC, joystick e altro. Collegali a uno qualsiasi dei 26 pin GPIO."
+      },
+      "bottom": {
+        "title": "Pronto a simulare Raspberry Pi Pico?",
+        "body": "Apri l'editor, seleziona una scheda Pico e inizia a programmare — nessun hardware Raspberry Pi richiesto.",
+        "cta": "Avvia il simulatore Pico"
+      }
+    }
+  }
+}

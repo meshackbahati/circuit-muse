@@ -1,0 +1,144 @@
+/**
+ * start.ts — production wiring for the mixed-mode simulator.
+ *
+ * The single function `startSimulation()` mounts everything the
+ * editor needs to run circuits end-to-end against the WASM ngspice:
+ *
+ *   1. CircuitSimulationService — orchestrates solves, publishes to
+ *      useElectricalStore.
+ *   2. connectAnalogInputsToMcu — subscribes to useElectricalStore
+ *      and pushes voltages into MCU ADCs.
+ *   3. connectMcuEdgesToService — MCU pin transitions trigger
+ *      scheduler.alterSource + republish via the service.
+ *
+ * Replaces the old EditorPage useEffect that chained the legacy
+ * wireElectricalSolver + connectLegacySolverToMixedMode +
+ * connectMixedModeSchedulerToStore + connectAnalogInputsToMcu.
+ *
+ * Phase 1c step G1 of the mixed-mode migration.
+ */
+import { useSimulatorStore, getBoardPinManager } from '../../store/useSimulatorStore';
+import { useElectricalStore } from '../../store/useElectricalStore';
+import {
+  getMixedModeScheduler,
+} from './MixedModeScheduler';
+import {
+  CircuitSimulationService,
+  type SimulatorStorePort,
+  type ElectricalStorePort,
+  type MixedModeSchedulerPort,
+  type ElectricalSnapshot,
+} from './CircuitSimulationService';
+import { connectAnalogInputsToMcu } from './connectAnalogInputsToMcu';
+import { connectChipInputsToSolve } from './connectChipInputsToSolve';
+import { connectMcuEdgesToService } from './connectMcuEdgesToService';
+import { setElectricalResolveHook } from './electricalResolveHook';
+import { collectPinStates } from './collectPinStates';
+
+/** Adapt useElectricalStore to the ElectricalStorePort. */
+function createElectricalStorePort(): ElectricalStorePort {
+  return {
+    publish(snapshot: ElectricalSnapshot): void {
+      useElectricalStore.getState().setSolveResult({
+        nodeVoltages: snapshot.nodeVoltages,
+        branchCurrents: snapshot.branchCurrents,
+        pinNetMap: snapshot.pinNetMap,
+        analysisMode: snapshot.analysisMode,
+        timeWaveforms: snapshot.timeWaveforms,
+        converged: snapshot.warnings.length === 0,
+        error: snapshot.warnings[0] ?? null,
+        lastSolveMs: 0,
+        submittedNetlist: '',
+      });
+    },
+  };
+}
+
+/**
+ * Mount the simulation loop.  Returns an unsubscribe handle for
+ * editor cleanup.
+ */
+export function startSimulation(): () => void {
+  const service = new CircuitSimulationService(
+    useSimulatorStore as unknown as SimulatorStorePort,
+    createElectricalStorePort(),
+    getMixedModeScheduler() as unknown as MixedModeSchedulerPort,
+    {
+      collectBoardPinStates: (boardId, boardKind, wires) =>
+        collectPinStates(
+          boardId,
+          boardKind as Parameters<typeof collectPinStates>[1],
+          wires as Parameters<typeof collectPinStates>[2],
+        ),
+    },
+  );
+  // Phase 1d #3 — pre-boot the WASM engine the moment the editor
+  // mounts.  Without this, the first solve (typically the user's
+  // first canvas edit) pays the full WASM init cost (~2-5 s) and the
+  // canvas appears frozen.  By kicking init now, the Worker boots
+  // while the user looks at the empty canvas; by the time they wire
+  // anything, the engine is warm.
+  void getMixedModeScheduler().start();
+
+  const unsubService = service.start();
+  const unsubAdc = connectAnalogInputsToMcu();
+  const unsubChipIn = connectChipInputsToSolve();
+  const unsubEdges = connectMcuEdgesToService(service);
+
+  // Let custom chips request a re-solve when they toggle an output pin, so
+  // their SPICE voltage sources (emitted by the custom-chip mapper) are
+  // refreshed and LEDs / analog parts on the chip's nets update. The service
+  // coalesces overlapping ticks, so frequent chip toggles are cheap.
+  setElectricalResolveHook(() => {
+    void service.tick();
+  });
+
+  // Phase 1d #16 — debug helper. Call `__spiceDebug()` from DevTools
+  // to get a snapshot of the simulation state (analysis mode, voltage
+  // count, pin map, last solve time, etc.).  Useful for diagnosing
+  // "why is my circuit not solving?" reports from users.
+  (window as unknown as { __spiceDebug?: () => unknown }).__spiceDebug = () => {
+    const electrical = useElectricalStore.getState();
+    // Probe: collect every board's outputPins set so we can verify the
+    // MCU-direction-tracking fix from the harness.
+    const outputPinsByBoard: Record<string, number[]> = {};
+    try {
+      const boards = useSimulatorStore.getState().boards;
+      for (const b of boards) {
+        const pm = getBoardPinManager(b.id);
+        if (pm && typeof pm.getOutputPins === 'function') {
+          outputPinsByBoard[b.id] = [...pm.getOutputPins()];
+        }
+      }
+    } catch {
+      // ignore — fallback already covered by snapshot fields below
+    }
+    const snapshot = {
+      analysisMode: electrical.analysisMode,
+      converged: electrical.converged,
+      error: electrical.error,
+      lastSolveMs: electrical.lastSolveMs,
+      nodeVoltageCount: Object.keys(electrical.nodeVoltages).length,
+      branchCurrentCount: Object.keys(electrical.branchCurrents).length,
+      branchCurrentNames: Object.keys(electrical.branchCurrents),
+      pinNetMapSize: electrical.pinNetMap.size,
+      pinNetMapEntries: [...electrical.pinNetMap.entries()],
+      nodeVoltages: { ...electrical.nodeVoltages },
+      hasTimeWaveforms: !!electrical.timeWaveforms,
+      paused: electrical.paused,
+      outputPinsByBoard,
+    };
+    (window as unknown as { __lastSpice?: unknown }).__lastSpice = snapshot;
+    // eslint-disable-next-line no-console
+    console.log('[__spiceDebug]', snapshot);
+    return snapshot;
+  };
+
+  return () => {
+    setElectricalResolveHook(null);
+    unsubService();
+    unsubAdc();
+    unsubChipIn();
+    unsubEdges();
+  };
+}

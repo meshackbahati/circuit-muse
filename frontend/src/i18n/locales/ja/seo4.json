@@ -1,0 +1,251 @@
+{
+  "seo": {
+    "attiny85": {
+      "hero": {
+        "title": "無料のATtiny85シミュレーター",
+        "accent": "ブラウザで動作するサイクル精度のAVRエミュレーション",
+        "subtitle": "ATtiny85用のArduinoコードを書き、即座に実行 — すべてのAVRオペコードを忠実にエミュレート。6つのI/Oピン、I²C/SPI用USI、Timer0/Timer1 PWM、10ビットADC、ウォッチドッグ。実際のSPICEアナログ回路に配線可能。無料、インストール不要、アカウント不要。",
+        "ctaPrimary": "ATtiny85シミュレーターを開く",
+        "ctaSecondary": "ATtiny85の例を見る",
+        "trust": "無料＆オープンソース · サイクル精度のavr8js · サインアップ不要"
+      },
+      "specs": {
+        "heading": "シミュレーターでのATtiny85仕様",
+        "lead": "プログラマーやブレッドボードなしでATtiny85ファームウェアを開発するために必要なすべて。",
+        "coreTitle": "コア",
+        "coreBody": "AVR 8ビットRISC、8 KBフラッシュ、512 B SRAM、512 B EEPROM。DIP-8ピン配置（PB0–PB5 + VCC/GND）。",
+        "gpioTitle": "GPIO",
+        "gpioBody": "PORTB上の6つのI/Oピン。入力/出力/プルアップとして設定可能。ピン変化割り込み（PCINT0–PCINT5）および外部INT0。",
+        "timersTitle": "タイマー＆PWM",
+        "timersBody": "Timer0（8ビット）はPB0/PB1に2つのPWMチャンネル。Timer1（8ビット）は高速モードとPB1/PB4に2つのPWMチャンネル — 高周波PWMに便利。",
+        "adcTitle": "ADC",
+        "adcBody": "10ビットADC、4つの入力チャンネル（ADC0 on PB5、ADC1 on PB2、ADC2 on PB4、ADC3 on PB3）。内部1.1 Vリファレンス。",
+        "usiTitle": "USI",
+        "usiBody": "ユニバーサルシリアルインターフェース — I²C（TWI）とSPIをビットバン。TinyWireM / TinyWireSおよび標準SPIライブラリと互換性あり。",
+        "wdtTitle": "ウォッチドッグ＆スリープ",
+        "wdtBody": "リセットおよび割り込みモードのウォッチドッグタイマー。パワーダウン、ADCノイズ低減、アイドルスリープモード — 低電力デモに便利。"
+      },
+      "build": {
+        "heading": "何が作れますか？",
+        "lead": "ATtiny85プロジェクトは、小型で低消費電力、アナログ対応のときに輝きます — SPICEソルバーが組み込まれたVelxioの強みです。",
+        "blinkTitle": "点滅＆PWMフェード",
+        "blinkBody": "古典的な入門 — Timer0によるPB1のハードウェアPWM駆動LEDフェード、およびPB4の高速Timer1 PWM。",
+        "buttonTitle": "ボタン駆動LED",
+        "buttonBody": "PB2のボタンを内部プルアップで読み取り、ファームウェアでデバウンスし、PB0のLEDを駆動。",
+        "ntcTitlePrefix": "NTC温度",
+        "ntcBodyPrefix": "ADC1でNTCサーミスタ/固定抵抗分圧を読み取り — SPICEソルバーが実際の分圧電圧を ",
+        "ntcBodyCode": "analogRead()",
+        "ntcBodySuffix": " に返します。",
+        "i2cTitle": "USI経由のI²Cペリフェラル",
+        "i2cBody": "TinyWireMを使用してPB0/PB2上のOLED、EEPROM、またはRTCと通信。バストラフィックはエンドツーエンドでエミュレートされます。",
+        "spiTitle": "SPI WS2812 / シフトレジスタ",
+        "spiBody": "USI経由のビットバンでWS2812ストリングまたは74HC595シフトレジスタを数ピンで駆動。",
+        "analogTitle": "アナログスイッチング",
+        "analogBody": "SPICEモデルのゲートチャージカーブを通じてPB1 PWMからMOSFETゲートを駆動 — 負荷へのスルーレート効果を確認。"
+      },
+      "faq": {
+        "heading": "よくある質問",
+        "q1": "これは本物のATtiny85エミュレーターですか？",
+        "a1": "はい。Velxioはavr8js — サイクル精度のAVR8エミュレーター — を使用して、コンパイルされたATtiny85ファームウェアを実際のDIP-8チップで実行されるのとまったく同じようにバイト単位で実行します。",
+        "q2": "サポートされているATtiny85の機能は？",
+        "a2": "6つのGPIOピン（PB0–PB5）、Timer0（8ビット）PWM、Timer1（8ビット）PWMと高速モード、ウォッチドッグタイマー、10ビットADC（4入力チャンネルADC0–ADC3）、I²C（TWI）およびSPIビットバン用USIペリフェラル、ピン変化割り込み、外部割り込み（INT0）。",
+        "q3": "VelxioでATtiny85をプログラムするには？",
+        "a3": "MonacoエディタでC/C++（Arduino構文）でスケッチを書きます。Velxioはバンドルされたarduino-cliを使用してATTinyCoreボードパッケージでコンパイルし、実際の.hexファイルを生成します — USBaspでフラッシュするものと同じです。",
+        "q4": "Arduino互換ライブラリは使えますか？",
+        "a4": "はい。ライブラリマネージャーは完全なArduinoライブラリレジストリをインデックス化します。多くのライブラリが適切なピン割り当てでATtiny85で動作します — I²C用TinyWireM、USI経由のSoftwareSerial、TinyServoなど。",
+        "q5": "アナログ回路に配線できますか？",
+        "a5": "はい。VelxioにはリアルタイムSPICEソルバーが含まれています — ATtiny85のADCピンを分圧回路、オペアンプ出力、またはNTCサーミスタブリッジに配線すると、analogRead()はそのピンの実際のSPICE解決電圧を返します。",
+        "q6": "無料ですか？",
+        "a6": "はい — VelxioはGNU AGPLv3の下で完全に無料でオープンソースです。アカウントは不要です。"
+      },
+      "bottom": {
+        "title": "ハードウェアなしでATtiny85ファームウェアを開発",
+        "body": "エディタを開いてコーディングを開始 — コンパイル、シミュレーション、プローブを数秒で。",
+        "cta": "ATtiny85シミュレーターを起動"
+      }
+    },
+    "arduinoEmu": {
+      "hero": {
+        "title": "Arduinoエミュレーター",
+        "accent": "本物のAVR8＆RP2040エミュレーション、無料",
+        "subtitle": "Velxioはブラウザ内で完全に動作するサイクル精度のArduinoエミュレーターです。すべてのAVRオペコードが16 MHzで忠実に実行されます — ハードウェアを購入することなく、実際のハードウェアと同じシリコン動作を実現。",
+        "ctaPrimary": "エミュレーターを開く",
+        "ctaSecondary": "エミュレーションの詳細",
+        "trust": "無料＆オープンソース · avr8js & rp2040js 搭載 · サインアップ不要"
+      },
+      "accuracy": {
+        "heading": "エミュレーションの精度",
+        "leadPrefix": "Velxioは ",
+        "leadAvr": "avr8js",
+        "leadMid": " をAVR8に、",
+        "leadRp": "rp2040js",
+        "leadSuffix": " をRP2040に使用 — Wokwiチームによって開発されたオープンソースライブラリで、真のハードウェア忠実度を提供します。",
+        "isaTitle": "AVR8命令セット",
+        "isaBody": "MUL、MULSU、FMUL、LPM、SPM、およびすべての分岐/スキップ命令を含む135のAVR命令すべてをエミュレート。16 MHzクロック。",
+        "timersTitle": "ハードウェアタイマー",
+        "timersBodyPrefix": "Timer0、Timer1、Timer2はプリスケーラサポート、オーバーフロー割り込み、出力比較を備え、",
+        "timersBodyCode1": "delay()",
+        "timersBodyMid": "、",
+        "timersBodyCode2": "millis()",
+        "timersBodySuffix": "、およびPWMを可能にします。",
+        "usartTitle": "USARTシリアル",
+        "usartBodyPrefix": "設定可能なボーレートとTX/RX割り込みを備えた完全なUSARTエミュレーション。",
+        "usartBodyCode": "Serial.print()",
+        "usartBodySuffix": "は実際のArduinoハードウェアとまったく同じように動作します。",
+        "adcTitle": "10ビットADC",
+        "adcBodyPrefix": "アナログリファレンスサポート付きのアナログ-デジタルコンバーターエミュレーション。",
+        "adcBodyCode": "analogRead()",
+        "adcBodySuffix": "はシミュレートされたセンサーから正確な値を返します。",
+        "rpTitle": "RP2040デュアルコアARM",
+        "rpBody": "rp2040jsによるCortex-M0+エミュレーション。Raspberry Pi PicoおよびPico W用のArduino-picoおよびPlatformIOスケッチを実行。",
+        "riscvTitle": "RISC-V（ESP32-C3）",
+        "riscvBody": "QEMU lcgamboaフォーク（libqemu-riscv32、esp32c3-picsimlabマシン）による160 MHzのESP32-C3用RV32IMCエミュレーション。"
+      },
+      "boards": {
+        "heading": "サポートされているボード",
+        "lead": "5つのCPUアーキテクチャにわたる19のボード — AVR8、ARM Cortex-M0+、RISC-V、Xtensa LX6/LX7、ARM Cortex-A53。",
+        "avrTitle": "AVR8 — avr8js",
+        "avrBody": "Arduino Uno（ATmega328P）、Arduino Nano、Arduino Mega 2560（ATmega2560）、ATtiny85、Arduino Leonardo（ATmega32u4）、Arduino Pro Mini。",
+        "rpTitle": "RP2040 — rp2040js",
+        "rpBody": "Raspberry Pi Pico、Raspberry Pi Pico W — 133 MHzのデュアルARM Cortex-M0+。",
+        "riscvTitle": "RISC-V — QEMU",
+        "riscvBody": "ESP32-C3 DevKit、XIAO ESP32-C3、ESP32-C3 SuperMini、CH32V003 — libqemu-riscv32による160 MHzのRV32IMC。",
+        "xtensaTitle": "Xtensa — QEMU",
+        "xtensaBody": "ESP32 DevKit V1/C V4、ESP32-S3、ESP32-CAM、Seeed XIAO ESP32-S3、Arduino Nano ESP32 — 240 MHzのXtensa LX6/LX7。",
+        "armTitle": "ARM Cortex-A53 — QEMU",
+        "armBody": "Raspberry Pi 3B — クアッドコア1.2 GHz、フルLinux、Python 3。ブラウザで実際のOSレベルのプログラムを実行。"
+      },
+      "faq": {
+        "heading": "よくある質問",
+        "q1": "Arduinoエミュレーターとは？",
+        "a1": "Arduinoエミュレーターは、物理的なArduinoマイクロコントローラーの動作をソフトウェアで再現します — CPU命令実行、ペリフェラルレジスタ（GPIO、USART、ADC、タイマー、PWM）、割り込み — ハードウェアは不要です。",
+        "q2": "VelxioのArduinoエミュレーションの精度は？",
+        "a2": "Velxioはavr8jsを使用しており、サイクル精度のAVR8命令エミュレーションを提供します。すべてのAVRオペコードが16 MHzで忠実にエミュレートされるため、実際のハードウェアにフラッシュする前に実際のファームウェアを開発およびデバッグするのに信頼性があります。",
+        "q3": "VelxioはどのArduinoボードをエミュレートできますか？",
+        "a3": "Arduino Uno（ATmega328P）、Arduino Nano、Arduino Mega 2560（ATmega2560）、ATtiny85（AVR8）、Arduino Leonardo（ATmega32u4）、Arduino Pro Mini、Raspberry Pi PicoおよびPico W（RP2040）、および複数のESP32/RISC-Vボード。5つのCPUアーキテクチャにわたる19のボード。",
+        "q4": "どのペリフェラルがエミュレートされますか？",
+        "a4": "GPIOポート（PORTB、PORTC、PORTD）、ハードウェアタイマー（Timer0、Timer1、Timer2）、8/16ビットPWM、USARTシリアル、10ビットADC（アナログ入力）、SPI、I2C。すべての標準Arduinoライブラリ関数が正しく動作します。",
+        "q5": "VelxioはWokwiとどう違いますか？",
+        "a5": "Velxioは完全に自己ホスト型で、GNU AGPLv3の下でオープンソースです。Wokwiと同じavr8jsエミュレーションライブラリを使用しますが、完全に自分のマシン上で動作します — クラウド依存なし、登録不要、サブスクリプション不要。"
+      },
+      "bottom": {
+        "title": "今すぐArduinoエミュレーションを開始",
+        "body": "エディタを開き、実際のエミュレートされたCPUに対してファームウェアを実行 — ハードウェア購入不要、クラウド不要、制限なし。",
+        "cta": "エミュレーターを起動"
+      }
+    },
+    "esp32": {
+      "hero": {
+        "title": "無料のESP32シミュレーター",
+        "accent": "ブラウザで動作するXtensa LX6エミュレーション",
+        "subtitle": "ESP32用のArduinoコードを書き、即座にシミュレーション — QEMU経由の240 MHzの実際のXtensa LX6エミュレーション。48以上のインタラクティブコンポーネント、シリアルモニター、インストール不要。",
+        "ctaPrimary": "ESP32シミュレーターを開く",
+        "ctaSecondary": "ESP32の例",
+        "trust": "無料＆オープンソース · サインアップ不要 · QEMU搭載エミュレーション",
+        "imageAlt": "ESP32 DevKit V1ボード"
+      },
+      "boards": {
+        "heading": "サポートされているESP32ボード",
+        "lead": "Velxioは完全なESP32ファミリーをエミュレート — Xtensa LX6（ESP32）、Xtensa LX7（ESP32-S3）、RISC-V（ESP32-C3）。各ボードは近似ではなく実際のCPUエミュレーションで動作します。",
+        "devkitTitle": "ESP32 DevKit V1 / C V4",
+        "devkitBody": "240 MHzのXtensa LX6デュアルコア。WiFi + Bluetooth。34 GPIOピン、12ビットADC、2× DAC、SPI、I2C、UART。",
+        "s3Title": "ESP32-S3 DevKitC",
+        "s3Body": "240 MHzのXtensa LX7デュアルコア。USB OTG、ベクトル命令、45 GPIOピン。",
+        "camTitle": "ESP32-CAM",
+        "camBody": "OV2640カメラモジュール搭載ESP32。240 MHz Xtensa LX6、オンボードmicroSDスロット。",
+        "nanoTitle": "Arduino Nano ESP32",
+        "nanoBody": "Arduino NanoフォームファクターのESP32-S3。USB-C、14デジタル+8アナログピン、Arduinoシールドと互換性あり。",
+        "xiaoTitle": "XIAO ESP32-S3",
+        "xiaoBody": "Seeed Studioのコンパクトボード。Xtensa LX7、11 GPIO、超小型21×17.5 mmフォームファクター。",
+        "c3Title": "ESP32-C3（RISC-V）",
+        "c3BodyPrefix": "160 MHzのシングルコアRISC-V RV32IMC、Xtensa ESP32と同じQEMUバックエンド（libqemu-riscv32、esp32c3-picsimlabマシン）でエミュレート。",
+        "c3Link": "詳細を見る"
+      },
+      "examples": {
+        "heading": "ESP32のサンプルプロジェクト",
+        "lead": "すぐに実行できるESP32の例でシミュレーションに飛び込む — 基本的なLED点滅からセンサー統合まで。",
+        "blinkTitle": "ESP32 LED点滅",
+        "blinkBody": "ESP32 GPIO用に調整された古典的な点滅スケッチ。ピン2のLEDを1 Hzでトグル。",
+        "echoTitle": "ESP32シリアルエコー",
+        "echoBody": "シリアルモニターから入力を読み取り、エコーバック — 115200ボーでUART通信をテスト。",
+        "dhtTitle": "ESP32 DHT22センサー",
+        "dhtBody": "DHT22センサーから温度と湿度を読み取り、シリアルモニターに値を表示。",
+        "sonarTitle": "ESP32 HC-SR04超音波",
+        "sonarBody": "超音波センサーで距離を測定。実際のGPIOエミュレーションによるトリガー/エコータイミング。",
+        "servoTitle": "ESP32サーボモーター",
+        "servoBody": "ESP32 PWMを使用してサーボモーターを0°から180°にスイープ — ESP32Servoライブラリを使用。",
+        "segTitle": "ESP32 7セグメントディスプレイ",
+        "segBody": "0〜9をカウントする7セグメントディスプレイを駆動。ESP32でのデジタル出力ピンマッピングを示します。",
+        "viewAll": "68以上の例をすべて表示"
+      },
+      "faq": {
+        "heading": "よくある質問",
+        "q1": "このESP32シミュレーターは無料ですか？",
+        "a1": "はい。Velxioは完全に無料でオープンソース（GNU AGPLv3）です。ブラウザでESP32コードをシミュレートするか、1つのDockerコマンドでプラットフォーム全体をセルフホスト — アカウント不要、支払い不要。",
+        "q2": "ESP32エミュレーションはどのように動作しますか？",
+        "a2": "VelxioはQEMU（lcgamboaフォーク）を使用して240 MHzのXtensa LX6 CPUをエミュレートします。Arduinoスケッチは公式のESP32 Arduinoコアでコンパイルされ、結果のファームウェアがエミュレートされたハードウェア上で実行されます — 実際のシリコンと同じです。",
+        "q3": "どのESP32ボードがサポートされていますか？",
+        "a3": "VelxioはESP32 DevKit V1、ESP32 DevKit C V4、ESP32-CAM、Arduino Nano ESP32、ESP32-S3 DevKitC、XIAO ESP32-S3、ESP32-C3 DevKit、XIAO ESP32-C3、ESP32-C3 SuperMiniをサポートしています。",
+        "q4": "センサーやディスプレイを使ってESP32をシミュレートできますか？",
+        "a4": "はい。48以上のインタラクティブコンポーネントを接続：DHT22、HC-SR04超音波、MPU6050 IMU、サーボモーター、ILI9341 TFTディスプレイ、LED、ボタン、7セグメントディスプレイなど。",
+        "q5": "ESP32用のシリアルモニターはサポートされていますか？",
+        "a5": "はい。シリアルモニターはArduinoと同様にESP32で動作 — 自動ボーレート検出、リアルタイムTX/RX出力、実行中のスケッチにコマンドを送信。"
+      },
+      "bottom": {
+        "title": "ESP32をシミュレートする準備はできましたか？",
+        "body": "エディタを開き、ESP32ボードを選択してコーディングを開始 — セットアップ不要、インストール不要、アカウント不要。",
+        "cta": "ESP32シミュレーターを起動"
+      }
+    },
+    "esp32s3": {
+      "hero": {
+        "title": "無料のESP32-S3シミュレーター",
+        "accent": "Xtensa LX7 · デュアルコア · 240 MHz",
+        "subtitle": "ブラウザでESP32-S3ファームウェアをシミュレート — QEMU経由の実際のXtensa LX7デュアルコアエミュレーション。USB OTG、ベクトル拡張、45 GPIO。書き込み、コンパイル、実行を数秒で。",
+        "ctaPrimary": "ESP32-S3シミュレーターを開く",
+        "ctaSecondary": "例を見る",
+        "trust": "無料＆オープンソース · QEMU Xtensa LX7 · アカウント不要",
+        "imageAlt": "ESP32-S3 DevKitC-1ボード"
+      },
+      "boards": {
+        "heading": "サポートされているESP32-S3ボード",
+        "lead": "Velxioは3つのESP32-S3ボードをエミュレート。各ボードはarduino-cliでコンパイルされた公式ESP32 Arduinoコアを実行します。",
+        "devkitTitle": "ESP32-S3 DevKitC-1",
+        "devkitBody": "Espressif公式開発ボード。240 MHzのデュアルコアXtensa LX7、45 GPIO、USB OTG、512 KB SRAM。",
+        "xiaoTitle": "XIAO ESP32-S3",
+        "xiaoBody": "Seeed Studioの超コンパクトボード（21×17.5 mm）。11 GPIO、USB-C、ウェアラブルとIoTに最適。",
+        "nanoTitle": "Arduino Nano ESP32",
+        "nanoBody": "Arduino NanoフォームファクターのESP32-S3。USB-C、14デジタル+8アナログピン、Arduinoエコシステム互換性。"
+      },
+      "diff": {
+        "heading": "ESP32-S3 vs ESP32 — 新機能",
+        "cpuTitle": "Xtensa LX7 CPU",
+        "cpuBody": "クロックあたりの性能が向上した新しいアーキテクチャ。同じ240 MHzデュアルコアだが、より効率的な命令パイプライン。",
+        "usbTitle": "USB OTG",
+        "usbBody": "ネイティブUSBデバイスおよびホストサポート — 外部USB-UARTチップ不要。HID、CDC、MSCデバイスクラス。",
+        "vectorTitle": "ベクトル命令",
+        "vectorBody": "エッジでのAI/ML推論のためのハードウェアアクセラレーションベクトル演算。TensorFlow Lite Micro最適化。",
+        "gpioTitle": "より多くのGPIO",
+        "gpioBody": "45のプログラマブルGPIO（ESP32の34に対して）。より多くのADCチャンネル、タッチピン、ペリフェラルオプション。"
+      },
+      "faq": {
+        "heading": "よくある質問",
+        "q1": "ESP32-S3とは？",
+        "a1": "ESP32-S3はEspressifによる240 MHzで動作するXtensa LX7デュアルコアマイクロコントローラーです。元のESP32と比較して、USB OTG、AI/ML用ベクトル命令、最大45 GPIOピンを追加しています。",
+        "q2": "ESP32-S3シミュレーターは無料ですか？",
+        "a2": "はい。Velxioは100%無料でオープンソースです。QEMU経由の実際のXtensa LX7エミュレーションでブラウザ内でESP32-S3コードをシミュレート — クラウド不要、サブスクリプション不要。",
+        "q3": "どのESP32-S3ボードがサポートされていますか？",
+        "a3": "VelxioはESP32-S3 DevKitC-1、Seeed XIAO ESP32-S3、Arduino Nano ESP32（ESP32-S3チップ使用）をサポートしています。",
+        "q4": "ESP32-S3でArduinoライブラリを使用できますか？",
+        "a4": "はい。Velxioは公式のESP32 Arduinoコアでスケッチをコンパイルします。Arduinoライブラリマネージャーから任意のライブラリをインストールし、ESP32-S3プロジェクトで使用できます。",
+        "q5": "ESP32とESP32-S3の違いは？",
+        "a5": "ESP32-S3は新しいXtensa LX7アーキテクチャ（LX6に対して）を使用し、ネイティブUSBデバイスサポートのためのUSB OTGを追加し、AIワークロード用のベクトル命令を含み、より多くのGPIOピン（45対34）を備えています。"
+      },
+      "bottom": {
+        "title": "ESP32-S3をシミュレートする準備はできましたか？",
+        "body": "エディタを開き、ESP32-S3ボードを選択してコードを即座に実行。",
+        "cta": "ESP32-S3シミュレーターを起動"
+      }
+    }
+  }
+}

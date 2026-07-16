@@ -1,0 +1,100 @@
+{
+  "_comment": "Source of truth for QEMU boot files. Adding a new board kind means appending an entry under image_sets; the BootImageProvider picks it up via load_manifest() with no Python edits. SHA256s are verified after download; mismatches raise IntegrityError and the cache slot is not populated. See docs/BOOT_IMAGES.md for the architecture.",
+  "version": 1,
+  "image_sets": {
+    "raspberry-pi-3-virt": {
+      "description": "Raspberry Pi 3 simulator on QEMU -M virt + cortex-a53. Velxio-built minimal ARM64 kernel + initramfs + Alpine-based rootfs. Replaces the broken raspi3b path (pl011 RX bug in QEMU 10 + kernel 6.12 \u2014 see project/pi-emulation/decisions.md for the full trail). Used by app.services.qemu_manager.",
+      "images": [
+        {
+          "name": "velxio-kernel-arm64",
+          "asset_id": "velxio-kernel-arm64",
+          "sha256": "76652d46bee27fe46f92c21adf9e67964356774ff4f6abe4f009344aacd3acd9",
+          "size_bytes": 30697408,
+          "version": "2026.05+v6.12.88-deb13-cloud"
+        },
+        {
+          "name": "velxio-initramfs-arm64.cpio.gz",
+          "asset_id": "velxio-initramfs-arm64",
+          "sha256": "9a1ecd1c83a65207562b8395fcc57cc9218f16cf240dd4b5cf84e13ef0b34efe",
+          "size_bytes": 1032327,
+          "version": "2026.05"
+        },
+        {
+          "name": "velxio-pi-rootfs-arm64.ext4",
+          "asset_id": "velxio-pi-rootfs-arm64-zst",
+          "sha256": "d6d4a2747d18055493a621f28bf2552e94dc2a11b1586d64b0eeb3847c7e06be",
+          "size_bytes": 629145600,
+          "version": "2026.05+phase2-shims-final",
+          "compressed": {
+            "encoding": "zstd",
+            "sha256": "debd1c339dc8a6e0c72494a14f032d69f3579f4f55929ca45446f030415602ca",
+            "size_bytes": 24733697
+          }
+        }
+      ]
+    },
+    "raspberry-pi-armhf": {
+      "description": "Raspberry Pi Zero / 1 / 2 simulator on QEMU -M virt + cortex-a7. Velxio-built armhf kernel (Debian armmp) + initramfs (bundled ext4 + jbd2 + mbcache + crc16 + crc32c_generic + virtio_blk + virtio_mmio) + Alpine-based armhf rootfs. arm-32 virt PCI is broken (missing reg DT prop) so the QEMU command uses the mmio virtio transport; Pi Zero / Pi 1 share this image set with Pi 2 because the real ARMv6 silicon they have isn't supported by any QEMU-virt-capable upstream kernel.",
+      "images": [
+        {
+          "name": "velxio-kernel-armhf",
+          "asset_id": "velxio-kernel-armhf",
+          "sha256": "9d7377c33b9a5631e99ab109c8d3d9d89f99331b53eb8cc755cd76e775c9d0d5",
+          "size_bytes": 6033920,
+          "version": "2026.05+v6.12.88-armmp+ext4mods"
+        },
+        {
+          "name": "velxio-initramfs-armhf.cpio.gz",
+          "asset_id": "velxio-initramfs-armhf",
+          "sha256": "611eb3d219cb5d71a534d417dea564ed6eadbd2d1b40e33d28bb4a5a5f5829f5",
+          "size_bytes": 1390924,
+          "version": "2026.05+ext4mods"
+        },
+        {
+          "name": "velxio-pi-rootfs-armhf.ext4",
+          "asset_id": "velxio-pi-rootfs-armhf-zst",
+          "sha256": "5f2eafc0e76acc9ecc79da42313c1ffaacd577f42df5a58934d97ea167fab4ee",
+          "size_bytes": 629145600,
+          "version": "2026.05+phase2-shims-armhf",
+          "compressed": {
+            "encoding": "zstd",
+            "sha256": "ce9037b371aa1e847f2ce16bf6b0067c4ef51d48b66fe4c2d79941cbdff37b30",
+            "size_bytes": 23322299
+          }
+        }
+      ]
+    },
+    "raspberry-pi-3": {
+      "description": "[DEPRECATED \u2014 kept for one release to ease rollback] Original raspi3b setup. Replaced by 'raspberry-pi-3-virt' (see above). qemu_manager.py no longer references this entry; do not add new clients here.",
+      "deprecated": true,
+      "images": [
+        {
+          "name": "kernel8.img",
+          "asset_id": "kernel8-pi3",
+          "sha256": "2f87328ab8d36c266ac0545e59a7eed53841e146a75e0010929d3dafd0209310",
+          "size_bytes": 24367616,
+          "version": "2026-03-11+raw"
+        },
+        {
+          "name": "bcm2710-rpi-3-b.dtb",
+          "asset_id": "dtb-bcm2710-rpi-3-b",
+          "sha256": "496fa7723583a0374b5b2e2be997301368d70b411a47bc74a394291c3636ad13",
+          "size_bytes": 34687,
+          "version": "2026-04-21"
+        },
+        {
+          "name": "raspios-trixie-armhf.img",
+          "asset_id": "raspios-trixie-armhf-zst",
+          "sha256": "1c5d05449be589fcdbc3283364462d40dd5efbc685e2bd5169fd857a311ff5b0",
+          "size_bytes": 5729419264,
+          "version": "2026-04-21+ttyAMA1",
+          "compressed": {
+            "encoding": "zstd",
+            "sha256": "2f5e62277cba51bc66f4a2d76666eae34e8ef5a1fbba4169b9f2824830afe115",
+            "size_bytes": 1488004697
+          }
+        }
+      ]
+    }
+  }
+}

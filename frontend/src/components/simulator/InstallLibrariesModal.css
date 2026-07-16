@@ -1,0 +1,284 @@
+.ilib-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  backdrop-filter: blur(4px);
+  animation: ilib-fadeIn 0.15s ease;
+}
+
+@keyframes ilib-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ilib-modal {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  width: 480px;
+  max-width: 95vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  animation: ilib-slideIn 0.2s ease;
+  overflow: hidden;
+}
+
+@keyframes ilib-slideIn {
+  from {
+    transform: translateY(-16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Header */
+.ilib-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #111;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.ilib-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ccc;
+  text-transform: uppercase;
+}
+
+.ilib-close-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  line-height: 1;
+}
+
+.ilib-close-btn:hover:not(:disabled) {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+.ilib-close-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Subtitle */
+.ilib-subtitle {
+  padding: 10px 18px;
+  font-size: 13px;
+  color: #999;
+  border-bottom: 1px solid #222;
+  background: #161616;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.ilib-subtitle-installing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #00b8d4;
+  font-weight: 500;
+}
+
+.ilib-subtitle-done {
+  color: #4ade80;
+  font-weight: 500;
+}
+
+/* Library list */
+.ilib-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+
+.ilib-list::-webkit-scrollbar {
+  width: 6px;
+}
+.ilib-list::-webkit-scrollbar-track {
+  background: #111;
+}
+.ilib-list::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+.ilib-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  border-bottom: 1px solid #1f1f1f;
+  gap: 12px;
+  transition: background 0.1s;
+}
+
+.ilib-item:hover {
+  background: #1f1f1f;
+}
+
+.ilib-item-name {
+  font-size: 13px;
+  color: #ddd;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ilib-item--done .ilib-item-name {
+  color: #888;
+}
+.ilib-item--error .ilib-item-name {
+  color: #888;
+}
+
+.ilib-item-status {
+  flex-shrink: 0;
+}
+
+/* Status badges */
+.ilib-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.ilib-badge--pending {
+  color: #666;
+  background: #1a1a1a;
+  border: 1px solid #333;
+}
+
+.ilib-badge--installing {
+  color: #00b8d4;
+  background: #0a1f24;
+  border: 1px solid #005f7a;
+}
+
+.ilib-badge--done {
+  color: #4ade80;
+  background: #0d2b1e;
+  border: 1px solid #1a4731;
+}
+
+.ilib-badge--error {
+  color: #f87171;
+  background: #2b0d0d;
+  border: 1px solid #4a1a1a;
+  cursor: help;
+}
+
+.ilib-badge--wokwi {
+  color: #7dd3fc;
+  background: #0c2340;
+  border: 1px solid #1e4070;
+  margin-left: 6px;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  cursor: default;
+}
+
+/* Spinner */
+.ilib-spinner {
+  flex-shrink: 0;
+  animation: ilib-spin 0.8s linear infinite;
+}
+
+@keyframes ilib-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Footer */
+.ilib-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 18px;
+  background: #111;
+  border-top: 1px solid #2a2a2a;
+}
+
+.ilib-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 22px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.ilib-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.ilib-btn--primary {
+  background: #00b8d4;
+  color: #000;
+}
+
+.ilib-btn--primary:hover:not(:disabled) {
+  background: #00d4f0;
+  box-shadow: 0 0 12px rgba(0, 184, 212, 0.4);
+  transform: translateY(-1px);
+}
+
+.ilib-btn--ghost {
+  background: transparent;
+  color: #888;
+  border: 1px solid #333;
+}
+
+.ilib-btn--ghost:hover:not(:disabled) {
+  background: #2a2a2a;
+  color: #ccc;
+}

@@ -1,0 +1,15 @@
+[submodule "third-party/avr8js"]
+	path = third-party/avr8js
+	url = https://github.com/wokwi/avr8js.git
+
+[submodule "third-party/rp2040js"]
+	path = third-party/rp2040js
+	url = https://github.com/wokwi/rp2040js.git
+
+[submodule "third-party/wokwi-elements"]
+	path = third-party/wokwi-elements
+	url = https://github.com/wokwi/wokwi-elements.git
+
+[submodule "third-party/wokwi-features"]
+	path = third-party/wokwi-features
+	url = https://github.com/wokwi/wokwi-features.git

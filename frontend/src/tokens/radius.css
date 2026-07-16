@@ -1,0 +1,25 @@
+/* Radius tokens — corner radius scale.
+ *
+ * Use --radius-pill for fully-round buttons/badges. Use the others by
+ * matching the component's role:
+ *   xs — code chips, tags
+ *   sm — inputs, small buttons
+ *   md — cards, dropdowns
+ *   lg — modals, large surfaces
+ *   xl — feature cards, hero panels
+ *   2xl — full-bleed marketing tiles
+ */
+
+:root {
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-2xl:  28px;
+  --radius-pill: 9999px;
+
+  /* Legacy aliases */
+  --radius:    var(--radius-xl);  /* 18px ~ 20px in old system */
+  --radius-pill-old: var(--radius-pill);
+}

@@ -1,0 +1,429 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg-canvas);
+  color: var(--color-fg-default);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── App shell ──────────────────────────────────── */
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* ── Header ─────────────────────────────────────── */
+.app-header {
+  background-color: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 0 16px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f5f5f7;
+  letter-spacing: -0.2px;
+}
+
+/* Kept for backward compatibility */
+.examples-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: transparent;
+  color: #9d9d9d;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #3a3a3a;
+  transition: all 0.15s;
+}
+
+.examples-link:hover {
+  background: #2a2d2e;
+  color: #fff;
+  border-color: #555;
+}
+
+/* ── Unified nav links ──────────────────────────── */
+.header-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.header-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  color: #86868b;
+  text-decoration: none;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 400;
+  transition:
+    color 0.2s,
+    background 0.2s;
+  white-space: nowrap;
+}
+
+.header-nav-link:hover {
+  color: #f5f5f7;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.header-nav-link-active {
+  color: #f5f5f7;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.header-nav-discord {
+  color: #7289da;
+}
+
+.header-nav-discord:hover {
+  color: #8fa8f5;
+  background: rgba(114, 137, 218, 0.1);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* Mobile hamburger */
+.header-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.header-hamburger span {
+  display: block;
+  height: 2px;
+  background: #9d9d9d;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+
+.header-hamburger:hover span {
+  background: #e0e0e0;
+}
+
+/* ── Unified top toolbar (desktop) ───────────────
+   Editor controls + canvas controls share a single full-width row that does
+   NOT reflow when the editor/canvas splitter below is dragged. The canvas
+   side renders into the empty `.unified-toolbar-canvas` slot via a React
+   portal from inside SimulatorCanvas. */
+.unified-toolbar {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  background: #252526;
+  border-bottom: 1px solid #333;
+  min-height: 38px;
+}
+
+.unified-toolbar-explorer-toggle {
+  border-bottom: none;
+}
+
+.unified-toolbar-editor {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+}
+
+.unified-toolbar-editor .editor-toolbar-wrapper,
+.unified-toolbar-editor .editor-toolbar {
+  flex: 1;
+  min-width: 0;
+}
+
+.unified-toolbar-editor .editor-toolbar {
+  border-bottom: none;
+}
+
+.unified-toolbar-canvas {
+  flex-shrink: 0;
+  display: flex;
+  align-items: stretch;
+  border-left: 1px solid #333;
+}
+
+/* ── Main panels container ──────────────────────── */
+.app-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.editor-panel {
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  overflow: hidden;
+  min-width: 20%;
+  max-width: 80%;
+}
+
+/* Toggle button for the file explorer sidebar */
+.explorer-toggle-btn {
+  width: 36px;
+  flex-shrink: 0;
+  background: #252526;
+  border: none;
+  border-right: 1px solid #333;
+  border-bottom: 1px solid #333;
+  color: #7a7a7a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.1s,
+    color 0.1s;
+}
+
+.explorer-toggle-btn:hover {
+  background: #2a2d2e;
+  color: #ccc;
+}
+
+/* Resize handle for the file explorer sidebar */
+.explorer-resize-handle {
+  width: 4px;
+  flex-shrink: 0;
+  cursor: col-resize;
+  background: #2a2a2a;
+  transition: background 0.15s;
+  position: relative;
+  z-index: 5;
+}
+
+.explorer-resize-handle:hover,
+.explorer-resize-handle:active {
+  background: #007acc;
+}
+
+.editor-wrapper {
+  flex: 1;
+  overflow: hidden;
+}
+
+.simulator-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 20%;
+}
+
+/* ── Resize handle ──────────────────────────────── */
+.resize-handle {
+  width: 5px;
+  flex-shrink: 0;
+  background: #2a2a2a;
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  position: relative;
+  z-index: 10;
+}
+
+.resize-handle:hover,
+.resize-handle:active {
+  background: #007acc;
+}
+
+.resize-handle-grip {
+  width: 2px;
+  height: 32px;
+  background: #444;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+
+.resize-handle:hover .resize-handle-grip,
+.resize-handle:active .resize-handle-grip {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Responsive ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .editor-panel,
+  .simulator-panel {
+    width: 100% !important;
+    min-width: unset;
+    max-width: unset;
+    flex: 1;
+  }
+
+  .resize-handle {
+    display: none;
+  }
+}
+
+/* ── Mobile tab bar ──────────────────────────────── */
+.mobile-tab-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-tab-bar {
+    display: flex;
+    flex-shrink: 0;
+    height: 44px;
+    background: #1e1e1e;
+    border-bottom: 2px solid #007acc;
+    z-index: 50;
+    /* Sits between header and panels */
+  }
+
+  .mobile-tab-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #7a7a7a;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      color 0.15s,
+      background 0.15s,
+      border-color 0.15s;
+    padding: 8px 0;
+    margin-bottom: -2px;
+  }
+
+  .mobile-tab-btn--active {
+    color: #007acc;
+    border-bottom-color: #007acc;
+    background: rgba(0, 122, 204, 0.1);
+  }
+
+  .mobile-tab-btn:active {
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+/* ── View-mode toggle: desktop only (mobile uses bottom-nav) ─────── */
+@media (max-width: 768px) {
+  .view-mode-toggle {
+    display: none !important;
+  }
+}
+
+/* ── Header responsive ───────────────────────────── */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0 10px;
+    height: 44px;
+  }
+
+  .examples-link span,
+  .header-github-text,
+  .header-username-text {
+    display: none;
+  }
+
+  .examples-link {
+    padding: 6px 8px;
+  }
+
+  /* Mobile nav: hide links, show hamburger, dropdown on open */
+  .header-nav-links {
+    display: none;
+    position: absolute;
+    top: 44px;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.96);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 6px 0;
+    z-index: 200;
+  }
+
+  .header-nav-links.header-nav-open {
+    display: flex;
+  }
+
+  .header-nav-link {
+    padding: 10px 16px;
+    border-radius: 0;
+    font-size: 14px;
+  }
+
+  .header-hamburger {
+    display: flex;
+  }
+}
+
+@keyframes circuitmuse-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50%      { opacity: 1.0; transform: scale(1.0); }
+}

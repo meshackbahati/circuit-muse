@@ -1,0 +1,12 @@
+alias exit quit
+alias acct rusage all
+
+set num_threads=8
+set ngbehavior=ltpsa
+
+codemodel /usr/local/lib/ngspice/spice2poly.cm
+codemodel /usr/local/lib/ngspice/analog.cm
+codemodel /usr/local/lib/ngspice/digital.cm
+codemodel /usr/local/lib/ngspice/xtradev.cm
+codemodel /usr/local/lib/ngspice/xtraevt.cm
+codemodel /usr/local/lib/ngspice/table.cm

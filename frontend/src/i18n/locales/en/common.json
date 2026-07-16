@@ -1,0 +1,434 @@
+{
+  "header": {
+    "skipToContent": "Skip to content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "nav": {
+      "home": "Home",
+      "documentation": "Documentation",
+      "examples": "Examples",
+      "editor": "Editor",
+      "about": "About",
+      "pricing": "Pricing",
+      "download": "Download",
+      "blog": "Blog",
+      "github": "GitHub",
+      "discord": "Discord",
+      "classroom": "For schools"
+    },
+    "auth": {
+      "signIn": "Sign in",
+      "signUp": "Sign up",
+      "myProjects": "My projects",
+      "signOut": "Sign out"
+    },
+    "language": "Language",
+    "search": "Search"
+  },
+  "footer": {
+    "about": "Velxio is a free, open-source circuit and microcontroller simulator that runs entirely in your browser. Arduino, ESP32, RP2040 and ATtiny85, with SPICE-accurate analog co-simulation. Built for makers, students and embedded engineers learning by doing. AGPLv3."
+  },
+  "landing": {
+    "hero": {
+      "titleLine1": "Arduino, ESP32 & Raspberry Pi.",
+      "titleAccent": "Right in your browser.",
+      "subtitle": "Write code, wire up components, hit run. 19 boards, an AI agent that builds circuits for you, real CPU emulation, full offline desktop app, AGPLv3 open source.",
+      "ctaPrimary": "Try Simulator Free Online →",
+      "ctaGithub": "View on GitHub",
+      "trustLine": "AI agent included · Works offline · Open source AGPLv3 · No signup needed",
+      "imageAlt": "Velxio editor with Arduino Uno traffic-light circuit"
+    },
+    "boards": {
+      "label": "Supported Hardware",
+      "titleLine1": "Every architecture.",
+      "titleLine2": "One tool.",
+      "subtitle": "19 boards across 5 CPU architectures — AVR8, ARM Cortex-M0+, RISC-V, Xtensa, and Linux. All running locally, no cloud needed."
+    },
+    "features": {
+      "label": "Features",
+      "title": "Everything you need.",
+      "subtitle": "A complete IDE, compiler, and multi-architecture simulator — running locally with no external services required.",
+      "spice": {
+        "title": "Real-Time SPICE Analog",
+        "desc": "ngspice-WASM engine — full Modified Nodal Analysis at ~60 Hz. Resistors, capacitors, op-amps, BJTs, MOSFETs, regulators behave like real silicon, not idealised models."
+      },
+      "engines": {
+        "title": "5 Emulation Engines",
+        "desc": "AVR8 (ATmega328P, ATmega2560, ATtiny85), RP2040 (ARM Cortex-M0+), RV32IMC (ESP32-C3, CH32V003 via QEMU), Xtensa LX6/LX7 (ESP32 via QEMU), and ARM Cortex-A53 (Raspberry Pi 3 Linux)."
+      },
+      "customChips": {
+        "title": "Custom Chips",
+        "desc": "Author your own integrated circuits in C, Rust, or AssemblyScript using the Wokwi Custom Chips API. Compile to WebAssembly and reuse across projects."
+      },
+      "components": {
+        "title": "100+ Components",
+        "desc": "SPICE-accurate analog parts plus 48+ wokwi visual components — LEDs, LCDs, ILI9341 TFT, servos, buzzers, ultrasonic sensors, keypads, NeoPixel strips."
+      },
+      "instruments": {
+        "title": "Live Instruments",
+        "desc": "Multi-channel oscilloscope, voltmeter, ammeter, signal generator. Drop on any node and watch waveforms update in real time as the simulation runs."
+      },
+      "monaco": {
+        "title": "Monaco Editor + arduino-cli",
+        "desc": "VS Code-grade C++ editor with multi-file workspace. Local arduino-cli compiles to real .hex / .uf2 / .bin files — no cloud round-trip."
+      }
+    },
+    "support": {
+      "title": "Support the project",
+      "subtitle": "Velxio is free and open source. If it saves you time, consider supporting its development.",
+      "ctaSponsors": "GitHub Sponsors",
+      "ctaPaypal": "Donate via PayPal"
+    },
+    "licensing": {
+      "label": "Licensing",
+      "title": "Free, with a commercial option.",
+      "subtitle": "AGPLv3 for the open-source release. A commercial license for teams that need to ship Velxio inside closed-source products.",
+      "opensource": {
+        "title": "Open source — AGPLv3",
+        "desc": "Free forever for personal use, education, research and self-hosting. Modify, fork and redistribute — your changes stay under AGPLv3 too.",
+        "cta": "View source on GitHub →"
+      },
+      "commercial": {
+        "badge": "Commercial",
+        "title": "Commercial license",
+        "desc": "For closed-source products, proprietary SaaS, or internal company use where AGPLv3 reciprocity is incompatible with your business model.",
+        "cta": "Contact for pricing →"
+      }
+    },
+    "ai": {
+      "label": "AI agent",
+      "title": "Powered by AI agents.",
+      "subtitle": "A multi-step agent runs inside the editor. It reads your canvas, writes code, places parts and wires them up — all driven by natural language. Backed by frontier LLMs auto-routed for cost and reliability.",
+      "cards": {
+        "wire": {
+          "title": "Drop & wire components",
+          "desc": "Ask \"add a button on D2 with a pull-up to 5V\". The agent picks the parts, drops them on the canvas, connects every pin and labels the wires."
+        },
+        "code": {
+          "title": "Generate working sketches",
+          "desc": "Describe what you want the board to do and the agent writes the Arduino / MicroPython code, compiles it, and loads the firmware — no copy-paste from the chat."
+        },
+        "debug": {
+          "title": "Diagnose live circuits",
+          "desc": "Stuck on a wiring bug? Share the canvas screenshot and the agent reads the schematic, runs a sim, and tells you which pin is wrong."
+        }
+      }
+    },
+    "pricing": {
+      "label": "Pricing",
+      "title": "Free to run circuits. Pay for the AI.",
+      "subtitle": "The simulator stays free forever. Plans only raise the AI agent quota — credits roll over each day.",
+      "popular": "Most popular",
+      "tiers": {
+        "free": {
+          "name": "Free",
+          "tagline": "Discover the simulator + light AI help.",
+          "f1": "20 daily AI credits (up to 600/month)",
+          "f2": "All 30+ boards + 48+ components",
+          "f3": "Real CPU emulation, public projects",
+          "cta": "Get started"
+        },
+        "maker": {
+          "name": "Maker",
+          "tagline": "For makers shipping real circuits with AI help.",
+          "f1": "500 daily AI credits (up to 15,000/month)",
+          "f2": "Unlisted projects + Velxio Desktop (offline)",
+          "f3": "Unlimited ESP32, STM32 & Raspberry Pi run time",
+          "cta": "Start Maker"
+        },
+        "pro": {
+          "name": "Pro",
+          "tagline": "Private projects, GitHub Sync and BOM exports.",
+          "f1": "2,000 daily AI credits (up to 60,000/month)",
+          "f2": "Private projects + BOM CSV + schematic PNG",
+          "f3": "GitHub Sync + watermark-free embeds",
+          "cta": "Subscribe to Pro"
+        }
+      },
+      "classroomBanner": "Bringing Velxio into a course? Velxio for Classroom gives every student Pro access from $40/year.",
+      "classroomCta": "See classroom plans →"
+    }
+  },
+  "profile": {
+    "newProject": "New project",
+    "loading": "Loading…",
+    "empty": "No public projects yet.",
+    "private": "Private",
+    "copyLink": "Copy shareable link",
+    "notFound": "User not found."
+  },
+  "pricing": {
+    "title": "Pricing",
+    "selfHosted": "This Velxio instance is self-hosted from the open-source image — all features are free for everyone using it.",
+    "hostedVersion": "The hosted version at <link>velxio.dev</link> offers an optional Pro tier that helps fund development.",
+    "sourceCode": "Source code is <link>MIT-licensed on GitHub</link>."
+  },
+  "admin": {
+    "loading": "Loading…",
+    "panel": "Admin panel",
+    "logout": "Logout",
+    "tabs": {
+      "dashboard": "Dashboard",
+      "users": "Users",
+      "projects": "Projects",
+      "boards": "Boards"
+    },
+    "errors": {
+      "save": "Failed to save."
+    },
+    "editUser": {
+      "title": "Edit user",
+      "username": "Username",
+      "email": "Email",
+      "newPassword": "New password (leave blank to keep)",
+      "passwordPlaceholder": "Min. 8 characters",
+      "admin": "Admin",
+      "active": "Active",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving…"
+    },
+    "setup": {
+      "title": "Admin setup",
+      "body": "No admin account exists yet. Create the first admin user to proceed.",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "passwordMismatch": "Passwords do not match.",
+      "creating": "Creating…",
+      "createAdmin": "Create admin",
+      "failed": "Failed to create admin."
+    },
+    "notAdmin": {
+      "title": "Admin access required",
+      "body": "You must be logged in as an admin to access this panel.",
+      "goLogin": "Go to login"
+    },
+    "users": {
+      "loadFailed": "Failed to load users.",
+      "deleteFailed": "Failed to delete user.",
+      "confirmDelete": "Delete user \"{{username}}\" and all their projects? This cannot be undone.",
+      "searchPlaceholder": "Search by username or email…",
+      "count_one": "{{count}} user",
+      "count_other": "{{count}} users",
+      "noResults": "No users found.",
+      "col": {
+        "username": "Username",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "projects": "Projects",
+        "compiles": "Compiles",
+        "runs": "Runs",
+        "boards": "Boards",
+        "country": "Country",
+        "lastActive": "Last active",
+        "joined": "Joined",
+        "actions": "Actions"
+      },
+      "actions": {
+        "activity": "Activity",
+        "edit": "Edit",
+        "delete": "Delete",
+        "resetAgentUsage": "Reset agent",
+        "resetAgentUsageTooltip": "Clear today's agent usage so the user can continue using the agent."
+      },
+      "confirmResetAgentUsage": "Reset agent quota for \"{{username}}\" (today, UTC)?",
+      "resetAgentUsageDone": "Reset agent quota for {{username}} — freed {{cycles}} cycle(s) across {{rows}} event row(s).",
+      "resetAgentUsageFailed": "Failed to reset agent usage."
+    },
+    "boards": {
+      "loadFailed": "Failed to load board metrics.",
+      "range": "Range:",
+      "byFamily": "By board family",
+      "byFqbn": "By exact FQBN",
+      "noData": "No data.",
+      "col": {
+        "family": "Family",
+        "fqbn": "FQBN",
+        "compiles": "Compiles",
+        "errors": "Errors",
+        "successRate": "Success rate",
+        "runs": "Runs",
+        "distinctUsers": "Distinct users",
+        "distinctProjects": "Distinct projects"
+      }
+    },
+    "dashboard": {
+      "loadFailed": "Failed to load metrics.",
+      "loadingMetrics": "Loading metrics…",
+      "unknown": "Unknown",
+      "kpi": {
+        "totalUsers": "Total users",
+        "totalProjects": "Total projects",
+        "compilesAllTime": "Compiles (all-time)",
+        "runsAllTime": "Runs (all-time)",
+        "newIn30d": "+{{count}} in 30d",
+        "successPct": "{{pct}}% success",
+        "dau": "active in last 24h",
+        "wau": "active in last 7d",
+        "mau": "active in last 30d",
+        "publicPrivate": "Public / Private"
+      },
+      "charts": {
+        "activityOverTime": "Activity over time",
+        "noActivity": "No activity yet in this range.",
+        "compilesByFamily": "Compiles by board family ({{days}}d)",
+        "diversityTitle": "How many board families per user",
+        "diversitySubtitle": "Pricing signal — multi-board users likely warrant paid tiers.",
+        "boardCount_one": "{{count}} board",
+        "boardCount_other": "{{count}} boards",
+        "noDataYet": "No data yet.",
+        "topFqbn": "Top boards by FQBN ({{days}}d)",
+        "topCountries": "Top countries ({{days}}d)",
+        "countriesSubtitle": "From Cloudflare's CF-IPCountry header. \"Users\" = current home country, \"Signups\" = where they registered, \"Active\" = distinct users with activity in this range.",
+        "noCountryData": "No country data yet (likely running outside Cloudflare).",
+        "topUsers": "Top users by compiles",
+        "topProjects": "Top projects by compiles"
+      },
+      "col": {
+        "country": "Country",
+        "users": "Users",
+        "signups": "Signups",
+        "activeRange": "Active ({{days}}d)",
+        "user": "User"
+      }
+    },
+    "activity": {
+      "loadFailed": "Failed to load activity.",
+      "title": "Daily activity — {{username}}",
+      "subtitle": "Per-day, per-project compile and run counts for this user.",
+      "noActivity": "No activity in the selected range.",
+      "projectCount_one": "{{count}} project",
+      "projectCount_other": "{{count}} projects",
+      "deletedProject": "(deleted project)",
+      "noProject": "(no project)",
+      "col": {
+        "date": "Date",
+        "saves": "Saves"
+      }
+    },
+    "projects": {
+      "loadFailed": "Failed to load projects.",
+      "deleteFailed": "Failed to delete project.",
+      "confirmDelete": "Delete project \"{{name}}\"? This cannot be undone.",
+      "searchPlaceholder": "Search by name or owner…",
+      "count_one": "{{count}} project",
+      "count_other": "{{count}} projects",
+      "noResults": "No projects found.",
+      "private": "private",
+      "public": "public",
+      "privateTitle": "Private project (admin view)",
+      "col": {
+        "name": "Name",
+        "owner": "Owner",
+        "board": "Board",
+        "visibility": "Visibility",
+        "compiles": "Compiles",
+        "runs": "Runs",
+        "updates": "Updates",
+        "lastCompile": "Last compile",
+        "updated": "Updated"
+      }
+    }
+  },
+  "examples": {
+    "heading": "Featured Projects",
+    "subtitle": "Explore and run example projects — organized by board",
+    "searchPlaceholder": "Search examples — try 'esp32 oled', 'blink', 'dht'…",
+    "searchLabel": "Search examples",
+    "clearSearch": "Clear search",
+    "clear": "Clear",
+    "matchCount_one": "{{count}} match",
+    "matchCount_other": "{{count}} matches",
+    "filters": {
+      "categoryLabel": "Category:",
+      "difficultyLabel": "Difficulty:",
+      "category": {
+        "all": "All",
+        "basics": "Basics",
+        "sensors": "Sensors",
+        "displays": "Displays",
+        "communication": "Communication",
+        "games": "Games",
+        "robotics": "Robotics",
+        "circuits": "Circuits"
+      },
+      "difficulty": {
+        "all": "All",
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      }
+    },
+    "copyLink": "Copy shareable link",
+    "empty": "No examples found with the selected filters",
+    "emptyForQuery": "No examples found for \"{{query}}\" with the selected filters",
+    "resetFilters": "Reset filters",
+    "installing": "Installing libraries ({{done}}/{{total}})",
+    "loadingExample": "Loading example...",
+    "notFound": "Example \"{{id}}\" not found.",
+    "browseAll": "Browse all examples"
+  },
+  "starBanner": {
+    "ariaLabel": "Star Velxio on GitHub",
+    "title": "Enjoying Velxio?",
+    "body": "A ⭐ on GitHub helps more developers discover the project — it only takes 2 seconds!",
+    "cta": "Star on GitHub",
+    "dismiss": "Dismiss"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "to continue to Velxio",
+      "email": "Email",
+      "password": "Password",
+      "signIn": "Sign in",
+      "signingIn": "Signing in…",
+      "or": "or",
+      "continueGoogle": "Continue with Google",
+      "noAccount": "Don't have an account?",
+      "failed": "Login failed."
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Start building for free",
+      "username": "Username",
+      "usernamePlaceholder": "e.g. alice",
+      "passwordPlaceholder": "At least 8 characters",
+      "create": "Create account",
+      "creating": "Creating account…",
+      "haveAccount": "Already have an account?",
+      "errors": {
+        "reserved": "That username is reserved.",
+        "usernameRules": "Username must be 3-30 chars (a-z, 0-9, _, -)",
+        "passwordTooShort": "Password must be at least 8 characters.",
+        "failed": "Registration failed."
+      }
+    }
+  },
+  "quotaModal": {
+    "titleFree": "You've hit today's free limit",
+    "titlePaid": "You've reached your daily limit",
+    "bodyFree": "Free accounts get {{cap}} AI messages a day. Pro ($15/mo) gives you {{proCap}}/day — {{multiplier}}× the cap. Or wait until your quota resets.",
+    "bodyPaid": "Your {{plan}} plan allows {{cap}} messages per day. Upgrade to a higher tier or wait for the reset.",
+    "today": "Today",
+    "thisMonth": "This month",
+    "resets": "Resets",
+    "ctaUpgrade": "Upgrade to Pro — $15/mo",
+    "ctaSeePlans": "See plans",
+    "ctaWait": "Wait until reset"
+  },
+  "editor": {
+    "share": {
+      "updateFailed": "Could not update visibility — please try again.",
+      "visibility": {
+        "publicLabel": "Public",
+        "publicHint": "Anyone can find this project on velxio.dev.",
+        "unlistedLabel": "Unlisted",
+        "unlistedHint": "Hidden from search and the gallery — only accessible via the share link.",
+        "privateLabel": "Private",
+        "privateHint": "Only you can see this project."
+      }
+    }
+  }
+}

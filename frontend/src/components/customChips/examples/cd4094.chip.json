@@ -1,0 +1,10 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "CD4094",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "8-stage shift-and-store bus register, MSB-first serial in, parallel out.",
+  "pins": ["VDD", "VSS", "CLK", "DATA", "STR", "OE", "QS", "QSN",
+           "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8"],
+  "attributes": []
+}

@@ -1,0 +1,87 @@
+.gh-star-banner {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #1e2228;
+  border: 1px solid #3c4049;
+  border-radius: 12px;
+  padding: 16px 18px;
+  width: 320px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+  animation: gh-banner-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes gh-banner-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.gh-star-banner__icon {
+  color: #e3b341;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.gh-star-banner__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.gh-star-banner__body strong {
+  display: block;
+  color: #e1e4e8;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.gh-star-banner__body p {
+  color: #8b949e;
+  font-size: 12.5px;
+  line-height: 1.45;
+  margin: 0 0 12px;
+}
+
+.gh-star-banner__btn {
+  display: inline-block;
+  background: #e3b341;
+  color: #1b1f23;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.15s ease;
+  letter-spacing: 0.01em;
+}
+
+.gh-star-banner__btn:hover {
+  background: #f0c860;
+}
+
+.gh-star-banner__close {
+  background: none;
+  border: none;
+  color: #6e7681;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: color 0.15s ease;
+}
+
+.gh-star-banner__close:hover {
+  color: #e1e4e8;
+}

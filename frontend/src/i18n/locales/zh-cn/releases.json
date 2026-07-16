@@ -1,0 +1,132 @@
+{
+  "v2": {
+    "versionBadge": "版本 2.0",
+    "heroAccent": "多平台嵌入式模拟器",
+    "heroSubtitle": "在浏览器中模拟 Arduino、ESP32、Raspberry Pi Pico 和 Raspberry Pi 3。19 块开发板、68 多个即用示例、逼真的传感器模拟。免费、开源、无需安装。",
+    "tryV2": "尝试 Velxio 2.0",
+    "joinDiscord": "加入 Discord",
+    "boardsHeading": "19 块开发板。5 种架构。一个工具。",
+    "boardsLead": "从 8 位 AVR 到四核 ARM Linux — Velxio 2.0 在单个浏览器标签页中模拟每个主要嵌入式平台。",
+    "multipleBoards": "一个电路中的多块开发板",
+    "mixArchitectures": "混合架构",
+    "mixArchitecturesBody": "将 ESP32 连接到 Raspberry Pi 3，将三个 Arduino 连接在一起，或将 Pico 与 ESP32-C3 组合。任何组合都可行。",
+    "realInterBoard": "真实的板间通信",
+    "realInterBoardBody": "开发板通过有线连接进行通信 — UART、I2C、SPI 或简单的 GPIO 信号，就像真实硬件一样。",
+    "uniqueFeature": "没有其他模拟器能做到这一点",
+    "uniqueFeatureBody": "传统模拟器单独模拟一块开发板。Velxio 模拟整个系统，多块开发板同时运行。",
+    "whatsNew": "2.0 的新功能",
+    "whatsNewLead": "完全转型为多平台嵌入式系统模拟器 — 更多开发板、更精确的模拟、更好的开发者体验。",
+    "examplesHeading": "68 多个即用示例",
+    "examplesLead": "从基本的 LED 闪烁到多板通信 — 适用于每个平台和技能水平的示例。",
+    "examples": {
+      "arduino": {
+        "title": "Arduino（17 个示例）",
+        "body": "闪烁、交通灯、按钮、渐变、RGB LED、Simon Says 游戏、TFT 显示屏、LCD、I2C 扫描仪、SPI 回环等。"
+      },
+      "pico": {
+        "title": "Raspberry Pi Pico（18 个示例）",
+        "body": "闪烁、串行、I2C（扫描仪、RTC、EEPROM）、SPI、ADC 读取、DHT22、HC-SR04、舵机、摇杆、NTC 传感器。"
+      },
+      "esp32": {
+        "title": "ESP32（9 个示例）",
+        "body": "闪烁、串行回显、7 段数码管、DHT22、HC-SR04、MPU6050 IMU、PIR 运动检测、舵机、摇杆。"
+      },
+      "esp32c3": {
+        "title": "ESP32-C3 RISC-V（9 个示例）",
+        "body": "闪烁、串行、RGB LED、按钮 + LED、串行回显、DHT22、HC-SR04、PIR、舵机。"
+      },
+      "mega": {
+        "title": "Arduino Mega（5 个示例）",
+        "body": "闪烁、LED 追逐、串行回显、串行控制、7 段数码管显示。"
+      },
+      "nano": {
+        "title": "Arduino Nano（4 个示例）",
+        "body": "闪烁、按钮 LED、渐变、串行回显。以及多板 Pi 到 Arduino 控制。"
+      }
+    },
+    "outcomeHeading": "成果",
+    "outcomeLead": "Velxio 2.0 将项目转变为一个完整、可扩展的多平台嵌入式系统模拟器。",
+    "outcome": {
+      "realistic": "更逼真的模拟",
+      "realisticBody": "基于 QEMU 的 Xtensa、RISC-V 和 ARM 模拟。通过 avr8js 实现周期精确的 AVR8。真实的固件执行，而非近似。",
+      "broader": "更广泛的硬件支持",
+      "broaderBody": "涵盖 5 种 CPU 架构的 19 块开发板。从 8 位 ATtiny85 到运行完整 Linux 的四核 Raspberry Pi 3B。",
+      "devEx": "更好的开发者体验",
+      "devExBody": "Monaco 编辑器、多文件工作区、库管理器、示波器、传感器控制面板、响应式移动设计。"
+    },
+    "builtOnOss": "基于开源构建",
+    "builtOnOssLead": "Velxio 由以下开源项目驱动。没有它们，这一切都不可能实现。",
+    "bottom": {
+      "title": "立即尝试 Velxio 2.0",
+      "body": "打开编辑器并开始模拟 — 19 块开发板、68 多个示例、零设置。",
+      "cta": "启动模拟器"
+    }
+  },
+  "v25": {
+    "versionBadge": "版本 2.5",
+    "heroAccent": "Arduino 在浏览器中与 SPICE 相遇",
+    "heroSubtitle": "通过 ngspice-WASM 进行实时模拟电路仿真，连接到 Arduino、ESP32 和 Raspberry Pi Pico。电阻、电容、运算放大器、晶体管、实时电流表和电压表 — 与您的固件协同仿真。免费、开源、无需安装。",
+    "tryV25": "尝试 Velxio 2.5",
+    "fullEmulation": "从纯数字到完整电路仿真",
+    "fullEmulationLead": "Velxio 2.0 完美仿真您的固件。Velxio 2.5 仿真其周围的电路 — 使用与专业 EDA 工具相同的 ngspice 引擎，完全在您的浏览器标签页中运行。",
+    "notLinear": "不是线性近似",
+    "notLinearBody": "Velxio 在每个时钟周期求解完整的改进节点分析。非线性器件 — 二极管、BJT、MOSFET、带饱和的运算放大器 — 表现如同真实器件，而非教科书理想化。",
+    "realFirmware": "真实固件。真实电路。同一画布。",
+    "realFirmwareBody": "GPIO 引脚作为电压源驱动 SPICE 网络。ADC 输入读取求解的节点电压。analogRead() 返回电路实际产生的结果 — 而非模拟捷径。",
+    "browserOffline": "100% 浏览器，100% 离线",
+    "browserOfflineBody": "ngspice 通过开源 eecircuit-engine 编译为 WebAssembly。无需服务器、无需云、无需账户。首次加载后可离线工作。您的电路永远不会离开您的机器。",
+    "catalogHeading": "100 多个 SPICE 精确元件",
+    "catalogLead": "完整的电子元件目录 — 无源器件、半导体、逻辑器件、仪器 — 每个都使用真实的 ngspice 器件模型，而非行为替代。",
+    "coSimHeading": "混合数字 + 模拟协同仿真",
+    "coSimLead": "大多数浏览器模拟器要么运行您的固件，要么运行电路 — 但从未同时运行两者。Velxio 2.5 在同一时钟上求解它们。",
+    "driveMotor": "从 Arduino 引脚驱动电机",
+    "driveMotorBody": "引脚高电平 → MOSFET 栅极 → 通过真实感性负载的漏极电流 → 通过续流二极管的反电动势。全部由 SPICE 求解。并排观察栅极和漏极电压波形。",
+    "readSensor": "通过真实运算放大器读取传感器",
+    "readSensorBody": "光电二极管 → 跨阻运算放大器 → ADC。调节光照强度滑块，观察 analogRead() 通过实际放大器级的响应 — 包括饱和、压摆率等。",
+    "liveInstruments": "使用实时仪器调试",
+    "liveInstrumentsBody": "在任何两个节点之间放置电流表，在任何网络上放置电压表。示波器同时捕获数字引脚和模拟节点。没有“假设” — 只有测量。",
+    "examplesHeading": "40 个新的模拟与混合示例",
+    "examplesLead": "预接线电路，一键打开 — 从教科书基础到真实的 Arduino+模拟系统。",
+    "examples": {
+      "fundamentals": {
+        "title": "基础",
+        "body": "分压器、RC 低通滤波器、RC 高通滤波器、LR 电路、电容充电、RLC 谐振、惠斯通电桥。"
+      },
+      "diodes": {
+        "title": "二极管与整流器",
+        "body": "半波整流器、全波桥式整流器、齐纳稳压器、钳位器、限幅器、倍压器。"
+      },
+      "opamps": {
+        "title": "运算放大器电路",
+        "body": "反相放大器、同相放大器、求和放大器、差分放大器、积分器、微分器、施密特触发器、比较器。"
+      },
+      "transistors": {
+        "title": "晶体管电路",
+        "body": "共射放大器、晶体管开关、达林顿对、MOSFET 驱动器、H 桥、电流镜。"
+      },
+      "arduino": {
+        "title": "Arduino + 模拟",
+        "body": "PWM 驱动 LED 带 RC 平滑、Arduino 控制 MOSFET 电机驱动器、光隔离继电器、光电二极管 + 运算放大器 + ADC 流水线。"
+      },
+      "sensors": {
+        "title": "传感器",
+        "body": "NTC 热敏电阻电桥、光敏电阻照度计、光电二极管跨阻、电位器调光器、火焰探测器。"
+      }
+    },
+    "outcomeHeading": "成果",
+    "outcomeLead": "Velxio 2.5 闭合了固件与硬件之间的回路：运行您的代码的同一工具现在也求解其周围的电路。",
+    "outcome": {
+      "teach": "教授与学习电子学",
+      "teachBody": "面向学生的免费、基于浏览器的 SPICE 游乐场 — 外加驱动真实微控制器固件的优势。无需许可证、无需安装、无需预约实验室。",
+      "prototype": "焊接前进行原型验证",
+      "prototypeBody": "在订购任何零件之前，端到端验证模拟前端、功率级和传感器流水线。示波器和万用表已在工作台上。",
+      "openSource": "仍然 100% 开源",
+      "openSourceBody": "GitHub 上的 AGPL-3.0。基于 ngspice、eecircuit-engine、avr8js、rp2040js、QEMU 和 wokwi-elements 构建。可分支、托管、扩展。"
+    },
+    "builtOnOssLead": "Velxio 2.5 站在数十年电子工具巨人的肩膀上。衷心感谢以下每个项目的维护者。",
+    "bottom": {
+      "title": "立即尝试 Velxio 2.5",
+      "body": "打开编辑器并开始模拟 — 固件和模拟电路，同一画布，零设置。"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Intel 8253 PIT",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Programmable Interval Timer — 3 independent 16-bit counters with Modes 0/2/3 (interrupt-on-terminal-count, rate-generator, square-wave). The same chip that drives the IBM PC's 18.2 Hz tick.",
+  "pins": [
+    "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
+    "A0", "A1", "CS", "RD", "WR",
+    "CLK0", "CLK1", "CLK2",
+    "GATE0", "GATE1", "GATE2",
+    "OUT0", "OUT1", "OUT2",
+    "VCC", "GND"
+  ],
+  "attributes": []
+}

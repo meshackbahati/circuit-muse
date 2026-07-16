@@ -1,0 +1,9 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Inverter",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Single-input logic inverter — OUT = !IN",
+  "pins": ["IN", "OUT", "GND", "VCC"],
+  "attributes": []
+}

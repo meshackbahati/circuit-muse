@@ -1,0 +1,74 @@
+name: Library compile (nightly)
+
+# Phase 1d-tests I.  Runs arduino-cli against every example that
+# declares Arduino libraries, ensuring sketches still compile after
+# upstream library bumps.  Slow (~10 min) and external-dependent
+# (arduino-cli + cores + libs from the index), so it's kept OUT of
+# the PR workflow.
+#
+# Runs on a 5 AM UTC cron + on-demand via workflow_dispatch.
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup arduino-cli
+        uses: arduino/setup-arduino-cli@v2
+        with:
+          version: 1.0.4
+
+      # Cache the Arduino core downloads (~500 MB total for avr + esp32 +
+      # rp2040).  Invalidate when the upstream `arduino-cli core list`
+      # output changes — proxy via the lockfile alternative below.
+      - name: Cache Arduino cores
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.arduino15
+            ~/Arduino
+          key: arduino-cores-v3-${{ runner.os }}
+
+      - name: Update arduino-cli core index
+        run: |
+          arduino-cli config init --overwrite
+          arduino-cli config add board_manager.additional_urls \
+            https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json \
+            https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
+          arduino-cli core update-index
+
+      - name: Install board cores
+        run: |
+          arduino-cli core install arduino:avr
+          arduino-cli core install esp32:esp32
+          arduino-cli core install rp2040:rp2040
+
+      - name: Install frontend dependencies
+        run: cd frontend && npm install --no-audit --no-fund --include=optional
+
+      - name: Compile every example that declares libraries
+        run: cd frontend && npm run test:libraries
+        env:
+          RUN_LIBRARY_TESTS: '1'
+
+      - name: Upload arduino-cli logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arduino-cli-logs
+          path: /tmp/arduino-cli-*.log
+          if-no-files-found: ignore

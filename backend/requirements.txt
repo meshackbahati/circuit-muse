@@ -1,0 +1,21 @@
+# Velxio OSS backend — stateless: compile, libraries, simulation,
+# iot_gateway, MCP. No auth, no DB, no project persistence; those live in
+# the velxio-prod private overlay's pro/backend/requirements.txt and are
+# pip-installed on top of this list at Docker build time.
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+websockets>=12.0
+pydantic>=2.11.0
+pydantic-settings>=2.6.0
+# httpx — iot_gateway proxy + MCP
+httpx>=0.27.1
+mcp>=1.0.0
+esptool>=4.7.0
+# WASM runtime for Custom Chips on ESP32 (chip's WASM runs in the QEMU worker
+# subprocess so I2C events get a synchronous response — see
+# docs/wiki/custom-chips-esp32-backend-runtime.md).
+wasmtime>=20.0
+# zstd decompression for the boot_images provider — the Raspberry Pi 3
+# SD image ships as a .zst on the velxio.dev licence endpoint to save
+# ~75% of network transfer.
+zstandard>=0.22.0

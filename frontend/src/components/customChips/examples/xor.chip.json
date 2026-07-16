@@ -1,0 +1,9 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "XOR Gate",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "2-input exclusive-OR logic gate. OUT = A xor B.",
+  "pins": ["A", "B", "OUT", "GND", "VCC"],
+  "attributes": []
+}

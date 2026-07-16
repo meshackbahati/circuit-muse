@@ -1,0 +1,14 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Intel 8080 CPU (programmable)",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Programmable Intel 8080 chip. Add a chip-program file to the project (.s for 8080 assembly, .hex for Intel HEX, .bin for raw bytes), click Compile, then Run. The same chip runs any 8080 program — make a mini PC, a calculator, an LED show, the Kill-the-Bit game, anything that fits in 32 KB. Memory map: ROM at 0x0000, RAM at 0x8000, MMIO at 0xC000 (LEDs/buttons/UART).",
+  "pins": [
+    "LED0", "LED1", "LED2", "LED3", "LED4", "LED5", "LED6", "LED7",
+    "BTN0", "BTN1", "BTN2", "BTN3", "BTN4", "BTN5", "BTN6", "BTN7",
+    "RX", "TX", "VCC", "GND"
+  ],
+  "attributes": [],
+  "programTargets": ["8080"]
+}

@@ -1,0 +1,9 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "RAM 64K + Display (Galaksija)",
+  "author": "Velxio (font8x8: Daniel Hepper / Marcel Sondaar, public domain)",
+  "license": "MIT (chip) / public-domain (font)",
+  "description": "64KB SRAM that also renders the Galaksija 32x16 text screen from its own video RAM (0x2800-0x2BFF) into a 256x128 framebuffer on a ~30fps timer. Reads from real memory (not snooped writes) so the picture is correct regardless of chip load order. Yields reads of 0x2000-0x203F to the memory-mapped keyboard. Phase 3 chip-to-chip bus proof.",
+  "display": { "width": 256, "height": 128 },
+  "pins": ["A0","A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","D0","D1","D2","D3","D4","D5","D6","D7","CE","OE","WE","VCC","GND"]
+}

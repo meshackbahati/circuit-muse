@@ -1,0 +1,132 @@
+{
+  "v2": {
+    "versionBadge": "バージョン2.0",
+    "heroAccent": "マルチプラットフォーム組み込みシミュレータ",
+    "heroSubtitle": "ブラウザ上でArduino、ESP32、Raspberry Pi Pico、Raspberry Pi 3をシミュレート。19種類のボード、68以上のすぐに使えるサンプル、リアルなセンサーシミュレーション。無料、オープンソース、インストール不要。",
+    "tryV2": "Velxio 2.0を試す",
+    "joinDiscord": "Discordに参加",
+    "boardsHeading": "19ボード。5アーキテクチャ。1つのツール。",
+    "boardsLead": "8ビットAVRからクアッドコアARM Linuxまで — Velxio 2.0は単一のブラウザタブであらゆる主要な組み込みプラットフォームをエミュレートします。",
+    "multipleBoards": "1つの回路に複数のボード",
+    "mixArchitectures": "アーキテクチャの混在",
+    "mixArchitecturesBody": "ESP32をRaspberry Pi 3に接続し、3つのArduinoを配線し、PicoとESP32-C3を組み合わせる。どの組み合わせでも動作します。",
+    "realInterBoard": "実際のボード間通信",
+    "realInterBoardBody": "ボードは有線接続（UART、I2C、SPI、または単純なGPIO信号）を介して通信します。実際のハードウェアと同じです。",
+    "uniqueFeature": "これを実現するシミュレータは他にありません",
+    "uniqueFeatureBody": "従来のシミュレータは1つのボードを単独でエミュレートします。Velxioは複数のボードが同時に動作するシステム全体をシミュレートします。",
+    "whatsNew": "2.0の新機能",
+    "whatsNewLead": "マルチプラットフォーム組み込みシステムシミュレータへの完全な変革 — より多くのボード、より正確なエミュレーション、より優れた開発者体験。",
+    "examplesHeading": "68以上のすぐに使えるサンプル",
+    "examplesLead": "基本的なLED点滅からマルチボード通信まで — あらゆるプラットフォームとスキルレベルに対応したサンプル。",
+    "examples": {
+      "arduino": {
+        "title": "Arduino（17サンプル）",
+        "body": "点滅、信号機、ボタン、フェード、RGB LED、Simon Saysゲーム、TFTディスプレイ、LCD、I2Cスキャナ、SPIループバックなど。"
+      },
+      "pico": {
+        "title": "Raspberry Pi Pico（18サンプル）",
+        "body": "点滅、シリアル、I2C（スキャナ、RTC、EEPROM）、SPI、ADC読み取り、DHT22、HC-SR04、サーボ、ジョイスティック、NTCセンサー。"
+      },
+      "esp32": {
+        "title": "ESP32（9サンプル）",
+        "body": "点滅、シリアルエコー、7セグメント、DHT22、HC-SR04、MPU6050 IMU、PIRモーション、サーボ、ジョイスティック。"
+      },
+      "esp32c3": {
+        "title": "ESP32-C3 RISC-V（9サンプル）",
+        "body": "点滅、シリアル、RGB LED、ボタン+LED、シリアルエコー、DHT22、HC-SR04、PIR、サーボ。"
+      },
+      "mega": {
+        "title": "Arduino Mega（5サンプル）",
+        "body": "点滅、LEDチェイス、シリアルエコー、シリアル制御、7セグメントディスプレイ。"
+      },
+      "nano": {
+        "title": "Arduino Nano（4サンプル）",
+        "body": "点滅、ボタンLED、フェード、シリアルエコー。さらにマルチボードのPi-to-Arduino制御。"
+      }
+    },
+    "outcomeHeading": "成果",
+    "outcomeLead": "Velxio 2.0はプロジェクトを完全でスケーラブルなマルチプラットフォーム組み込みシステムシミュレータに変革します。",
+    "outcome": {
+      "realistic": "よりリアルなエミュレーション",
+      "realisticBody": "QEMUベースのXtensa、RISC-V、ARMエミュレーション。avr8jsによるサイクル精度のAVR8。近似ではなく実際のファームウェア実行。",
+      "broader": "より広範なハードウェアサポート",
+      "broaderBody": "5つのCPUアーキテクチャにわたる19ボード。8ビットATtiny85から完全なLinuxを実行するクアッドコアRaspberry Pi 3Bまで。",
+      "devEx": "より優れた開発者体験",
+      "devExBody": "Monacoエディタ、マルチファイルワークスペース、ライブラリマネージャ、オシロスコープ、センサー制御パネル、モバイル対応デザイン。"
+    },
+    "builtOnOss": "オープンソース上に構築",
+    "builtOnOssLead": "Velxioはこれらのオープンソースプロジェクトによって支えられています。それらなしでは、これは実現不可能でした。",
+    "bottom": {
+      "title": "今すぐVelxio 2.0を試す",
+      "body": "エディタを開いてシミュレーションを開始 — 19ボード、68以上のサンプル、ゼロセットアップ。",
+      "cta": "シミュレータを起動"
+    }
+  },
+  "v25": {
+    "versionBadge": "バージョン2.5",
+    "heroAccent": "ArduinoとSPICEがブラウザで出会う",
+    "heroSubtitle": "ngspice-WASMによるリアルタイムアナログ回路シミュレーション。Arduino、ESP32、Raspberry Pi Picoに配線。抵抗、コンデンサ、オペアンプ、トランジスタ、ライブ電流計と電圧計 — ファームウェアと共にシミュレート。無料、オープンソース、インストール不要。",
+    "tryV25": "Velxio 2.5を試す",
+    "fullEmulation": "デジタル専用から完全回路エミュレーションへ",
+    "fullEmulationLead": "Velxio 2.0はファームウェアを完璧にシミュレートしました。Velxio 2.5はその周辺回路をシミュレートします — プロフェッショナルEDAツールと同じngspiceエンジンを使用し、ブラウザタブ内で完全に動作します。",
+    "notLinear": "線形近似ではありません",
+    "notLinearBody": "Velxioは毎ティック完全な修正節点解析を解きます。非線形デバイス — ダイオード、BJT、MOSFET、飽和を伴うオペアンプ — は教科書的な理想化ではなく、実際の動作を再現します。",
+    "realFirmware": "実際のファームウェア。実際の回路。同じキャンバス。",
+    "realFirmwareBody": "GPIOピンは電圧源としてSPICEネットを駆動します。ADC入力は解かれた節点電圧を読み取ります。analogRead()は回路が実際に生成する値を返します — シミュレートされた近道ではありません。",
+    "browserOffline": "100%ブラウザ、100%オフライン",
+    "browserOfflineBody": "ngspiceはオープンソースのeecircuit-engineを介してWebAssemblyにコンパイルされています。サーバー不要、クラウド不要、アカウント不要。初回ロード後はオフラインで動作。回路がマシンを離れることはありません。",
+    "catalogHeading": "100以上のSPICE精度のコンポーネント",
+    "catalogLead": "完全な電子部品カタログ — パッシブ、半導体、ロジック、計測器 — すべて実際のngspiceデバイスカードでモデル化されており、動作の代用ではありません。",
+    "coSimHeading": "ハイブリッドデジタル+アナログ協調シミュレーション",
+    "coSimLead": "ほとんどのブラウザシミュレータはファームウェアか回路のどちらか一方しか実行しません — 両方を同時に実行することはありません。Velxio 2.5は同じクロックで両方を解きます。",
+    "driveMotor": "Arduinoピンからモーターを駆動",
+    "driveMotorBody": "ピンHIGH → MOSFETゲート → 実際の誘導負荷を通るドレイン電流 → フライバックダイオードを通る逆起電力。すべてSPICEで解決。ゲートとドレインの電圧を並べて観測。",
+    "readSensor": "実際のオペアンプを通してセンサーを読み取る",
+    "readSensorBody": "フォトダイオード → トランスインピーダンスオペアンプ → ADC。照度スライダーを調整すると、実際の増幅段（飽和、スルーレートなど）を通してanalogRead()が応答するのを確認できます。",
+    "liveInstruments": "ライブ計測器でデバッグ",
+    "liveInstrumentsBody": "任意の2ノード間に電流計、任意のネットに電圧計を配置。オシロスコープはデジタルピンとアナログノードを同時にキャプチャ。「もしも」ではなく、測定値です。",
+    "examplesHeading": "40の新しいアナログ＆ハイブリッドサンプル",
+    "examplesLead": "ワンクリックで開ける事前配線済み回路 — 教科書の基礎から現実的なArduino+アナログシステムまで。",
+    "examples": {
+      "fundamentals": {
+        "title": "基礎",
+        "body": "分圧回路、RCローパスフィルタ、RCハイパスフィルタ、LR回路、コンデンサ充電、RLC共振、ホイートストンブリッジ。"
+      },
+      "diodes": {
+        "title": "ダイオードと整流器",
+        "body": "半波整流、全波ブリッジ整流、ツェナーレギュレータ、クランパ、クリッパ、倍電圧整流。"
+      },
+      "opamps": {
+        "title": "オペアンプ回路",
+        "body": "反転増幅器、非反転増幅器、加算増幅器、差動増幅器、積分器、微分器、シュミットトリガ、コンパレータ。"
+      },
+      "transistors": {
+        "title": "トランジスタ回路",
+        "body": "エミッタ接地増幅器、トランジスタスイッチ、ダーリントンペア、MOSFETドライバ、Hブリッジ、カレントミラー。"
+      },
+      "arduino": {
+        "title": "Arduino + アナログ",
+        "body": "PWM駆動LEDとRC平滑化、Arduino制御MOSFETモータードライバ、フォトカプラ絶縁リレー、フォトダイオード+オペアンプ+ADCパイプライン。"
+      },
+      "sensors": {
+        "title": "センサー",
+        "body": "NTCサーミスタブリッジ、フォトレジスタ照度計、フォトダイオードトランスインピーダンス、ポテンショメータ調光器、火炎検出器。"
+      }
+    },
+    "outcomeHeading": "成果",
+    "outcomeLead": "Velxio 2.5はファームウェアとハードウェアのループを閉じます：スケッチを実行する同じツールが、その周辺回路も解くようになりました。",
+    "outcome": {
+      "teach": "電子工学の教育と学習",
+      "teachBody": "学生向けの無料ブラウザベースSPICEプレイグラウンド — 実際のマイクロコントローラファームウェアを駆動できる利点も。ライセンス不要、インストール不要、実験室予約不要。",
+      "prototype": "はんだ付け前にプロトタイプ",
+      "prototypeBody": "アナログフロントエンド、パワーステージ、センサーパイプラインを部品を注文する前にエンドツーエンドで検証。オシロスコープとDMMはすでにベンチにあります。",
+      "openSource": "依然として100%オープンソース",
+      "openSourceBody": "GitHub上でAGPL-3.0。ngspice、eecircuit-engine、avr8js、rp2040js、QEMU、wokwi-elements上に構築。フォーク、ホスト、拡張可能。"
+    },
+    "builtOnOssLead": "Velxio 2.5は数十年にわたる電子ツールの肩の上に立っています。以下の各プロジェクトのメンテナに多大なる感謝を。",
+    "bottom": {
+      "title": "今すぐVelxio 2.5を試す",
+      "body": "エディタを開いてシミュレーションを開始 — ファームウェアとアナログ回路、同じキャンバス、ゼロセットアップ。"
+    }
+  }
+}

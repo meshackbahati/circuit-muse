@@ -1,0 +1,132 @@
+{
+  "v2": {
+    "versionBadge": "Version 2.0",
+    "heroAccent": "Simulateur embarqué multi-plateforme",
+    "heroSubtitle": "Simulez Arduino, ESP32, Raspberry Pi Pico et Raspberry Pi 3 dans votre navigateur. 19 cartes, 68+ exemples prêts à l'emploi, simulation réaliste de capteurs. Gratuit, open-source, sans installation.",
+    "tryV2": "Essayer Velxio 2.0",
+    "joinDiscord": "Rejoindre Discord",
+    "boardsHeading": "19 cartes. 5 architectures. Un seul outil.",
+    "boardsLead": "Du 8-bit AVR au quad-core ARM Linux — Velxio 2.0 émule chaque plateforme embarquée majeure dans un seul onglet de navigateur.",
+    "multipleBoards": "Plusieurs cartes dans un même circuit",
+    "mixArchitectures": "Mélanger les architectures",
+    "mixArchitecturesBody": "Connectez un ESP32 à un Raspberry Pi 3, câblez trois Arduinos ensemble, ou combinez un Pico avec un ESP32-C3. N'importe quelle combinaison fonctionne.",
+    "realInterBoard": "Communication inter-cartes réelle",
+    "realInterBoardBody": "Les cartes communiquent via des connexions filaires — UART, I2C, SPI, ou simples signaux GPIO, comme du vrai matériel.",
+    "uniqueFeature": "Aucun autre simulateur ne fait cela",
+    "uniqueFeatureBody": "Les simulateurs traditionnels émulent une carte isolée. Velxio simule des systèmes entiers avec plusieurs cartes fonctionnant simultanément.",
+    "whatsNew": "Nouveautés de la version 2.0",
+    "whatsNewLead": "Une transformation complète en simulateur de systèmes embarqués multi-plateforme — plus de cartes, une émulation plus précise, une meilleure expérience développeur.",
+    "examplesHeading": "68+ exemples prêts à l'emploi",
+    "examplesLead": "Du simple clignotement de LED à la communication multi-cartes — des exemples pour chaque plateforme et niveau de compétence.",
+    "examples": {
+      "arduino": {
+        "title": "Arduino (17 exemples)",
+        "body": "Blink, feu de circulation, bouton, fondu, LED RGB, jeu Simon Says, écran TFT, LCD, scanner I2C, boucle SPI, et plus."
+      },
+      "pico": {
+        "title": "Raspberry Pi Pico (18 exemples)",
+        "body": "Blink, série, I2C (scanner, RTC, EEPROM), SPI, lecture ADC, DHT22, HC-SR04, servo, joystick, capteur NTC."
+      },
+      "esp32": {
+        "title": "ESP32 (9 exemples)",
+        "body": "Blink, écho série, 7 segments, DHT22, HC-SR04, MPU6050 IMU, détecteur PIR, servo, joystick."
+      },
+      "esp32c3": {
+        "title": "ESP32-C3 RISC-V (9 exemples)",
+        "body": "Blink, série, LED RGB, bouton + LED, écho série, DHT22, HC-SR04, PIR, servo."
+      },
+      "mega": {
+        "title": "Arduino Mega (5 exemples)",
+        "body": "Blink, chenillard LED, écho série, contrôle série, afficheur 7 segments."
+      },
+      "nano": {
+        "title": "Arduino Nano (4 exemples)",
+        "body": "Blink, bouton LED, fondu, écho série. Plus contrôle multi-cartes Pi vers Arduino."
+      }
+    },
+    "outcomeHeading": "Le résultat",
+    "outcomeLead": "Velxio 2.0 transforme le projet en un simulateur de systèmes embarqués multi-plateforme complet et évolutif.",
+    "outcome": {
+      "realistic": "Émulation plus réaliste",
+      "realisticBody": "Émulation Xtensa, RISC-V et ARM basée sur QEMU. AVR8 précis au cycle près via avr8js. Exécution réelle du firmware, pas d'approximations.",
+      "broader": "Support matériel élargi",
+      "broaderBody": "19 cartes sur 5 architectures CPU. Du 8-bit ATtiny85 au quad-core Raspberry Pi 3B exécutant un Linux complet.",
+      "devEx": "Meilleure expérience développeur",
+      "devExBody": "Éditeur Monaco, espace de travail multi-fichiers, gestionnaire de bibliothèques, oscilloscope, panneau de contrôle des capteurs, design responsive mobile."
+    },
+    "builtOnOss": "Construit sur l'open-source",
+    "builtOnOssLead": "Velxio est propulsé par ces projets open-source. Sans eux, rien de tout cela ne serait possible.",
+    "bottom": {
+      "title": "Essayez Velxio 2.0 maintenant",
+      "body": "Ouvrez l'éditeur et commencez à simuler — 19 cartes, 68+ exemples, zéro configuration.",
+      "cta": "Lancer le simulateur"
+    }
+  },
+  "v25": {
+    "versionBadge": "Version 2.5",
+    "heroAccent": "Arduino rencontre SPICE dans votre navigateur",
+    "heroSubtitle": "Simulation de circuits analogiques en temps réel via ngspice-WASM, câblée à Arduino, ESP32 et Raspberry Pi Pico. Résistances, condensateurs, amplificateurs opérationnels, transistors, ampèremètres et voltmètres en direct — co-simulés avec votre firmware. Gratuit, open-source, sans installation.",
+    "tryV25": "Essayer Velxio 2.5",
+    "fullEmulation": "Du numérique pur à l'émulation de circuit complet",
+    "fullEmulationLead": "Velxio 2.0 simulait parfaitement votre firmware. Velxio 2.5 simule le circuit autour — avec le même moteur ngspice utilisé par les outils EDA professionnels, fonctionnant entièrement dans votre onglet de navigateur.",
+    "notLinear": "Pas une approximation linéaire",
+    "notLinearBody": "Velxio résout l'analyse nodale modifiée complète à chaque tick. Les dispositifs non linéaires — diodes, BJT, MOSFET, amplificateurs opérationnels avec saturation — se comportent comme la réalité, pas comme des idéalisations de manuel.",
+    "realFirmware": "Vrai firmware. Vrai circuit. Même toile.",
+    "realFirmwareBody": "Les broches GPIO pilotent les nœuds SPICE comme sources de tension. Les entrées ADC lisent les tensions de nœud résolues. analogRead() retourne ce que le circuit produit réellement — pas un raccourci simulé.",
+    "browserOffline": "100% navigateur, 100% hors ligne",
+    "browserOfflineBody": "ngspice compilé en WebAssembly via le moteur open-source eecircuit-engine. Pas de serveur, pas de cloud, pas de compte. Fonctionne hors ligne après le premier chargement. Vos circuits ne quittent jamais votre machine.",
+    "catalogHeading": "100+ composants précis SPICE",
+    "catalogLead": "Un catalogue électronique complet — passifs, semi-conducteurs, logique, instruments — chacun modélisé avec de vraies cartes de dispositif ngspice, pas des substituts comportementaux.",
+    "coSimHeading": "Co-simulation hybride numérique + analogique",
+    "coSimLead": "La plupart des simulateurs de navigateur exécutent soit votre firmware, soit un circuit — jamais les deux ensemble. Velxio 2.5 les résout sur la même horloge.",
+    "driveMotor": "Piloter un moteur depuis une broche Arduino",
+    "driveMotorBody": "Broche HIGH → grille MOSFET → courant de drain à travers une charge inductive réelle → force contre-électromotrice via une diode de roue libre. Le tout résolu par SPICE. Visualisez les tensions de grille et de drain côte à côte.",
+    "readSensor": "Lire un capteur via un amplificateur opérationnel réel",
+    "readSensorBody": "Photodiode → amplificateur transimpédance → ADC. Ajustez le curseur de lux et regardez analogRead() répondre à travers l'étage d'amplification réel — saturation, slew rate, et tout.",
+    "liveInstruments": "Déboguer avec des instruments en direct",
+    "liveInstrumentsBody": "Placez un ampèremètre entre deux nœuds, un voltmètre sur n'importe quel nœud. L'oscilloscope capture les broches numériques et les nœuds analogiques ensemble. Pas de \"et si\" — juste des mesures.",
+    "examplesHeading": "40 nouveaux exemples analogiques et hybrides",
+    "examplesLead": "Circuits pré-câblés que vous pouvez ouvrir en un clic — des fondamentaux des manuels aux systèmes réalistes Arduino+analogique.",
+    "examples": {
+      "fundamentals": {
+        "title": "Fondamentaux",
+        "body": "Diviseur de tension, filtre passe-bas RC, filtre passe-haut RC, circuit LR, charge de condensateur, résonance RLC, pont de Wheatstone."
+      },
+      "diodes": {
+        "title": "Diodes et redresseurs",
+        "body": "Redresseur demi-onde, redresseur en pont double alternance, régulateur Zener, clampeur, écrêteur, doubleur de tension."
+      },
+      "opamps": {
+        "title": "Circuits à amplificateurs opérationnels",
+        "body": "Amplificateur inverseur, amplificateur non inverseur, amplificateur sommateur, amplificateur différentiel, intégrateur, différenciateur, trigger de Schmitt, comparateur."
+      },
+      "transistors": {
+        "title": "Circuits à transistors",
+        "body": "Amplificateur émetteur commun, interrupteur à transistor, paire Darlington, driver MOSFET, pont en H, miroir de courant."
+      },
+      "arduino": {
+        "title": "Arduino + analogique",
+        "body": "LED pilotée par PWM avec lissage RC, driver moteur MOSFET contrôlé par Arduino, relais opto-isolé, pipeline photodiode + amplificateur opérationnel + ADC."
+      },
+      "sensors": {
+        "title": "Capteurs",
+        "body": "Pont de thermistance NTC, luxmètre à photorésistance, transimpédance à photodiode, variateur à potentiomètre, détecteur de flamme."
+      }
+    },
+    "outcomeHeading": "Le résultat",
+    "outcomeLead": "Velxio 2.5 ferme la boucle entre firmware et matériel : le même outil qui exécute votre sketch résout maintenant le circuit autour.",
+    "outcome": {
+      "teach": "Enseigner et apprendre l'électronique",
+      "teachBody": "Un terrain de jeu SPICE gratuit dans le navigateur pour les étudiants — avec l'avantage supplémentaire de piloter un vrai firmware de microcontrôleur. Pas de licence, pas d'installation, pas de réservation de labo.",
+      "prototype": "Prototyper avant de souder",
+      "prototypeBody": "Validez les frontaux analogiques, les étages de puissance et les pipelines de capteurs de bout en bout avant de commander une seule pièce. L'oscilloscope et le multimètre sont déjà sur l'établi.",
+      "openSource": "Toujours 100% open source",
+      "openSourceBody": "AGPL-3.0 sur GitHub. Construit sur ngspice, eecircuit-engine, avr8js, rp2040js, QEMU et wokwi-elements. Forkez-le, hébergez-le, étendez-le."
+    },
+    "builtOnOssLead": "Velxio 2.5 repose sur des décennies d'outillage électronique. Un grand merci aux mainteneurs de chaque projet ci-dessous.",
+    "bottom": {
+      "title": "Essayez Velxio 2.5 maintenant",
+      "body": "Ouvrez l'éditeur et commencez à simuler — firmware et circuit analogique, même toile, zéro configuration."
+    }
+  }
+}

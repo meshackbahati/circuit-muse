@@ -1,0 +1,186 @@
+# Dependencies
+node_modules/
+*/node_modules/
+**/node_modules/
+
+# npm lock files. We deliberately do NOT commit these — they pin
+# platform-specific native binaries (Rollup, esbuild, swc) and a lock
+# generated on Windows breaks the Linux Docker build (and vice versa). The
+# Docker image always does a fresh `npm install` so reproducibility is
+# pinned by package.json's version ranges + the image tag. See npm/cli#4828.
+package-lock.json
+**/package-lock.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Third-party reference repositories (optional clones — not required to run
+# Velxio). Clone them manually when needed for offline hacking or metadata
+# generation. See CLAUDE.md "Wokwi Libraries" section for details.
+third-party/
+
+# Build outputs
+frontend/dist/
+frontend/.vite/
+backend/dist/
+
+# Local-dev junctions to a private overlay repo (e.g. velxio-prod). Created
+# by the user when running the pro stack against the OSS dev server; never
+# committed because they point at out-of-tree code that isn't part of the
+# open-source project. The OSS Vite alias falls back to a no-op stub when
+# these aren't present.
+backend/app/pro/
+frontend/src/pro/
+
+# Temporary vitest config used to run pro overlay tests locally.
+frontend/pro-vitest.config.ts
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+arduino_projects.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Package lock files (opcional, comentar si quieres commitearlos)
+# package-lock.json
+# yarn.lock
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Coverage
+coverage/
+*.coverage
+.nyc_output/
+
+# Wokwi libs build artifacts (no ignorar el código fuente, solo builds)
+third-party/*/dist/
+third-party/*/node_modules/
+third-party/*/.cache/
+
+# NO ignorar los repositorios de Wokwi
+!third-party/wokwi-elements/
+!third-party/avr8js/
+!third-party/rp2040js/
+!third-party/wokwi-features/
+.claude/settings.local.json
+.history/*
+.daveagent/*
+data/*
+.publicar/*
+.publicar_discord/*
+img/*
+
+# QEMU runtime binaries (too large for git, and Pro-gated — built/copied from
+# MSYS2/qemu-lcgamboa). These must NEVER be committed to the public OSS repo:
+# STM32 (libqemu-arm) + ESP32 emulation are paid/desktop-only features, the
+# velxio.dev/Pro image downloads them at build time behind a license key, and
+# the OSS image intentionally ships without them.
+backend/app/services/libqemu-arm.dll
+backend/app/services/libqemu-arm.dylib
+backend/app/services/libqemu-xtensa.dll
+backend/app/services/libqemu-riscv32.dll
+backend/app/services/libqemu-*.dll
+backend/app/services/libqemu-*.dylib
+backend/app/services/esp32-v3-rom.bin
+backend/app/services/esp32-v3-rom-app.bin
+backend/app/services/esp32c3-rom.bin
+
+# QEMU DLL backups / intermediate builds — local rollback points only,
+# never committed (huge, recreated by rebuilding the qemu-lcgamboa fork).
+backend/app/services/libqemu-*.dll.pre-camera
+backend/app/services/libqemu-*.dll.new
+backend/app/services/libqemu-*.dll.bak
+
+# esp32-camera repo is cloned during dev (used as include path by the
+# arduino-esp32 toolchain via ARDUINO_ESP32_PATH). Not a submodule and
+# not part of the main repo — gitignored to keep the working tree clean.
+third-party/esp32-camera/
+
+# Pre-built QEMU .so for Docker (built by build-qemu.sh — ~30MB Linux binaries)
+prebuilt/*
+!prebuilt/qemu/
+prebuilt/qemu/*
+!prebuilt/qemu/.gitkeep
+
+# ESP32 build artifacts (ELF/MAP debug symbols — large, not needed for tests)
+test/esp32-emulator/**/*.elf
+test/esp32-emulator/**/*.map
+test/esp32-emulator/out_*/
+
+# ESP32-CAM blink regression test (issue #129) — firmware compiled on the
+# fly via /api/compile/, never committed.
+test/esp32_cam/binaries/
+test/esp32_cam/out_*/
+
+# Arduino-cli compilation by-products (not needed for tests)
+**/*.ino.eep
+**/*.ino.with_bootloader.bin
+**/*.ino.with_bootloader.hex
+**/*.ino.map
+**/*.ino.uf2
+.claude/settings.json
+
+# Google Cloud service account credentials
+velxio-ba3355a41944.json
+marketing/*
+docs/github-issues/*
+
+# ESP32 E2E tests that require local QEMU DLLs (not portable to CI)
+backend/tests/debug_qemu_c3.py
+backend/tests/test_esp32c3_wifi_e2e.py
+backend/tests/test_wifi_webserver_e2e.py
+
+# Compiled binary test fixtures (large, should be built not committed)
+frontend/src/__tests__/fixtures/avr-blink/
+frontend/src/__tests__/fixtures/rp2040-blink/
+
+# Arduino compilation byproducts in test fixtures
+**/*.ino.eep
+**/*.ino.with_bootloader.bin
+**/*.ino.with_bootloader.hex
+**/*.ino.map
+**/*.ino.uf2
+.claude/*
+backups/*
+# Sidecar checksum file for data/ backups (matches a specific .tar.gz snapshot)
+MANIFEST.sha256
+*.tar.gz
+*.sqlite-backup
+
+backend/.venv/*

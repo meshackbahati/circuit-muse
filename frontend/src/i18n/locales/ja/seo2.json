@@ -1,0 +1,231 @@
+{
+  "seo": {
+    "spice": {
+      "hero": {
+        "title": "無料のSPICEシミュレーターオンライン",
+        "accent": "本物のngspice、ブラウザで",
+        "subtitle": "Velxioは、オープンソースのngspiceエンジンをWebAssemblyにコンパイルして実行します。実際のデバイスモデル、完全な修正節点解析、リアルタイム過渡シミュレーション—そして、実際のArduino / ESP32 / RP2040ファームウェアに配線できます。無料、インストール不要、アカウント不要。",
+        "ctaPrimary": "SPICEシミュレーターを開く",
+        "ctaSecondary": "Velxio 2.5リリースを見る",
+        "trust": "本物のngspice · 無料＆オープンソース · ブラウザで100%動作"
+      },
+      "why": {
+        "heading": "なぜVelxioがSPICEに最適なのか？",
+        "lead": "ブラウザSPICEは、これまでSPICEがない（線形近似器）か、アカウントが必要なホスト型ツールしかありませんでした。Velxioは、実際のエンジンをローカルで無料で実行します。",
+        "realTitle": "本物のngspice",
+        "realBody": "プロフェッショナルEDAワークフローと同じエンジンを、eecircuit-engineを介してWebAssemblyにコンパイル。簡略化されたソルバーではなく、完全なMNA、完全なデバイスライブラリ。",
+        "noServerTitle": "サーバー不要、アカウント不要",
+        "noServerBody": "ソルバーはブラウザタブ内で実行されます。回路がマシンを離れることはありません。初回ロード後はオフラインでも動作します。",
+        "coTitle": "ファームウェアとの協調シミュレーション",
+        "coBody": "Arduino / ESP32 / RP2040 / ATtiny85のGPIOがSPICEソースを駆動し、ADCが解決されたノード電圧を読み取ります。他のブラウザ内ツールでは提供されない独自の組み合わせです。"
+      },
+      "devices": {
+        "heading": "デバイスライブラリ",
+        "lead": "キャンバス上のすべてのコンポーネントは、動作の代用ではなく、実際のngspiceデバイスカードに対応しています。",
+        "passivesTitle": "パッシブ",
+        "passivesBody": "抵抗、コンデンサ（電解/セラミック/極性対応）、インダクタ、ポテンショメータ、フォトレジスタ（LDR）、フォトダイオード、NTCサーミスタ。",
+        "diodesTitle": "ダイオード",
+        "diodesBody": "1N4148、1N4007、1N5817 / 1N5819（ショットキー）、ツェナー1N4733—適切な順方向降下、逆降伏、回復特性を備えています。",
+        "bjtTitle": "BJT",
+        "bjtBody": "2N2222、2N3055（大電流NPN）、2N3906、BC547、BC557—遮断、活性領域、飽和動作を備えています。",
+        "mosfetTitle": "MOSFET",
+        "mosfetBody": "2N7000（小信号Nチャネル）、IRF540（パワーNチャネル）、IRF9540（パワーPチャネル）、FQP27P06—レベル3モデル。",
+        "opampTitle": "オペアンプ",
+        "opampBody": "LM358、LM741、TL072、LM324、理想—現実的な飽和レールにより、出力クリッピングが正しく表示されます。",
+        "regulatorsTitle": "リニアレギュレータ",
+        "regulatorsBody": "7805、7812、7905、LM317—ドロップアウト電圧付き。キャンバス上で完全な電源を構築できます。",
+        "logicTitle": "ロジックIC",
+        "logicBody": "74HCシリーズDIP-14パッケージ、基本ゲート（AND/OR/NAND/NOR/XOR/XNOR/NOT）、エッジトリガD/T/JKフリップフロップ、SRラッチ。",
+        "powerTitle": "パワーステージ部品",
+        "powerBody": "L293DデュアルHブリッジ、フォトカプラ（4N25、PC817、CTR付き）、コイルインダクタンス、ヒステリシス、フライバックダイオード付きSPDTリレー。",
+        "sourcesTitle": "ソース＆計測器",
+        "sourcesBody": "9V / AA / コイン電池（現実的なESR付き）、信号発生器（サイン/方形/DC）、オシロスコープ、電圧計、電流計。"
+      },
+      "faq": {
+        "heading": "よくある質問",
+        "q1": "これはブラウザで動作する本物のngspiceですか？",
+        "a1": "はい。Velxioは、オープンソースのeecircuit-engineを介してWebAssemblyにコンパイルされたngspiceを読み込みます。プロフェッショナルEDAワークフローを支える同じSPICEエンジンがブラウザタブで動作します—サーバー不要、インストール不要。",
+        "q2": "どのような解析を実行しますか？",
+        "a2": "リアルタイム過渡解析。ソルバーは毎ティック（約60 Hz）で修正節点解析を実行し、回路の動作に伴って波形が変化するのを確認できます。非線形デバイスは各ステップで収束するまで反復します。",
+        "q3": "どのSPICEデバイスモデルがサポートされていますか？",
+        "a3": "抵抗、コンデンサ、インダクタ、理想電圧源および電流源、ダイオード（1N4148、1N4007、1N5817、1N5819、ツェナー1N4733）、BJT（2N2222、2N3055、2N3906、BC547、BC557）、MOSFET（2N7000、IRF540、IRF9540、FQP27P06—レベル3モデル）、オペアンプ（LM358、LM741、TL072、LM324、理想）飽和レール付き、リニアレギュレータ（7805、7812、7905、LM317）、フォトカプラ（4N25、PC817）、およびインダクタンス付きリレーコイル。",
+        "q4": "生のSPICEネットリストを書けますか？",
+        "a4": "Velxioは回路図からネットリストを自動生成します—キャンバス上にコンポーネントを配線すると、シミュレーターがSPICEカードを生成します。ネットリストを手書きする必要はありませんが、基盤となるエンジンは完全なngspiceであり、標準のデバイスカードを受け入れます。",
+        "q5": "計測器は含まれていますか？",
+        "a5": "はい—マルチチャンネルオシロスコープ、電圧計、電流計、信号発生器（サイン/方形/DC、周波数、振幅、オフセット設定可能）。すべての計測器は、ライブのSPICEノード電圧とブランチ電流をプローブします。",
+        "q6": "SPICEはマイクロコントローラと通信できますか？",
+        "a6": "はい。これが独自の機能です。Arduino / ESP32 / RP2040 / ATtiny85のGPIOがSPICE電圧源を駆動し、ADC入力が解決されたノード電圧を読み取ります。1つのツールで、実際のファームウェア駆動のアナログ信号チェーンをエンドツーエンドで構築できます。"
+      },
+      "bottom": {
+        "title": "本物のSPICEを実行—インストール不要、アカウント不要",
+        "body": "エディターを開いて、数秒で実際の回路の解析を始めましょう。",
+        "cta": "SPICEシミュレーターを起動"
+      }
+    },
+    "mega": {
+      "hero": {
+        "title": "Arduino Mega 2560シミュレーター",
+        "accent": "無料オンラインAVR8エミュレーション",
+        "subtitle": "ブラウザでArduino Mega 2560スケッチをシミュレーション—完全なATmega2560エミュレーション：256 KBフラッシュ、54デジタルピン、16アナログ入力、4シリアルポート、6タイマー。無料でオープンソース。",
+        "ctaPrimary": "Mega 2560シミュレーターを開く",
+        "ctaSecondary": "例を見る",
+        "trust": "無料＆オープンソース · サインアップ不要 · 完全なATmega2560エミュレーション"
+      },
+      "specs": {
+        "heading": "Arduino Mega 2560 — 完全仕様エミュレーション",
+        "lead": "ATmega2560は、Arduinoラインナップで最も高性能なAVR8マイクロコントローラです。Velxioはその完全なペリフェラルセットをエミュレートし、Mega固有のすべての機能がシミュレーターで動作します。",
+        "flashTitle": "256 KBフラッシュ",
+        "flashBody": "Arduino Unoの8倍のプログラムストレージ。ストレージ制限なく、大規模なスケッチ、複雑なステートマシン、データ集約型アプリケーションを実行できます。",
+        "gpioTitle": "54デジタルピン",
+        "gpioBody": "PORTAからPORTLまでの完全エミュレーション。Unoと比較して40の追加I/Oピン—マルチプレクスディスプレイ、大規模ボタンマトリックス、マルチモジュールプロジェクトに最適。",
+        "adcTitle": "16アナログ入力",
+        "adcBody": "10ビットADC、16チャンネル（A0–A15）。シミュレーションで複数のセンサー、ポテンショメータ、アナログコンポーネントを同時に接続できます。",
+        "serialTitle": "4ハードウェアシリアル",
+        "serialBody": "Serial（USART0–3）すべてエミュレート。Serial1、Serial2、Serial3がシリアルモニターに表示—マルチデバイスシリアル通信プロジェクトをテストできます。",
+        "timersTitle": "6ハードウェアタイマー",
+        "timersBody": "Timer0/1/2/3/4/5。Unoと比較して3つの追加16ビットタイマー（Timer3、Timer4、Timer5）—より多くのPWM出力と正確なタイミングチャンネル。",
+        "pwmTitle": "15 PWM出力",
+        "pwmBody": "analogWrite()によるハードウェアPWM対応の15ピン。モーター制御、サーボアレイ、LED調光、オーディオ出力プロジェクトに最適。"
+      },
+      "uses": {
+        "heading": "Mega 2560の用途",
+        "lead": "Arduino Mega 2560は、複雑なメイカープロジェクトに最適なボードです。ハードウェアなしですべてをシミュレーションできます。",
+        "printerTitle": "3Dプリンターファームウェア",
+        "printerBody": "MarlinとRAMPS 1.4シールドはATmega2560上で動作します。シミュレーターでプリンター制御ロジックをプロトタイプ化およびデバッグできます。",
+        "cncTitle": "CNC＆ロボティクス",
+        "cncBody": "GRBL CNCコントローラとマルチサーボロボットアームは、Megaの追加I/Oピンとタイマーの恩恵を受けます。",
+        "ledTitle": "大規模LEDマトリックス",
+        "ledBody": "8×8または16×16 LEDマトリックスの駆動には多くのピンが必要です。Megaの54デジタル出力が最適です。",
+        "sensorTitle": "マルチセンサーシステム",
+        "sensorBody": "16のアナログ入力により、マルチプレクサなしで温度、圧力、湿度、光センサーを同時に読み取れます。"
+      },
+      "faq": {
+        "heading": "よくある質問",
+        "q1": "Arduino Mega 2560とは何ですか？",
+        "a1": "Arduino Mega 2560は、ATmega2560をベースにしたマイクロコントローラボードです。256 KBフラッシュメモリ、8 KB SRAM、54デジタルI/Oピン（15 PWM）、16アナログ入力、4ハードウェアUSARTチャンネルを備え、大規模で複雑なArduinoプロジェクトに最適なボードです。",
+        "q2": "ブラウザでArduino Mega 2560コードをシミュレーションできますか？",
+        "a2": "はい。Velxioは完全なATmega2560 AVR8エミュレーションを提供します。ボードピッカーで「Arduino Mega 2560」を選択し、スケッチを書き、コンパイルしてシミュレーション—54のデジタルピンと16のアナログ入力がすべて利用可能です。",
+        "q3": "Arduino Mega 2560エミュレーションは正確ですか？",
+        "a3": "Velxioはavr8jsを使用して、サイクル精度のAVR8命令エミュレーションを実現しています。ATmega2560はATmega328Pと同じAVR8コアを共有しますが、拡張メモリ、より多くのポート（PORTA–PORTL）、追加タイマー（Timer3、Timer4、Timer5）を備えており、すべてエミュレートされています。",
+        "q4": "MegaにはArduino Unoと比較してどのような追加機能がありますか？",
+        "a4": "Arduino Mega 2560は以下を追加：8倍のフラッシュ（256 KB vs 32 KB）、4倍のSRAM（8 KB vs 2 KB）、40の追加デジタルピン、10の追加アナログ入力、3つの追加ハードウェアシリアルポート（Serial1、Serial2、Serial3）、3つの追加16ビットタイマー（Timer3、Timer4、Timer5）。",
+        "q5": "Megaシミュレーターは複数のシリアルポートをサポートしていますか？",
+        "a5": "はい。Serial（USART0）、Serial1（USART1）、Serial2（USART2）、Serial3（USART3）はすべてエミュレートされています。それぞれがシリアルモニタータブに表示されるため、マルチシリアル通信プロジェクトを監視できます。"
+      },
+      "bottom": {
+        "title": "Arduino Megaプロジェクトをシミュレーション",
+        "body": "エディターでMega 2560ボードを選択し、シミュレーションを開始—完全なATmega2560エミュレーション、ハードウェア購入不要。",
+        "cta": "Mega 2560シミュレーターを起動"
+      }
+    },
+    "rpi": {
+      "hero": {
+        "title": "無料のRaspberry Pi 3シミュレーター",
+        "accent": "完全なLinux · Python · GPIO — ブラウザで",
+        "subtitle": "ブラウザでRaspberry Pi 3BをRaspberry Pi OSとともに直接実行—QEMUによるARM Cortex-A53クアッドコアエミュレーション。Pythonの記述、GPIO制御、パッケージのインストール。ハードウェア不要。",
+        "ctaPrimary": "Pi 3シミュレーターを開く",
+        "ctaSecondary": "ドキュメントを読む",
+        "trust": "無料＆オープンソース · QEMU ARM64 · 完全なRaspberry Pi OS",
+        "imageAlt": "Raspberry Pi 3ボードのイラスト"
+      },
+      "what": {
+        "heading": "Pi 3シミュレーターでできること",
+        "lead": "Velxioは完全なRaspberry Pi 3Bをエミュレートします—GPIOピンだけでなく、Linuxオペレーティングシステム全体。ブラウザ内の完全なコンピュータです。",
+        "pythonTitle": "Pythonスクリプトの実行",
+        "pythonBody": "Raspberry Pi OSにPython 3がプリインストール。スクリプトの実行、pipの使用、ライブラリのインポート—完全なPython環境。",
+        "gpioTitle": "GPIO制御",
+        "gpioBody": "RPi.GPIOまたはgpiozeroを使用してLEDの制御、ボタンの読み取り、モーターの駆動—QEMUでの実際のGPIOエミュレーション。",
+        "linuxTitle": "Linuxターミナル",
+        "linuxBody": "apt、nano、git、およびすべての標準Linuxツールを備えた完全なbashターミナル。パッケージのインストール、ファイルの編集、サービスの実行。",
+        "armTitle": "ARM Cortex-A53",
+        "armBody": "QEMU raspi3bマシンによる1.2 GHzクアッドコア64ビットARM CPU。公式のRaspberry Pi OSイメージを実行。",
+        "sdTitle": "SDカード不要",
+        "sdBody": "OSイメージはプリロード済み。フラッシュ不要、SDカード不要、電源不要—ブラウザを開いてすぐにコーディング開始。",
+        "multiTitle": "マルチボードキャンバス",
+        "multiBody": "同じシミュレーションキャンバス上でRaspberry Pi 3とArduino、ESP32を混在。PiからArduinoをシリアル経由で制御。"
+      },
+      "compare": {
+        "heading": "Raspberry Pi Pico vs Pi 3 — どちらを選ぶべきか",
+        "picoTitle": "Raspberry Pi Pico (RP2040)",
+        "picoBodyPrefix": "マイクロコントローラ。133 MHzのARM Cortex-M0+。Arduino C++コードを実行。OSなし、ベアメタル。組み込み、IoT、センサーに最適。",
+        "picoLink": "Picoシミュレーターを試す",
+        "pi3Title": "Raspberry Pi 3 (ARM Cortex-A53)",
+        "pi3Body": "完全なLinuxコンピュータ。1.2 GHzクアッドコア。Python、Node.js、bashを実行。自動化、サーバー、GPIOスクリプティング、教育に最適。"
+      },
+      "faq": {
+        "heading": "よくある質問",
+        "q1": "ブラウザでRaspberry Pi 3をシミュレーションできますか？",
+        "a1": "はい。VelxioはQEMU raspi3bを使用して完全なRaspberry Pi 3Bをエミュレート—1.2 GHzのARM Cortex-A53クアッドコアでRaspberry Pi OS（Linux）を実行。Python、bash、システムコマンドを実行できる実際のターミナルを提供します。",
+        "q2": "このRaspberry Piシミュレーターは無料ですか？",
+        "a2": "はい。Velxioは100%無料でオープンソース（GNU AGPLv3）です。アカウント不要、サブスクリプション不要—ブラウザでRaspberry Pi 3コードをシミュレーションするか、Dockerでセルフホスト。",
+        "q3": "Raspberry PiシミュレーターでPythonスクリプトを実行できますか？",
+        "a3": "はい。エミュレートされたRaspberry Pi 3は、Python 3がプリインストールされた完全なRaspberry Pi OSを実行します。Pythonスクリプトの実行、RPi.GPIOを使用したGPIO制御、pipパッケージのインストールなどが可能です。",
+        "q4": "Pi PicoとPi 3のシミュレーションの違いは何ですか？",
+        "a4": "Raspberry Pi Pico（RP2040）はマイクロコントローラ—Arduino C++コードを実行、OSなし。Raspberry Pi 3は完全なLinuxコンピュータ—Python、bash、システムサービスを実行。Velxioは両方をサポートしています。",
+        "q5": "Raspberry Pi 3のGPIOはサポートされていますか？",
+        "a5": "はい。QEMUエミュレートされたRaspberry Pi 3は、RPi.GPIOおよびgpiozero Pythonライブラリを介してGPIOをサポートしています。LEDの制御、ボタンの読み取り、Pythonからのセンサーとのインターフェースが可能です。"
+      },
+      "bottom": {
+        "title": "Raspberry Pi 3のシミュレーションを始めましょう",
+        "body": "エディターを開き、Raspberry Pi 3を選択してLinuxを起動—ブラウザ内で。",
+        "cta": "Pi 3シミュレーターを起動"
+      }
+    },
+    "pico": {
+      "hero": {
+        "title": "無料のRaspberry Pi Picoシミュレーター",
+        "accent": "RP2040 ARM Cortex-M0+エミュレーション",
+        "subtitle": "Raspberry Pi Pico用のArduinoコードを書き、ブラウザでシミュレーション—133 MHzの実際のRP2040 ARM Cortex-M0+エミュレーション。26 GPIOピン、I2C、SPI、UART、ADC。ハードウェア不要。",
+        "ctaPrimary": "Picoシミュレーターを開く",
+        "ctaSecondary": "Picoの例",
+        "trust": "無料＆オープンソース · rp2040jsエミュレーション · アカウント不要",
+        "imageAlt": "Raspberry Pi Picoボード"
+      },
+      "boards": {
+        "heading": "サポートされているRP2040ボード",
+        "lead": "公式のRaspberry Pi Picoボードは両方とも、rp2040jsによる完全なRP2040 CPUエミュレーションでサポートされています。",
+        "picoTitle": "Raspberry Pi Pico",
+        "picoBody": "133 MHzのRP2040デュアルコアARM Cortex-M0+。264 KB SRAM、2 MBフラッシュ。26 GPIO、3 ADC、2×SPI、2×I2C、2×UART。",
+        "picoWTitle": "Raspberry Pi Pico W",
+        "picoWBody": "同じRP2040チップに加え、WiFi 4およびBluetooth 5.2用のInfineon CYW43439。Picoとピン互換。",
+        "specsTitle": "RP2040仕様",
+        "specsBody": "133 MHzのデュアルコアCortex-M0+、264 KB SRAM、ハードウェア補間器、8 PIOステートマシン、DMAコントローラ。"
+      },
+      "examples": {
+        "heading": "Picoのサンプルプロジェクト",
+        "lead": "18以上のすぐに使えるRaspberry Pi Picoの例—LED点滅からI2C、SPI、センサー統合まで。",
+        "blinkTitle": "Pico点滅",
+        "blinkBody": "オンボードLED（GP25）をトグル。RP2040の最も簡単な出発点。",
+        "echoTitle": "Picoシリアルエコー",
+        "echoBody": "シリアルから読み取り、エコーバック。RP2040のUART通信をテスト。",
+        "i2cTitle": "Pico I2Cスキャナー",
+        "i2cBody": "I2Cバスをスキャンし、接続されたデバイスを報告。センサープロジェクトの基礎。",
+        "adcTitle": "Pico ADC読み取り",
+        "adcBody": "12ビットADCを読み取り—アナログ電圧、温度センサー、またはポテンショメータを測定。",
+        "dhtTitle": "Pico DHT22センサー",
+        "dhtBody": "DHT22から温度と湿度を読み取り。フォーマットされた読み取り値でシリアル出力。",
+        "servoTitle": "Picoサーボモーター",
+        "servoBody": "RP2040 PWMを使用してサーボを0°から180°にスイープ。設定可能な範囲でスムーズな動作。",
+        "viewAll": "すべての68以上の例を見る"
+      },
+      "faq": {
+        "heading": "よくある質問",
+        "q1": "このRaspberry Pi Picoシミュレーターは無料ですか？",
+        "a1": "はい。Velxioは完全に無料でオープンソース（GNU AGPLv3）です。ブラウザでRP2040コードをシミュレーション—Raspberry Piハードウェア不要、アカウント不要、支払い不要。",
+        "q2": "RP2040エミュレーションはどのように動作しますか？",
+        "a2": "Velxioはrp2040js（オープンソースのRP2040エミュレーター）を使用して、133 MHzのARM Cortex-M0+ CPUをシミュレーションします。コードはEarle Philhowerによる公式のArduino-Picoコアでコンパイルされます。",
+        "q3": "Raspberry Pi Pico Wはサポートされていますか？",
+        "a3": "はい。Raspberry Pi PicoとPico Wの両方がサポートされています。RP2040コアのエミュレーションは同一です—WiFi機能は将来のアップデートで計画されています。",
+        "q4": "Raspberry Pi PicoでArduinoコードを使用できますか？",
+        "a4": "はい。Velxioはarduino-picoコア（Earle Philhower製）を使用して.inoスケッチをコンパイルします。Serial、digitalWrite、analogRead、I2C/SPIなどの標準Arduino関数がそのまま動作します。",
+        "q5": "Picoシミュレーションで動作するコンポーネントは？",
+        "a5": "48以上のすべてのコンポーネント：LED、抵抗、ボタン、DHT22、HC-SR04、サーボモーター、7セグメントディスプレイ、RGB LED、NTCセンサー、ジョイスティックなど。26のGPIOピンのいずれかに配線できます。"
+      },
+      "bottom": {
+        "title": "Raspberry Pi Picoのシミュレーションを始めましょう",
+        "body": "エディターを開き、Picoボードを選択してコーディング開始—Raspberry Piハードウェア不要。",
+        "cta": "Picoシミュレーターを起動"
+      }
+    }
+  }
+}

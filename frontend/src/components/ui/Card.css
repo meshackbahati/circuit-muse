@@ -1,0 +1,33 @@
+.ui-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+}
+
+.ui-card--default {
+  background: var(--color-bg-surface-1);
+}
+
+.ui-card--elevated {
+  background: var(--color-bg-surface-2);
+  box-shadow: var(--shadow-2);
+}
+
+.ui-card--outlined {
+  background: transparent;
+  border: 1px solid var(--color-border-default);
+}
+
+.ui-card--p-sm { padding: var(--space-6); }
+.ui-card--p-md { padding: var(--space-9); }
+.ui-card--p-lg { padding: var(--space-11) var(--space-10); }
+
+.ui-card__header {
+  margin-bottom: var(--space-6);
+}
+
+.ui-card__footer {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border-default);
+}

@@ -1,0 +1,205 @@
+{
+  "seo": {
+    "customChip": {
+      "hero": {
+        "title": "Construye tus propios chips personalizados",
+        "accent": "en C, Rust o AssemblyScript",
+        "subtitle": "Define tus propios circuitos integrados con la API de Chips Personalizados compatible con Wokwi. Escribe el chip en C, Rust o AssemblyScript; Velxio lo compila a WebAssembly y lo ejecuta en el lienzo como cualquier otro componente, controlado por firmware de Arduino, ESP32 o RP2040.",
+        "ctaPrimary": "Abrir el Editor",
+        "ctaSecondary": "Leer la Documentación",
+        "trust": "API compatible con Wokwi · Gratuito y de código abierto · Impulsado por WASM, se ejecuta en tu navegador"
+      },
+      "build": {
+        "heading": "¿Qué puedes construir?",
+        "lead": "Los chips personalizados llenan los vacíos entre los componentes integrados. Si un CI real no está disponible, construye un modelo de comportamiento y tu firmware nunca notará la diferencia.",
+        "sensorTitle": "Sustitutos de sensores",
+        "sensorBody": "Simula un sensor de temperatura, presión o IMU que responda por I²C, útil cuando aún no tienes el componente pero quieres desarrollar el firmware.",
+        "bridgeTitle": "Puentes de protocolo",
+        "bridgeBody": "Construye un puente UART a I²C, un registro de desplazamiento SPI, un envoltorio digital a analógico o un traductor de nivel personalizado.",
+        "logicTitle": "Lógica personalizada",
+        "logicBody": "Lógica de pegamento, máquinas de estados, decodificadores de direcciones, antirrebotes: cualquier cosa que de otro modo cablearías con puertas discretas.",
+        "icTitle": "CI de comportamiento",
+        "icBody": "Recrea el comportamiento externo visible de un CI real (un controlador de 7 segmentos, un controlador de motor paso a paso) sin simular sus internos analógicos.",
+        "fixturesTitle": "Bancos de prueba",
+        "fixturesBody": "Inyecta señales programadas, captura transiciones de pines, valida el firmware contra el comportamiento esperado a nivel de pin.",
+        "reuseTitle": "Bibliotecas reutilizables",
+        "reuseBody": "Guarda el chip en tu cuenta, impórtalo en otros proyectos, compártelo con la comunidad."
+      },
+      "api": {
+        "heading": "Lo que te ofrece la API",
+        "lead": "El runtime de Chips Personalizados de Velxio es totalmente compatible con Wokwi, con extras para el entorno SPICE y de múltiples placas.",
+        "pinTitle": "E/S de pines",
+        "pinBody": "Lee el estado del pin, escribe alto/bajo digital, configura resistencias de pull-up, reacciona a flancos con callbacks de vigilancia de pines.",
+        "attrTitle": "Atributos",
+        "attrBody": "Lee atributos configurables por el usuario desde el panel de propiedades (valores, cadenas, números) y vuelve a leerlos al cambiar.",
+        "timersTitle": "Temporizadores",
+        "timersBody": "Programa callbacks con resolución de microsegundos. El runtime los dispara alineados con el reloj del simulador.",
+        "i2cTitle": "Bus I²C",
+        "i2cBody": "Conéctate a cualquier cable que forme parte de un bus I²C, responde a condiciones de inicio/parada, reconoce direcciones, envía/recibe bytes.",
+        "spiTitle": "Bus SPI",
+        "spiBody": "SPI bidireccional con manejo de selección de chip. Implementa un registro de desplazamiento, una memoria SPI o un sensor con un callback de flujo de bytes.",
+        "wasiTitle": "Shim WASI",
+        "wasiBody": "Un pequeño shim WASI permite que tu chip en C/Rust use llamadas de la biblioteca estándar (printf, operaciones de cadenas, matemáticas) sin un runtime pesado."
+      },
+      "faq": {
+        "heading": "Preguntas Frecuentes",
+        "q1": "¿Qué es un chip personalizado en Velxio?",
+        "a1": "Un chip personalizado es un circuito integrado definido por el usuario. Escribes la lógica del chip en C, Rust o AssemblyScript; Velxio lo compila a WebAssembly, lo instancia en el lienzo como cualquier otro componente y controla sus pines desde el simulador.",
+        "q2": "¿Qué API utiliza Velxio?",
+        "a2": "Velxio implementa la API de Chips Personalizados de Wokwi, la misma API que usa Wokwi, por lo que los chips que escribas para Velxio son portables a Wokwi y viceversa. Velxio añade un shim WASI para que puedas usar funciones de la biblioteca estándar en tu código de chip.",
+        "q3": "¿Qué puedo construir?",
+        "a3": "Modelos de comportamiento de CI reales (sensores, decodificadores, traductores de nivel, puentes de protocolo), lógica digital personalizada, sustitutos de sensores para hardware que aún no tienes y simulaciones a nivel de protocolo para probar firmware. Los chips pueden controlar pines, leer atributos, registrar temporizadores y conectarse a buses I²C/SPI.",
+        "q4": "¿Cómo comparto o reutilizo un chip?",
+        "a4": "Guarda el chip en tu cuenta de Velxio y reutilízalo en varios proyectos. La definición del chip incluye su diseño de pines, atributos y el WASM compilado; colócalo en cualquier lienzo de proyecto como un componente integrado.",
+        "q5": "¿Necesito un backend para ejecutar mi chip?",
+        "a5": "No. El WASM del chip compilado se ejecuta en la misma pestaña del navegador que el resto de la simulación. Las actualizaciones de pines, lecturas de atributos y ticks de temporizador son locales.",
+        "q6": "¿Puede mi chip personalizado comunicarse con un Arduino?",
+        "a6": "Sí, ese es el caso de uso típico. Conecta sus pines a GPIO, SPI o líneas I²C de Arduino y el firmware en el Arduino interactúa con tu chip exactamente como con un CI real."
+      },
+      "bottom": {
+        "title": "Construye tu primer chip personalizado",
+        "body": "Abre el editor y crea un chip en segundos: elige C, Rust o AssemblyScript.",
+        "cta": "Iniciar el Editor"
+      }
+    },
+    "electronics": {
+      "hero": {
+        "title": "Simulador de Electrónica Online Gratuito",
+        "accent": "Construye, cablea y prueba en tu navegador",
+        "subtitle": "Un banco de trabajo de electrónica completo: componentes analógicos precisos con SPICE, 19 microcontroladores simulados (Arduino, ESP32, RP2040, ATtiny85, Raspberry Pi 3), más de 100 componentes e instrumentos en vivo, todo en un solo lienzo. Gratuito, sin instalación, sin cuenta.",
+        "ctaPrimary": "Abrir Simulador de Electrónica",
+        "ctaSecondary": "Explorar más de 100 Ejemplos",
+        "trust": "Gratuito y de código abierto · Sin registro necesario · SPICE real + emulación real de CPU"
+      },
+      "inside": {
+        "heading": "Qué incluye",
+        "lead": "Una sola herramienta para cada capa de un proyecto de electrónica, desde la resistencia en tu protoboard hasta el firmware en tu microcontrolador.",
+        "spiceTitle": "Solucionador analógico SPICE",
+        "spiceBody": "ngspice real mediante WebAssembly. Más de 100 tarjetas de dispositivo: pasivos, BJT, MOSFET, amplificadores operacionales, reguladores, diodos, optoacopladores, relés.",
+        "mcuTitle": "19 microcontroladores",
+        "mcuBody": "Arduino Uno / Nano / Mega / ATtiny85 / Leonardo / Pro Mini, Raspberry Pi Pico (W), ESP32 / ESP32-S3 / ESP32-CAM / Nano ESP32, familia ESP32-C3, CH32V003, Raspberry Pi 3B Linux.",
+        "chipsTitle": "Chips personalizados",
+        "chipsBody": "Define tus propios CI en C, Rust o AssemblyScript mediante la API de Chips Personalizados de Wokwi: controla pines, atributos, temporizadores, I²C y SPI desde tu código.",
+        "instrumentsTitle": "Instrumentos en vivo",
+        "instrumentsBody": "Osciloscopio multicanal, voltímetro, amperímetro, generador de señales (senoidal / cuadrada / DC): colócalos en cualquier nodo y observa las formas de onda en vivo.",
+        "componentsTitle": "Más de 48 componentes visuales",
+        "componentsBody": "LEDs, LEDs RGB, displays de 7 segmentos, LCD 16×2, TFT ILI9341, tiras NeoPixel, servos, zumbadores, sensores ultrasónicos, DHT22, MPU6050, teclados.",
+        "ideTitle": "IDE Arduino integrado",
+        "ideBody": "Editor de código Monaco, espacio de trabajo multifichero, Gestor de Bibliotecas (índice completo de bibliotecas Arduino), compilador arduino-cli, Monitor Serie."
+      },
+      "audience": {
+        "heading": "Para profesores, estudiantes y aficionados",
+        "lead": "Velxio es gratuito bajo AGPLv3: sin coste de licencia, sin precio por usuario, sin cuenta en la nube. Autoalójalo con un solo comando Docker para laboratorios universitarios.",
+        "coursesTitle": "Para cursos",
+        "coursesBody": "Usa la misma herramienta desde la semana 1 (ley de Ohm, divisores de tensión) hasta proyectos con Arduino y cadenas de señal con amplificadores operacionales. Una única interfaz para todo el temario.",
+        "labsTitle": "Para laboratorios",
+        "labsBody": "Autoalójalo en un servidor del campus. Sin dependencia de Internet, sin barreras de cuenta: los estudiantes solo abren la URL.",
+        "makersTitle": "Para aficionados",
+        "makersBody": "Valida tu circuito y firmware antes de pedir componentes. El osciloscopio y el multímetro ya están en el banco."
+      },
+      "faq": {
+        "heading": "Preguntas Frecuentes",
+        "q1": "¿Es Velxio un simulador de electrónica completo?",
+        "a1": "Sí. Velxio combina un solucionador analógico preciso con SPICE, 19 microcontroladores simulados (Arduino, ESP32, RP2040, ATtiny85, Raspberry Pi 3), más de 100 componentes, un osciloscopio, voltímetro, amperímetro y generador de señales: todo lo necesario para diseñar y validar un proyecto de electrónica de principio a fin.",
+        "q2": "¿Puedo usarlo como una protoboard virtual?",
+        "a2": "Sí. Coloca componentes en el lienzo, arrastra cables entre pines y el simulador construye la lista de conexiones SPICE automáticamente. Los cables se ajustan a una rejilla; los componentes giran en incrementos de 90°; los colores de tipo de señal marcan rutas de VCC, GND, digital y analógica.",
+        "q3": "¿Necesito instalar algo?",
+        "a3": "No. Abre velxio.dev en cualquier navegador moderno y comienza. El solucionador SPICE y los emuladores AVR/RP2040 se ejecutan localmente en tu navegador; las placas Xtensa y RISC-V (ESP32, ESP32-C3, CH32V003) más Raspberry Pi 3 Linux se ejecutan mediante QEMU lcgamboa, incluido en la imagen Docker. La compilación de sketches Arduino usa el backend en la nube arduino-cli.",
+        "q4": "¿Es bueno para enseñar electrónica?",
+        "a4": "Sí, ese es uno de los objetivos de diseño. Gratuito, sin instalación, sin cuenta, sin coste de licencia. Más de 100 circuitos de ejemplo precableados cubren divisores de tensión, filtros RC, amplificadores con amplificadores operacionales, interruptores con transistores, rectificadores y proyectos completos con Arduino. Ideal para laboratorios universitarios y autoaprendizaje.",
+        "q5": "¿Es Velxio una alternativa a Tinkercad / Falstad?",
+        "a5": "Sí, y más precisa. Velxio ejecuta ngspice real (el motor que usan las herramientas EDA profesionales) y, a diferencia de esas herramientas, también ejecuta el firmware en el microcontrolador que controla el circuito. Código abierto bajo AGPLv3."
+      },
+      "bottom": {
+        "title": "Abre tu protoboard virtual",
+        "body": "Cablea tu primer circuito en segundos: sin configuración, sin instalación, sin cuenta.",
+        "cta": "Iniciar Simulador de Electrónica"
+      }
+    },
+    "arduino": {
+      "hero": {
+        "title": "Simulador de Arduino Online Gratuito",
+        "accent": "Ejecuta Sketches en tu Navegador",
+        "subtitle": "Escribe código Arduino y simúlalo al instante: emulación real AVR8 a 16 MHz con más de 48 componentes electrónicos interactivos. Sin instalación, sin nube, sin cuenta requerida.",
+        "ctaPrimary": "Abrir Simulador de Arduino",
+        "ctaSecondary": "Explorar Ejemplos",
+        "trust": "Gratuito y de código abierto · Sin registro necesario · Se ejecuta 100% en tu navegador"
+      },
+      "what": {
+        "heading": "¿Qué puedes simular?",
+        "lead": "Velxio simula programas Arduino con precisión total de CPU AVR8, incluyendo puertos GPIO, temporizadores hardware, USART, ADC, PWM, SPI e I2C. Sin aproximaciones, sin atajos.",
+        "unoTitle": "Arduino Uno y Nano",
+        "unoBody": "Simulación completa de ATmega328P a 16 MHz. Emulación de registros PORTB, PORTC, PORTD. Los 14 pines digitales y 6 analógicos.",
+        "megaTitle": "Arduino Mega 2560",
+        "megaBody": "ATmega2560 con 256 KB de flash, 54 pines digitales, 16 entradas analógicas y 4 canales USART hardware.",
+        "componentsTitle": "Más de 48 Componentes Electrónicos",
+        "componentsBody": "LEDs, resistencias, botones, zumbador, servo, sensor ultrasónico, TFT ILI9341, LCD 16×2, NeoPixel, DHT22 y más.",
+        "serialTitle": "Monitor Serie",
+        "serialBodyPrefix": "TX/RX en tiempo real con detección automática de baudios. Envía comandos y ve la salida de ",
+        "serialBodyCode": "Serial.print()",
+        "serialBodySuffix": " en vivo.",
+        "multiTitle": "Sketches Multifichero",
+        "multiBody": "Escribe archivos .ino, .h y .cpp en un editor Monaco estilo VS Code: soporte completo para proyectos Arduino multifichero.",
+        "libTitle": "Gestor de Bibliotecas",
+        "libBody": "Busca e instala cualquier biblioteca del índice completo de bibliotecas Arduino directamente desde el simulador."
+      },
+      "how": {
+        "heading": "Cómo funciona el simulador",
+        "leadPrefix": "Velxio utiliza ",
+        "leadHighlight": "avr8js",
+        "leadSuffix": ", la librería de emulación AVR8 de código abierto probada, para ejecutar tu firmware compilado byte a byte, exactamente como se ejecutaría en hardware físico.",
+        "writeTitle": "1. Escribe",
+        "writeBody": "Escribe tu sketch Arduino en el editor Monaco con resaltado de sintaxis C++ y autocompletado.",
+        "compileTitle": "2. Compila",
+        "compileBody": "Haz clic en Compilar. arduino-cli produce un archivo .hex real, la misma salida que el IDE de Arduino.",
+        "simulateTitle": "3. Simula",
+        "simulateBody": "El .hex se carga en el emulador AVR8. Tu programa se ejecuta a 16 MHz y controla los componentes visuales."
+      },
+      "faq": {
+        "heading": "Preguntas Frecuentes",
+        "q1": "¿Este simulador de Arduino es gratuito?",
+        "a1": "Sí. Velxio es completamente gratuito y de código abierto (GNU AGPLv3). Sin cuenta, sin pago, sin suscripción en la nube: ejecútalo en tu navegador o autoalójalo con un solo comando Docker.",
+        "q2": "¿El simulador de Arduino funciona sin instalar nada?",
+        "a2": "El motor de simulación se ejecuta completamente en tu navegador. Compilar código requiere el backend arduino-cli, que puedes ejecutar localmente o mediante Docker. No es necesario instalar ningún IDE.",
+        "q3": "¿Qué placas Arduino puedo simular?",
+        "a3": "Velxio soporta 19 placas: Arduino Uno (ATmega328P), Arduino Nano, Arduino Mega 2560, ATtiny85, Arduino Leonardo, Arduino Pro Mini (AVR8), además de Raspberry Pi Pico (RP2040), ESP32-C3 / XIAO ESP32-C3 / CH32V003 (RISC-V), ESP32 / ESP32-S3 / ESP32-CAM (Xtensa mediante QEMU) y Raspberry Pi 3B (Linux mediante QEMU).",
+        "q4": "¿Puedo simular LEDs, sensores y displays?",
+        "a4": "Sí. Velxio incluye más de 48 wokwi-elements interactivos: LEDs, resistencias, botones, servomotores, sensores ultrasónicos, displays TFT ILI9341, LCD, tiras NeoPixel, zumbadores, DHT22 y más.",
+        "q5": "¿Es Velxio una alternativa a Wokwi?",
+        "a5": "Sí. Velxio es una alternativa gratuita y autoalojada a Wokwi. Utiliza la misma librería de emulación avr8js y los mismos componentes visuales wokwi-elements, pero se ejecuta completamente en tu propia máquina sin dependencia de la nube."
+      },
+      "bottom": {
+        "title": "¿Listo para simular tu Arduino?",
+        "body": "Abre el editor y empieza a codificar en segundos: sin configuración, sin instalación, sin cuenta necesaria.",
+        "cta": "Iniciar Simulador de Arduino"
+      }
+    },
+    "links": {
+      "circuit": "Simulador de Circuitos",
+      "spice": "Simulador SPICE",
+      "electronics": "Simulador de Electrónica",
+      "customChip": "Simulador de Chips Personalizados",
+      "arduino": "Simulador de Arduino",
+      "arduinoEmu": "Emulador de Arduino",
+      "atmega": "Simulador de ATmega328P",
+      "mega": "Simulador de Mega 2560",
+      "attiny85": "Simulador de ATtiny85",
+      "esp32": "Simulador de ESP32",
+      "esp32s3": "Simulador de ESP32-S3",
+      "esp32c3": "Simulador de ESP32-C3",
+      "pico": "Simulador de Pico",
+      "rpiPico": "Simulador de RP2040",
+      "rpi": "Simulador de Raspberry Pi 3",
+      "v25": "Lanzamiento de Velxio 2.5",
+      "examples": "Proyectos de Ejemplo",
+      "examplesAnalog": "Ejemplos Analógicos",
+      "examplesAll": "Todos los Ejemplos",
+      "examplesPlain": "Ejemplos",
+      "exampleSketches": "Sketches de Ejemplo",
+      "esp32Docs": "Documentación de ESP32",
+      "rp2040Docs": "Documentación de RP2040",
+      "riscvDocs": "Documentación de RISC-V",
+      "pi3Docs": "Documentación de Pi 3"
+    }
+  }
+}

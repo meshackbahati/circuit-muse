@@ -1,0 +1,10 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "74HC595",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "8-bit serial-in parallel-out shift register with output latches.",
+  "pins": ["SER", "SRCLK", "RCLK", "SRCLR", "OE", "QH",
+           "Q0", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "GND", "VCC"],
+  "attributes": []
+}

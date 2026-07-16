@@ -1,0 +1,14 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Zilog Z80 CPU (programmable)",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Programmable Zilog Z80 chip — full Z80 ISA including IX/IY, EXX, JR, DJNZ, LDIR, IM 0/1/2. Add a .s/.asm/.hex/.bin file to your project, click Compile, then Run. Same chip, any Z80 program — port your ZX Spectrum demo, write a game, or run Tiny BASIC. 32 KB ROM + 16 KB RAM + 8 LEDs + 8 buttons + UART.",
+  "pins": [
+    "LED0", "LED1", "LED2", "LED3", "LED4", "LED5", "LED6", "LED7",
+    "BTN0", "BTN1", "BTN2", "BTN3", "BTN4", "BTN5", "BTN6", "BTN7",
+    "RX", "TX", "VCC", "GND"
+  ],
+  "attributes": [],
+  "programTargets": ["z80"]
+}

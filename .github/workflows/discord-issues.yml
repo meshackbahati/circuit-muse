@@ -1,0 +1,56 @@
+name: Discord — New Issue Notification
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send issue to Discord
+        uses: actions/github-script@v7
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_ISSUES }}
+        with:
+          script: |
+            const webhook = process.env.DISCORD_WEBHOOK;
+            const issue   = context.payload.issue;
+
+            const body = (issue.body || '').slice(0, 300) + ((issue.body || '').length > 300 ? '...' : '');
+            const labels = issue.labels.length
+              ? issue.labels.map(l => `\`${l.name}\``).join(', ')
+              : '*(none)*';
+
+            const payload = {
+              content: '📢 **New issue reported on Velxio!**',
+              embeds: [{
+                title: `🐛 Issue #${issue.number}: ${issue.title}`,
+                url: issue.html_url,
+                description: body || '*(no description)*',
+                color: 0xE74C3C,
+                fields: [
+                  { name: '📦 Repository', value: `[\`${context.repo.owner}/${context.repo.repo}\`](https://github.com/${context.repo.owner}/${context.repo.repo})`, inline: true },
+                  { name: '🏷️ Labels',    value: labels, inline: true }
+                ],
+                author: {
+                  name: issue.user.login,
+                  url: `https://github.com/${issue.user.login}`,
+                  icon_url: issue.user.avatar_url
+                },
+                footer: { text: 'Velxio · GitHub Issues' },
+                timestamp: issue.created_at
+              }]
+            };
+
+            const res = await fetch(webhook, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            console.log(`Discord response: ${res.status}`);
+            if (!res.ok) {
+              const text = await res.text();
+              core.setFailed(`Discord webhook failed ${res.status}: ${text}`);
+            }

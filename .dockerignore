@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# npm lock files — never include them in the build context. A host-generated
+# lock pins platform-specific Rollup/esbuild binaries and breaks the Linux
+# build inside the image.
+package-lock.json
+**/package-lock.json
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+env/
+*.egg-info/
+
+# Build outputs (will be built inside Docker)
+frontend/dist/
+frontend/.vite/
+
+# Reference-only third-party clones — Velxio resolves these from npm at
+# build time, so the Docker image doesn't need the upstream sources.
+third-party/avr8js/
+third-party/rp2040js/
+third-party/wokwi-elements/
+third-party/wokwi-boards/
+
+# QEMU source & Windows builds (only prebuilt/qemu/ .so files are needed)
+third-party/qemu-lcgamboa/
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Git
+.git/
+.gitignore
+
+# Docker files (avoid recursion)
+docker-compose.yml
+Dockerfile*
+
+# Documentation (not needed in image)
+*.md
+doc/
+LICENSE
+
+# Logs
+*.log

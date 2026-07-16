@@ -1,0 +1,22 @@
+{
+  "name": "test-intel",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1",
+  "description": "TDD harness for Intel 4004/4040/8080/8086 and Zilog Z80 emulator chips on velxio.",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:buses": "vitest run test_buses",
+    "test:8080":  "vitest run test_8080",
+    "test:z80":   "vitest run test_z80",
+    "test:4004":  "vitest run test_4004",
+    "test:4040":  "vitest run test_4040",
+    "test:8086":  "vitest run test_8086",
+    "compile:chip":  "bash scripts/compile-chip.sh",
+    "compile:all":   "bash scripts/compile-all.sh"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.9"
+  }
+}

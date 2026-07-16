@@ -1,0 +1,52 @@
+/* Typography tokens — type ramp inspired by Apple HIG.
+ *
+ * Self-hosted Inter (variable) + JetBrains Mono (variable) with system-stack
+ * fallbacks. Mac users still get SF Pro because Inter is listed first but
+ * -apple-system catches before Inter ever loads.
+ *
+ * Each --text-* token bundles size + line-height. Use `font: var(--text-body)`
+ * or split with separate properties if needed.
+ */
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter.var.woff2') format('woff2-variations'),
+       url('/fonts/Inter.var.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono.var.woff2') format('woff2-variations'),
+       url('/fonts/JetBrainsMono.var.woff2') format('woff2');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+               'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', Consolas,
+               'Liberation Mono', monospace;
+
+  /* Type ramp (size / line-height pairs in the same token) */
+  --text-caption2:   400 11px/13px var(--font-sans);
+  --text-caption1:   400 12px/16px var(--font-sans);
+  --text-footnote:   400 13px/18px var(--font-sans);
+  --text-subheadline: 400 15px/20px var(--font-sans);
+  --text-callout:    400 16px/21px var(--font-sans);
+  --text-body:       400 17px/22px var(--font-sans);
+  --text-headline:   600 17px/22px var(--font-sans);
+  --text-title3:     600 20px/25px var(--font-sans);
+  --text-title2:     600 22px/28px var(--font-sans);
+  --text-title1:     700 28px/34px var(--font-sans);
+  --text-largetitle: 700 34px/41px var(--font-sans);
+
+  /* Letter-spacing tokens for tight headlines */
+  --tracking-tight:  -0.02em;
+  --tracking-normal:  0;
+  --tracking-loose:   0.02em;
+}

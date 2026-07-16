@@ -1,0 +1,400 @@
+{
+  "editor": {
+    "toolbar": {
+      "languageMode": "Language mode",
+      "compile": {
+        "addBoard": "Add a board to compile",
+        "loading": "Loading…",
+        "loadMicropython": "Load MicroPython",
+        "compile": "Compile (Ctrl+B)"
+      },
+      "run": {
+        "addBoard": "Add a board to run",
+        "runMicropython": "Run MicroPython",
+        "run": "Run (auto-compiles if needed)"
+      },
+      "stop": "Stop",
+      "reset": "Reset",
+      "compileAll": "Compile all boards",
+      "runAll": "Run all boards",
+      "libraries": {
+        "title": "Search and install Arduino libraries",
+        "label": "Libraries"
+      },
+      "import": "Import project (.vlx Velxio or .zip Wokwi)",
+      "export": "Export the current project as a .zip file",
+      "uploadFirmware": "Upload firmware (.hex, .bin, .elf, .ihex) to bypass compilation",
+      "toggleConsole": "Toggle Output Console",
+      "libHint": {
+        "message": "Missing library? Install it from the",
+        "cta": "Library Manager",
+        "dismiss": "Dismiss"
+      },
+      "exportBom": "Export Bill of Materials (CSV — Pro)",
+      "exportScreenshot": "Export schematic as image (PNG — Pro)"
+    },
+    "fileExplorer": {
+      "workspace": "WORKSPACE",
+      "newWorkspace": "New workspace (clears boards, components, wires and files)",
+      "saveProject": "Save project (Ctrl+S)",
+      "clickToEdit": "click to edit",
+      "collapse": "Collapse",
+      "expand": "Expand",
+      "newFileInBoard": "New file in this board",
+      "unsavedChanges": "Unsaved changes",
+      "unsavedSuffix": "unsaved",
+      "emptyState": "Add a board to the canvas to start editing code.",
+      "confirmDelete": "Delete this file?",
+      "status": {
+        "running": "Running",
+        "compiled": "Compiled",
+        "idle": "Idle"
+      },
+      "contextMenu": {
+        "rename": "Rename",
+        "delete": "Delete"
+      }
+    },
+    "fileTabs": {
+      "unsavedChanges": "Unsaved changes",
+      "close": "Close",
+      "confirmClose": "Close file with unsaved changes?",
+      "closeAnyway": "Close anyway",
+      "cancel": "Cancel"
+    },
+    "loginPrompt": {
+      "title": "Sign in to save your project",
+      "body": "Create a free account to save and share your projects.",
+      "createAccount": "Create account",
+      "cancel": "Cancel"
+    },
+    "saveProject": {
+      "titleSave": "Save project",
+      "titleUpdate": "Update project",
+      "nameLabel": "Project name *",
+      "namePlaceholder": "My awesome project",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Optional",
+      "save": "Save",
+      "update": "Update",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "visibility": {
+        "public": "Public",
+        "publicHint": "Anyone with the link can view",
+        "private": "Private",
+        "privateHint": "Only you can see this"
+      },
+      "errors": {
+        "nameRequired": "Project name is required.",
+        "unreachable": "Server unreachable. Check your connection and try again.",
+        "notAuth": "Not authenticated. Please log in and try again.",
+        "failedStatus": "Save failed ({{status}})."
+      }
+    },
+    "share": {
+      "title": "Share project",
+      "public": "Public",
+      "private": "Private",
+      "publicHint": "Anyone with the link can view this project",
+      "privateHint": "Only you can see this project",
+      "makePrivate": "Make private",
+      "makePublic": "Make public",
+      "copy": "Copy",
+      "privateWarning": "This project is private. Others will see a 403 error when opening this link.",
+      "close": "Close"
+    },
+    "canvas": {
+      "status": {
+        "running": "Running",
+        "stopped": "Stopped"
+      },
+      "activeBoard": "Active board",
+      "noBoard": "No board",
+      "noBoardHint": "No board on canvas — add one with the Add button to compile and run code",
+      "undo": {
+        "label": "Undo",
+        "title": "Undo: {{description}} (Ctrl+Z)",
+        "empty": "Nothing to undo"
+      },
+      "redo": {
+        "label": "Redo",
+        "title": "Redo: {{description}} (Ctrl+Y)",
+        "empty": "Nothing to redo"
+      },
+      "toggleSerialMonitor": "Toggle Serial Monitor",
+      "serial": "Serial",
+      "toggleScope": "Toggle Oscilloscope / Logic Analyzer",
+      "scope": "Scope",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "resetView": "Reset view (click to reset)",
+      "componentCount_one": "{{count}} component",
+      "componentCount_other": "{{count}} components",
+      "addComponentTitle": "Add Component",
+      "add": "Add",
+      "dismiss": "Dismiss",
+      "removeBoard": "Remove board",
+      "wireCount_one": "{{count}} wire",
+      "wireCount_other": "{{count}} wires",
+      "removeConfirm": {
+        "boardFallback": "Board",
+        "title": "Remove {{label}}?",
+        "body": "This will remove the board from the workspace. This action cannot be undone.",
+        "bodyWithWires_one": "This will remove the board from the workspace and {{count}} connected wire. This action cannot be undone.",
+        "bodyWithWires_other": "This will remove the board from the workspace and {{count}} connected wires. This action cannot be undone.",
+        "cancel": "Cancel",
+        "remove": "Remove"
+      }
+    },
+    "componentPicker": {
+      "title": "Add Component",
+      "close": "Close",
+      "searchPlaceholder": "Search components...",
+      "clearSearch": "Clear search",
+      "allComponents": "All Components",
+      "boards": "Boards",
+      "loading": "Loading components...",
+      "noResults": "No components found",
+      "clearFilters": "Clear filters"
+    },
+    "libraryManager": {
+      "title": "LIBRARY MANAGER",
+      "searchTab": "Search",
+      "installedTab": "Installed",
+      "filterPlaceholder": "Filter your search...",
+      "searchingFor": "Searching \"{{query}}\"…",
+      "loadingLibraries": "Loading libraries…",
+      "noResults": "No libraries available",
+      "noResultsFor": "No libraries found for \"{{query}}\"",
+      "byAuthor": "by {{author}}",
+      "install": "INSTALL",
+      "installing": "Installing...",
+      "uninstall": "UNINSTALL",
+      "uninstalling": "Uninstalling...",
+      "loadingInstalled": "Loading installed libraries...",
+      "noneInstalled": "No libraries installed yet.",
+      "useSearchTab": "Use the Search tab to install libraries."
+    },
+    "installLibs": {
+      "title": "REQUIRED LIBRARIES",
+      "installingProgress": "Installing {{done}} of {{total}}…",
+      "allDone": "All libraries installed successfully",
+      "required_one": "This project requires {{count}} library. Install it to compile correctly.",
+      "required_other": "This project requires {{count}} libraries. Install them to compile correctly.",
+      "wokwiHosted": "Wokwi-hosted library",
+      "pending": "pending",
+      "installing": "installing…",
+      "installed": "installed",
+      "errorStatus": "error",
+      "close": "Close",
+      "skip": "Skip",
+      "installAll": "Install All ({{count}})",
+      "installingShort": "Installing…"
+    },
+    "shell": {
+      "code": "Code",
+      "both": "Both",
+      "circuit": "Circuit",
+      "showExplorer": "Show file explorer",
+      "hideExplorer": "Hide file explorer",
+      "viewMode": "View mode",
+      "dragResize": "Drag to resize"
+    },
+    "oscilloscope": {
+      "title": "Oscilloscope",
+      "addChannelTitle": "Add a pin channel",
+      "addChannel": "Add Channel",
+      "timeDiv": "Time/div:",
+      "pauseTitle": "Pause capture",
+      "resumeTitle": "Resume capture",
+      "pause": "Pause",
+      "run": "Run",
+      "clearTitle": "Clear all captured samples",
+      "clear": "Clear",
+      "noChannels": "No channels added.",
+      "noChannelsHint": "Click \"+ Add Channel\" to monitor a pin.",
+      "removeChannel": "Remove {{label}}"
+    },
+    "componentProps": {
+      "close": "Close",
+      "tapToConnect": "Tap a pin to connect:",
+      "tapToWire": "Tap a pin to wire:",
+      "pinRoles": "Pin Roles:",
+      "arduinoPin": "Arduino Pin:",
+      "confirmDelete": "Delete {{name}}?",
+      "confirmDeleteTitle": "Confirm delete",
+      "deleteTitle": "Delete component",
+      "rotate90": "Rotate 90°",
+      "rotate": "Rotate",
+      "delete": "Delete",
+      "cancel": "Cancel"
+    },
+    "selectionBar": {
+      "label": "Selection actions",
+      "rotate90": "Rotate 90°",
+      "rotate": "Rotate",
+      "delete": "Delete",
+      "deselect": "Deselect",
+      "changeColor": "Change color",
+      "deleteKind": {
+        "wire": "Delete wire",
+        "component": "Delete component",
+        "board": "Delete board"
+      }
+    },
+    "console": {
+      "title": "Output",
+      "errorCount_one": "{{count}} error",
+      "errorCount_other": "{{count}} errors",
+      "warningCount_one": "{{count}} warning",
+      "warningCount_other": "{{count}} warnings",
+      "filterAll": "All",
+      "filterErrors": "Errors",
+      "filterWarnings": "Warnings",
+      "auto": "Auto",
+      "clear": "Clear output",
+      "close": "Close",
+      "empty": "No compilation output yet. Click Compile to start."
+    },
+    "boardPicker": {
+      "title": "Add Board"
+    },
+    "pinPicker": {
+      "close": "Close",
+      "filterPins": "Filter pins…",
+      "noMatch": "No pins match.",
+      "rotate": "Rotate",
+      "delete": "Delete"
+    },
+    "pi": {
+      "connected": "Connected",
+      "starting": "Starting…",
+      "offline": "Offline",
+      "powerOnTitle": "Power on the Raspberry Pi",
+      "startPi": "Start Pi",
+      "connectTitle": "Connect terminal to Pi",
+      "connect": "Connect",
+      "disconnectTitle": "Disconnect terminal",
+      "disconnect": "Disconnect",
+      "terminal": "Terminal",
+      "close": "Close",
+      "offlineTitle": "Raspberry Pi 3B is powered off",
+      "offlineSubtitle": "Start the Pi to open a terminal and interact with the Linux system.",
+      "offlineNote1": "Note: The file explorer shows a staging area.",
+      "offlineNote2": "Use \"Upload to Pi\" after starting to transfer files to the running Pi.",
+      "loadingTerminal": "Loading terminal…",
+      "selectFile": "Select a file from the explorer to edit it."
+    },
+    "sensorPanel": {
+      "close": "Close"
+    },
+    "customChip": {
+      "title": "Custom Chip — {{chipName}}",
+      "tabExamples": "Examples",
+      "tabEditor": "Editor",
+      "attributes": "Attributes",
+      "compiling": "Compiling…",
+      "compile": "Compile",
+      "compiledOk": "✓ Compiled — {{kb}} KB",
+      "compileFailed": "Compile failed",
+      "cancel": "Cancel",
+      "savePlace": "Save & Place",
+      "compileFirst": "Compile first"
+    },
+    "serial": {
+      "title": "Serial Monitor",
+      "addBoard": "Add a board to start the serial monitor.",
+      "autoscroll": "Autoscroll",
+      "clearTitle": "Clear output for this board",
+      "clear": "Clear",
+      "send": "Send",
+      "iotGatewayTitle": "Click to open through IoT Gateway",
+      "openIotGateway": "Open IoT Gateway",
+      "waitingData": "Waiting for serial data...",
+      "startSim": "Start simulation to see serial output.",
+      "placeholderText": "Type message to send...",
+      "placeholderPython": "Type Python expression... (Ctrl+C to interrupt)",
+      "lineEnd": {
+        "none": "No line ending",
+        "nl": "Newline",
+        "cr": "Carriage return",
+        "both": "Both NL & CR"
+      }
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "About Velxio",
+      "subtitle": "A free, open-source embedded systems emulator — built by a single developer with a passion for hardware and open source."
+    },
+    "story": {
+      "heading": "The Story",
+      "p1": "Velxio started as a personal exploration into how microcontroller emulators work internally — CPU instructions, memory management, peripheral timing, and low-level architecture. What began as a learning project during a vacation quickly grew into something bigger.",
+      "p2": "The idea was simple: <strong>what if anyone could simulate Arduino, ESP32, and Raspberry Pi boards directly in the browser, without buying hardware, without installing toolchains, without cloud accounts?</strong>",
+      "p3": "Velxio v1 launched on Product Hunt and Hacker News, supporting Arduino Uno and Raspberry Pi Pico. The feedback from the maker and embedded community was incredible — and it pushed the project forward.",
+      "p4": "<strong>Velxio 2.0</strong> shipped with ESP32 emulation via QEMU (using the lcgamboa fork), a Raspberry Pi 3 running real Linux, RISC-V support for ESP32-C3 and CH32V003, realistic sensor simulation (DHT22, HC-SR04, WS2812B NeoPixel), and 19 boards across 5 CPU architectures — all running real compiled code.",
+      "p5": "The v2 launch hit the <strong>front page of Hacker News for over 20 hours</strong>, reaching nearly 600 GitHub stars and thousands of visitors in less than 24 hours. It's now being used by students, professors, and makers around the world."
+    },
+    "howItWorks": {
+      "heading": "How It Works",
+      "avrRp2040Body": "Cycle-accurate emulation runs entirely in your browser using avr8js and rp2040js. No backend needed for simulation.",
+      "esp32Body": "Xtensa ESP32 and ESP32-S3 run on backend QEMU (lcgamboa fork) with real flash images, GPIO, ADC, and timers.",
+      "riscvBody": "ESP32-C3 (DevKit, XIAO, SuperMini) and CH32V003 are emulated through the QEMU lcgamboa fork with libqemu-riscv32, the same backend pattern as Xtensa ESP32.",
+      "raspiBody": "Full ARM Cortex-A53 Linux via QEMU raspi3b — boots real Raspberry Pi OS and runs Python with RPi.GPIO."
+    },
+    "openSource": {
+      "heading": "Open Source Philosophy",
+      "lead": "Velxio is <strong>100% open source</strong> under the AGPLv3 license. No cloud dependency, no student accounts, no data leaving your network. Universities and bootcamps can deploy it on their own servers with a single Docker command and give every student access to a complete embedded development environment — for free.",
+      "creditsIntro": "The project builds on top of amazing open-source work from the community:",
+      "credits": {
+        "avr8js": "AVR8 CPU emulation by Wokwi",
+        "rp2040js": "RP2040 emulation by Wokwi",
+        "wokwiElements": "48+ visual electronic components by Wokwi",
+        "qemuLcgamboa": "ESP32 and Raspberry Pi QEMU emulation",
+        "arduinoCli": "Arduino compilation toolchain"
+      },
+      "inspiredBy": "Velxio was inspired by <a>Wokwi</a>, which is a fantastic tool. The goal of Velxio is to take a different path: fully open source, self-hostable, and supporting multiple heterogeneous boards in the same circuit."
+    },
+    "creator": {
+      "heading": "The Creator",
+      "role": "Application Architect @ IBM · Montevideo, Uruguay",
+      "bio1": "Application Architect with over 10 years of experience leading the development of large-scale enterprise ecosystems. Specialist in Generative AI (LLMs, RAG, LangChain), Cloud-Native architectures (OpenShift, Kubernetes), and certified Odoo ERP expert. Currently at IBM working on enterprise applications for the Uruguayan State Insurance Bank (BSE).",
+      "bio2": "Studied Computer Science Engineering at Universidad de Oriente in Cuba (2012-2017), then moved to Uruguay where he built a career spanning roles at Quanam (Odoo implementations for government institutions), and IBM (enterprise architecture for BPS and BSE).",
+      "bio3": "Programming and robotics enthusiast. Creator of other open-source projects including a <a>3D racing game running on an ESP32</a> (viral on Reddit with 40K+ views) and an iPod Classic clone for Raspberry Pi.",
+      "techStack": "Tech Stack"
+    },
+    "releases": {
+      "heading": "Recent releases",
+      "latest": "Latest",
+      "v25Tagline": "Arduino meets SPICE in your browser",
+      "v25Blurb": "Real-time analog circuit simulation via ngspice-WASM, wired to Arduino, ESP32 and Raspberry Pi Pico. 100+ SPICE-accurate components, live ammeters and voltmeters, 40 new analog/hybrid examples — co-simulated with your firmware.",
+      "v2Tagline": "Multi-board canvas, ESP32, Raspberry Pi 3",
+      "v2Blurb": "Full QEMU-driven ESP32 emulation with WiFi/BLE, Raspberry Pi 3B Linux, MicroPython support across Pico/ESP32, custom WASM chips, and a redesigned canvas with multi-board co-simulation.",
+      "readNotes": "Read the launch notes →"
+    },
+    "quote": {
+      "p1": "\"I studied Computer Science in Cuba from 2012 to 2017, and when I moved to Uruguay, the most common question was: <em>'How did you graduate as an engineer without internet, without a computer, without YouTube?'</em>",
+      "p2": "I only had 4 words for the answer: <strong>Perseverance! Perseverance! Perseverance! Perseverance!</strong>",
+      "p3": "There is no better motivation than not having a plan B.\""
+    },
+    "community": {
+      "heading": "Community & Press",
+      "stats": {
+        "githubStars": "GitHub Stars",
+        "countries": "Countries",
+        "supportedBoards": "Supported Boards",
+        "cpuArchitectures": "CPU Architectures"
+      },
+      "featuredOn": "Featured on:",
+      "press": {
+        "hackerNews": "Hacker News (Front Page)"
+      }
+    },
+    "cta": {
+      "title": "Ready to try Velxio?",
+      "subtitle": "No signup required. Runs 100% in your browser. Free and open source.",
+      "openEditor": "Open Editor"
+    }
+  }
+}

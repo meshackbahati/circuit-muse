@@ -1,0 +1,17 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Intel 4040",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Clean-room Intel 4040 (1974) — 4004 successor with 14 new opcodes, interrupts, single-step, and a bank-aware register file. Same nibble-bus protocol as the 4004.",
+  "pins": [
+    "D0", "D1", "D2", "D3",
+    "SYNC", "RESET", "TEST",
+    "CMROM0", "CMROM1",
+    "CMRAM0", "CMRAM1", "CMRAM2", "CMRAM3",
+    "CLK1", "CLK2",
+    "STP", "STPA", "INT", "INTA", "CY",
+    "VDD", "VDD1", "VDD2", "VSS"
+  ],
+  "attributes": []
+}

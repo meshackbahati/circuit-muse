@@ -1,0 +1,118 @@
+# Keeps GitHub Actions cache storage from filling up.
+#
+# Two complementary triggers:
+#
+#   1. Weekly sweep — delete every cache older than 14 days. Catches the slow
+#      drift from old branches and stale entries that nothing references.
+#   2. PR-close sweep — when a pull request is merged or closed, delete every
+#      cache scoped to that PR's branch. Most caches are short-lived per-PR
+#      buildx scopes; without this they linger for the full retention window
+#      eating quota for nothing.
+#
+# Storage quota on davidmonterocrespo24's plan is 0.5 GB. A multi-stage Docker
+# build with mode=min cache can sit around 200-400 MB so two stale PR caches
+# are enough to push us over.
+name: Actions cache cleanup
+
+on:
+  schedule:
+    # Sundays at 04:00 UTC — well outside CI peak hours.
+    - cron: '0 4 * * 0'
+  pull_request:
+    types: [closed]
+  workflow_dispatch: {}
+
+jobs:
+  weekly-sweep:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Delete caches older than 14 days
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const cutoffMs = Date.now() - 14 * 24 * 60 * 60 * 1000;
+            let page = 1;
+            let deleted = 0;
+            let kept = 0;
+            let bytesFreed = 0;
+            while (true) {
+              const { data } = await github.rest.actions.getActionsCacheList({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 100,
+                page,
+              });
+              if (!data.actions_caches.length) break;
+              for (const cache of data.actions_caches) {
+                const created = new Date(cache.created_at).getTime();
+                if (created < cutoffMs) {
+                  console.log(
+                    `delete  ${cache.id}  ${(cache.size_in_bytes / 1024 / 1024).toFixed(1)} MB  ${cache.ref}  ${cache.key}`,
+                  );
+                  await github.rest.actions.deleteActionsCacheById({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    cache_id: cache.id,
+                  });
+                  deleted += 1;
+                  bytesFreed += cache.size_in_bytes;
+                } else {
+                  kept += 1;
+                }
+              }
+              if (data.actions_caches.length < 100) break;
+              page += 1;
+            }
+            console.log(
+              `summary: deleted=${deleted} kept=${kept} freed=${(bytesFreed / 1024 / 1024).toFixed(1)} MB`,
+            );
+
+  pr-close-sweep:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Delete caches scoped to the closed PR's branch
+        uses: actions/github-script@v7
+        env:
+          PR_REF: refs/pull/${{ github.event.pull_request.number }}/merge
+          BRANCH_REF: refs/heads/${{ github.event.pull_request.head.ref }}
+        with:
+          script: |
+            const refs = [process.env.PR_REF, process.env.BRANCH_REF];
+            let deleted = 0;
+            let bytesFreed = 0;
+            for (const ref of refs) {
+              let page = 1;
+              while (true) {
+                const { data } = await github.rest.actions.getActionsCacheList({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref,
+                  per_page: 100,
+                  page,
+                });
+                if (!data.actions_caches.length) break;
+                for (const cache of data.actions_caches) {
+                  console.log(
+                    `delete  ${cache.id}  ${(cache.size_in_bytes / 1024 / 1024).toFixed(1)} MB  ${cache.ref}  ${cache.key}`,
+                  );
+                  await github.rest.actions.deleteActionsCacheById({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    cache_id: cache.id,
+                  });
+                  deleted += 1;
+                  bytesFreed += cache.size_in_bytes;
+                }
+                if (data.actions_caches.length < 100) break;
+                page += 1;
+              }
+            }
+            console.log(
+              `pr-close summary: deleted=${deleted} freed=${(bytesFreed / 1024 / 1024).toFixed(1)} MB`,
+            );

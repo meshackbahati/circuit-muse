@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Emulator Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.running {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status.stopped {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .canvas-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            background: #222;
+        }
+        .controls button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .log {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: monospace;
+            padding: 10px;
+            border-radius: 5px;
+            height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ESP32 Emulator Test (QEMU + WebAssembly)</h1>
+        <p>This test loads QEMU compiled to WebAssembly and runs a compiled ESP32 blink sketch.</p>
+        <div class="status stopped" id="status">Emulator not loaded</div>
+        <div class="controls">
+            <button onclick="loadEmulator()">Load Emulator</button>
+            <button onclick="startEmulation()" disabled id="startBtn">Start</button>
+            <button onclick="stopEmulation()" disabled id="stopBtn">Stop</button>
+            <button onclick="resetEmulation()" disabled id="resetBtn">Reset</button>
+        </div>
+        <div class="canvas-container">
+            <canvas id="simulationCanvas" width="800" height="400"></canvas>
+        </div>
+        <h3>Serial Output</h3>
+        <div class="log" id="serialLog"></div>
+        <h3>GPIO State</h3>
+        <div id="gpioState">
+            <table border="1" cellpadding="5">
+                <thead>
+                    <tr><th>Pin</th><th>Mode</th><th>State</th></tr>
+                </thead>
+                <tbody id="gpioTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="emulator.js"></script>
+</body>
+</html>

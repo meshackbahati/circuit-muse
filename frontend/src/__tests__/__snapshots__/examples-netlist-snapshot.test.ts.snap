@@ -1,0 +1,3475 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-aqi-esp 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-auto-night-light-using-ldr-esp32-plus-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-battery-monitor-with-blynk-iot 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-bluetooth-based-wireless-led-control-system 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-blynk-based-iot-relay-control-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-blynk-controlled-dc-brushless-fan 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-clap-toggle-switch-using-esp32-and-digital-sound-sensor-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-dc-motor-speed-control-web-slider 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-dht11-web-server-using-esp32-and-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-dimmer-led-using-potentiometer-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-dual-ir-entry-exit-detector-with-telegram-alerts 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-eeprom-simulation-using-micropython-on-esp32-wokwi 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-esp32-ble-led-control 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-esp32-hotspot-access-point-setup-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-esp32-ir-sensor-telegram-alert-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-esp32-oled-smart-ui-eyes-animation-time-and-weather-micropython 1`] = `
+"* Velxio circuit
+R_btn-next n4 n0 1000000000
+R_btn-sel n4 n1 1000000000
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-flask-server-based-led-control-using-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-iot-atmospheric-monitoring-system-using-esp32-wowki-and-blynk 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-iot-based-dsm-smart-metering 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-iot-environment-monitoring-with-anomaly-detection 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-iot-relay-control-web-server-raspberry-pi-pico-2w 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-iot-smart-irrigation-system 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-joystick-controlled-servo 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-joystick-direction-display-with-oled 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-micropython-watch 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-mq-135-gas-sensor-with-esp32-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-mq4-gas-leak-detection-system-using-esp32-and-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-mq7-co-gas-detection-esp32 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-ntp-synchronized-digital-clock-using-esp32-and-max7219 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-ota-update-pico2w 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-password-lock-system-using-esp32 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-pico-2-w-dht11-http-csv-logger 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-pico-w-async-led-control-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-pico-w-web-servo-controller 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-pir-motion-detector-using-raspberry-pi-pico-2w-and-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-potentiometer-visualizer 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-pulse-monitor 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-raspberry-pi-pico-2-w-thingsboard-iot 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-rgb-color-mixer-using-potentiometers-esp32-plus-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-servo-motor-control-with-raspberry-pi-pico-2-w-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-single-digit-seven-segment-display-with-raspberry-pi-pico-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-smart-home-automation-system 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-smart-indoor-security-system 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-smart-iot-gas-monitoring-system 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-stepper-motor-control-using-esp32-and-a4988-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-temperature-based-led-indicator-micropython-esp32 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-ultrasonic-led-distance-indicator-esp32-micropython 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-websocket-led-control-using-raspberry-pi-pico-w 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — 100-days (49 examples) > 100d-wi-fi-controlled-4wd-robot-car 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-bjt-common-emitter 1`] = `
+"* Velxio circuit
+V_vcc n4 0 DC 12
+V_src n3 0 SIN(0 0.05 1000)
+R_rb1 n4 n1 47000
+R_rb2 n1 0 10000
+R_rc n4 n2 4700
+R_re n0 0 1000
+C_cin n3 n1 0.000009999999999999999 IC=0
+Q_q1 n2 n1 n0 Q2N2222
+R_vm_vmR n2 0 10Meg
+.model Q2N2222 NPN(IS=1E-14 VAF=100 BF=200 IKF=0.3 XTB=1.5 BR=3 CJC=8E-12 CJE=25E-12 TR=100E-9 TF=400E-12 ITF=1 VTF=2 XTF=3 RB=10 RC=.3 RE=.2)
+* voltmeter probe: read v(n2) - v(0)
+.tran 5.000e-5 5.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-bjt-diff-pair 1`] = `
+"* Velxio circuit
+V_vcc n5 0 DC 12
+V_in1 n0 0 SIN(2.5 0.02 1000)
+V_in2 n1 0 DC 2.5
+R_rc1 n5 n3 4700
+R_rc2 n5 n4 4700
+Q_q1 n3 n0 n2 Q2N2222
+Q_q2 n4 n1 n2 Q2N2222
+R_rtail n2 0 4700
+R_vm_vmR n4 0 10Meg
+.model Q2N2222 NPN(IS=1E-14 VAF=100 BF=200 IKF=0.3 XTB=1.5 BR=3 CJC=8E-12 CJE=25E-12 TR=100E-9 TF=400E-12 ITF=1 VTF=2 XTF=3 RB=10 RC=.3 RE=.2)
+* voltmeter probe: read v(n4) - v(0)
+.tran 5.000e-5 5.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-bjt-emitter-follower 1`] = `
+"* Velxio circuit
+V_vcc n3 0 DC 12
+V_src n2 0 SIN(6 1 1000)
+R_rb n2 n1 100000
+Q_q1 n3 n1 n0 Q2N2222
+R_re n0 0 1000
+R_vm_vmR n0 0 10Meg
+.model Q2N2222 NPN(IS=1E-14 VAF=100 BF=200 IKF=0.3 XTB=1.5 BR=3 CJC=8E-12 CJE=25E-12 TR=100E-9 TF=400E-12 ITF=1 VTF=2 XTF=3 RB=10 RC=.3 RE=.2)
+* voltmeter probe: read v(n0) - v(0)
+.tran 5.000e-5 5.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-bjt-switch 1`] = `
+"* Velxio circuit
+V_vcc n3 0 DC 9
+V_src n2 0 PULSE(0 4 0 1n 1n 0.005 0.01)
+R_rb n2 n0 4700
+R_rl n3 n1 1000
+Q_q1 n1 n0 0 Q2N2222
+R_vm_vmR n1 0 10Meg
+.model Q2N2222 NPN(IS=1E-14 VAF=100 BF=200 IKF=0.3 XTB=1.5 BR=3 CJC=8E-12 CJE=25E-12 TR=100E-9 TF=400E-12 ITF=1 VTF=2 XTF=3 RB=10 RC=.3 RE=.2)
+* voltmeter probe: read v(n1) - v(0)
+.tran 5.000e-4 4.000e-2
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-bridge-rectifier 1`] = `
+"* Velxio circuit
+V_src n2 0 SIN(0 10 50)
+D_d1 n2 n0 D1N4007
+D_d2 0 n0 D1N4007
+D_d3 n1 n2 D1N4007
+D_d4 n1 0 D1N4007
+R_r1 n0 n1 2200
+R_vm_vmR n0 n1 10Meg
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+.model D1N4007 D(Is=76.9n N=1.45 Rs=0.0342 Ikf=2.34 Bv=1000 Ibv=5u)
+* voltmeter probe: read v(n0) - v(n1)
+.tran 1.000e-3 8.000e-2
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-current-mirror 1`] = `
+"* Velxio circuit
+V_vcc n3 0 DC 12
+R_rref n3 n2 10000
+Q_q1 n2 n2 0 Q2N2222
+Q_q2 n0 n2 0 Q2N2222
+R_rload n3 n1 4700
+V_am_sense n1 amm_am_mid DC 0
+R_am_shunt amm_am_mid n0 1m
+R_autopull_n0 n0 0 100Meg
+.model Q2N2222 NPN(IS=1E-14 VAF=100 BF=200 IKF=0.3 XTB=1.5 BR=3 CJC=8E-12 CJE=25E-12 TR=100E-9 TF=400E-12 ITF=1 VTF=2 XTF=3 RB=10 RC=.3 RE=.2)
+* ammeter probe: read i(v_am_sense)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-darlington 1`] = `
+"* Velxio circuit
+V_vcc n4 0 DC 12
+V_src n3 0 DC 2
+R_rb n3 n1 10000
+Q_q1 n2 n1 n0 Q2N2222
+Q_q2 n2 n0 0 Q2N2222
+R_rl n4 n2 220
+R_vm_vmR n2 0 10Meg
+R_autopull_n0 n0 0 100Meg
+.model Q2N2222 NPN(IS=1E-14 VAF=100 BF=200 IKF=0.3 XTB=1.5 BR=3 CJC=8E-12 CJE=25E-12 TR=100E-9 TF=400E-12 ITF=1 VTF=2 XTF=3 RB=10 RC=.3 RE=.2)
+* voltmeter probe: read v(n2) - v(0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-diode-clamper 1`] = `
+"* Velxio circuit
+V_src n1 0 SIN(0 5 1000)
+C_c1 n1 n0 0.000001 IC=0
+D_d1 0 n0 D1N4007
+R_rl n0 0 10000
+R_vm_vmR n0 0 10Meg
+.model D1N4007 D(Is=76.9n N=1.45 Rs=0.0342 Ikf=2.34 Bv=1000 Ibv=5u)
+* voltmeter probe: read v(n0) - v(0)
+.tran 5.000e-5 5.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-diode-clipper 1`] = `
+"* Velxio circuit
+V_src n1 0 SIN(0 5 1000)
+R_r1 n1 n0 1000
+D_d1 n0 0 D1N4007
+D_d2 0 n0 D1N4007
+R_vm_vmR n0 0 10Meg
+.model D1N4007 D(Is=76.9n N=1.45 Rs=0.0342 Ikf=2.34 Bv=1000 Ibv=5u)
+* voltmeter probe: read v(n0) - v(0)
+.tran 5.000e-5 5.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-half-wave-rectifier 1`] = `
+"* Velxio circuit
+V_src n1 0 SIN(0 8 50)
+D_d1 n1 n0 D1N4007
+R_r1 n0 0 1000
+R_vm_vmR n0 0 10Meg
+.model D1N4007 D(Is=76.9n N=1.45 Rs=0.0342 Ikf=2.34 Bv=1000 Ibv=5u)
+* voltmeter probe: read v(n0) - v(0)
+.tran 1.000e-3 8.000e-2
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-mosfet-common-source 1`] = `
+"* Velxio circuit
+V_vcc n4 0 DC 12
+V_src n3 0 SIN(0 0.1 1000)
+R_rg1 n4 n2 1000000
+R_rg2 n2 0 470000
+R_rd n4 n1 4700
+R_rs n0 0 1000
+C_cin n3 n2 0.000009999999999999999 IC=0
+M_m1 n1 n2 n0 M2N7000
+R_vm_vmR n1 0 10Meg
+.model M2N7000 VDMOS(Rg=3 Vto=1.6 Rd=0 Rs=.75 Rb=.14 Kp=.17 mtriode=1.25 Cgdmax=80p Cgdmin=12p Cgs=50p Cjo=50p Is=.04p Vds=60 Ron=2 Qg=1.5n)
+* voltmeter probe: read v(n1) - v(0)
+.tran 5.000e-5 5.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-mosfet-pmos-highside 1`] = `
+"* Velxio circuit
+V_vcc n3 0 DC 12
+V_ctrl n0 0 PULSE(0 12 0 1n 1n 0.1 0.2)
+R_rg n0 n2 1000
+M_m1 n1 n2 n3 MIRF9540
+R_rl n1 0 220
+R_vm_vmR n1 0 10Meg
+.model MIRF9540 VDMOS(pchan Rg=3 Vto=-3.5 Rd=.15 Rs=.15 Rb=.15 Kp=8 lambda=.01 mtriode=.5 Cgdmax=1.5n Cgdmin=.07n Cgs=1n Cjo=1n Is=38p Vds=-200 Ron=.5 Qg=44n)
+* voltmeter probe: read v(n1) - v(0)
+.tran 1.000e-2 4.000e-1
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-mosfet-switch 1`] = `
+"* Velxio circuit
+V_vcc n3 0 DC 12
+V_src n2 0 PULSE(0 4 0 1n 1n 0.005 0.01)
+R_rg n2 n0 100
+R_rl n3 n1 470
+M_m1 n1 n0 0 M2N7000
+R_rgp n0 0 100000
+R_vm_vmR n1 0 10Meg
+.model M2N7000 VDMOS(Rg=3 Vto=1.6 Rd=0 Rs=.75 Rb=.14 Kp=.17 mtriode=1.25 Cgdmax=80p Cgdmin=12p Cgs=50p Cjo=50p Is=.04p Vds=60 Ron=2 Qg=1.5n)
+* voltmeter probe: read v(n1) - v(0)
+.tran 5.000e-4 4.000e-2
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-opamp-comparator 1`] = `
+"* Velxio circuit
+V_src n0 0 SIN(2.5 2.5 100)
+V_vref n2 0 DC 2.5
+X_u1 n0 n2 vcc_rail 0 n1 LM358
+R_rl n1 0 10000
+R_vm_vmR n1 0 10Meg
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+* voltmeter probe: read v(n1) - v(0)
+.tran 5.000e-4 4.000e-2
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-opamp-follower 1`] = `
+"* Velxio circuit
+V_src n0 0 SIN(2.5 1 200)
+X_u1 n0 n1 vcc_rail 0 n1 LM358
+R_rl n1 0 1000
+R_vm_vmR n1 0 10Meg
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+* voltmeter probe: read v(n1) - v(0)
+.tran 2.500e-4 2.000e-2
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-opamp-integrator 1`] = `
+"* Velxio circuit
+V_src n2 0 PULSE(1.5 3.5 0 1n 1n 0.0025 0.005)
+R_rin n2 n1 10000
+C_cf n1 n0 1.0000000000000001e-7 IC=0
+X_u1 n3 n1 vcc_rail 0 n0 LM358
+V_vref n3 0 DC 2.5
+R_vm_vmR n0 0 10Meg
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+* voltmeter probe: read v(n0) - v(0)
+.tran 2.500e-4 2.000e-2
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-opamp-inverting 1`] = `
+"* Velxio circuit
+V_src n2 0 SIN(2.5 0.2 500)
+R_rin n2 n1 1000
+R_rf n1 n0 10000
+X_u1 n3 n1 vcc_rail 0 n0 LM358
+V_vref n3 0 DC 2.5
+R_vm_vmR n0 0 10Meg
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+* voltmeter probe: read v(n0) - v(0)
+.tran 1.000e-4 8.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-opamp-non-inverting 1`] = `
+"* Velxio circuit
+V_src n1 0 SIN(2.5 0.1 500)
+X_u1 n1 n0 vcc_rail 0 n2 LM358
+R_rf n2 n0 10000
+R_rg n0 0 1000
+R_vm_vmR n2 0 10Meg
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+* voltmeter probe: read v(n2) - v(0)
+.tran 1.000e-4 8.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-opamp-summing 1`] = `
+"* Velxio circuit
+V_v1 n2 0 DC 1
+V_v2 n3 0 DC 2
+R_r1 n2 n0 10000
+R_r2 n3 n0 10000
+R_rf n0 n1 10000
+X_u1 n4 n0 vcc_rail 0 n1 LM358
+V_vref n4 0 DC 2.5
+R_vm_vmR n1 0 10Meg
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+* voltmeter probe: read v(n1) - v(0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-parallel-resistors 1`] = `
+"* Velxio circuit
+V_src n1 0 DC 5
+R_r1 n1 n0 1000
+R_r2 n1 n0 1000
+R_r3 n1 n0 1000
+V_am_sense n0 amm_am_mid DC 0
+R_am_shunt amm_am_mid 0 1m
+* ammeter probe: read i(v_am_sense)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-rc-high-pass 1`] = `
+"* Velxio circuit
+V_src n1 0 SIN(0 1 1000)
+C_c1 n1 n0 1.0000000000000001e-7 IC=0
+R_r1 n0 0 1600
+R_vm_vmR n0 0 10Meg
+* voltmeter probe: read v(n0) - v(0)
+.tran 5.000e-5 5.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-rc-low-pass 1`] = `
+"* Velxio circuit
+V_src n1 0 SIN(0 1 1000)
+R_r1 n1 n0 1600
+C_c1 n0 0 1.0000000000000001e-7 IC=0
+R_vm_vmR n0 0 10Meg
+* voltmeter probe: read v(n0) - v(0)
+.tran 5.000e-5 5.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-rl-low-pass 1`] = `
+"* Velxio circuit
+V_src n1 0 SIN(0 1 5000)
+L_l1 n1 n0 0.01
+R_r1 n0 0 1000
+R_vm_vmR n0 0 10Meg
+* voltmeter probe: read v(n0) - v(0)
+.tran 1.000e-5 5.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-rlc-series-resonance 1`] = `
+"* Velxio circuit
+V_src n2 0 SIN(0 1 5000)
+R_r1 n2 n1 10
+L_l1 n1 n0 0.001
+C_c1 n0 0 0.000001 IC=0
+R_vm_vmR n0 0 10Meg
+* voltmeter probe: read v(n0) - v(0)
+.tran 1.000e-5 5.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-schmitt-trigger 1`] = `
+"* Velxio circuit
+V_src n1 0 SIN(2.5 2.5 100)
+V_vref n3 0 DC 2.5
+R_r1 n1 n0 10000
+X_u1 n0 n3 vcc_rail 0 n2 LM358
+R_r2 n2 n0 10000
+R_vm_vmR n2 0 10Meg
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+* voltmeter probe: read v(n2) - v(0)
+.tran 5.000e-4 4.000e-2
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-series-resistors 1`] = `
+"* Velxio circuit
+V_src n3 0 DC 10
+R_r1 n3 n0 1000
+R_r2 n0 n1 2200
+R_r3 n1 n2 4700
+V_am_sense n2 amm_am_mid DC 0
+R_am_shunt amm_am_mid 0 1m
+* ammeter probe: read i(v_am_sense)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-smoothed-rectifier 1`] = `
+"* Velxio circuit
+V_src n1 0 SIN(0 10 50)
+D_d1 n1 n0 D1N4007
+C_c1 n0 0 0.00009999999999999999 IC=0
+R_r1 n0 0 1000
+R_vm_vmR n0 0 10Meg
+.model D1N4007 D(Is=76.9n N=1.45 Rs=0.0342 Ikf=2.34 Bv=1000 Ibv=5u)
+* voltmeter probe: read v(n0) - v(0)
+.tran 1.000e-3 8.000e-2
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-voltage-divider 1`] = `
+"* Velxio circuit
+V_src n1 0 DC 5
+R_r1 n1 n0 10000
+R_r2 n0 0 10000
+R_vm_vmR n0 0 10Meg
+* voltmeter probe: read v(n0) - v(0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-voltage-doubler 1`] = `
+"* Velxio circuit
+V_src n2 0 SIN(0 8 50)
+C_c1 n2 n0 0.000009999999999999999 IC=0
+D_d1 0 n0 D1N4007
+D_d2 n0 n1 D1N4007
+C_c2 n1 0 0.00009999999999999999 IC=0
+R_rl n1 0 10000
+R_vm_vmR n1 0 10Meg
+R_autopull_n0 n0 0 100Meg
+.model D1N4007 D(Is=76.9n N=1.45 Rs=0.0342 Ikf=2.34 Bv=1000 Ibv=5u)
+* voltmeter probe: read v(n1) - v(0)
+.tran 1.000e-3 8.000e-2
+.end"
+`;
+
+exports[`netlist snapshot — analog (30 examples) > an-zener-regulator 1`] = `
+"* Velxio circuit
+V_src n1 0 DC 12
+R_r1 n1 n0 220
+D_d1 0 n0 D1N4733
+R_rl n0 0 2200
+R_vm_vmR n0 0 10Meg
+.model D1N4733 D(Is=1n N=1 Rs=5 Bv=5.1 Ibv=50m)
+* voltmeter probe: read v(n0) - v(0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > and-gate-alarm 1`] = `
+"* Velxio circuit
+V_src n1 0 DC 5
+R_sw1 n1 n2 1000000000
+R_sw2 n1 n3 1000000000
+R_rpd1 n2 0 10000
+R_rpd2 n3 0 10000
+B_u1 n4 0 V = 5 * u(V(n2)-2.5) * u(V(n3)-2.5)
+R_u1_load n4 0 1Meg
+R_rl n4 n0 220
+V_led1_sense n0 led1_sense_mid DC 0
+D_led1 led1_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > battery-voltage-monitor 1`] = `
+"* Velxio circuit
+R_r2 n0 n1 10000
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > binary-counter-leds 1`] = `
+"* Velxio circuit
+R_r0 n0 n5 220
+R_r1 n1 n6 220
+R_r2 n2 n7 220
+R_r3 n3 n8 220
+V_led0_sense n5 led0_sense_mid DC 0
+D_led0 led0_sense_mid n4 LED_RED
+V_led1_sense n6 led1_sense_mid DC 0
+D_led1 led1_sense_mid n4 LED_YELLOW
+V_led2_sense n7 led2_sense_mid DC 0
+D_led2 led2_sense_mid n4 LED_GREEN
+V_led3_sense n8 led3_sense_mid DC 0
+D_led3 led3_sense_mid n4 LED_BLUE
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+R_autopull_n6 n6 0 100Meg
+R_autopull_n7 n7 0 100Meg
+R_autopull_n8 n8 0 100Meg
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > bjt-common-emitter 1`] = `
+"* Velxio circuit
+R_rb1 n0 n2 47000
+R_rb2 n2 0 10000
+R_rc n0 n3 4700
+R_re n1 0 1000
+Q_q1 n3 n2 n1 Q2N2222
+V_sg1 n4 0 SIN(0 0.05 1000)
+R_rin n4 n2 10000
+.model Q2N2222 NPN(IS=1E-14 VAF=100 BF=200 IKF=0.3 XTB=1.5 BR=3 CJC=8E-12 CJE=25E-12 TR=100E-9 TF=400E-12 ITF=1 VTF=2 XTF=3 RB=10 RC=.3 RE=.2)
+.tran 5.000e-5 5.000e-3
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > capacitor-charge-curve 1`] = `
+"* Velxio circuit
+R_r1 n0 n2 10000
+C_c1 n2 n1 0.00009999999999999999 IC=0
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > darlington-high-current 1`] = `
+"* Velxio circuit
+R_rb n1 n5 10000
+R_rl n0 n6 220
+V_led1_sense n6 led1_sense_mid DC 0
+D_led1 led1_sense_mid n2 LED_RED
+Q_q1 n2 n5 n3 Q2N2222
+Q_q2 n2 n3 n4 Q2N2222
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+R_autopull_n6 n6 0 100Meg
+.model LED_RED D(Is=1e-20 N=1.7)
+.model Q2N2222 NPN(IS=1E-14 VAF=100 BF=200 IKF=0.3 XTB=1.5 BR=3 CJC=8E-12 CJE=25E-12 TR=100E-9 TF=400E-12 ITF=1 VTF=2 XTF=3 RB=10 RC=.3 RE=.2)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > diode-rectifier 1`] = `
+"* Velxio circuit
+V_sg1 n1 0 SIN(0 5 50)
+D_d1 n1 n0 D1N4007
+R_rl n0 0 1000
+.model D1N4007 D(Is=76.9n N=1.45 Rs=0.0342 Ikf=2.34 Bv=1000 Ibv=5u)
+.tran 1.000e-3 8.000e-2
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > esp32-dual-adc 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_pot1_top vcc_rail n0 10000
+R_pot1_bot n0 0 1
+R_pot2_top vcc_rail n1 10000
+R_pot2_bot n1 0 1
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > esp32-pwm-led-rgb 1`] = `
+"* Velxio circuit
+R_rr n0 n6 220
+R_rg n1 n4 220
+R_rb n2 n3 220
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+R_autopull_n6 n6 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > full-adder 1`] = `
+"* Velxio circuit
+R_bA n0 n5 1000000000
+R_bB n1 n5 1000000000
+R_bCin n2 n5 1000000000
+R_rSum n3 n7 220
+R_rCout n4 n6 220
+V_sumLed_sense n7 sumLed_sense_mid DC 0
+D_sumLed sumLed_sense_mid n5 LED_GREEN
+V_coutLed_sense n6 coutLed_sense_mid DC 0
+D_coutLed coutLed_sense_mid n5 LED_RED
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+R_autopull_n6 n6 0 100Meg
+R_autopull_n7 n7 0 100Meg
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > l293d-motor-control 1`] = `
+"* Velxio circuit
+B_u1_ch1a n4 0 V = u(V(n3)-2.5) * u(V(n1)-2.5) * V(n0)
+R_u1_ch1a_load n4 0 10Meg
+B_u1_ch1b n5 0 V = u(V(n3)-2.5) * u(V(n2)-2.5) * V(n0)
+R_u1_ch1b_load n5 0 10Meg
+R_rm n4 n5 5
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > l293d-speed-pwm 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_pot_top vcc_rail n3 10000
+R_pot_bot n3 0 1
+B_u1_ch1a n4 0 V = u(V(n2)-2.5) * u(V(n0)-2.5) * V(vcc_rail)
+R_u1_ch1a_load n4 0 10Meg
+B_u1_ch1b n5 0 V = u(V(n2)-2.5) * u(V(n1)-2.5) * V(vcc_rail)
+R_u1_ch1b_load n5 0 10Meg
+R_rm n4 n5 5
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > led-current-limiting 1`] = `
+"* Velxio circuit
+R_r1 n0 n2 330
+V_led1_sense n2 led1_sense_mid DC 0
+D_led1 led1_sense_mid n1 LED_RED
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > lm317-adjustable-psu 1`] = `
+"* Velxio circuit
+V_bat n0 bat_int DC 9
+R_bat_esr bat_int n1 1.5
+B_u1 n3 0 V = V(n2) + min(V(n0)-V(n2)-2, 1.25)
+R_u1_out n3 0 10Meg
+R_r1 n3 n2 240
+R_r2 n2 n1 720
+R_rload n3 n1 1000
+R_autopull_n0 n0 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > logic-probe 1`] = `
+"* Velxio circuit
+V_gLed_sense n3 gLed_sense_mid DC 0
+D_gLed gLed_sense_mid n2 LED_GREEN
+V_rLed_sense n4 rLed_sense_mid DC 0
+D_rLed rLed_sense_mid n2 LED_RED
+R_rg n1 n3 220
+R_rr n0 n4 220
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > mega-multi-led 1`] = `
+"* Velxio circuit
+V_led0_sense n9 led0_sense_mid DC 0
+D_led0 led0_sense_mid n8 LED_RED
+V_led1_sense n10 led1_sense_mid DC 0
+D_led1 led1_sense_mid n8 LED_RED
+V_led2_sense n11 led2_sense_mid DC 0
+D_led2 led2_sense_mid n8 LED_RED
+V_led3_sense n12 led3_sense_mid DC 0
+D_led3 led3_sense_mid n8 LED_RED
+V_led4_sense n13 led4_sense_mid DC 0
+D_led4 led4_sense_mid n8 LED_RED
+V_led5_sense n14 led5_sense_mid DC 0
+D_led5 led5_sense_mid n8 LED_RED
+V_led6_sense n15 led6_sense_mid DC 0
+D_led6 led6_sense_mid n8 LED_RED
+V_led7_sense n16 led7_sense_mid DC 0
+D_led7 led7_sense_mid n8 LED_RED
+R_r0 n0 n9 220
+R_r1 n1 n10 220
+R_r2 n2 n11 220
+R_r3 n3 n12 220
+R_r4 n4 n13 220
+R_r5 n5 n14 220
+R_r6 n6 n15 220
+R_r7 n7 n16 220
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+R_autopull_n6 n6 0 100Meg
+R_autopull_n7 n7 0 100Meg
+R_autopull_n8 n8 0 100Meg
+R_autopull_n9 n9 0 100Meg
+R_autopull_n10 n10 0 100Meg
+R_autopull_n11 n11 0 100Meg
+R_autopull_n12 n12 0 100Meg
+R_autopull_n13 n13 0 100Meg
+R_autopull_n14 n14 0 100Meg
+R_autopull_n15 n15 0 100Meg
+R_autopull_n16 n16 0 100Meg
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > mixed-and-transistor-driver 1`] = `
+"* Velxio circuit
+B_u1 n7 0 V = 5 * u(V(n0)-2.5) * u(V(n2)-2.5)
+R_u1_load n7 0 1Meg
+R_rb n7 n5 1000
+Q_q1 n3 n5 n4 Q2N2222
+R_rl n1 n6 220
+V_motor_sense n6 motor_sense_mid DC 0
+D_motor motor_sense_mid n3 LED_GREEN
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n6 n6 0 100Meg
+.model Q2N2222 NPN(IS=1E-14 VAF=100 BF=200 IKF=0.3 XTB=1.5 BR=3 CJC=8E-12 CJE=25E-12 TR=100E-9 TF=400E-12 ITF=1 VTF=2 XTF=3 RB=10 RC=.3 RE=.2)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > mosfet-pwm-led 1`] = `
+"* Velxio circuit
+R_rl n0 n4 220
+V_led1_sense n4 led1_sense_mid DC 0
+D_led1 led1_sense_mid n2 LED_WHITE
+M_q1 n2 n1 n3 M2N7000
+R_rg n1 n3 100000
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+.model LED_WHITE D(Is=1e-28 N=2.0)
+.model M2N7000 VDMOS(Rg=3 Vto=1.6 Rd=0 Rs=.75 Rb=.14 Kp=.17 mtriode=1.25 Cgdmax=80p Cgdmin=12p Cgs=50p Cjo=50p Is=.04p Vds=60 Ron=2 Qg=1.5n)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > multi-led-bar 1`] = `
+"* Velxio circuit
+R_r0 n0 n6 220
+R_r1 n1 n7 220
+R_r2 n2 n8 220
+R_r3 n3 n9 220
+R_r4 n4 n10 220
+V_led0_sense n6 led0_sense_mid DC 0
+D_led0 led0_sense_mid n5 LED_RED
+V_led1_sense n7 led1_sense_mid DC 0
+D_led1 led1_sense_mid n5 LED_YELLOW
+V_led2_sense n8 led2_sense_mid DC 0
+D_led2 led2_sense_mid n5 LED_GREEN
+V_led3_sense n9 led3_sense_mid DC 0
+D_led3 led3_sense_mid n5 LED_BLUE
+V_led4_sense n10 led4_sense_mid DC 0
+D_led4 led4_sense_mid n5 LED_WHITE
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+R_autopull_n6 n6 0 100Meg
+R_autopull_n7 n7 0 100Meg
+R_autopull_n8 n8 0 100Meg
+R_autopull_n9 n9 0 100Meg
+R_autopull_n10 n10 0 100Meg
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.model LED_WHITE D(Is=1e-28 N=2.0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > nand-sr-latch 1`] = `
+"* Velxio circuit
+R_setBtn n5 n6 1000000000
+R_rstBtn n4 n6 1000000000
+R_rpuS n0 n5 10000
+R_rpuR n0 n4 10000
+B_g1 n1 0 V = 5 * (1 - u(V(n5)-2.5) * u(V(n2)-2.5))
+R_g1_load n1 0 1Meg
+B_g2 n2 0 V = 5 * (1 - u(V(n4)-2.5) * u(V(n1)-2.5))
+R_g2_load n2 0 1Meg
+R_rl n1 n3 220
+V_qled_sense n3 qled_sense_mid DC 0
+D_qled qled_sense_mid n6 LED_GREEN
+R_autopull_n0 n0 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+R_autopull_n6 n6 0 100Meg
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > nano-sensor-station 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_ntc_ntc vcc_rail n1 11441.484668193882
+R_ntc_pull n1 0 10000
+R_ldr_ldr vcc_rail n0 400000
+R_ldr_pull n0 0 10000
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > npn-led-switch 1`] = `
+"* Velxio circuit
+R_rb n1 n4 1000
+R_rc n0 n5 220
+V_led1_sense n5 led1_sense_mid DC 0
+D_led1 led1_sense_mid n2 LED_GREEN
+Q_q1 n2 n4 n3 Q2N2222
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model Q2N2222 NPN(IS=1E-14 VAF=100 BF=200 IKF=0.3 XTB=1.5 BR=3 CJC=8E-12 CJE=25E-12 TR=100E-9 TF=400E-12 ITF=1 VTF=2 XTF=3 RB=10 RC=.3 RE=.2)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > ntc-temperature 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_ntc_ntc vcc_rail n0 10000
+R_ntc_pull n0 0 10000
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > opamp-comparator 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_pot_top vcc_rail n0 10000
+R_pot_bot n0 0 1
+R_rref1 vcc_rail n2 10000
+R_rref2 n2 0 10000
+X_u1 n0 n2 vcc_rail 0 n3 LM358
+R_rl n3 n1 220
+V_led1_sense n1 led1_sense_mid DC 0
+D_led1 led1_sense_mid 0 LED_GREEN
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > opamp-difference 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_r1 n0 n2 10000
+R_rf n4 n2 100000
+R_r2 n1 n3 10000
+R_rg n3 0 100000
+X_u1 n3 n2 vcc_rail 0 n4 LM358
+R_pot1_top vcc_rail n0 10000
+R_pot1_bot n0 0 1
+R_pot2_top vcc_rail n1 10000
+R_pot2_bot n1 0 1
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > opamp-inverting 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_pot_top vcc_rail n0 10000
+R_pot_bot n0 0 1
+R_rin n0 n2 1000
+R_rf n3 n2 10000
+R_rbp1 vcc_rail n1 10000
+R_rbp2 n1 0 10000
+X_u1 n1 n2 vcc_rail 0 n3 LM358
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > opamp-schmitt-trigger 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_pot_top vcc_rail n0 10000
+R_pot_bot n0 0 1
+R_rref1 vcc_rail n2 10000
+R_rref2 n2 0 10000
+R_rin n2 n1 10000
+R_rfb n3 n1 100000
+X_u1 n1 n0 vcc_rail 0 n3 LM358
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > opamp-voltage-follower 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_pot_top vcc_rail n0 10000
+R_pot_bot n0 0 1
+X_u1 n0 n1 vcc_rail 0 n1 LM358
+.SUBCKT LM358 1 2 99 50 28
+IOS 2 1 5N
+R1 1 3 500K
+R2 3 2 500K
+I1 99 4 100U
+R3 5 50 517
+R4 6 50 517
+Q1 5 2 4 QX_LM358
+Q2 6 7 4 QX_LM358
+C4 5 6 128.27P
+I2 99 50 75U
+EOS 7 1 POLY(1) 16 49 2E-3 1
+R8 99 49 60K
+R9 49 50 60K
+V2 99 8 1.63
+D1 9 8 DX_LM358
+D2 10 9 DX_LM358
+V3 10 50 .635
+EH 99 98 99 49 1
+G1 98 9 POLY(1) 5 6 0 9.8772E-4 0 .3459
+R5 98 9 101.2433MEG
+C3 98 9 200P
+G3 98 15 9 49 1E-6
+R12 98 15 1MEG
+C5 98 15 7.9577E-14
+G4 98 16 3 49 5.6234E-8
+L2 98 17 15.9M
+R13 17 16 1K
+F6 50 99 POLY(1) V6 300U 1
+E1 99 23 99 15 1
+R16 24 23 17.5
+D5 26 24 DX_LM358
+V6 26 22 .63V
+R17 23 25 17.5
+D6 25 27 DX_LM358
+V7 22 27 .63V
+V5 22 21 0.27V
+D4 21 15 DX_LM358
+V4 20 22 0.27V
+D3 15 20 DX_LM358
+L3 22 28 500P
+RL3 22 28 100K
+.MODEL DX_LM358 D(IS=1E-15)
+.MODEL QX_LM358 PNP(BF=1.111E3)
+.ENDS LM358
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > optocoupler-signal 1`] = `
+"* Velxio circuit
+R_rled n1 n2 270
+D_u1_led n2 u1_mid DLED_OPTO
+V_u1_sense u1_mid n4 DC 0
+F_u1_pt n3 n4 V_u1_sense 0.5
+R_u1_leak n3 n4 100Meg
+R_rpull n0 n3 10000
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+.model DLED_OPTO D(Is=1e-14 N=2 Rs=5)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > parallel-resistors 1`] = `
+"* Velxio circuit
+R_rs n0 n2 10000
+R_r1 n2 n1 10000
+R_r2 n2 n1 10000
+R_r3 n2 n1 10000
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > photoresistor-light 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_ldr_ldr vcc_rail n0 285714.28571428574
+R_ldr_pull n0 0 10000
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > pnp-high-side-switch 1`] = `
+"* Velxio circuit
+R_rb n0 n4 1000
+R_rl n2 n5 220
+V_led1_sense n5 led1_sense_mid DC 0
+D_led1 led1_sense_mid n1 LED_RED
+Q_q1 n2 n4 n3 Q2N3906
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+.model LED_RED D(Is=1e-20 N=1.7)
+.model Q2N3906 PNP(IS=1E-14 VAF=100 BF=200 IKF=0.4 XTB=1.5 BR=4 CJC=4.5E-12 CJE=10E-12 RB=20 RC=0.1 RE=0.1 TR=250E-9 TF=350E-12 ITF=1 VTF=2 XTF=3)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > pot-adc-reader 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_pot_top vcc_rail n0 10000
+R_pot_bot n0 0 1
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > power-supply-7805 1`] = `
+"* Velxio circuit
+V_bat n0 bat_int DC 9
+R_bat_esr bat_int 0 1.5
+B_u1 n1 0 V = min(V(n0)-V(0)-2, 5)
+R_u1_out n1 0 10Meg
+R_rload n1 0 1000
+R_autopull_n0 n0 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > rc-low-pass-filter 1`] = `
+"* Velxio circuit
+R_r1 n0 n2 10000
+C_c1 n2 n1 0.000009999999999999999 IC=0
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > relay-led-switch 1`] = `
+"* Velxio circuit
+R_rb n1 n3 1000
+Q_q1 n5 n3 n2 Q2N2222
+R_rly_coil n0 rly_coilmid 70
+L_rly_coil rly_coilmid n5 20m
+S_rly_no n6 n0 n0 n5 RELAY_SW
+D_rly_fly n5 n0 D1N4148
+R_rl n6 n4 220
+V_led1_sense n4 led1_sense_mid DC 0
+D_led1 led1_sense_mid n2 LED_RED
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+R_autopull_n6 n6 0 100Meg
+.model Q2N2222 NPN(IS=1E-14 VAF=100 BF=200 IKF=0.3 XTB=1.5 BR=3 CJC=8E-12 CJE=25E-12 TR=100E-9 TF=400E-12 ITF=1 VTF=2 XTF=3 RB=10 RC=.3 RE=.2)
+.model RELAY_SW SW(Vt=3 Vh=0.75 Ron=0.05 Roff=1G)
+.model D1N4148 D(Is=2.52n Rs=.568 N=1.752 Cjo=4p M=.4 tt=20n Bv=100 Ibv=0.1u)
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > schottky-reverse-protection 1`] = `
+"* Velxio circuit
+V_bat n0 bat_int DC 9
+R_bat_esr bat_int n2 1.5
+D_d1 n0 n1 D1N5817
+R_rl n1 n2 1000
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+.model D1N5817 D(Is=31.7u Rs=.051 N=1.373 Cjo=190p M=.3 Eg=.69 Xti=2 Bv=20 Ibv=10m)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > voltage-divider 1`] = `
+"* Velxio circuit
+R_r1 n0 n1 10000
+R_r2 n1 n2 10000
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > wheatstone-bridge 1`] = `
+"* Velxio circuit
+R_r1 n0 n1 10000
+R_r2 n0 n2 10000
+R_r3 n1 n3 11000
+R_r4 n2 n3 10000
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > xor-toggle-detector 1`] = `
+"* Velxio circuit
+R_sw1 n0 n5 1000000000
+R_sw2 n1 n5 1000000000
+B_u1 n6 0 V = 5 * (u(V(n2)-2.5) + u(V(n3)-2.5) - 2*u(V(n2)-2.5)*u(V(n3)-2.5))
+R_u1_load n6 0 1Meg
+R_rl n6 n4 220
+V_led1_sense n4 led1_sense_mid DC 0
+D_led1 led1_sense_mid n5 LED_YELLOW
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n5 n5 0 100Meg
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — circuits (41 examples) > zener-regulator 1`] = `
+"* Velxio circuit
+V_bat n0 bat_int DC 9
+R_bat_esr bat_int n2 1.5
+R_rs n0 n1 220
+D_z1 n2 n1 D1N4733
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+.model D1N4733 D(Is=1n N=1 Rs=5 Bv=5.1 Ibv=50m)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-adder-subtractor-4bit 1`] = `
+"* Velxio circuit
+V_src n38 0 DC 5
+R_asM n38 n16 1000000000
+R_asRM n16 0 10000
+R_asA0 n38 n0 1000000000
+R_asRA0 n0 0 10000
+R_asB0 n38 n12 1000000000
+R_asRB0 n12 0 10000
+R_asA1 n38 n1 1000000000
+R_asRA1 n1 0 10000
+R_asB1 n38 n13 1000000000
+R_asRB1 n13 0 10000
+R_asA2 n38 n6 1000000000
+R_asRA2 n6 0 10000
+R_asB2 n38 n14 1000000000
+R_asRB2 n14 0 10000
+R_asA3 n38 n11 1000000000
+R_asRA3 n11 0 10000
+R_asB3 n38 n15 1000000000
+R_asRB3 n15 0 10000
+B_asXm0 n34 0 V = 5 * (u(V(n12)-2.5) + u(V(n16)-2.5) - 2*u(V(n12)-2.5)*u(V(n16)-2.5))
+R_asXm0_load n34 0 1Meg
+B_asX1_0 n26 0 V = 5 * (u(V(n0)-2.5) + u(V(n34)-2.5) - 2*u(V(n0)-2.5)*u(V(n34)-2.5))
+R_asX1_0_load n26 0 1Meg
+B_asA1_0 n2 0 V = 5 * u(V(n0)-2.5) * u(V(n34)-2.5)
+R_asA1_0_load n2 0 1Meg
+B_asX2_0 n30 0 V = 5 * (u(V(n26)-2.5) + u(V(n16)-2.5) - 2*u(V(n26)-2.5)*u(V(n16)-2.5))
+R_asX2_0_load n30 0 1Meg
+B_asA2_0 n7 0 V = 5 * u(V(n26)-2.5) * u(V(n16)-2.5)
+R_asA2_0_load n7 0 1Meg
+B_asOrC_0 n17 0 V = 5 * (1 - (1-u(V(n2)-2.5)) * (1-u(V(n7)-2.5)))
+R_asOrC_0_load n17 0 1Meg
+R_asRS0 n30 n22 220
+V_asLS0_sense n22 asLS0_sense_mid DC 0
+D_asLS0 asLS0_sense_mid 0 LED_RED
+B_asXm1 n35 0 V = 5 * (u(V(n13)-2.5) + u(V(n16)-2.5) - 2*u(V(n13)-2.5)*u(V(n16)-2.5))
+R_asXm1_load n35 0 1Meg
+B_asX1_1 n27 0 V = 5 * (u(V(n1)-2.5) + u(V(n35)-2.5) - 2*u(V(n1)-2.5)*u(V(n35)-2.5))
+R_asX1_1_load n27 0 1Meg
+B_asA1_1 n3 0 V = 5 * u(V(n1)-2.5) * u(V(n35)-2.5)
+R_asA1_1_load n3 0 1Meg
+B_asX2_1 n31 0 V = 5 * (u(V(n27)-2.5) + u(V(n17)-2.5) - 2*u(V(n27)-2.5)*u(V(n17)-2.5))
+R_asX2_1_load n31 0 1Meg
+B_asA2_1 n8 0 V = 5 * u(V(n27)-2.5) * u(V(n17)-2.5)
+R_asA2_1_load n8 0 1Meg
+B_asOrC_1 n18 0 V = 5 * (1 - (1-u(V(n3)-2.5)) * (1-u(V(n8)-2.5)))
+R_asOrC_1_load n18 0 1Meg
+R_asRS1 n31 n23 220
+V_asLS1_sense n23 asLS1_sense_mid DC 0
+D_asLS1 asLS1_sense_mid 0 LED_YELLOW
+B_asXm2 n36 0 V = 5 * (u(V(n14)-2.5) + u(V(n16)-2.5) - 2*u(V(n14)-2.5)*u(V(n16)-2.5))
+R_asXm2_load n36 0 1Meg
+B_asX1_2 n28 0 V = 5 * (u(V(n6)-2.5) + u(V(n36)-2.5) - 2*u(V(n6)-2.5)*u(V(n36)-2.5))
+R_asX1_2_load n28 0 1Meg
+B_asA1_2 n4 0 V = 5 * u(V(n6)-2.5) * u(V(n36)-2.5)
+R_asA1_2_load n4 0 1Meg
+B_asX2_2 n32 0 V = 5 * (u(V(n28)-2.5) + u(V(n18)-2.5) - 2*u(V(n28)-2.5)*u(V(n18)-2.5))
+R_asX2_2_load n32 0 1Meg
+B_asA2_2 n9 0 V = 5 * u(V(n28)-2.5) * u(V(n18)-2.5)
+R_asA2_2_load n9 0 1Meg
+B_asOrC_2 n19 0 V = 5 * (1 - (1-u(V(n4)-2.5)) * (1-u(V(n9)-2.5)))
+R_asOrC_2_load n19 0 1Meg
+R_asRS2 n32 n24 220
+V_asLS2_sense n24 asLS2_sense_mid DC 0
+D_asLS2 asLS2_sense_mid 0 LED_GREEN
+B_asXm3 n37 0 V = 5 * (u(V(n15)-2.5) + u(V(n16)-2.5) - 2*u(V(n15)-2.5)*u(V(n16)-2.5))
+R_asXm3_load n37 0 1Meg
+B_asX1_3 n29 0 V = 5 * (u(V(n11)-2.5) + u(V(n37)-2.5) - 2*u(V(n11)-2.5)*u(V(n37)-2.5))
+R_asX1_3_load n29 0 1Meg
+B_asA1_3 n5 0 V = 5 * u(V(n11)-2.5) * u(V(n37)-2.5)
+R_asA1_3_load n5 0 1Meg
+B_asX2_3 n33 0 V = 5 * (u(V(n29)-2.5) + u(V(n19)-2.5) - 2*u(V(n29)-2.5)*u(V(n19)-2.5))
+R_asX2_3_load n33 0 1Meg
+B_asA2_3 n10 0 V = 5 * u(V(n29)-2.5) * u(V(n19)-2.5)
+R_asA2_3_load n10 0 1Meg
+B_asOrC_3 n20 0 V = 5 * (1 - (1-u(V(n5)-2.5)) * (1-u(V(n10)-2.5)))
+R_asOrC_3_load n20 0 1Meg
+R_asRS3 n33 n25 220
+V_asLS3_sense n25 asLS3_sense_mid DC 0
+D_asLS3 asLS3_sense_mid 0 LED_BLUE
+R_asRCo n20 n21 220
+V_asLCo_sense n21 asLCo_sense_mid DC 0
+D_asLCo asLCo_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-alu-slice-1bit 1`] = `
+"* Velxio circuit
+V_src n22 0 DC 5
+R_aluA n22 n0 1000000000
+R_aluRA n0 0 10000
+R_aluB n22 n2 1000000000
+R_aluRB n2 0 10000
+R_aluCi n22 n5 1000000000
+R_aluRCi n5 0 10000
+R_aluM0 n22 n11 1000000000
+R_aluRM0 n11 0 10000
+R_aluM1 n22 n12 1000000000
+R_aluRM1 n12 0 10000
+B_aluAnd n1 0 V = 5 * u(V(n0)-2.5) * u(V(n2)-2.5)
+R_aluAnd_load n1 0 1Meg
+B_aluOr n15 0 V = 5 * (1 - (1-u(V(n0)-2.5)) * (1-u(V(n2)-2.5)))
+R_aluOr_load n15 0 1Meg
+B_aluXor n20 0 V = 5 * (u(V(n0)-2.5) + u(V(n2)-2.5) - 2*u(V(n0)-2.5)*u(V(n2)-2.5))
+R_aluXor_load n20 0 1Meg
+B_aluSum1 n18 0 V = 5 * (u(V(n0)-2.5) + u(V(n2)-2.5) - 2*u(V(n0)-2.5)*u(V(n2)-2.5))
+R_aluSum1_load n18 0 1Meg
+B_aluSum2 n19 0 V = 5 * (u(V(n18)-2.5) + u(V(n5)-2.5) - 2*u(V(n18)-2.5)*u(V(n5)-2.5))
+R_aluSum2_load n19 0 1Meg
+B_aluCar1 n3 0 V = 5 * u(V(n0)-2.5) * u(V(n2)-2.5)
+R_aluCar1_load n3 0 1Meg
+B_aluCar2 n4 0 V = 5 * u(V(n18)-2.5) * u(V(n5)-2.5)
+R_aluCar2_load n4 0 1Meg
+B_aluCout n6 0 V = 5 * (1 - (1-u(V(n3)-2.5)) * (1-u(V(n4)-2.5)))
+R_aluCout_load n6 0 1Meg
+B_aluNM0 n13 0 V = 5 * (1 - u(V(n11)-2.5))
+R_aluNM0_load n13 0 1Meg
+B_aluNM1 n14 0 V = 5 * (1 - u(V(n12)-2.5))
+R_aluNM1_load n14 0 1Meg
+B_aluE00 n7 0 V = 5 * u(V(n1)-2.5) * u(V(n14)-2.5) * u(V(n13)-2.5)
+R_aluE00_load n7 0 1Meg
+B_aluE01 n8 0 V = 5 * u(V(n15)-2.5) * u(V(n14)-2.5) * u(V(n11)-2.5)
+R_aluE01_load n8 0 1Meg
+B_aluE10 n9 0 V = 5 * u(V(n20)-2.5) * u(V(n12)-2.5) * u(V(n13)-2.5)
+R_aluE10_load n9 0 1Meg
+B_aluE11 n10 0 V = 5 * u(V(n19)-2.5) * u(V(n12)-2.5) * u(V(n11)-2.5)
+R_aluE11_load n10 0 1Meg
+B_aluY n21 0 V = 5 * (1 - (1-u(V(n7)-2.5)) * (1-u(V(n8)-2.5)) * (1-u(V(n9)-2.5)) * (1-u(V(n10)-2.5)))
+R_aluY_load n21 0 1Meg
+R_aluRY n21 n17 220
+V_aluLY_sense n17 aluLY_sense_mid DC 0
+D_aluLY aluLY_sense_mid 0 LED_GREEN
+R_aluRCo n6 n16 220
+V_aluLCo_sense n16 aluLCo_sense_mid DC 0
+D_aluLCo aluLCo_sense_mid 0 LED_RED
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-and-two-switches 1`] = `
+"* Velxio circuit
+V_src n3 0 DC 5
+R_s1 n3 n1 1000000000
+R_rpd1 n1 0 10000
+R_s2 n3 n2 1000000000
+R_rpd2 n2 0 10000
+B_u1 n4 0 V = 5 * u(V(n1)-2.5) * u(V(n2)-2.5)
+R_u1_load n4 0 1Meg
+R_rl n4 n0 220
+V_led_sense n0 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-and3-all-on 1`] = `
+"* Velxio circuit
+V_src n4 0 DC 5
+R_s1 n4 n1 1000000000
+R_rpd1 n1 0 10000
+R_s2 n4 n2 1000000000
+R_rpd2 n2 0 10000
+R_s3 n4 n3 1000000000
+R_rpd3 n3 0 10000
+B_u1 n5 0 V = 5 * u(V(n1)-2.5) * u(V(n2)-2.5) * u(V(n3)-2.5)
+R_u1_load n5 0 1Meg
+R_rl n5 n0 220
+V_led_sense n0 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-and4-all-on 1`] = `
+"* Velxio circuit
+V_src n5 0 DC 5
+R_s1 n5 n1 1000000000
+R_r1 n1 0 10000
+R_s2 n5 n2 1000000000
+R_r2 n2 0 10000
+R_s3 n5 n3 1000000000
+R_r3 n3 0 10000
+R_s4 n5 n4 1000000000
+R_r4 n4 0 10000
+B_u1 n6 0 V = 5 * u(V(n1)-2.5) * u(V(n2)-2.5) * u(V(n3)-2.5) * u(V(n4)-2.5)
+R_u1_load n6 0 1Meg
+R_rl n6 n0 220
+V_led_sense n0 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-aoi-gate 1`] = `
+"* Velxio circuit
+V_src n8 0 DC 5
+R_sA n8 n4 1000000000
+R_rA n4 0 10000
+R_sB n8 n5 1000000000
+R_rB n5 0 10000
+R_sC n8 n6 1000000000
+R_rC n6 0 10000
+R_sD n8 n7 1000000000
+R_rD n7 0 10000
+B_aAB n0 0 V = 5 * u(V(n4)-2.5) * u(V(n5)-2.5)
+R_aAB_load n0 0 1Meg
+B_aCD n1 0 V = 5 * u(V(n6)-2.5) * u(V(n7)-2.5)
+R_aCD_load n1 0 1Meg
+B_norY n2 0 V = 5 * (1-u(V(n0)-2.5)) * (1-u(V(n1)-2.5))
+R_norY_load n2 0 1Meg
+R_rl n2 n3 220
+V_led_sense n3 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-bcd-7seg-segment-a 1`] = `
+"* Velxio circuit
+V_src n10 0 DC 5
+R_saB0 n10 n1 1000000000
+R_saR0 n1 0 10000
+R_saB1 n10 n2 1000000000
+R_saR1 n2 0 10000
+R_saB2 n10 n3 1000000000
+R_saR2 n3 0 10000
+R_saB3 n10 n5 1000000000
+R_saR3 n5 0 10000
+B_saNB0 n6 0 V = 5 * (1 - u(V(n1)-2.5))
+R_saNB0_load n6 0 1Meg
+B_saNB2 n7 0 V = 5 * (1 - u(V(n3)-2.5))
+R_saNB2_load n7 0 1Meg
+B_saB2B0 n4 0 V = 5 * u(V(n3)-2.5) * u(V(n1)-2.5)
+R_saB2B0_load n4 0 1Meg
+B_saNB2NB0 n8 0 V = 5 * u(V(n7)-2.5) * u(V(n6)-2.5)
+R_saNB2NB0_load n8 0 1Meg
+B_saA n0 0 V = 5 * (1 - (1-u(V(n5)-2.5)) * (1-u(V(n2)-2.5)) * (1-u(V(n4)-2.5)) * (1-u(V(n8)-2.5)))
+R_saA_load n0 0 1Meg
+R_saRl n0 n9 220
+V_saLed_sense n9 saLed_sense_mid DC 0
+D_saLed saLed_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-bcd-validity 1`] = `
+"* Velxio circuit
+V_src n9 0 DC 5
+R_bcdB0 n9 n2 1000000000
+R_bcdR0 n2 0 10000
+R_bcdB1 n9 n3 1000000000
+R_bcdR1 n3 0 10000
+R_bcdB2 n9 n4 1000000000
+R_bcdR2 n4 0 10000
+R_bcdB3 n9 n5 1000000000
+R_bcdR3 n5 0 10000
+B_bcdA32 n1 0 V = 5 * u(V(n5)-2.5) * u(V(n4)-2.5)
+R_bcdA32_load n1 0 1Meg
+B_bcdA31 n0 0 V = 5 * u(V(n5)-2.5) * u(V(n3)-2.5)
+R_bcdA31_load n0 0 1Meg
+B_bcdOrInv n6 0 V = 5 * (1 - (1-u(V(n1)-2.5)) * (1-u(V(n0)-2.5)))
+R_bcdOrInv_load n6 0 1Meg
+B_bcdValid n8 0 V = 5 * (1 - u(V(n6)-2.5))
+R_bcdValid_load n8 0 1Meg
+R_bcdRl n8 n7 220
+V_bcdLed_sense n7 bcdLed_sense_mid DC 0
+D_bcdLed bcdLed_sense_mid 0 LED_GREEN
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-binary-to-gray-3bit 1`] = `
+"* Velxio circuit
+V_src n8 0 DC 5
+R_grB0 n8 n0 1000000000
+R_grRB0 n0 0 10000
+R_grB1 n8 n1 1000000000
+R_grRB1 n1 0 10000
+R_grB2 n8 n2 1000000000
+R_grRB2 n2 0 10000
+B_grX10 n6 0 V = 5 * (u(V(n1)-2.5) + u(V(n0)-2.5) - 2*u(V(n1)-2.5)*u(V(n0)-2.5))
+R_grX10_load n6 0 1Meg
+B_grX21 n7 0 V = 5 * (u(V(n2)-2.5) + u(V(n1)-2.5) - 2*u(V(n2)-2.5)*u(V(n1)-2.5))
+R_grX21_load n7 0 1Meg
+R_grRG0 n6 n3 220
+V_grLG0_sense n3 grLG0_sense_mid DC 0
+D_grLG0 grLG0_sense_mid 0 LED_RED
+R_grRG1 n7 n4 220
+V_grLG1_sense n4 grLG1_sense_mid DC 0
+D_grLG1 grLG1_sense_mid 0 LED_YELLOW
+R_grRG2 n2 n5 220
+V_grLG2_sense n5 grLG2_sense_mid DC 0
+D_grLG2 grLG2_sense_mid 0 LED_GREEN
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-buffer-three-inverters 1`] = `
+"* Velxio circuit
+V_src n5 0 DC 5
+R_s1 n5 n4 1000000000
+R_rpd n4 0 10000
+B_n1 n0 0 V = 5 * (1 - u(V(n4)-2.5))
+R_n1_load n0 0 1Meg
+B_n2 n1 0 V = 5 * (1 - u(V(n0)-2.5))
+R_n2_load n1 0 1Meg
+B_n3 n2 0 V = 5 * (1 - u(V(n1)-2.5))
+R_n3_load n2 0 1Meg
+R_rl n2 n3 220
+V_led_sense n3 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_YELLOW
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-carry-lookahead-adder-4bit 1`] = `
+"* Velxio circuit
+V_src n42 0 DC 5
+R_claA0 n42 n0 1000000000
+R_claRA0 n0 0 10000
+R_claB0 n42 n4 1000000000
+R_claRB0 n4 0 10000
+R_claA1 n42 n1 1000000000
+R_claRA1 n1 0 10000
+R_claB1 n42 n5 1000000000
+R_claRB1 n5 0 10000
+R_claA2 n42 n2 1000000000
+R_claRA2 n2 0 10000
+R_claB2 n42 n6 1000000000
+R_claRB2 n6 0 10000
+R_claA3 n42 n3 1000000000
+R_claRA3 n3 0 10000
+R_claB3 n42 n7 1000000000
+R_claRB3 n7 0 10000
+R_claC0 n42 n8 1000000000
+R_claRC0 n8 0 10000
+B_claG0 n14 0 V = 5 * u(V(n0)-2.5) * u(V(n4)-2.5)
+R_claG0_load n14 0 1Meg
+B_claP0 n18 0 V = 5 * (u(V(n0)-2.5) + u(V(n4)-2.5) - 2*u(V(n0)-2.5)*u(V(n4)-2.5))
+R_claP0_load n18 0 1Meg
+B_claG1 n15 0 V = 5 * u(V(n1)-2.5) * u(V(n5)-2.5)
+R_claG1_load n15 0 1Meg
+B_claP1 n19 0 V = 5 * (u(V(n1)-2.5) + u(V(n5)-2.5) - 2*u(V(n1)-2.5)*u(V(n5)-2.5))
+R_claP1_load n19 0 1Meg
+B_claG2 n16 0 V = 5 * u(V(n2)-2.5) * u(V(n6)-2.5)
+R_claG2_load n16 0 1Meg
+B_claP2 n20 0 V = 5 * (u(V(n2)-2.5) + u(V(n6)-2.5) - 2*u(V(n2)-2.5)*u(V(n6)-2.5))
+R_claP2_load n20 0 1Meg
+B_claG3 n17 0 V = 5 * u(V(n3)-2.5) * u(V(n7)-2.5)
+R_claG3_load n17 0 1Meg
+B_claP3 n21 0 V = 5 * (u(V(n3)-2.5) + u(V(n7)-2.5) - 2*u(V(n3)-2.5)*u(V(n7)-2.5))
+R_claP3_load n21 0 1Meg
+B_claT_p0c0 n31 0 V = 5 * u(V(n18)-2.5) * u(V(n8)-2.5)
+R_claT_p0c0_load n31 0 1Meg
+B_claC1 n9 0 V = 5 * (1 - (1-u(V(n14)-2.5)) * (1-u(V(n31)-2.5)))
+R_claC1_load n9 0 1Meg
+B_claT_p1g0 n32 0 V = 5 * u(V(n19)-2.5) * u(V(n14)-2.5)
+R_claT_p1g0_load n32 0 1Meg
+B_claT_p1p0c0 n33 0 V = 5 * u(V(n19)-2.5) * u(V(n18)-2.5) * u(V(n8)-2.5)
+R_claT_p1p0c0_load n33 0 1Meg
+B_claC2 n10 0 V = 5 * (1 - (1-u(V(n15)-2.5)) * (1-u(V(n32)-2.5)) * (1-u(V(n33)-2.5)))
+R_claC2_load n10 0 1Meg
+B_claT_p2g1 n34 0 V = 5 * u(V(n20)-2.5) * u(V(n15)-2.5)
+R_claT_p2g1_load n34 0 1Meg
+B_claT_p2p1g0 n35 0 V = 5 * u(V(n20)-2.5) * u(V(n19)-2.5) * u(V(n14)-2.5)
+R_claT_p2p1g0_load n35 0 1Meg
+B_claT_p2p1p0c0 n36 0 V = 5 * u(V(n20)-2.5) * u(V(n19)-2.5) * u(V(n18)-2.5) * u(V(n8)-2.5)
+R_claT_p2p1p0c0_load n36 0 1Meg
+B_claC3 n11 0 V = 5 * (1 - (1-u(V(n16)-2.5)) * (1-u(V(n34)-2.5)) * (1-u(V(n35)-2.5)) * (1-u(V(n36)-2.5)))
+R_claC3_load n11 0 1Meg
+B_claT_p3g2 n37 0 V = 5 * u(V(n21)-2.5) * u(V(n16)-2.5)
+R_claT_p3g2_load n37 0 1Meg
+B_claT_p3p2g1 n38 0 V = 5 * u(V(n21)-2.5) * u(V(n20)-2.5) * u(V(n15)-2.5)
+R_claT_p3p2g1_load n38 0 1Meg
+B_claT_p3p2p1g0 n39 0 V = 5 * u(V(n21)-2.5) * u(V(n20)-2.5) * u(V(n19)-2.5) * u(V(n14)-2.5)
+R_claT_p3p2p1g0_load n39 0 1Meg
+B_claT_pAll n40 0 V = 5 * u(V(n21)-2.5) * u(V(n20)-2.5) * u(V(n19)-2.5) * u(V(n18)-2.5)
+R_claT_pAll_load n40 0 1Meg
+B_claT_pAllc0 n41 0 V = 5 * u(V(n40)-2.5) * u(V(n8)-2.5)
+R_claT_pAllc0_load n41 0 1Meg
+B_claC4a n13 0 V = 5 * (1 - (1-u(V(n17)-2.5)) * (1-u(V(n37)-2.5)) * (1-u(V(n38)-2.5)) * (1-u(V(n39)-2.5)))
+R_claC4a_load n13 0 1Meg
+B_claC4 n12 0 V = 5 * (1 - (1-u(V(n13)-2.5)) * (1-u(V(n41)-2.5)))
+R_claC4_load n12 0 1Meg
+B_claS0 n27 0 V = 5 * (u(V(n18)-2.5) + u(V(n8)-2.5) - 2*u(V(n18)-2.5)*u(V(n8)-2.5))
+R_claS0_load n27 0 1Meg
+R_claRS0 n27 n23 220
+V_claLS0_sense n23 claLS0_sense_mid DC 0
+D_claLS0 claLS0_sense_mid 0 LED_RED
+B_claS1 n28 0 V = 5 * (u(V(n19)-2.5) + u(V(n9)-2.5) - 2*u(V(n19)-2.5)*u(V(n9)-2.5))
+R_claS1_load n28 0 1Meg
+R_claRS1 n28 n24 220
+V_claLS1_sense n24 claLS1_sense_mid DC 0
+D_claLS1 claLS1_sense_mid 0 LED_YELLOW
+B_claS2 n29 0 V = 5 * (u(V(n20)-2.5) + u(V(n10)-2.5) - 2*u(V(n20)-2.5)*u(V(n10)-2.5))
+R_claS2_load n29 0 1Meg
+R_claRS2 n29 n25 220
+V_claLS2_sense n25 claLS2_sense_mid DC 0
+D_claLS2 claLS2_sense_mid 0 LED_GREEN
+B_claS3 n30 0 V = 5 * (u(V(n21)-2.5) + u(V(n11)-2.5) - 2*u(V(n21)-2.5)*u(V(n11)-2.5))
+R_claS3_load n30 0 1Meg
+R_claRS3 n30 n26 220
+V_claLS3_sense n26 claLS3_sense_mid DC 0
+D_claLS3 claLS3_sense_mid 0 LED_BLUE
+R_claRCo n12 n22 220
+V_claLCo_sense n22 claLCo_sense_mid DC 0
+D_claLCo claLCo_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-comparator-4bit 1`] = `
+"* Velxio circuit
+V_src n29 0 DC 5
+R_cmpA0 n29 n0 1000000000
+R_cmpRA0 n0 0 10000
+R_cmpB0 n29 n4 1000000000
+R_cmpRB0 n4 0 10000
+R_cmpA1 n29 n1 1000000000
+R_cmpRA1 n1 0 10000
+R_cmpB1 n29 n5 1000000000
+R_cmpRB1 n5 0 10000
+R_cmpA2 n29 n2 1000000000
+R_cmpRA2 n2 0 10000
+R_cmpB2 n29 n6 1000000000
+R_cmpRB2 n6 0 10000
+R_cmpA3 n29 n3 1000000000
+R_cmpRA3 n3 0 10000
+R_cmpB3 n29 n7 1000000000
+R_cmpRB3 n7 0 10000
+B_cmpEq0 n11 0 V = 5 * (1 - (u(V(n0)-2.5) + u(V(n4)-2.5) - 2*u(V(n0)-2.5)*u(V(n4)-2.5)))
+R_cmpEq0_load n11 0 1Meg
+B_cmpNotB0 n22 0 V = 5 * (1 - u(V(n4)-2.5))
+R_cmpNotB0_load n22 0 1Meg
+B_cmpGt0 n16 0 V = 5 * u(V(n0)-2.5) * u(V(n22)-2.5)
+R_cmpGt0_load n16 0 1Meg
+B_cmpEq1 n12 0 V = 5 * (1 - (u(V(n1)-2.5) + u(V(n5)-2.5) - 2*u(V(n1)-2.5)*u(V(n5)-2.5)))
+R_cmpEq1_load n12 0 1Meg
+B_cmpNotB1 n23 0 V = 5 * (1 - u(V(n5)-2.5))
+R_cmpNotB1_load n23 0 1Meg
+B_cmpGt1 n17 0 V = 5 * u(V(n1)-2.5) * u(V(n23)-2.5)
+R_cmpGt1_load n17 0 1Meg
+B_cmpEq2 n13 0 V = 5 * (1 - (u(V(n2)-2.5) + u(V(n6)-2.5) - 2*u(V(n2)-2.5)*u(V(n6)-2.5)))
+R_cmpEq2_load n13 0 1Meg
+B_cmpNotB2 n24 0 V = 5 * (1 - u(V(n6)-2.5))
+R_cmpNotB2_load n24 0 1Meg
+B_cmpGt2 n18 0 V = 5 * u(V(n2)-2.5) * u(V(n24)-2.5)
+R_cmpGt2_load n18 0 1Meg
+B_cmpEq3 n14 0 V = 5 * (1 - (u(V(n3)-2.5) + u(V(n7)-2.5) - 2*u(V(n3)-2.5)*u(V(n7)-2.5)))
+R_cmpEq3_load n14 0 1Meg
+B_cmpNotB3 n25 0 V = 5 * (1 - u(V(n7)-2.5))
+R_cmpNotB3_load n25 0 1Meg
+B_cmpGt3 n19 0 V = 5 * u(V(n3)-2.5) * u(V(n25)-2.5)
+R_cmpGt3_load n19 0 1Meg
+B_cmpEqAll n15 0 V = 5 * u(V(n11)-2.5) * u(V(n12)-2.5) * u(V(n13)-2.5) * u(V(n14)-2.5)
+R_cmpEqAll_load n15 0 1Meg
+B_cmpE3G2 n10 0 V = 5 * u(V(n14)-2.5) * u(V(n18)-2.5)
+R_cmpE3G2_load n10 0 1Meg
+B_cmpE32G1F n9 0 V = 5 * u(V(n14)-2.5) * u(V(n13)-2.5) * u(V(n17)-2.5)
+R_cmpE32G1F_load n9 0 1Meg
+B_cmpE321G0 n8 0 V = 5 * u(V(n14)-2.5) * u(V(n13)-2.5) * u(V(n12)-2.5) * u(V(n16)-2.5)
+R_cmpE321G0_load n8 0 1Meg
+B_cmpGtAll n20 0 V = 5 * (1 - (1-u(V(n19)-2.5)) * (1-u(V(n10)-2.5)) * (1-u(V(n9)-2.5)) * (1-u(V(n8)-2.5)))
+R_cmpGtAll_load n20 0 1Meg
+B_cmpLt n21 0 V = 5 * (1-u(V(n15)-2.5)) * (1-u(V(n20)-2.5))
+R_cmpLt_load n21 0 1Meg
+R_cmpRGt n20 n27 220
+V_cmpLedGt_sense n27 cmpLedGt_sense_mid DC 0
+D_cmpLedGt cmpLedGt_sense_mid 0 LED_RED
+R_cmpREq n15 n26 220
+V_cmpLedEq_sense n26 cmpLedEq_sense_mid DC 0
+D_cmpLedEq cmpLedEq_sense_mid 0 LED_YELLOW
+R_cmpRLt n21 n28 220
+V_cmpLedLt_sense n28 cmpLedLt_sense_mid DC 0
+D_cmpLedLt cmpLedLt_sense_mid 0 LED_GREEN
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-comparator-equal-2bit 1`] = `
+"* Velxio circuit
+V_src n6 0 DC 5
+R_sA0 n6 n2 1000000000
+R_rA0 n2 0 10000
+R_sA1 n6 n3 1000000000
+R_rA1 n3 0 10000
+R_sB0 n6 n4 1000000000
+R_rB0 n4 0 10000
+R_sB1 n6 n5 1000000000
+R_rB1 n5 0 10000
+B_xn0 n7 0 V = 5 * (1 - (u(V(n2)-2.5) + u(V(n4)-2.5) - 2*u(V(n2)-2.5)*u(V(n4)-2.5)))
+R_xn0_load n7 0 1Meg
+B_xn1 n8 0 V = 5 * (1 - (u(V(n3)-2.5) + u(V(n5)-2.5) - 2*u(V(n3)-2.5)*u(V(n5)-2.5)))
+R_xn1_load n8 0 1Meg
+B_aEq n0 0 V = 5 * u(V(n7)-2.5) * u(V(n8)-2.5)
+R_aEq_load n0 0 1Meg
+R_rl n0 n1 220
+V_led_sense n1 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_GREEN
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-comparator-magnitude-1bit 1`] = `
+"* Velxio circuit
+V_src n10 0 DC 5
+R_sA n10 n8 1000000000
+R_rA n8 0 10000
+R_sB n10 n9 1000000000
+R_rB n9 0 10000
+B_notA n3 0 V = 5 * (1 - u(V(n8)-2.5))
+R_notA_load n3 0 1Meg
+B_notB n4 0 V = 5 * (1 - u(V(n9)-2.5))
+R_notB_load n4 0 1Meg
+B_gGt n1 0 V = 5 * u(V(n8)-2.5) * u(V(n4)-2.5)
+R_gGt_load n1 0 1Meg
+B_gEq n0 0 V = 5 * (1 - (u(V(n8)-2.5) + u(V(n9)-2.5) - 2*u(V(n8)-2.5)*u(V(n9)-2.5)))
+R_gEq_load n0 0 1Meg
+B_gLt n2 0 V = 5 * u(V(n3)-2.5) * u(V(n9)-2.5)
+R_gLt_load n2 0 1Meg
+R_rGt n1 n6 220
+V_ledGt_sense n6 ledGt_sense_mid DC 0
+D_ledGt ledGt_sense_mid 0 LED_RED
+R_rEq n0 n5 220
+V_ledEq_sense n5 ledEq_sense_mid DC 0
+D_ledEq ledEq_sense_mid 0 LED_YELLOW
+R_rLt n2 n7 220
+V_ledLt_sense n7 ledLt_sense_mid DC 0
+D_ledLt ledLt_sense_mid 0 LED_GREEN
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-compressor-4to2 1`] = `
+"* Velxio circuit
+V_src n18 0 DC 5
+R_cmpX1 n18 n14 1000000000
+R_cmpRX1 n14 0 10000
+R_cmpX2 n18 n15 1000000000
+R_cmpRX2 n15 0 10000
+R_cmpX3 n18 n16 1000000000
+R_cmpRX3 n16 0 10000
+R_cmpX4 n18 n17 1000000000
+R_cmpRX4 n17 0 10000
+R_cmpCin n18 n13 1000000000
+R_cmpRCin n13 0 10000
+B_cmFA1_x1 n3 0 V = 5 * (u(V(n14)-2.5) + u(V(n15)-2.5) - 2*u(V(n14)-2.5)*u(V(n15)-2.5))
+R_cmFA1_x1_load n3 0 1Meg
+B_cmFA1_x2 n4 0 V = 5 * (u(V(n3)-2.5) + u(V(n16)-2.5) - 2*u(V(n3)-2.5)*u(V(n16)-2.5))
+R_cmFA1_x2_load n4 0 1Meg
+B_cmFA1_a1 n0 0 V = 5 * u(V(n14)-2.5) * u(V(n15)-2.5)
+R_cmFA1_a1_load n0 0 1Meg
+B_cmFA1_a2 n1 0 V = 5 * u(V(n3)-2.5) * u(V(n16)-2.5)
+R_cmFA1_a2_load n1 0 1Meg
+B_cmFA1_or n2 0 V = 5 * (1 - (1-u(V(n0)-2.5)) * (1-u(V(n1)-2.5)))
+R_cmFA1_or_load n2 0 1Meg
+B_cmFA2_x1 n8 0 V = 5 * (u(V(n4)-2.5) + u(V(n17)-2.5) - 2*u(V(n4)-2.5)*u(V(n17)-2.5))
+R_cmFA2_x1_load n8 0 1Meg
+B_cmFA2_x2 n9 0 V = 5 * (u(V(n8)-2.5) + u(V(n13)-2.5) - 2*u(V(n8)-2.5)*u(V(n13)-2.5))
+R_cmFA2_x2_load n9 0 1Meg
+B_cmFA2_a1 n5 0 V = 5 * u(V(n4)-2.5) * u(V(n17)-2.5)
+R_cmFA2_a1_load n5 0 1Meg
+B_cmFA2_a2 n6 0 V = 5 * u(V(n8)-2.5) * u(V(n13)-2.5)
+R_cmFA2_a2_load n6 0 1Meg
+B_cmFA2_or n7 0 V = 5 * (1 - (1-u(V(n5)-2.5)) * (1-u(V(n6)-2.5)))
+R_cmFA2_or_load n7 0 1Meg
+R_cmRS n9 n12 220
+V_cmLS_sense n12 cmLS_sense_mid DC 0
+D_cmLS cmLS_sense_mid 0 LED_GREEN
+R_cmRCar n2 n10 220
+V_cmLCar_sense n10 cmLCar_sense_mid DC 0
+D_cmLCar cmLCar_sense_mid 0 LED_YELLOW
+R_cmRCo n7 n11 220
+V_cmLCo_sense n11 cmLCo_sense_mid DC 0
+D_cmLCo cmLCo_sense_mid 0 LED_RED
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-decoder-2to4 1`] = `
+"* Velxio circuit
+V_src n12 0 DC 5
+R_sA n12 n10 1000000000
+R_rA n10 0 10000
+R_sB n12 n11 1000000000
+R_rB n11 0 10000
+B_notA n4 0 V = 5 * (1 - u(V(n10)-2.5))
+R_notA_load n4 0 1Meg
+B_notB n5 0 V = 5 * (1 - u(V(n11)-2.5))
+R_notB_load n5 0 1Meg
+B_a0 n0 0 V = 5 * u(V(n4)-2.5) * u(V(n5)-2.5)
+R_a0_load n0 0 1Meg
+B_a1 n1 0 V = 5 * u(V(n10)-2.5) * u(V(n5)-2.5)
+R_a1_load n1 0 1Meg
+B_a2 n2 0 V = 5 * u(V(n4)-2.5) * u(V(n11)-2.5)
+R_a2_load n2 0 1Meg
+B_a3 n3 0 V = 5 * u(V(n10)-2.5) * u(V(n11)-2.5)
+R_a3_load n3 0 1Meg
+R_r0 n0 n6 220
+V_led0_sense n6 led0_sense_mid DC 0
+D_led0 led0_sense_mid 0 LED_RED
+R_r1 n1 n7 220
+V_led1_sense n7 led1_sense_mid DC 0
+D_led1 led1_sense_mid 0 LED_YELLOW
+R_r2 n2 n8 220
+V_led2_sense n8 led2_sense_mid DC 0
+D_led2 led2_sense_mid 0 LED_GREEN
+R_r3 n3 n9 220
+V_led3_sense n9 led3_sense_mid DC 0
+D_led3 led3_sense_mid 0 LED_BLUE
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-decoder-3to8 1`] = `
+"* Velxio circuit
+V_src n22 0 DC 5
+R_dec3A0 n22 n0 1000000000
+R_dec3R0 n0 0 10000
+R_dec3A1 n22 n1 1000000000
+R_dec3R1 n1 0 10000
+R_dec3A2 n22 n2 1000000000
+R_dec3R2 n2 0 10000
+B_dec3N0 n3 0 V = 5 * (1 - u(V(n0)-2.5))
+R_dec3N0_load n3 0 1Meg
+B_dec3N1 n4 0 V = 5 * (1 - u(V(n1)-2.5))
+R_dec3N1_load n4 0 1Meg
+B_dec3N2 n5 0 V = 5 * (1 - u(V(n2)-2.5))
+R_dec3N2_load n5 0 1Meg
+B_dec3Y0 n6 0 V = 5 * u(V(n5)-2.5) * u(V(n4)-2.5) * u(V(n3)-2.5)
+R_dec3Y0_load n6 0 1Meg
+B_dec3Y1 n7 0 V = 5 * u(V(n5)-2.5) * u(V(n4)-2.5) * u(V(n0)-2.5)
+R_dec3Y1_load n7 0 1Meg
+B_dec3Y2 n8 0 V = 5 * u(V(n5)-2.5) * u(V(n1)-2.5) * u(V(n3)-2.5)
+R_dec3Y2_load n8 0 1Meg
+B_dec3Y3 n9 0 V = 5 * u(V(n5)-2.5) * u(V(n1)-2.5) * u(V(n0)-2.5)
+R_dec3Y3_load n9 0 1Meg
+B_dec3Y4 n10 0 V = 5 * u(V(n2)-2.5) * u(V(n4)-2.5) * u(V(n3)-2.5)
+R_dec3Y4_load n10 0 1Meg
+B_dec3Y5 n11 0 V = 5 * u(V(n2)-2.5) * u(V(n4)-2.5) * u(V(n0)-2.5)
+R_dec3Y5_load n11 0 1Meg
+B_dec3Y6 n12 0 V = 5 * u(V(n2)-2.5) * u(V(n1)-2.5) * u(V(n3)-2.5)
+R_dec3Y6_load n12 0 1Meg
+B_dec3Y7 n13 0 V = 5 * u(V(n2)-2.5) * u(V(n1)-2.5) * u(V(n0)-2.5)
+R_dec3Y7_load n13 0 1Meg
+R_dec3rl0 n6 n14 220
+V_dec3l0_sense n14 dec3l0_sense_mid DC 0
+D_dec3l0 dec3l0_sense_mid 0 LED_RED
+R_dec3rl1 n7 n15 220
+V_dec3l1_sense n15 dec3l1_sense_mid DC 0
+D_dec3l1 dec3l1_sense_mid 0 LED_RED
+R_dec3rl2 n8 n16 220
+V_dec3l2_sense n16 dec3l2_sense_mid DC 0
+D_dec3l2 dec3l2_sense_mid 0 LED_YELLOW
+R_dec3rl3 n9 n17 220
+V_dec3l3_sense n17 dec3l3_sense_mid DC 0
+D_dec3l3 dec3l3_sense_mid 0 LED_GREEN
+R_dec3rl4 n10 n18 220
+V_dec3l4_sense n18 dec3l4_sense_mid DC 0
+D_dec3l4 dec3l4_sense_mid 0 LED_BLUE
+R_dec3rl5 n11 n19 220
+V_dec3l5_sense n19 dec3l5_sense_mid DC 0
+D_dec3l5 dec3l5_sense_mid 0 LED_RED
+R_dec3rl6 n12 n20 220
+V_dec3l6_sense n20 dec3l6_sense_mid DC 0
+D_dec3l6 dec3l6_sense_mid 0 LED_WHITE
+R_dec3rl7 n13 n21 220
+V_dec3l7_sense n21 dec3l7_sense_mid DC 0
+D_dec3l7 dec3l7_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.model LED_WHITE D(Is=1e-28 N=2.0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-full-adder 1`] = `
+"* Velxio circuit
+V_src n8 0 DC 5
+R_sA n8 n5 1000000000
+R_rpdA n5 0 10000
+R_sB n8 n6 1000000000
+R_rpdB n6 0 10000
+R_sCi n8 n7 1000000000
+R_rpdCi n7 0 10000
+B_x1 n9 0 V = 5 * (u(V(n5)-2.5) + u(V(n6)-2.5) - 2*u(V(n5)-2.5)*u(V(n6)-2.5))
+R_x1_load n9 0 1Meg
+B_a1 n0 0 V = 5 * u(V(n5)-2.5) * u(V(n6)-2.5)
+R_a1_load n0 0 1Meg
+B_x2 n10 0 V = 5 * (u(V(n9)-2.5) + u(V(n7)-2.5) - 2*u(V(n9)-2.5)*u(V(n7)-2.5))
+R_x2_load n10 0 1Meg
+B_a2 n1 0 V = 5 * u(V(n9)-2.5) * u(V(n7)-2.5)
+R_a2_load n1 0 1Meg
+B_orC n2 0 V = 5 * (1 - (1-u(V(n0)-2.5)) * (1-u(V(n1)-2.5)))
+R_orC_load n2 0 1Meg
+R_rS n10 n4 220
+V_ledS_sense n4 ledS_sense_mid DC 0
+D_ledS ledS_sense_mid 0 LED_GREEN
+R_rCo n2 n3 220
+V_ledCo_sense n3 ledCo_sense_mid DC 0
+D_ledCo ledCo_sense_mid 0 LED_RED
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-gray-to-binary-3bit 1`] = `
+"* Velxio circuit
+V_src n8 0 DC 5
+R_gbG0 n8 n0 1000000000
+R_gbRG0 n0 0 10000
+R_gbG1 n8 n1 1000000000
+R_gbRG1 n1 0 10000
+R_gbG2 n8 n2 1000000000
+R_gbRG2 n2 0 10000
+B_gbX21 n7 0 V = 5 * (u(V(n1)-2.5) + u(V(n2)-2.5) - 2*u(V(n1)-2.5)*u(V(n2)-2.5))
+R_gbX21_load n7 0 1Meg
+B_gbX10 n6 0 V = 5 * (u(V(n0)-2.5) + u(V(n7)-2.5) - 2*u(V(n0)-2.5)*u(V(n7)-2.5))
+R_gbX10_load n6 0 1Meg
+R_gbRB0 n6 n3 220
+V_gbLB0_sense n3 gbLB0_sense_mid DC 0
+D_gbLB0 gbLB0_sense_mid 0 LED_RED
+R_gbRB1 n7 n4 220
+V_gbLB1_sense n4 gbLB1_sense_mid DC 0
+D_gbLB1 gbLB1_sense_mid 0 LED_YELLOW
+R_gbRB2 n2 n5 220
+V_gbLB2_sense n5 gbLB2_sense_mid DC 0
+D_gbLB2 gbLB2_sense_mid 0 LED_GREEN
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-half-adder 1`] = `
+"* Velxio circuit
+V_src n6 0 DC 5
+R_sA n6 n4 1000000000
+R_rpdA n4 0 10000
+R_sB n6 n5 1000000000
+R_rpdB n5 0 10000
+B_gSum n1 0 V = 5 * (u(V(n4)-2.5) + u(V(n5)-2.5) - 2*u(V(n4)-2.5)*u(V(n5)-2.5))
+R_gSum_load n1 0 1Meg
+B_gC n0 0 V = 5 * u(V(n4)-2.5) * u(V(n5)-2.5)
+R_gC_load n0 0 1Meg
+R_rS n1 n3 220
+V_ledS_sense n3 ledS_sense_mid DC 0
+D_ledS ledS_sense_mid 0 LED_GREEN
+R_rC n0 n2 220
+V_ledC_sense n2 ledC_sense_mid DC 0
+D_ledC ledC_sense_mid 0 LED_RED
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-half-adder-nand-only 1`] = `
+"* Velxio circuit
+V_src n10 0 DC 5
+R_hnA n10 n0 1000000000
+R_hnRA n0 0 10000
+R_hnB n10 n1 1000000000
+R_hnRB n1 0 10000
+B_hnN1 n4 0 V = 5 * (1 - u(V(n0)-2.5) * u(V(n1)-2.5))
+R_hnN1_load n4 0 1Meg
+B_hnN2 n5 0 V = 5 * (1 - u(V(n0)-2.5) * u(V(n4)-2.5))
+R_hnN2_load n5 0 1Meg
+B_hnN3 n6 0 V = 5 * (1 - u(V(n1)-2.5) * u(V(n4)-2.5))
+R_hnN3_load n6 0 1Meg
+B_hnN4 n7 0 V = 5 * (1 - u(V(n5)-2.5) * u(V(n6)-2.5))
+R_hnN4_load n7 0 1Meg
+B_hnC1 n2 0 V = 5 * (1 - u(V(n0)-2.5) * u(V(n1)-2.5))
+R_hnC1_load n2 0 1Meg
+B_hnC2 n3 0 V = 5 * (1 - u(V(n2)-2.5) * u(V(n2)-2.5))
+R_hnC2_load n3 0 1Meg
+R_hnRS n7 n9 220
+V_hnLS_sense n9 hnLS_sense_mid DC 0
+D_hnLS hnLS_sense_mid 0 LED_GREEN
+R_hnRC n3 n8 220
+V_hnLC_sense n8 hnLC_sense_mid DC 0
+D_hnLC hnLC_sense_mid 0 LED_RED
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-half-subtractor 1`] = `
+"* Velxio circuit
+V_src n7 0 DC 5
+R_sA n7 n5 1000000000
+R_rA n5 0 10000
+R_sB n7 n6 1000000000
+R_rB n6 0 10000
+B_gDiff n1 0 V = 5 * (u(V(n5)-2.5) + u(V(n6)-2.5) - 2*u(V(n5)-2.5)*u(V(n6)-2.5))
+R_gDiff_load n1 0 1Meg
+B_nA n2 0 V = 5 * (1 - u(V(n5)-2.5))
+R_nA_load n2 0 1Meg
+B_gBor n0 0 V = 5 * u(V(n2)-2.5) * u(V(n6)-2.5)
+R_gBor_load n0 0 1Meg
+R_rD n1 n4 220
+V_ledD_sense n4 ledD_sense_mid DC 0
+D_ledD ledD_sense_mid 0 LED_GREEN
+R_rBo n0 n3 220
+V_ledBo_sense n3 ledBo_sense_mid DC 0
+D_ledBo ledBo_sense_mid 0 LED_RED
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-hamming-encoder-74 1`] = `
+"* Velxio circuit
+V_src n17 0 DC 5
+R_hmD0 n17 n0 1000000000
+R_hmRD0 n0 0 10000
+R_hmD1 n17 n1 1000000000
+R_hmRD1 n1 0 10000
+R_hmD2 n17 n2 1000000000
+R_hmRD2 n2 0 10000
+R_hmD3 n17 n3 1000000000
+R_hmRD3 n3 0 10000
+B_hmP1a n4 0 V = 5 * (u(V(n0)-2.5) + u(V(n1)-2.5) - 2*u(V(n0)-2.5)*u(V(n1)-2.5))
+R_hmP1a_load n4 0 1Meg
+B_hmP1b n5 0 V = 5 * (u(V(n4)-2.5) + u(V(n3)-2.5) - 2*u(V(n4)-2.5)*u(V(n3)-2.5))
+R_hmP1b_load n5 0 1Meg
+B_hmP2a n6 0 V = 5 * (u(V(n0)-2.5) + u(V(n2)-2.5) - 2*u(V(n0)-2.5)*u(V(n2)-2.5))
+R_hmP2a_load n6 0 1Meg
+B_hmP2b n7 0 V = 5 * (u(V(n6)-2.5) + u(V(n3)-2.5) - 2*u(V(n6)-2.5)*u(V(n3)-2.5))
+R_hmP2b_load n7 0 1Meg
+B_hmP4a n8 0 V = 5 * (u(V(n1)-2.5) + u(V(n2)-2.5) - 2*u(V(n1)-2.5)*u(V(n2)-2.5))
+R_hmP4a_load n8 0 1Meg
+B_hmP4b n9 0 V = 5 * (u(V(n8)-2.5) + u(V(n3)-2.5) - 2*u(V(n8)-2.5)*u(V(n3)-2.5))
+R_hmP4b_load n9 0 1Meg
+R_hmR1 n5 n10 220
+V_hmL1_sense n10 hmL1_sense_mid DC 0
+D_hmL1 hmL1_sense_mid 0 LED_RED
+R_hmR2 n7 n11 220
+V_hmL2_sense n11 hmL2_sense_mid DC 0
+D_hmL2 hmL2_sense_mid 0 LED_RED
+R_hmR3 n0 n12 220
+V_hmL3_sense n12 hmL3_sense_mid DC 0
+D_hmL3 hmL3_sense_mid 0 LED_YELLOW
+R_hmR4 n9 n13 220
+V_hmL4_sense n13 hmL4_sense_mid DC 0
+D_hmL4 hmL4_sense_mid 0 LED_RED
+R_hmR5 n1 n14 220
+V_hmL5_sense n14 hmL5_sense_mid DC 0
+D_hmL5 hmL5_sense_mid 0 LED_GREEN
+R_hmR6 n2 n15 220
+V_hmL6_sense n15 hmL6_sense_mid DC 0
+D_hmL6 hmL6_sense_mid 0 LED_BLUE
+R_hmR7 n3 n16 220
+V_hmL7_sense n16 hmL7_sense_mid DC 0
+D_hmL7 hmL7_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-majority-voter 1`] = `
+"* Velxio circuit
+V_src n8 0 DC 5
+R_sA n8 n5 1000000000
+R_rA n5 0 10000
+R_sB n8 n6 1000000000
+R_rB n6 0 10000
+R_sC n8 n7 1000000000
+R_rC n7 0 10000
+B_aAB n0 0 V = 5 * u(V(n5)-2.5) * u(V(n6)-2.5)
+R_aAB_load n0 0 1Meg
+B_aAC n1 0 V = 5 * u(V(n5)-2.5) * u(V(n7)-2.5)
+R_aAC_load n1 0 1Meg
+B_aBC n2 0 V = 5 * u(V(n6)-2.5) * u(V(n7)-2.5)
+R_aBC_load n2 0 1Meg
+B_or3 n3 0 V = 5 * (1 - (1-u(V(n0)-2.5)) * (1-u(V(n1)-2.5)) * (1-u(V(n2)-2.5)))
+R_or3_load n3 0 1Meg
+R_rl n3 n4 220
+V_led_sense n4 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-multiplier-2x2 1`] = `
+"* Velxio circuit
+V_src n16 0 DC 5
+R_sA0 n16 n12 1000000000
+R_rA0 n12 0 10000
+R_sA1 n16 n13 1000000000
+R_rA1 n13 0 10000
+R_sB0 n16 n14 1000000000
+R_rB0 n14 0 10000
+R_sB1 n16 n15 1000000000
+R_rB1 n15 0 10000
+B_pA0B0 n4 0 V = 5 * u(V(n12)-2.5) * u(V(n14)-2.5)
+R_pA0B0_load n4 0 1Meg
+B_pA1B0 n6 0 V = 5 * u(V(n13)-2.5) * u(V(n14)-2.5)
+R_pA1B0_load n6 0 1Meg
+B_pA0B1 n5 0 V = 5 * u(V(n12)-2.5) * u(V(n15)-2.5)
+R_pA0B1_load n5 0 1Meg
+B_pA1B1 n7 0 V = 5 * u(V(n13)-2.5) * u(V(n15)-2.5)
+R_pA1B1_load n7 0 1Meg
+B_p1Sum n1 0 V = 5 * (u(V(n6)-2.5) + u(V(n5)-2.5) - 2*u(V(n6)-2.5)*u(V(n5)-2.5))
+R_p1Sum_load n1 0 1Meg
+B_p1Car n0 0 V = 5 * u(V(n6)-2.5) * u(V(n5)-2.5)
+R_p1Car_load n0 0 1Meg
+B_p2Sum n2 0 V = 5 * (u(V(n7)-2.5) + u(V(n0)-2.5) - 2*u(V(n7)-2.5)*u(V(n0)-2.5))
+R_p2Sum_load n2 0 1Meg
+B_p3Car n3 0 V = 5 * u(V(n7)-2.5) * u(V(n0)-2.5)
+R_p3Car_load n3 0 1Meg
+R_rP0 n4 n8 220
+V_ledP0_sense n8 ledP0_sense_mid DC 0
+D_ledP0 ledP0_sense_mid 0 LED_RED
+R_rP1 n1 n9 220
+V_ledP1_sense n9 ledP1_sense_mid DC 0
+D_ledP1 ledP1_sense_mid 0 LED_YELLOW
+R_rP2 n2 n10 220
+V_ledP2_sense n10 ledP2_sense_mid DC 0
+D_ledP2 ledP2_sense_mid 0 LED_GREEN
+R_rP3 n3 n11 220
+V_ledP3_sense n11 ledP3_sense_mid DC 0
+D_ledP3 ledP3_sense_mid 0 LED_BLUE
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-mux-2to1 1`] = `
+"* Velxio circuit
+V_src n8 0 DC 5
+R_sSel n8 n7 1000000000
+R_rpdSel n7 0 10000
+R_sD0 n8 n5 0.01
+R_rpdD0 n5 0 10000
+R_sD1 n8 n6 1000000000
+R_rpdD1 n6 0 10000
+B_nSel n2 0 V = 5 * (1 - u(V(n7)-2.5))
+R_nSel_load n2 0 1Meg
+B_a0 n0 0 V = 5 * u(V(n5)-2.5) * u(V(n2)-2.5)
+R_a0_load n0 0 1Meg
+B_a1 n1 0 V = 5 * u(V(n6)-2.5) * u(V(n7)-2.5)
+R_a1_load n1 0 1Meg
+B_orY n3 0 V = 5 * (1 - (1-u(V(n0)-2.5)) * (1-u(V(n1)-2.5)))
+R_orY_load n3 0 1Meg
+R_rl n3 n4 220
+V_led_sense n4 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_GREEN
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-mux-4to1 1`] = `
+"* Velxio circuit
+V_src n18 0 DC 5
+R_d0 n18 n4 1000000000
+R_rd0 n4 0 10000
+R_d1 n18 n5 1000000000
+R_rd1 n5 0 10000
+R_d2 n18 n6 1000000000
+R_rd2 n6 0 10000
+R_d3 n18 n7 1000000000
+R_rd3 n7 0 10000
+R_s0 n18 n16 1000000000
+R_rs0 n16 0 10000
+R_s1 n18 n17 1000000000
+R_rs1 n17 0 10000
+B_ns0 n12 0 V = 5 * (1 - u(V(n16)-2.5))
+R_ns0_load n12 0 1Meg
+B_ns1 n13 0 V = 5 * (1 - u(V(n17)-2.5))
+R_ns1_load n13 0 1Meg
+B_a0 n0 0 V = 5 * u(V(n4)-2.5) * u(V(n8)-2.5)
+R_a0_load n0 0 1Meg
+B_a1 n1 0 V = 5 * u(V(n5)-2.5) * u(V(n9)-2.5)
+R_a1_load n1 0 1Meg
+B_a2 n2 0 V = 5 * u(V(n6)-2.5) * u(V(n10)-2.5)
+R_a2_load n2 0 1Meg
+B_a3 n3 0 V = 5 * u(V(n7)-2.5) * u(V(n11)-2.5)
+R_a3_load n3 0 1Meg
+B_dec0 n8 0 V = 5 * u(V(n13)-2.5) * u(V(n12)-2.5)
+R_dec0_load n8 0 1Meg
+B_dec1 n9 0 V = 5 * u(V(n13)-2.5) * u(V(n16)-2.5)
+R_dec1_load n9 0 1Meg
+B_dec2 n10 0 V = 5 * u(V(n17)-2.5) * u(V(n12)-2.5)
+R_dec2_load n10 0 1Meg
+B_dec3 n11 0 V = 5 * u(V(n17)-2.5) * u(V(n16)-2.5)
+R_dec3_load n11 0 1Meg
+B_orY n14 0 V = 5 * (1 - (1-u(V(n0)-2.5)) * (1-u(V(n1)-2.5)) * (1-u(V(n2)-2.5)) * (1-u(V(n3)-2.5)))
+R_orY_load n14 0 1Meg
+R_rl n14 n15 220
+V_led_sense n15 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_GREEN
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-nand-two-switches 1`] = `
+"* Velxio circuit
+V_src n3 0 DC 5
+R_s1 n3 n1 1000000000
+R_rpd1 n1 0 10000
+R_s2 n3 n2 1000000000
+R_rpd2 n2 0 10000
+B_u1 n4 0 V = 5 * (1 - u(V(n1)-2.5) * u(V(n2)-2.5))
+R_u1_load n4 0 1Meg
+R_rl n4 n0 220
+V_led_sense n0 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-nor-idle-light 1`] = `
+"* Velxio circuit
+V_src n3 0 DC 5
+R_s1 n3 n1 1000000000
+R_rpd1 n1 0 10000
+R_s2 n3 n2 1000000000
+R_rpd2 n2 0 10000
+B_u1 n4 0 V = 5 * (1-u(V(n1)-2.5)) * (1-u(V(n2)-2.5))
+R_u1_load n4 0 1Meg
+R_rl n4 n0 220
+V_led_sense n0 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_GREEN
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-not-inverter 1`] = `
+"* Velxio circuit
+V_src n2 0 DC 5
+R_s1 n2 n1 1000000000
+R_rpd n1 0 10000
+B_u1 n3 0 V = 5 * (1 - u(V(n1)-2.5))
+R_u1_load n3 0 1Meg
+R_rl n3 n0 220
+V_led_sense n0 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_GREEN
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-or-any-switch 1`] = `
+"* Velxio circuit
+V_src n3 0 DC 5
+R_s1 n3 n1 1000000000
+R_rpd1 n1 0 10000
+R_s2 n3 n2 1000000000
+R_rpd2 n2 0 10000
+B_u1 n4 0 V = 5 * (1 - (1-u(V(n1)-2.5)) * (1-u(V(n2)-2.5)))
+R_u1_load n4 0 1Meg
+R_rl n4 n0 220
+V_led_sense n0 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_BLUE
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-parity-4bit 1`] = `
+"* Velxio circuit
+V_src n5 0 DC 5
+R_s0 n5 n1 1000000000
+R_r0 n1 0 10000
+R_s1 n5 n2 1000000000
+R_r1 n2 0 10000
+R_s2 n5 n3 1000000000
+R_r2 n3 0 10000
+R_s3 n5 n4 1000000000
+R_r3 n4 0 10000
+B_x01 n6 0 V = 5 * (u(V(n1)-2.5) + u(V(n2)-2.5) - 2*u(V(n1)-2.5)*u(V(n2)-2.5))
+R_x01_load n6 0 1Meg
+B_x23 n7 0 V = 5 * (u(V(n3)-2.5) + u(V(n4)-2.5) - 2*u(V(n3)-2.5)*u(V(n4)-2.5))
+R_x23_load n7 0 1Meg
+B_xp n8 0 V = 5 * (u(V(n6)-2.5) + u(V(n7)-2.5) - 2*u(V(n6)-2.5)*u(V(n7)-2.5))
+R_xp_load n8 0 1Meg
+R_rl n8 n0 220
+V_led_sense n0 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_YELLOW
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-popcount-4bit 1`] = `
+"* Velxio circuit
+V_src n18 0 DC 5
+R_pcX0 n18 n14 1000000000
+R_pcR0 n14 0 10000
+R_pcX1 n18 n15 1000000000
+R_pcR1 n15 0 10000
+R_pcX2 n18 n16 1000000000
+R_pcR2 n16 0 10000
+R_pcX3 n18 n17 1000000000
+R_pcR3 n17 0 10000
+B_pcSA n10 0 V = 5 * (u(V(n14)-2.5) + u(V(n15)-2.5) - 2*u(V(n14)-2.5)*u(V(n15)-2.5))
+R_pcSA_load n10 0 1Meg
+B_pcCA n0 0 V = 5 * u(V(n14)-2.5) * u(V(n15)-2.5)
+R_pcCA_load n0 0 1Meg
+B_pcSB n11 0 V = 5 * (u(V(n16)-2.5) + u(V(n17)-2.5) - 2*u(V(n16)-2.5)*u(V(n17)-2.5))
+R_pcSB_load n11 0 1Meg
+B_pcCB n1 0 V = 5 * u(V(n16)-2.5) * u(V(n17)-2.5)
+R_pcCB_load n1 0 1Meg
+B_pcSC n12 0 V = 5 * (u(V(n10)-2.5) + u(V(n11)-2.5) - 2*u(V(n10)-2.5)*u(V(n11)-2.5))
+R_pcSC_load n12 0 1Meg
+B_pcSCcar n13 0 V = 5 * u(V(n10)-2.5) * u(V(n11)-2.5)
+R_pcSCcar_load n13 0 1Meg
+B_pcFA_x1 n5 0 V = 5 * (u(V(n0)-2.5) + u(V(n1)-2.5) - 2*u(V(n0)-2.5)*u(V(n1)-2.5))
+R_pcFA_x1_load n5 0 1Meg
+B_pcFA_x2 n6 0 V = 5 * (u(V(n5)-2.5) + u(V(n13)-2.5) - 2*u(V(n5)-2.5)*u(V(n13)-2.5))
+R_pcFA_x2_load n6 0 1Meg
+B_pcFA_a1 n2 0 V = 5 * u(V(n0)-2.5) * u(V(n1)-2.5)
+R_pcFA_a1_load n2 0 1Meg
+B_pcFA_a2 n3 0 V = 5 * u(V(n5)-2.5) * u(V(n13)-2.5)
+R_pcFA_a2_load n3 0 1Meg
+B_pcFA_or n4 0 V = 5 * (1 - (1-u(V(n2)-2.5)) * (1-u(V(n3)-2.5)))
+R_pcFA_or_load n4 0 1Meg
+R_pcRl0 n12 n7 220
+V_pcLed0_sense n7 pcLed0_sense_mid DC 0
+D_pcLed0 pcLed0_sense_mid 0 LED_RED
+R_pcRl1 n6 n8 220
+V_pcLed1_sense n8 pcLed1_sense_mid DC 0
+D_pcLed1 pcLed1_sense_mid 0 LED_YELLOW
+R_pcRl2 n4 n9 220
+V_pcLed2_sense n9 pcLed2_sense_mid DC 0
+D_pcLed2 pcLed2_sense_mid 0 LED_GREEN
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-priority-encoder-8to3 1`] = `
+"* Velxio circuit
+V_src n22 0 DC 5
+R_pe0 n22 n0 1000000000
+R_peR0 n0 0 10000
+R_pe1 n22 n1 1000000000
+R_peR1 n1 0 10000
+R_pe2 n22 n2 1000000000
+R_peR2 n2 0 10000
+R_pe3 n22 n3 1000000000
+R_peR3 n3 0 10000
+R_pe4 n22 n4 1000000000
+R_peR4 n4 0 10000
+R_pe5 n22 n5 1000000000
+R_peR5 n5 0 10000
+R_pe6 n22 n6 1000000000
+R_peR6 n6 0 10000
+R_pe7 n22 n7 1000000000
+R_peR7 n7 0 10000
+B_peY2 n17 0 V = 5 * (1 - (1-u(V(n4)-2.5)) * (1-u(V(n5)-2.5)) * (1-u(V(n6)-2.5)) * (1-u(V(n7)-2.5)))
+R_peY2_load n17 0 1Meg
+B_peLow23 n8 0 V = 5 * (1 - (1-u(V(n2)-2.5)) * (1-u(V(n3)-2.5)))
+R_peLow23_load n8 0 1Meg
+B_peNotY2 n10 0 V = 5 * (1 - u(V(n17)-2.5))
+R_peNotY2_load n10 0 1Meg
+B_peLow23M n9 0 V = 5 * u(V(n8)-2.5) * u(V(n10)-2.5)
+R_peLow23M_load n9 0 1Meg
+B_peTopGrp n11 0 V = 5 * (1 - (1-u(V(n6)-2.5)) * (1-u(V(n7)-2.5)))
+R_peTopGrp_load n11 0 1Meg
+B_peY1 n16 0 V = 5 * (1 - (1-u(V(n11)-2.5)) * (1-u(V(n9)-2.5)))
+R_peY1_load n16 0 1Meg
+B_peY0 n15 0 V = 5 * (1 - (1-u(V(n1)-2.5)) * (1-u(V(n3)-2.5)) * (1-u(V(n5)-2.5)) * (1-u(V(n7)-2.5)))
+R_peY0_load n15 0 1Meg
+B_peVL n13 0 V = 5 * (1 - (1-u(V(n0)-2.5)) * (1-u(V(n1)-2.5)) * (1-u(V(n2)-2.5)) * (1-u(V(n3)-2.5)))
+R_peVL_load n13 0 1Meg
+B_peVH n12 0 V = 5 * (1 - (1-u(V(n4)-2.5)) * (1-u(V(n5)-2.5)) * (1-u(V(n6)-2.5)) * (1-u(V(n7)-2.5)))
+R_peVH_load n12 0 1Meg
+B_peValid n14 0 V = 5 * (1 - (1-u(V(n13)-2.5)) * (1-u(V(n12)-2.5)))
+R_peValid_load n14 0 1Meg
+R_rY2 n17 n21 220
+V_lY2_sense n21 lY2_sense_mid DC 0
+D_lY2 lY2_sense_mid 0 LED_RED
+R_rY1 n16 n20 220
+V_lY1_sense n20 lY1_sense_mid DC 0
+D_lY1 lY1_sense_mid 0 LED_YELLOW
+R_rY0 n15 n19 220
+V_lY0_sense n19 lY0_sense_mid DC 0
+D_lY0 lY0_sense_mid 0 LED_GREEN
+R_rV n14 n18 220
+V_lV_sense n18 lV_sense_mid DC 0
+D_lV lV_sense_mid 0 LED_BLUE
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-ripple-adder-4bit 1`] = `
+"* Velxio circuit
+V_src n26 0 DC 5
+R_sA0 n26 n17 1000000000
+R_rA0 n17 0 10000
+R_sB0 n26 n21 1000000000
+R_rB0 n21 0 10000
+R_sA1 n26 n18 1000000000
+R_rA1 n18 0 10000
+R_sB1 n26 n22 1000000000
+R_rB1 n22 0 10000
+R_sA2 n26 n19 1000000000
+R_rA2 n19 0 10000
+R_sB2 n26 n23 1000000000
+R_rB2 n23 0 10000
+R_sA3 n26 n20 1000000000
+R_rA3 n20 0 10000
+R_sB3 n26 n24 1000000000
+R_rB3 n24 0 10000
+R_sCin n26 n25 1000000000
+R_rCin n25 0 10000
+B_x1_0 n27 0 V = 5 * (u(V(n17)-2.5) + u(V(n21)-2.5) - 2*u(V(n17)-2.5)*u(V(n21)-2.5))
+R_x1_0_load n27 0 1Meg
+B_a1_0 n0 0 V = 5 * u(V(n17)-2.5) * u(V(n21)-2.5)
+R_a1_0_load n0 0 1Meg
+B_x2_0 n31 0 V = 5 * (u(V(n27)-2.5) + u(V(n25)-2.5) - 2*u(V(n27)-2.5)*u(V(n25)-2.5))
+R_x2_0_load n31 0 1Meg
+B_a2_0 n4 0 V = 5 * u(V(n27)-2.5) * u(V(n25)-2.5)
+R_a2_0_load n4 0 1Meg
+B_orC_0 n8 0 V = 5 * (1 - (1-u(V(n0)-2.5)) * (1-u(V(n4)-2.5)))
+R_orC_0_load n8 0 1Meg
+R_rS0 n31 n13 220
+V_ledS0_sense n13 ledS0_sense_mid DC 0
+D_ledS0 ledS0_sense_mid 0 LED_RED
+B_x1_1 n28 0 V = 5 * (u(V(n18)-2.5) + u(V(n22)-2.5) - 2*u(V(n18)-2.5)*u(V(n22)-2.5))
+R_x1_1_load n28 0 1Meg
+B_a1_1 n1 0 V = 5 * u(V(n18)-2.5) * u(V(n22)-2.5)
+R_a1_1_load n1 0 1Meg
+B_x2_1 n32 0 V = 5 * (u(V(n28)-2.5) + u(V(n8)-2.5) - 2*u(V(n28)-2.5)*u(V(n8)-2.5))
+R_x2_1_load n32 0 1Meg
+B_a2_1 n5 0 V = 5 * u(V(n28)-2.5) * u(V(n8)-2.5)
+R_a2_1_load n5 0 1Meg
+B_orC_1 n9 0 V = 5 * (1 - (1-u(V(n1)-2.5)) * (1-u(V(n5)-2.5)))
+R_orC_1_load n9 0 1Meg
+R_rS1 n32 n14 220
+V_ledS1_sense n14 ledS1_sense_mid DC 0
+D_ledS1 ledS1_sense_mid 0 LED_YELLOW
+B_x1_2 n29 0 V = 5 * (u(V(n19)-2.5) + u(V(n23)-2.5) - 2*u(V(n19)-2.5)*u(V(n23)-2.5))
+R_x1_2_load n29 0 1Meg
+B_a1_2 n2 0 V = 5 * u(V(n19)-2.5) * u(V(n23)-2.5)
+R_a1_2_load n2 0 1Meg
+B_x2_2 n33 0 V = 5 * (u(V(n29)-2.5) + u(V(n9)-2.5) - 2*u(V(n29)-2.5)*u(V(n9)-2.5))
+R_x2_2_load n33 0 1Meg
+B_a2_2 n6 0 V = 5 * u(V(n29)-2.5) * u(V(n9)-2.5)
+R_a2_2_load n6 0 1Meg
+B_orC_2 n10 0 V = 5 * (1 - (1-u(V(n2)-2.5)) * (1-u(V(n6)-2.5)))
+R_orC_2_load n10 0 1Meg
+R_rS2 n33 n15 220
+V_ledS2_sense n15 ledS2_sense_mid DC 0
+D_ledS2 ledS2_sense_mid 0 LED_GREEN
+B_x1_3 n30 0 V = 5 * (u(V(n20)-2.5) + u(V(n24)-2.5) - 2*u(V(n20)-2.5)*u(V(n24)-2.5))
+R_x1_3_load n30 0 1Meg
+B_a1_3 n3 0 V = 5 * u(V(n20)-2.5) * u(V(n24)-2.5)
+R_a1_3_load n3 0 1Meg
+B_x2_3 n34 0 V = 5 * (u(V(n30)-2.5) + u(V(n10)-2.5) - 2*u(V(n30)-2.5)*u(V(n10)-2.5))
+R_x2_3_load n34 0 1Meg
+B_a2_3 n7 0 V = 5 * u(V(n30)-2.5) * u(V(n10)-2.5)
+R_a2_3_load n7 0 1Meg
+B_orC_3 n11 0 V = 5 * (1 - (1-u(V(n3)-2.5)) * (1-u(V(n7)-2.5)))
+R_orC_3_load n11 0 1Meg
+R_rS3 n34 n16 220
+V_ledS3_sense n16 ledS3_sense_mid DC 0
+D_ledS3 ledS3_sense_mid 0 LED_BLUE
+R_rCo n11 n12 220
+V_ledCo_sense n12 ledCo_sense_mid DC 0
+D_ledCo ledCo_sense_mid 0 LED_RED
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-ripple-counter-4bit 1`] = `
+"* Velxio circuit
+V_src n12 0 DC 5
+R_cnt_clk n12 n0 1000000000
+R_cnt_clk_r n0 0 10000
+R_cnt_lr0 n1 n8 220
+V_cnt_led0_sense n8 cnt_led0_sense_mid DC 0
+D_cnt_led0 cnt_led0_sense_mid 0 LED_RED
+R_cnt_lr1 n3 n9 220
+V_cnt_led1_sense n9 cnt_led1_sense_mid DC 0
+D_cnt_led1 cnt_led1_sense_mid 0 LED_GREEN
+R_cnt_lr2 n5 n10 220
+V_cnt_led2_sense n10 cnt_led2_sense_mid DC 0
+D_cnt_led2 cnt_led2_sense_mid 0 LED_BLUE
+R_cnt_lr3 n7 n11 220
+V_cnt_led3_sense n11 cnt_led3_sense_mid DC 0
+D_cnt_led3 cnt_led3_sense_mid 0 LED_YELLOW
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+R_autopull_n6 n6 0 100Meg
+R_autopull_n7 n7 0 100Meg
+R_autopull_n8 n8 0 100Meg
+R_autopull_n9 n9 0 100Meg
+R_autopull_n10 n10 0 100Meg
+R_autopull_n11 n11 0 100Meg
+.model LED_RED D(Is=1e-20 N=1.7)
+.model LED_GREEN D(Is=1e-22 N=1.9)
+.model LED_BLUE D(Is=1e-28 N=2.0)
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-xnor-equality 1`] = `
+"* Velxio circuit
+V_src n3 0 DC 5
+R_s1 n3 n1 0.01
+R_rpd1 n1 0 10000
+R_s2 n3 n2 0.01
+R_rpd2 n2 0 10000
+B_u1 n4 0 V = 5 * (1 - (u(V(n1)-2.5) + u(V(n2)-2.5) - 2*u(V(n1)-2.5)*u(V(n2)-2.5)))
+R_u1_load n4 0 1Meg
+R_rl n4 n0 220
+V_led_sense n0 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_YELLOW
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-xor-difference 1`] = `
+"* Velxio circuit
+V_src n3 0 DC 5
+R_s1 n3 n1 1000000000
+R_rpd1 n1 0 10000
+R_s2 n3 n2 1000000000
+R_rpd2 n2 0 10000
+B_u1 n4 0 V = 5 * (u(V(n1)-2.5) + u(V(n2)-2.5) - 2*u(V(n1)-2.5)*u(V(n2)-2.5))
+R_u1_load n4 0 1Meg
+R_rl n4 n0 220
+V_led_sense n0 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_YELLOW
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — digital (39 examples) > digital-xor-from-nands 1`] = `
+"* Velxio circuit
+V_src n7 0 DC 5
+R_sA n7 n5 1000000000
+R_rA n5 0 10000
+R_sB n7 n6 1000000000
+R_rB n6 0 10000
+B_n1 n0 0 V = 5 * (1 - u(V(n5)-2.5) * u(V(n6)-2.5))
+R_n1_load n0 0 1Meg
+B_n2 n1 0 V = 5 * (1 - u(V(n5)-2.5) * u(V(n0)-2.5))
+R_n2_load n1 0 1Meg
+B_n3 n2 0 V = 5 * (1 - u(V(n6)-2.5) * u(V(n0)-2.5))
+R_n3_load n2 0 1Meg
+B_n4 n3 0 V = 5 * (1 - u(V(n1)-2.5) * u(V(n2)-2.5))
+R_n4_load n3 0 1Meg
+R_rl n3 n4 220
+V_led_sense n4 led_sense_mid DC 0
+D_led led_sense_mid 0 LED_YELLOW
+.model LED_YELLOW D(Is=1e-21 N=1.8)
+.op
+.end"
+`;
+
+exports[`netlist snapshot — epaper (7 examples) > epaper-1in54-uno-hello 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — epaper (7 examples) > epaper-2in9-bwr-esp32-alert 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — epaper (7 examples) > epaper-2in9-esp32-weather 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — epaper (7 examples) > epaper-2in13-pico-clock 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — epaper (7 examples) > epaper-4in2-pico-image 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — epaper (7 examples) > epaper-5in65-7c-esp32-rainbow 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — epaper (7 examples) > epaper-7in5-esp32-dashboard 1`] = `
+"* Velxio circuit
+V_VCC_RAIL vcc_rail 0 DC 5
+R_autopull_n0 n0 0 100Meg
+R_autopull_n1 n1 0 100Meg
+R_autopull_n2 n2 0 100Meg
+R_autopull_n3 n3 0 100Meg
+R_autopull_n4 n4 0 100Meg
+R_autopull_n5 n5 0 100Meg
+.op
+.end"
+`;
+
+exports[`netlist snapshot — picow-wifi (4 examples) > picow-wifi-async-led 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — picow-wifi (4 examples) > picow-wifi-relay-web-server 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — picow-wifi (4 examples) > picow-wifi-servo-web 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;
+
+exports[`netlist snapshot — picow-wifi (4 examples) > picow-wifi-websocket-led 1`] = `
+"* Velxio circuit
+.op
+.end"
+`;

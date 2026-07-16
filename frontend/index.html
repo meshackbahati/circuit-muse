@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ═══════════════════════════════════════════════
+         PRIMARY SEO
+         Replace https://velxio.dev with your real domain
+    ═══════════════════════════════════════════════ -->
+    <title>CircuitMuse — Free Circuit &amp; Arduino Simulator with AI Agent | SPICE · ESP32 · RP2040</title>
+    <meta name="description" content="CircuitMuse is a free, open-source circuit and microcontroller simulator with an integrated AI agent. Real-time SPICE analog simulation, 31 boards across 6 CPU architectures, 100+ components — all running on your desktop. Bring your own AI provider (OpenAI, Anthropic, Ollama, Google, OpenRouter)." />
+    <meta name="keywords" content="circuit simulator, online circuit simulator, free circuit simulator, electronics simulator, spice simulator online, ngspice browser, analog circuit simulator, arduino simulator, arduino emulator, arduino simulator free, avr8 emulator, avr simulator, atmega328p simulator, atmega2560 simulator, attiny85 simulator, attiny85 emulator, arduino uno simulator, arduino mega simulator, arduino nano simulator, custom chip simulator, custom chip arduino, rp2040 emulator, raspberry pi pico simulator, esp32 emulator, esp32 simulator, esp32-c3 simulator, esp32-s3 emulator, risc-v simulator, ch32v003, raspberry pi 3 emulator, wokwi alternative, falstad alternative, tinkercad alternative, arduino ide browser, arduino online, online breadboard, virtual breadboard, oscilloscope simulator, op-amp simulator, transistor simulator, simulador arduino, simulador de circuitos, simulador electronico, velxio" />
+    <meta name="author" content="CircuitMuse Contributors" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <!-- canonical is set dynamically per-route by the useSEO hook -->
+
+    <!-- Google Search Console verification — replace token after verifying in Search Console -->
+    <!-- <meta name="google-site-verification" content="REPLACE_WITH_YOUR_VERIFICATION_TOKEN" /> -->
+
+    <!-- ═══════════════════════════════════════════════
+         GOOGLE ANALYTICS 4
+         Replace G-XXXXXXXXXX with your real Measurement ID
+         (analytics.google.com → Admin → Data Streams → Measurement ID)
+    ═══════════════════════════════════════════════ -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HPD8HTV3TG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HPD8HTV3TG');
+    </script>
+
+    <!-- ═══════════════════════════════════════════════
+         OPEN GRAPH (Facebook, LinkedIn, WhatsApp, Telegram, Discord, Slack…)
+    ═══════════════════════════════════════════════ -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Velxio" />
+    <meta property="og:title" content="Velxio — Free Circuit & Arduino Simulator | SPICE Analog · ESP32 · RP2040 · Custom Chips" />
+    <meta property="og:description" content="Hybrid digital + analog circuit simulator in your browser. SPICE-accurate analog (ngspice-WASM) wired to 19 boards: Arduino Uno/Nano/Mega/ATtiny85, ESP32, RP2040, RISC-V, Raspberry Pi 3 Linux. Build custom chips in C/Rust. 100+ components, oscilloscope, voltmeter — no cloud." />
+    <meta property="og:url" content="https://velxio.dev/" />
+    <meta property="og:image" content="https://velxio.dev/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Velxio — Free Online Circuit + Arduino Simulator with SPICE Analog, Custom Chips, ESP32, ATtiny85" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- ═══════════════════════════════════════════════
+         TWITTER / X CARD
+    ═══════════════════════════════════════════════ -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@velxio_app" />
+    <meta name="twitter:creator" content="@velxio_app" />
+    <meta name="twitter:title" content="Velxio — Free Circuit & Arduino Simulator | SPICE · ESP32 · RP2040 · Custom Chips" />
+    <meta name="twitter:description" content="Hybrid digital + analog circuit simulator in your browser. SPICE-accurate analog (ngspice-WASM) co-simulated with Arduino, ESP32, RP2040, ATtiny85. Build custom chips in C/Rust. 100+ components — free, no cloud." />
+    <meta name="twitter:image" content="https://velxio.dev/og-image.png" />
+    <meta name="twitter:image:alt" content="Velxio — Free Online Circuit + Arduino Simulator with SPICE Analog, Custom Chips, ESP32, ATtiny85" />
+
+    <!-- ═══════════════════════════════════════════════
+         THEME & APP
+    ═══════════════════════════════════════════════ -->
+    <meta name="theme-color" content="#007acc" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="application-name" content="Velxio" />
+    <meta name="generator" content="Vite + React + FastAPI" />
+
+    <!-- ═══════════════════════════════════════════════
+         FAVICON — full set generated by scripts/generate-favicons.mjs
+    ═══════════════════════════════════════════════ -->
+    <!-- SVG: modern browsers (scales perfectly) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- ICO: legacy browsers / Windows taskbar -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <!-- PNG fallbacks -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <!-- Apple devices (Safari, iOS home screen) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- ═══════════════════════════════════════════════
+         PWA / WEB APP MANIFEST
+    ═══════════════════════════════════════════════ -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- ═══════════════════════════════════════════════
+         PRECONNECT (speed up external resources)
+    ═══════════════════════════════════════════════ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://github.com" />
+    <link rel="dns-prefetch" href="https://discord.com" />
+
+    <!-- ═══════════════════════════════════════════════
+         WEBFONTS — self-hosted, preloaded
+    ═══════════════════════════════════════════════ -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/Inter.var.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/JetBrainsMono.var.woff2" crossorigin />
+
+    <!-- ═══════════════════════════════════════════════
+         JSON-LD STRUCTURED DATA
+         Helps Google understand the page type and show
+         rich results in search (ratings, price, etc.)
+    ═══════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://velxio.dev/#website",
+          "url": "https://velxio.dev/",
+          "name": "Velxio",
+          "description": "Free open-source circuit and microcontroller simulator. SPICE-accurate analog co-simulation wired to Arduino, ESP32, RP2040, ATtiny85, and Raspberry Pi 3 — all running in the browser.",
+          "inLanguage": "en-US",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://velxio.dev/examples?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://velxio.dev/#app",
+          "name": "Velxio",
+          "alternateName": ["Velxio Circuit Simulator", "Velxio Arduino Simulator", "Velxio SPICE Simulator", "Velxio Online Electronics Simulator", "Velxio Multi-Board Emulator"],
+          "description": "Free, open-source online circuit and microcontroller simulator. Real-time SPICE analog co-simulation via ngspice-WASM (resistors, capacitors, op-amps, transistors, diodes, voltage regulators) wired to 19 boards across 5 CPU architectures: ATmega328p/2560/ATtiny85 (AVR8 via avr8js), RP2040 ARM Cortex-M0+ (rp2040js, browser), ESP32-C3/CH32V003 RISC-V RV32IMC (QEMU lcgamboa libqemu-riscv32), ESP32/ESP32-S3 Xtensa LX6/LX7 (QEMU lcgamboa libqemu-xtensa), and Raspberry Pi 3B ARM Cortex-A53 (QEMU Linux). Build custom chips in C/Rust/AssemblyScript via the Wokwi Custom Chips API. Includes live oscilloscope, voltmeter, ammeter, signal generator, 100+ interactive electronic components, Monaco Editor, Serial Monitor, arduino-cli compilation, and Library Manager.",
+          "url": "https://velxio.dev/",
+          "applicationCategory": "DeveloperApplication",
+          "applicationSubCategory": "Electronics Simulator",
+          "operatingSystem": "Web Browser",
+          "browserRequirements": "Requires JavaScript. Works in Chrome, Firefox, Safari, Edge.",
+          "softwareVersion": "1.0.0",
+          "releaseNotes": "https://github.com/davidmonterocrespo24/velxio/releases",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "featureList": [
+            "Real-time SPICE analog circuit simulation via ngspice-WASM — Modified Nodal Analysis at ~60 Hz, not a linear approximation",
+            "Hybrid digital + analog co-simulation: GPIO drives SPICE nets, ADC reads solved node voltages back into firmware",
+            "100+ SPICE-accurate components: resistors, capacitors, inductors, BJTs (2N2222/3055/3906/BC547/BC557), MOSFETs (2N7000/IRF540/IRF9540), op-amps (LM358/741/TL072/LM324), regulators (7805/7812/LM317), Zener/Schottky diodes",
+            "Custom chips in C, Rust, and AssemblyScript (Wokwi Custom Chips API + WASI shim) — define your own ICs and reuse them across projects",
+            "Real AVR8 emulation: Arduino Uno (ATmega328p), Nano, Mega 2560 (ATmega2560), ATtiny85, Leonardo (ATmega32u4), Pro Mini at 16 MHz",
+            "RP2040 emulation: Raspberry Pi Pico and Pico W (ARM Cortex-M0+ at 133 MHz via rp2040js)",
+            "RISC-V emulation: ESP32-C3 DevKit, XIAO ESP32-C3, ESP32-C3 SuperMini, CH32V003 (RV32IMC/RV32EC via QEMU lcgamboa libqemu-riscv32)",
+            "ESP32 / ESP32-S3 / ESP32-CAM / Nano ESP32 emulation (Xtensa LX6/LX7 via QEMU)",
+            "Raspberry Pi 3B emulation: full ARM Cortex-A53 Linux (Raspberry Pi OS via QEMU raspi3b)",
+            "Live instruments: oscilloscope (multi-channel), voltmeter, ammeter, signal generator (sine/square/DC)",
+            "48+ wokwi visual components: LEDs, servos, ultrasonic sensors, TFT displays, NeoPixel, LCD, keypads",
+            "Monaco Code Editor with C++ / Python syntax highlighting and autocomplete",
+            "arduino-cli compilation backend — produces real .hex / .bin / .uf2 files",
+            "Serial Monitor with auto baud-rate detection and send",
+            "Library Manager for the full Arduino library index",
+            "Multi-file workspace (.ino, .h, .cpp, .py)",
+            "Wire system with orthogonal routing and 8 signal-type colors",
+            "ILI9341 TFT display simulation",
+            "I2C, SPI, USART, ADC, PWM support across all emulated boards",
+            "Multi-board canvas: mix Arduino + ESP32 + Raspberry Pi + analog circuits on the same simulation"
+          ],
+          "screenshot": "https://velxio.dev/og-image.png",
+          "downloadUrl": "https://hub.docker.com/r/davidmonterocrespo24/velxio",
+          "installUrl": "https://velxio.dev/editor",
+          "codeRepository": "https://github.com/davidmonterocrespo24/velxio",
+          "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+          "isAccessibleForFree": true,
+          "author": {
+            "@type": "Person",
+            "name": "David Montero Crespo",
+            "url": "https://github.com/davidmonterocrespo24"
+          },
+          "maintainer": {
+            "@type": "Person",
+            "name": "David Montero Crespo",
+            "url": "https://github.com/davidmonterocrespo24"
+          },
+          "keywords": "circuit simulator, online circuit simulator, free circuit simulator, electronics simulator, spice simulator online, ngspice browser, analog circuit simulator, arduino simulator, arduino emulator, avr8 simulator, atmega328p emulator, atmega2560, attiny85 simulator, custom chip simulator, esp32 emulator, esp32 simulator, esp32-c3 simulator, esp32-s3 emulator, rp2040 emulator, raspberry pi pico emulator, raspberry pi 3 emulator, risc-v simulator, wokwi alternative, falstad alternative, tinkercad alternative, online breadboard, oscilloscope simulator",
+          "inLanguage": "en-US"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://velxio.dev/#webpage",
+          "url": "https://velxio.dev/",
+          "name": "Velxio — Free Online Circuit & Arduino Simulator | SPICE · ESP32 · ATtiny85 · Custom Chips",
+          "description": "Velxio is a free, open-source online circuit simulator with hybrid digital + analog SPICE co-simulation, 19 supported boards, custom chip authoring, and 100+ components — all in your browser.",
+          "isPartOf": { "@id": "https://velxio.dev/#website" },
+          "about": { "@id": "https://velxio.dev/#app" },
+          "inLanguage": "en-US",
+          "potentialAction": {
+            "@type": "ReadAction",
+            "target": "https://velxio.dev/"
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
+  <style>
+    /* Hide SEO fallback content instantly — React removes it on mount.
+       Crawlers ignore visibility:hidden and still index the text. */
+    #root-seo { visibility: hidden; position: absolute; pointer-events: none; }
+  </style>
+  <body style="margin:0;background:#1e1e1e;">
+    <!--
+      Desktop-only splash. Sidecar boot + Monaco hydration take 3-8s
+      on a cold launch; without this the user stares at a black window.
+      Hidden by default and revealed by the inline script below only
+      when window.__TAURI__ is present (Tauri webview), so web users
+      never see it. Removed from the DOM when React's first render
+      lands (main.tsx).
+
+      Self-contained: inline SVG logo + CSS keyframes, no external
+      requests. Safe to keep in OSS since the gate is the Tauri
+      global, not VITE_DESKTOP.
+    -->
+    <div id="velxio-splash" aria-hidden="true" style="display:none;position:fixed;inset:0;z-index:2147483647;background:linear-gradient(160deg,#0d1117 0%,#161b22 50%,#0d1117 100%);color:#e6edf3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;align-items:center;justify-content:center;flex-direction:column;gap:24px;">
+      <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 18px rgba(88,166,255,0.35));">
+        <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+        <rect x="9" y="9" width="6" height="6"></rect>
+        <path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4"></path>
+      </svg>
+      <div style="font-size:32px;font-weight:600;letter-spacing:0.5px;">Velxio</div>
+      <div style="font-size:14px;color:#8b949e;max-width:340px;text-align:center;line-height:1.5;">Offline Arduino, RP2040 &amp; ESP32 simulator</div>
+      <div style="width:32px;height:32px;border:3px solid rgba(88,166,255,0.18);border-top-color:#58a6ff;border-radius:50%;animation:velxio-spin 0.9s linear infinite;margin-top:8px;"></div>
+      <div style="position:absolute;bottom:24px;left:0;right:0;text-align:center;font-size:11px;color:#484f58;">Starting local backend…</div>
+      <style>@keyframes velxio-spin{to{transform:rotate(360deg)}}</style>
+    </div>
+    <script>
+      // Reveal the splash ONLY inside Tauri. Detection is synchronous:
+      // `withGlobalTauri: true` in tauri.conf.json injects __TAURI__
+      // before page JS runs. Web users land here with __TAURI__
+      // undefined and the splash stays display:none.
+      if (typeof window !== 'undefined' && window.__TAURI__) {
+        var s = document.getElementById('velxio-splash');
+        if (s) s.style.display = 'flex';
+      }
+    </script>
+    <div id="root"></div>
+    <!--
+      Static pre-rendered content for search engine crawlers.
+      Hidden from users via CSS; React app renders in #root above.
+    -->
+    <div id="root-seo" aria-hidden="true">
+      <header style="font-family:sans-serif;background:#0d1117;color:#e6edf3;padding:1.5rem 2rem;">
+        <a href="/" style="text-decoration:none;color:inherit;">
+          <h1 style="margin:0;font-size:1.5rem;">Velxio — Free Online Circuit &amp; Arduino Simulator | SPICE · ESP32 · RP2040 · ATtiny85 · Custom Chips</h1>
+        </a>
+        <nav style="margin-top:.75rem;">
+          <a href="/editor" style="color:#58a6ff;margin-right:1.5rem;">Editor</a>
+          <a href="/examples" style="color:#58a6ff;margin-right:1.5rem;">Examples</a>
+          <a href="/v2-5" style="color:#58a6ff;margin-right:1.5rem;">Velxio 2.5 (SPICE)</a>
+          <a href="/circuit-simulator" style="color:#58a6ff;margin-right:1.5rem;">Circuit Simulator</a>
+          <a href="/spice-simulator" style="color:#58a6ff;margin-right:1.5rem;">SPICE Simulator</a>
+          <a href="/custom-chip-simulator" style="color:#58a6ff;margin-right:1.5rem;">Custom Chip Simulator</a>
+          <a href="/arduino-simulator" style="color:#58a6ff;margin-right:1.5rem;">Arduino Simulator</a>
+          <a href="/arduino-emulator" style="color:#58a6ff;margin-right:1.5rem;">Arduino Emulator</a>
+          <a href="/atmega328p-simulator" style="color:#58a6ff;margin-right:1.5rem;">ATmega328P Simulator</a>
+          <a href="/attiny85-simulator" style="color:#58a6ff;margin-right:1.5rem;">ATtiny85 Simulator</a>
+          <a href="/arduino-mega-simulator" style="color:#58a6ff;margin-right:1.5rem;">Arduino Mega Simulator</a>
+          <a href="/esp32-simulator" style="color:#58a6ff;margin-right:1.5rem;">ESP32 Simulator</a>
+          <a href="/esp32-c3-simulator" style="color:#58a6ff;margin-right:1.5rem;">ESP32-C3 Simulator</a>
+          <a href="/raspberry-pi-pico-simulator" style="color:#58a6ff;margin-right:1.5rem;">Raspberry Pi Pico Simulator</a>
+          <a href="/raspberry-pi-simulator" style="color:#58a6ff;margin-right:1.5rem;">Raspberry Pi 3 Simulator</a>
+          <a href="https://github.com/davidmonterocrespo24/velxio" style="color:#58a6ff;margin-right:1.5rem;">GitHub</a>
+          <a href="https://discord.gg/3mARjJrh4E" style="color:#58a6ff;margin-right:1.5rem;">Discord</a>
+          <a href="/docs/intro" style="color:#58a6ff;margin-right:1.5rem;">Documentation</a>
+          <a href="/about" style="color:#58a6ff;">About</a>
+        </nav>
+      </header>
+      <main style="font-family:sans-serif;background:#0d1117;color:#e6edf3;padding:2rem;">
+        <h2>Free online circuit + microcontroller simulator — SPICE-accurate analog wired to Arduino, ESP32, RP2040, ATtiny85 &amp; more</h2>
+        <p>Velxio is a free, open-source online circuit simulator with hybrid digital + analog co-simulation. Real-time SPICE analysis (ngspice-WASM) wired to 19 supported boards across 5 CPU architectures. Build custom chips in C, Rust, or AssemblyScript. 100+ interactive components, live oscilloscope, voltmeter, ammeter, Monaco Editor, Serial Monitor, arduino-cli compiler, and Library Manager — no cloud, no latency, no account required.</p>
+        <h3>What's new in Velxio 2.5</h3>
+        <ul>
+          <li><strong>Real-time SPICE analog simulation</strong> in your browser via ngspice-WASM (eecircuit-engine) — Modified Nodal Analysis at ~60 Hz, not a linear approximation</li>
+          <li><strong>Hybrid digital + analog co-simulation</strong> — GPIO pins drive SPICE nets as voltage sources; <code>analogRead()</code> reads solved node voltages back into firmware</li>
+          <li><strong>100+ SPICE-accurate parts</strong>: resistors, capacitors, inductors, BJTs, MOSFETs, op-amps (LM358/741/TL072), regulators (7805/7812/LM317), Zener/Schottky diodes, optocouplers, relays</li>
+          <li><strong>Live instruments</strong>: oscilloscope (multi-channel), voltmeter, ammeter, signal generator (sine/square/DC)</li>
+          <li><strong>40+ new analog &amp; hybrid examples</strong>: voltage divider, RC filter, full-wave rectifier, Schmitt trigger, op-amp amplifier, Wheatstone bridge, H-bridge motor driver</li>
+        </ul>
+        <h3>Features</h3>
+        <ul>
+          <li>Real AVR8 emulation: Arduino Uno (ATmega328p), Nano, Mega 2560, ATtiny85, Leonardo, Pro Mini at 16 MHz via avr8js</li>
+          <li>Raspberry Pi Pico &amp; Pico W (RP2040, ARM Cortex-M0+ at 133 MHz) via rp2040js</li>
+          <li>ESP32-C3 / XIAO ESP32-C3 / SuperMini / CH32V003 (RISC-V RV32IMC/EC) &mdash; via QEMU lcgamboa (libqemu-riscv32)</li>
+          <li>ESP32 / ESP32-S3 / ESP32-CAM / Arduino Nano ESP32 (Xtensa LX6/LX7 at 240 MHz) via QEMU lcgamboa</li>
+          <li>Raspberry Pi 3B (ARM Cortex-A53, full Linux) via QEMU raspi3b &mdash; runs Python scripts with RPi.GPIO</li>
+          <li><strong>Custom Chips</strong> — author your own integrated circuits in C, Rust, or AssemblyScript using the Wokwi Custom Chips API; reuse them across projects</li>
+          <li>48+ wokwi interactive electronic components (LEDs, resistors, buttons, sensors, TFT displays, NeoPixel&hellip;)</li>
+          <li>Monaco Code Editor with full C++ / Python syntax highlighting</li>
+          <li>arduino-cli compilation backend &mdash; produces real .hex / .uf2 / .bin files</li>
+          <li>Serial Monitor with auto baud-rate detection and send</li>
+          <li>Library Manager for Arduino libraries</li>
+          <li>Multi-file workspace (.ino, .h, .cpp, .py)</li>
+          <li>Wire system with orthogonal routing</li>
+          <li>ILI9341 TFT display simulation</li>
+          <li>I2C, SPI, USART, ADC, PWM support</li>
+          <li>Multi-board canvas: mix Arduino + ESP32 + Raspberry Pi + analog circuits in one simulation</li>
+        </ul>
+        <h3>Supported Boards</h3>
+        <ul>
+          <li>Arduino Uno (ATmega328P) &mdash; full AVR8 emulation at 16 MHz</li>
+          <li>Arduino Nano (ATmega328P) &mdash; full AVR8 emulation at 16 MHz</li>
+          <li>Arduino Mega 2560 (ATmega2560) &mdash; 256 KB flash, 54 digital pins, 4 serial ports</li>
+          <li>ATtiny85 &mdash; AVR, 8 KB flash, DIP-8, all 6 I/O pins emulated</li>
+          <li>Arduino Leonardo (ATmega32u4) &mdash; USB HID capable AVR</li>
+          <li>Arduino Pro Mini (ATmega328P) &mdash; 3.3 V / 5 V variants</li>
+          <li>Raspberry Pi Pico (RP2040) &mdash; ARM Cortex-M0+ at 133 MHz</li>
+          <li>Raspberry Pi Pico W (RP2040) &mdash; ARM Cortex-M0+ + WiFi</li>
+          <li>ESP32-C3 DevKit (RISC-V RV32IMC) &mdash; 160 MHz, QEMU libqemu-riscv32</li>
+          <li>Seeed XIAO ESP32-C3 (RISC-V RV32IMC) &mdash; compact, QEMU libqemu-riscv32</li>
+          <li>ESP32-C3 SuperMini (RISC-V RV32IMC) &mdash; mini form factor</li>
+          <li>CH32V003 (RISC-V RV32EC) &mdash; 48 MHz, ultra-compact DIP-8</li>
+          <li>ESP32 DevKit V1 / C V4 (Xtensa LX6) &mdash; 240 MHz, WiFi, QEMU</li>
+          <li>ESP32-S3 (Xtensa LX7) &mdash; 240 MHz, dual-core, QEMU</li>
+          <li>ESP32-CAM (Xtensa LX6) &mdash; camera module, QEMU</li>
+          <li>Seeed XIAO ESP32-S3 (Xtensa LX7) &mdash; compact, QEMU</li>
+          <li>Arduino Nano ESP32 (Xtensa LX6) &mdash; Arduino form factor, QEMU</li>
+          <li>Raspberry Pi 3B (ARM Cortex-A53) &mdash; full Linux OS via QEMU raspi3b, runs Python</li>
+        </ul>
+        <h3>Get Started</h3>
+        <p>
+          <a href="/editor">Open the Editor</a> &mdash; no installation needed.<br />
+          Self-host with Docker: <code>docker run -d -p 3080:80 ghcr.io/davidmonterocrespo24/velxio:master</code>
+        </p>
+        <h3>Documentation</h3>
+        <p>Browse the full Velxio documentation to learn how to set up, configure, and extend the emulator:</p>
+        <nav>
+          <ul>
+            <li><a href="/docs/intro">Introduction — What is Velxio and why use it?</a></li>
+            <li><a href="/docs/getting-started">Getting Started — Hosted editor, Docker, and manual setup</a></li>
+            <li><a href="/docs/emulator">Emulator Architecture — AVR8 and RP2040 CPU emulation internals</a></li>
+            <li><a href="/docs/components">Components Reference — All 48+ interactive electronic components</a></li>
+            <li><a href="/docs/architecture">Project Architecture — System design, data flows, and stores</a></li>
+            <li><a href="/docs/third-party">Wokwi Libraries — avr8js, wokwi-elements, rp2040js integration</a></li>
+            <li><a href="/docs/mcp">MCP Server — AI agent integration via Model Context Protocol</a></li>
+            <li><a href="/docs/setup">Project Status — All implemented features and troubleshooting</a></li>
+            <li><a href="/docs/roadmap">Roadmap — Implemented, in-progress, and planned features</a></li>
+          </ul>
+        </nav>
+        <h3>Frequently Asked Questions</h3>
+        <dl>
+          <dt>Is Velxio free?</dt>
+          <dd>Yes. Velxio is free and open-source under the GNU AGPLv3 license. A commercial license is available for proprietary integrations.</dd>
+          <dt>Does Velxio work offline?</dt>
+          <dd>The SPICE analog solver and the browser-side CPU emulators (AVR8 via avr8js, RP2040 via rp2040js) run entirely in the browser. Xtensa and RISC-V boards (ESP32 / ESP32-S3 / ESP32-C3 / CH32V003) and Raspberry Pi 3 Linux run through QEMU lcgamboa, which is bundled in the self-hosted Docker image. Compilation requires the local arduino-cli backend. Self-hosted deployments work fully offline once running.</dd>
+          <dt>Can Velxio simulate analog circuits like SPICE?</dt>
+          <dd>Yes. Velxio 2.5 includes real-time SPICE analog simulation via ngspice compiled to WebAssembly. It runs full Modified Nodal Analysis on every tick — non-linear devices (diodes, BJTs, MOSFETs, op-amps with saturation) behave like real silicon, not idealised models.</dd>
+          <dt>Can I co-simulate Arduino code with an analog circuit?</dt>
+          <dd>Yes. GPIO pins drive SPICE nets as voltage sources, and ADC pins read solved analog node voltages back into firmware. <code>analogRead()</code> returns the actual SPICE-solved value at that net — so you can build PWM-driven RC filters, transistor switches, op-amp signal chains, and motor drivers end-to-end on the same canvas.</dd>
+          <dt>Can I create my own custom chips?</dt>
+          <dd>Yes. Velxio implements the Wokwi Custom Chips API. Write your chip logic in C, Rust, or AssemblyScript — Velxio compiles it to WebAssembly and exposes pin I/O, attribute reads, timers, and I²C/SPI hooks. Save chips to your account and reuse them across projects.</dd>
+          <dt>Is Velxio a Wokwi alternative?</dt>
+          <dd>Yes. Velxio is a free, self-hosted alternative to Wokwi. It uses the same avr8js and wokwi-elements open-source libraries but runs on your own machine, and adds full SPICE analog co-simulation that Wokwi does not provide.</dd>
+          <dt>Is Velxio a Falstad / Tinkercad / CircuitLab alternative?</dt>
+          <dd>For analog circuits, yes. Velxio runs the open-source ngspice solver — the same engine professional EDA tools use. Unlike Falstad and Tinkercad, Velxio also runs the firmware on the microcontroller driving the circuit.</dd>
+          <dt>What boards are supported?</dt>
+          <dd>19 boards: Arduino Uno (ATmega328p / AVR8), Arduino Nano, Arduino Mega 2560 (ATmega2560), ATtiny85, Arduino Leonardo (ATmega32u4), Arduino Pro Mini, Raspberry Pi Pico &amp; Pico W (RP2040), ESP32 / ESP32-S3 / ESP32-CAM / Nano ESP32 (Xtensa via QEMU), ESP32-C3 / XIAO ESP32-C3 / ESP32-C3 SuperMini / CH32V003 (RISC-V), and Raspberry Pi 3B (Linux ARM Cortex-A53 via QEMU).</dd>
+        </dl>
+
+        <!-- SEO landing pages — keyword content for crawlers -->
+        <section>
+          <h2>Free Online Circuit Simulator with SPICE</h2>
+          <p>Velxio is a free online circuit simulator with real-time SPICE analog simulation in your browser. Drop resistors, capacitors, op-amps, transistors, diodes, and voltage regulators on the canvas — every component is modelled with real ngspice device cards, not behavioural stand-ins. <a href="/circuit-simulator">Open Circuit Simulator →</a></p>
+          <ul>
+            <li>ngspice-WASM engine — full Modified Nodal Analysis at ~60 Hz solve rate</li>
+            <li>Non-linear devices behave like real silicon: BJT cutoff/saturation, op-amp rails, diode forward drop</li>
+            <li>Live oscilloscope, voltmeter, ammeter, signal generator</li>
+            <li>100+ SPICE-accurate parts: passives, semiconductors, logic ICs, regulators, optocouplers, relays</li>
+            <li>Always-on — no toggle, every circuit is SPICE-solved</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>SPICE Simulator Online — ngspice in Your Browser</h2>
+          <p>Velxio runs ngspice (the open-source SPICE simulator powering professional EDA tools) compiled to WebAssembly via eecircuit-engine. Full transient analysis, real device models, in your browser tab. No install, no account, works offline after the first load. <a href="/spice-simulator">Open SPICE Simulator →</a></p>
+          <ul>
+            <li>Real ngspice — same engine, browser-native via WASM</li>
+            <li>5 BJTs (2N2222, 2N3055, 2N3906, BC547, BC557)</li>
+            <li>4 MOSFETs (2N7000, IRF540, IRF9540, FQP27P06)</li>
+            <li>5 op-amps (LM358, LM741, TL072, LM324, ideal) with saturation rails</li>
+            <li>4 linear regulators (7805, 7812, 7905, LM317)</li>
+            <li>Diodes: 1N4148, 1N4007, 1N5817, 1N5819, Zener 1N4733</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Custom Chip Simulator — Define Your Own ICs in C / Rust</h2>
+          <p>Velxio implements the Wokwi Custom Chips API: write your chip logic in C, Rust, or AssemblyScript, compile to WebAssembly, and the simulator drives its pins like any other component. Build a sensor model, a digital protocol bridge, or a behavioural IC stand-in — and reuse it across projects. <a href="/custom-chip-simulator">Open Custom Chip Simulator →</a></p>
+          <ul>
+            <li>Wokwi-compatible Custom Chips API with WASI shim</li>
+            <li>Pin reads/writes, attribute reads, timers</li>
+            <li>I²C and SPI bus integration</li>
+            <li>Save chips to your account and reuse across projects</li>
+            <li>Library of starter examples (sensors, decoders, bridges)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>ATtiny85 Simulator — Real AVR Emulation in Your Browser</h2>
+          <p>Velxio simulates the ATtiny85 with cycle-accurate AVR8 emulation. Full DIP-8 pinout, 8 KB flash, 6 GPIOs, USI peripheral, 10-bit ADC, Timer0/Timer1 with PWM, and watchdog. Wire it to LEDs, sensors, or analog circuits and run real ATtiny code without a programmer. <a href="/attiny85-simulator">Open ATtiny85 Simulator →</a></p>
+          <ul>
+            <li>Cycle-accurate ATtiny85 emulation via avr8js</li>
+            <li>All 6 I/O pins (PB0–PB5) with proper port behaviour</li>
+            <li>Timer0 (8-bit), Timer1 (8-bit), watchdog timer</li>
+            <li>10-bit ADC with 4 input channels</li>
+            <li>USI peripheral for I²C / SPI bit-banging</li>
+            <li>Wire to SPICE analog parts for full circuit testing</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Free Online Arduino Simulator</h2>
+          <p>Velxio is a free online Arduino simulator with real AVR8 emulation at 16 MHz. Simulate Arduino code with 48+ interactive electronic components directly in your browser — no install, no account required. <a href="/arduino-simulator">Open Arduino Simulator →</a></p>
+          <ul>
+            <li>Arduino Uno (ATmega328P) simulation at 16 MHz</li>
+            <li>48+ visual components: LEDs, sensors, displays, servos</li>
+            <li>Serial Monitor with auto baud-rate detection</li>
+            <li>Multi-file sketch support (.ino, .h, .cpp)</li>
+            <li>Free and open-source (GNU AGPLv3)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Arduino Emulator — Real AVR8 &amp; RP2040 Emulation</h2>
+          <p>Velxio is a cycle-accurate Arduino emulator built on avr8js and rp2040js. Every AVR opcode is faithfully emulated at 16 MHz — the same silicon behavior as real hardware. <a href="/arduino-emulator">Open Arduino Emulator →</a></p>
+          <ul>
+            <li>All 135 AVR8 instructions emulated</li>
+            <li>Hardware timers (Timer0/1/2) with PWM, CTC, and overflow interrupts</li>
+            <li>10-bit ADC, full USART0 (TX/RX), SPI, I2C</li>
+            <li>RP2040 dual-core ARM Cortex-M0+ via rp2040js</li>
+            <li>RISC-V RV32IMC (ESP32-C3) emulation via QEMU lcgamboa</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>ATmega328P Simulator</h2>
+          <p>Simulate ATmega328P firmware exactly as it runs on Arduino Uno and Nano. Full AVR8 emulation: PORTB, PORTC, PORTD, Timer0/1/2, ADC, USART0, and all interrupt vectors. <a href="/atmega328p-simulator">Open ATmega328P Simulator →</a></p>
+          <ul>
+            <li>ATmega328P: 32 KB flash, 2 KB SRAM, 16 MHz</li>
+            <li>GPIO: PORTB (pins 8–13), PORTC (A0–A5), PORTD (0–7)</li>
+            <li>Timer0 (8-bit), Timer1 (16-bit), Timer2 (8-bit) — all PWM modes</li>
+            <li>10-bit ADC, 6 analog channels (A0–A5)</li>
+            <li>USART0 with configurable baud rate</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Arduino Mega 2560 Simulator</h2>
+          <p>Simulate Arduino Mega 2560 (ATmega2560) code for free. 256 KB flash, 54 digital pins, 16 analog inputs, 4 hardware serial ports (Serial, Serial1, Serial2, Serial3), and 6 hardware timers. <a href="/arduino-mega-simulator">Open Mega 2560 Simulator →</a></p>
+          <ul>
+            <li>ATmega2560: 256 KB flash, 8 KB SRAM, 16 MHz</li>
+            <li>54 digital I/O pins (PORTA through PORTL)</li>
+            <li>16 analog input channels (A0–A15), 10-bit ADC</li>
+            <li>4 hardware USART channels: Serial0–3</li>
+            <li>6 hardware timers: Timer0–5 (including three 16-bit)</li>
+            <li>15 PWM output pins</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+
+  </body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "Galaksija ROM (8K)",
+  "author": "Velxio (ROM: Voja Antonic, public domain)",
+  "license": "MIT (chip) / public-domain (ROM image)",
+  "description": "8 KB EPROM holding the public-domain Galaksija (1983) home-computer ROM A (monitor + integer BASIC) + ROM B (float BASIC). A0..A12 address, D0..D7 data, CE/OE active-low. Fixture for the Phase 3 chip-to-chip bus proof: a real Z80 boots this over the bus.",
+  "pins": ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "CE", "OE"]
+}

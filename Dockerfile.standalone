@@ -1,0 +1,312 @@
+# ---- Stage 0: QEMU .so + ROM binaries ----
+# The Velxio runtime needs libqemu-xtensa.so + libqemu-riscv32.so (the
+# QEMU shared libraries that simulate ESP32 / ESP32-S3 / ESP32-C3) plus
+# the matching boot ROM blobs. Three sources, tried in order:
+#
+#   1. Local prebuilt files at prebuilt/qemu/<file>.
+#      Drop your own compiled .so files in there (see docs/BUILD-QEMU.md
+#      for the full build-from-source guide) and they win — no network
+#      access required.
+#
+#   2. velxio.dev gated download endpoint, when VELXIO_LICENSE_KEY is set.
+#      Free personal-tier keys at https://velxio.dev/license/signup.
+#
+#   3. Build fails with a clear error telling you which of the two paths
+#      to pick.
+#
+# Backward compatibility: the old QEMU_RELEASE_URL ARG is still accepted
+# so forks pointing at a private mirror of the binaries keep working.
+FROM ubuntu:22.04 AS qemu-provider
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+ARG TARGETARCH
+ARG VELXIO_LICENSE_KEY=
+ARG VELXIO_BINARY_BASE_URL=https://velxio.dev/api/pro/license/downloads
+# Legacy escape hatch — set this to keep using the old GitHub Release
+# mirror (or any other CDN you proxy from). When set, takes precedence
+# over the gated path.
+ARG QEMU_RELEASE_URL=
+
+# Copy the prebuilt directory (may contain .so+ROM files or just the .gitkeep)
+RUN mkdir -p /qemu
+COPY prebuilt/qemu/ /qemu/
+
+# Resolve which fetch path the build will use and fail-fast with a
+# friendly message if neither prebuilt files nor a key were provided.
+RUN cd /qemu \
+ && have_libs=1 && for base in libqemu-xtensa libqemu-riscv32; do \
+      [ -f "${base}.so" ] || have_libs=0 ; \
+    done \
+ && if [ "$have_libs" = "1" ]; then \
+      echo "[qemu-provider] using local prebuilt/qemu/ files — no download" ; \
+    elif [ -n "${QEMU_RELEASE_URL}" ]; then \
+      echo "[qemu-provider] using legacy QEMU_RELEASE_URL: ${QEMU_RELEASE_URL}" ; \
+    elif [ -n "${VELXIO_LICENSE_KEY}" ]; then \
+      echo "[qemu-provider] using velxio.dev gated download with provided license key" ; \
+    else \
+      echo "" ; \
+      echo "ERROR: Velxio docker build needs the QEMU runtime libraries." ; \
+      echo "" ; \
+      echo "Pick one:" ; \
+      echo "  a) Free personal key from https://velxio.dev/license/signup ," ; \
+      echo "     then re-build with --build-arg VELXIO_LICENSE_KEY=vlx_personal_..." ; \
+      echo "  b) Build QEMU yourself (see docs/BUILD-QEMU.md) and drop the .so" ; \
+      echo "     files plus the three esp32*-rom.bin files into prebuilt/qemu/." ; \
+      echo "" ; \
+      exit 1 ; \
+    fi
+
+# Download arch-specific .so and arch-independent ROM files.
+# The gated endpoint serves the same byte-for-byte content as the legacy
+# GitHub Release path; asset paths just drop the .so extension since the
+# license module's manifest carries the real filename.
+RUN cd /qemu \
+ && for base in libqemu-xtensa libqemu-riscv32; do \
+      f="${base}.so" ; \
+      if [ -f "$f" ]; then \
+        echo "Using local $f ($(stat -c%s "$f") bytes)" ; \
+      elif [ -n "${QEMU_RELEASE_URL}" ]; then \
+        echo "Downloading ${base}-${TARGETARCH}.so → $f (legacy URL) ..." ; \
+        curl -fSL -o "$f" "${QEMU_RELEASE_URL}/${base}-${TARGETARCH}.so" ; \
+      else \
+        echo "Downloading ${base}-${TARGETARCH} → $f (velxio.dev) ..." ; \
+        curl -fSL -o "$f" "${VELXIO_BINARY_BASE_URL}/${base}-${TARGETARCH}?key=${VELXIO_LICENSE_KEY}" ; \
+      fi ; \
+    done \
+ && for f in esp32-v3-rom.bin esp32-v3-rom-app.bin esp32c3-rom.bin; do \
+      asset="${f%.bin}" ; \
+      if [ -f "$f" ]; then \
+        echo "Using local $f ($(stat -c%s "$f") bytes)" ; \
+      elif [ -n "${QEMU_RELEASE_URL}" ]; then \
+        echo "Downloading $f (legacy URL) ..." ; \
+        curl -fSL -o "$f" "${QEMU_RELEASE_URL}/$f" ; \
+      else \
+        echo "Downloading $asset → $f (velxio.dev) ..." ; \
+        curl -fSL -o "$f" "${VELXIO_BINARY_BASE_URL}/${asset}?key=${VELXIO_LICENSE_KEY}" ; \
+      fi ; \
+    done \
+ && ls -lh /qemu/
+
+
+# ---- Stage 0.5: ESP-IDF toolchain for ESP32 compilation ----
+FROM ubuntu:22.04 AS espidf-builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git wget flex bison gperf python3 python3-pip python3-venv \
+    cmake ninja-build ccache libffi-dev libssl-dev \
+    libusb-1.0-0 ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install ESP-IDF 4.4.7 (matches Arduino ESP32 core 2.0.17 / lcgamboa QEMU ROM)
+RUN git clone -b v4.4.7 --recursive --depth=1 --shallow-submodules \
+    https://github.com/espressif/esp-idf.git /opt/esp-idf
+
+WORKDIR /opt/esp-idf
+
+# Install toolchains for esp32 (Xtensa) and esp32c3 (RISC-V) only
+RUN ./install.sh esp32,esp32c3
+
+# Clean up large unnecessary files to reduce image size
+RUN rm -rf .git docs examples \
+    && find /root/.espressif -name '*.tar.*' -delete 2>/dev/null || true
+
+# Install Arduino-as-component for full Arduino API support in ESP-IDF builds
+RUN git clone --branch 2.0.17 --depth=1 --recursive --shallow-submodules \
+    https://github.com/espressif/arduino-esp32.git /opt/arduino-esp32 \
+ && rm -rf /opt/arduino-esp32/.git
+
+# mkspiffs (arduino-esp32 0.2.3 flavor) — bakes uploaded files into the SPIFFS
+# data-partition image at compile time. Without it espidf_compiler._build_spiffs_image
+# silently returns None and ships a blank SPIFFS region, so SPIFFS.begin() fails and
+# auto-formats and user-uploaded files never appear (GH #162). Installed at the exact
+# path the runtime locates via IDF_TOOLS_PATH (tools/mkspiffs/*/mkspiffs/mkspiffs).
+RUN mkdir -p /root/.espressif/tools/mkspiffs/0.2.3/mkspiffs \
+ && wget -qO /tmp/mkspiffs.tgz \
+      https://github.com/igrr/mkspiffs/releases/download/0.2.3/mkspiffs-0.2.3-arduino-esp32-linux64.tar.gz \
+ && tar -xzf /tmp/mkspiffs.tgz -C /tmp \
+ && cp /tmp/mkspiffs-0.2.3-arduino-esp32-linux64/mkspiffs \
+       /root/.espressif/tools/mkspiffs/0.2.3/mkspiffs/mkspiffs \
+ && chmod +x /root/.espressif/tools/mkspiffs/0.2.3/mkspiffs/mkspiffs \
+ && rm -rf /tmp/mkspiffs.tgz /tmp/mkspiffs-0.2.3-arduino-esp32-linux64
+
+
+# ---- Stage 1: Build frontend and third-party ----
+FROM node:20 AS frontend-builder
+
+WORKDIR /app
+
+# avr8js, rp2040js and @wokwi/elements are pulled directly from the npm
+# registry (see frontend/package.json) — no upstream git clones needed.
+# Board SVGs live in frontend/public/boards/, component SVGs in
+# frontend/public/component-svgs/, and components-metadata.json is committed.
+COPY frontend/ frontend/
+COPY scripts/ scripts/
+WORKDIR /app/frontend
+# Lock files aren't committed in this repo (they're gitignored) — see the
+# note in .gitignore. The `rm -f` below is defense-in-depth in case
+# someone runs `docker build .` from a tree where a local lock exists.
+RUN rm -f package-lock.json \
+ && npm install --include=optional \
+ && npm run build:docker
+
+
+# ---- Stage 2: Final Production Image ----
+FROM python:3.12-slim
+
+# Install system dependencies, nginx, and QEMU runtime.
+#
+# qemu-system-arm + qemu-utils provide qemu-system-aarch64 and qemu-img,
+# both invoked by app/services/qemu_manager.py for Raspberry Pi 3
+# simulation. They were missing for the entire 2024-2026 stretch when
+# Pi 3 simulation was advertised but broken — see docs/BOOT_IMAGES.md.
+# ~200 MB added to the image; trade-off is "Pi 3 actually works".
+#
+# Other libs (libglib2.0-0, libgcrypt20, libslirp0, libpixman-1-0,
+# libfdt1) used to be needed only as runtime deps for libqemu-xtensa.so;
+# they're still needed but now also pulled in transitively by
+# qemu-system-arm.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    nginx \
+    libglib2.0-0 \
+    libgcrypt20 \
+    libslirp0 \
+    libpixman-1-0 \
+    libfdt1 \
+    cmake \
+    ninja-build \
+    libusb-1.0-0 \
+    git \
+    ccache \
+    qemu-system-arm \
+    qemu-utils \
+    sdcc \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir packaging
+
+# Install arduino-cli into /usr/local/bin directly (avoids touching /bin)
+RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh \
+    | BINDIR=/usr/local/bin sh
+
+# Only install arduino-cli binary here. Core installation (arduino:avr,
+# rp2040:rp2040) is done at first boot by entrypoint.sh and persisted
+# in the mounted /root/.arduino15 volume.
+# ESP32 compilation uses ESP-IDF instead of arduino-cli.
+
+WORKDIR /app
+
+# Data directory for persistent SQLite database (mounted as a volume at runtime)
+RUN mkdir -p /app/data
+
+# Install Python backend dependencies
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy backend application code
+COPY backend/app/ ./app/
+
+# One-off maintenance scripts (e.g. backfill_boards_2026_05). Pure stdlib —
+# run with: docker exec velxio-app python /app/scripts/<script> --apply
+COPY backend/scripts/ ./scripts/
+
+# Setup Nginx configuration. Remove Debian's stock site so it doesn't shadow
+# ours as the default_server (was Issue #108: users behind reverse proxies got
+# the "Welcome to nginx" page because the stock site claimed default_server).
+RUN rm -f /etc/nginx/sites-enabled/default
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy built frontend assets from builder stage
+COPY --from=frontend-builder /app/frontend/dist /usr/share/nginx/html
+
+# Copy and configure entrypoint script (fix Windows CRLF → LF)
+COPY docker/entrypoint.sh /app/entrypoint.sh
+RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
+
+# ── ESP32 emulation: pre-built QEMU .so + ROM binaries ──────────────────────
+# Downloaded from GitHub Release (public — no access to qemu-lcgamboa needed)
+# libqemu-xtensa.so    → ESP32 / ESP32-S3 (Xtensa LX6/LX7)
+# libqemu-riscv32.so   → ESP32-C3 (RISC-V RV32IMC)
+# esp32-v3-rom*.bin    → boot/app ROM images required by esp32-picsimlab machine
+# esp32c3-rom.bin      → ROM image required by esp32c3-picsimlab machine
+# NOTE: ROM files must live in the same directory as the .so (worker passes -L
+#       to QEMU pointing at os.path.dirname(lib_path))
+RUN mkdir -p /app/lib
+COPY --from=qemu-provider /qemu/ /app/lib/
+
+# Activate ESP32 emulation
+# QEMU_ESP32_LIB    → Xtensa library (ESP32, ESP32-S3)
+# QEMU_RISCV32_LIB  → RISC-V library (ESP32-C3 and variants)
+ENV QEMU_ESP32_LIB=/app/lib/libqemu-xtensa.so
+ENV QEMU_RISCV32_LIB=/app/lib/libqemu-riscv32.so
+
+# ── ESP-IDF toolchain for ESP32 compilation ──────────────────────────────────
+# Copied from espidf-builder stage: IDF framework + cross-compiler toolchains
+COPY --from=espidf-builder /opt/esp-idf /opt/esp-idf
+COPY --from=espidf-builder /root/.espressif /root/.espressif
+
+COPY --from=espidf-builder /opt/arduino-esp32 /opt/arduino-esp32
+
+ENV IDF_PATH=/opt/esp-idf
+ENV IDF_TOOLS_PATH=/root/.espressif
+ENV ARDUINO_ESP32_PATH=/opt/arduino-esp32
+
+# ── ccache for ESP-IDF compiles ──────────────────────────────────────────────
+# ESP-IDF's build system honours IDF_CCACHE_ENABLE=1 and routes every C/C++
+# compile through ccache. Cold first compile per container is unchanged
+# (cache is empty), but the second and subsequent compiles drop from
+# ~5-7 minutes to ~30-60 seconds because every ESP-IDF base object
+# (FreeRTOS, lwIP, esp_wifi, libsodium, …) hits the cache.
+#
+# Cache lives at /var/cache/ccache. Mount as a docker volume in
+# docker-compose.yml so the cache survives `docker compose up -d --build`.
+# Without the volume, the cache rebuilds itself on first compile after each
+# image rebuild — still better than no cache.
+ENV CCACHE_DIR=/var/cache/ccache
+ENV IDF_CCACHE_ENABLE=1
+# CCACHE_BASEDIR makes ccache treat absolute paths under this prefix as
+# relative when computing the cache key. Combined with the persistent
+# /var/lib/velxio-build/<target>/ build dir, this lets ccache hit across
+# compiles even though some flags (-I, -fmacro-prefix-map) embed absolute
+# paths into the command line.
+ENV CCACHE_BASEDIR=/var/lib/velxio-build
+# Cache cap + compression set as env vars (rather than via `ccache
+# --set-config` at image-build time) because $CCACHE_DIR is a docker volume:
+# anything written into /var/cache/ccache during the RUN step is masked at
+# runtime by the volume mount. ccache reads CCACHE_MAXSIZE / CCACHE_COMPRESS
+# / CCACHE_COMPRESSLEVEL on every invocation and they override any conf-file
+# value, so the cap actually applies at runtime.
+ENV CCACHE_MAXSIZE=8G
+ENV CCACHE_COMPRESS=1
+ENV CCACHE_COMPRESSLEVEL=6
+RUN mkdir -p /var/cache/ccache /var/lib/velxio-build /root/Arduino
+
+# ── Persistent paths ────────────────────────────────────────────────────────
+# Declaring these as VOLUMEs means `docker run` (without explicit -v) creates
+# anonymous volumes for them — they survive `docker stop`/`docker start` and
+# even `docker rm`. Without this, every container restart wipes the ccache
+# and persistent ESP-IDF build dir, so every compile is cold (~5-7 min on
+# modest hardware) instead of the warm-cache 5-30s we measured on prod.
+#
+# Users SHOULD pass `-v velxio-X:/path` for each of these to get named
+# volumes (easier to inspect / back up than anonymous ones), but the
+# anonymous default is a sensible fallback.
+#
+# /app/data            — SQLite DB + project files + auto-generated SECRET_KEY
+# /root/.arduino15     — arduino-cli config + installed cores
+# /root/Arduino        — Library Manager-installed Arduino libraries
+# /var/cache/ccache    — ccache cache (ESP-IDF compiles)
+# /var/lib/velxio-build — persistent ESP-IDF build dir (one subdir per target)
+VOLUME ["/app/data", "/root/.arduino15", "/root/Arduino", "/var/cache/ccache", "/var/lib/velxio-build"]
+
+# Install ESP-IDF Python dependencies using the final image's Python
+# The requirements.txt has version constraints required by ESP-IDF 4.4.x
+RUN grep -v 'esp-windows-curses' /opt/esp-idf/requirements.txt \
+    | pip install --no-cache-dir -r /dev/stdin
+
+EXPOSE 80
+
+CMD ["/app/entrypoint.sh"]

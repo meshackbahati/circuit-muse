@@ -1,0 +1,120 @@
+name: Frontend Tests
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['20', '22']
+        # Shard the 117 test files across two parallel runners per node
+        # version. The full suite leaks memory across files within one
+        # vitest fork — ngspice WASM modules, MixedModeScheduler
+        # singletons, zustand stores — and the cumulative heap exceeds
+        # even 8 GB. Sharding gives each runner a fresh Node process
+        # with only ~60 files of state to carry, well under budget.
+        # Splits are deterministic across runs (vitest hashes file
+        # paths into shards), so a flaky file lands in the same shard
+        # each time.
+        shard: [1, 2]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # The metadata generator scans wokwi-elements/src/, which only ships in
+      # the upstream repo (not on npm). Clone it once for the freshness check.
+      - name: Clone wokwi-elements (for metadata regeneration only)
+        run: git clone --depth=1 https://github.com/wokwi/wokwi-elements.git third-party/wokwi-elements
+
+      # Cache the vendored ngspice WASM (24 MB).  Keyed by the file hash —
+      # invalidates only when the WASM blob itself changes (rare).  Saves
+      # ~10s of disk write per CI run.
+      - name: Cache ngspice WASM
+        uses: actions/cache@v4
+        with:
+          path: frontend/public/wasm/ngspice-interactive
+          key: ngspice-wasm-${{ hashFiles('frontend/public/wasm/ngspice-interactive/ngspice-lib.wasm') }}
+
+      # No node_modules cache. Lock files are gitignored (see .gitignore) so
+      # a cache key tied to package-lock.json never invalidates and ends up
+      # restoring stale links to old `file:` deps from previous commits
+      # (e.g. wokwi-elements pre-npm migration). Fresh install every run is
+      # ~30s slower but actually correct.
+      - name: Install frontend dependencies
+        run: cd frontend && npm install --no-audit --no-fund --include=optional
+
+      - name: Install root dev dependencies
+        run: npm install --no-audit --no-fund
+
+      # Regenerate metadata and fail if committed JSON is stale. Catches PRs
+      # that modify component-overrides.json without running generate:metadata.
+      - name: Regenerate component metadata
+        run: cd frontend && npm run generate:metadata
+
+      - name: Fail if components-metadata.json is out of date
+        run: |
+          if ! git diff --quiet frontend/public/components-metadata.json; then
+            echo "::error::components-metadata.json is stale. Run 'cd frontend && npm run generate:metadata' and commit the result."
+            git diff frontend/public/components-metadata.json | head -100
+            exit 1
+          fi
+
+      - name: TypeScript build
+        run: cd frontend && npm run tsc
+        continue-on-error: true  # tsc -b has pre-existing strict errors in unrelated test files; tracking separately
+
+      - name: Run tests (shard ${{ matrix.shard }}/2)
+        run: cd frontend && npx vitest run --shard ${{ matrix.shard }}/2
+        env:
+          # Belt-and-braces heap raise. The same flag is also set in
+          # vitest.config.ts under `forks.execArgv`, but that path was
+          # under the now-removed `poolOptions.forks` until the latest
+          # commit, and we want the workflow not to depend on the
+          # exact vitest config shape to keep CI green during the
+          # vitest 4 migration. NODE_OPTIONS gets picked up by the
+          # parent vitest process; the forks themselves rely on the
+          # config.
+          NODE_OPTIONS: --max-old-space-size=8192
+
+      # Production build smoke — catches Vite/Rollup-only failures that
+      # vitest doesn't see (chunk wiring, dynamic imports, manualChunks
+      # config, asset resolution).
+      #
+      # Use `build:docker` (not `build`): the latter runs `tsc -b` first
+      # which has pre-existing strict errors (TS6133 unused, TS1294
+      # erasableSyntaxOnly, JSX intrinsic-element types from custom
+      # elements). Those are tracked separately and gated by the `tsc`
+      # step above with continue-on-error. The Dockerfile in production
+      # uses `build:docker` too — this step now matches what actually
+      # ships.
+      - name: Vite production build
+        run: cd frontend && npm run build:docker
+
+      # Upload coverage as an artifact for download / inspection.  Skip
+      # codecov for now (no org account).  Run only on Node 22 +
+      # shard 1 to keep the artifact list deduped and avoid two
+      # matrix legs racing to write the same artifact name.
+      - name: Coverage report
+        if: matrix.node-version == '22' && matrix.shard == 1
+        run: cd frontend && npm run test:coverage
+        continue-on-error: true
+
+      - name: Upload coverage artifact
+        if: matrix.node-version == '22' && matrix.shard == 1 && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-lcov
+          path: frontend/coverage/
+          if-no-files-found: ignore

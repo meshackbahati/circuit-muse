@@ -1,0 +1,31 @@
+# Source we don't need at runtime — the bundled dist/extension.js is the
+# only entry point. Webview ships its compiled dist/ but not its sources.
+.git/**
+.github/**
+.vscode/**
+.vscode-test/**
+src/**
+node_modules/**
+
+webview/src/**
+webview/node_modules/**
+webview/package*.json
+webview/tsconfig.json
+webview/vite.config.ts
+webview/index.html
+
+# Build + dev artefacts
+**/*.ts
+**/*.map
+**/tsconfig.json
+**/.eslintrc*
+.gitignore
+.npmignore
+.editorconfig
+
+# Project-level docs that aren't user-facing
+CONTRIBUTING.md
+DEVELOPMENT.md
+
+# Previously-published artefacts
+*.vsix

@@ -1,0 +1,137 @@
+/* CircuitMuse Desktop overlay styles — only loaded when VITE_DESKTOP=true. */
+
+/* Indeterminate progress strip used by Esp32QemuPrompt while
+   streaming a body without a Content-Length header. */
+@keyframes vlx-indeterminate {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+
+/* ── Update-available toast ──────────────────────────────────── */
+
+.vlx-desktop-update-toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9700;
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  padding: 16px;
+  background: #1a1d24;
+  color: #e6e6e9;
+  border: 1px solid #2c2c33;
+  border-radius: 8px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  animation: vlx-update-toast-in 0.25s ease;
+}
+
+@keyframes vlx-update-toast-in {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.vlx-desktop-update-toast-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.vlx-desktop-update-toast-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #007acc 0%, #005ea1 100%);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.vlx-desktop-update-toast-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.vlx-desktop-update-toast-version {
+  font-size: 12px;
+  color: #888;
+}
+
+.vlx-desktop-update-toast-notes {
+  margin: 8px 0 12px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  font-size: 12px;
+  color: #aaa;
+  line-height: 1.45;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.vlx-desktop-update-toast-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.vlx-desktop-update-toast-primary {
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #007acc 0%, #005ea1 100%);
+  border: 1px solid #005ea1;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.vlx-desktop-update-toast-primary:hover {
+  filter: brightness(1.1);
+}
+
+.vlx-desktop-update-toast-secondary {
+  padding: 7px 14px;
+  font-size: 13px;
+  color: #aaa;
+  background: transparent;
+  border: 1px solid #2c2c33;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.vlx-desktop-update-toast-secondary:hover {
+  background: #232730;
+  color: #ddd;
+}
+
+.vlx-desktop-update-toast-progress {
+  margin: 12px 0 6px;
+  height: 6px;
+  background: #0c0c11;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.vlx-desktop-update-toast-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #007acc 0%, #00a4ff 100%);
+  transition: width 0.2s ease;
+}
+
+.vlx-desktop-update-toast-progress-label {
+  font-size: 11px;
+  color: #888;
+  font-variant-numeric: tabular-nums;
+}

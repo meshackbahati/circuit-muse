@@ -1,0 +1,14 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "HM62256 SRAM (64 KB)",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Generic 64 KB static RAM. 16-bit address bus, 8-bit data bus, /CE chip enable, /OE output enable, /WE write enable. The standard companion to the rom-32k for an 8080/Z80 minimum board.",
+  "pins": [
+    "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7",
+    "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15",
+    "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
+    "CE", "OE", "WE", "VCC", "GND"
+  ],
+  "attributes": []
+}

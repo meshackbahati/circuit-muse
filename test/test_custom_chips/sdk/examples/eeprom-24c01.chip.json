@@ -1,0 +1,9 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "24C01 EEPROM",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "1 Kbit (128 byte) I2C serial EEPROM. Base address 0x50, A0/A1/A2 set low bits.",
+  "pins": ["A0", "A1", "A2", "GND", "VCC", "WP", "SCL", "SDA"],
+  "attributes": []
+}

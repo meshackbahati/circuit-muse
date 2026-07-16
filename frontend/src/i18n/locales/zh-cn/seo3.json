@@ -1,0 +1,205 @@
+{
+  "seo": {
+    "customChip": {
+      "hero": {
+        "title": "构建您自己的自定义芯片",
+        "accent": "使用 C、Rust 或 AssemblyScript",
+        "subtitle": "通过 Wokwi 兼容的自定义芯片 API 定义您自己的集成电路。用 C、Rust 或 AssemblyScript 编写芯片；Velxio 将其编译为 WebAssembly，并在画布上像其他组件一样运行——由 Arduino、ESP32 或 RP2040 固件驱动。",
+        "ctaPrimary": "打开编辑器",
+        "ctaSecondary": "阅读文档",
+        "trust": "Wokwi 兼容 API · 免费且开源 · 基于 WASM，在浏览器中运行"
+      },
+      "build": {
+        "heading": "您可以构建什么？",
+        "lead": "自定义芯片填补了内置组件之间的空白。如果某个真实 IC 不在库中，构建一个行为模型，您的固件将永远不会察觉差异。",
+        "sensorTitle": "传感器替代品",
+        "sensorBody": "模拟一个通过 I²C 响应的温度、压力或 IMU 传感器——当您还没有实物但想开发固件时非常有用。",
+        "bridgeTitle": "协议桥接器",
+        "bridgeBody": "构建 UART 到 I²C 桥接器、SPI 移位寄存器、数模转换包装器或自定义电平转换器。",
+        "logicTitle": "自定义逻辑",
+        "logicBody": "胶合逻辑、状态机、地址解码器、去抖器——任何您原本会用分立门电路搭建的东西。",
+        "icTitle": "行为 IC",
+        "icBody": "重新创建真实 IC（如 7 段驱动器、步进电机控制器）的外部可见行为，而无需模拟其内部模拟电路。",
+        "fixturesTitle": "测试夹具",
+        "fixturesBody": "按计划注入信号、捕获引脚转换、根据预期的引脚级行为验证固件。",
+        "reuseTitle": "可重用库",
+        "reuseBody": "将芯片保存到您的账户，导入到其他项目，与社区共享。"
+      },
+      "api": {
+        "heading": "API 提供的内容",
+        "lead": "Velxio 自定义芯片运行时完全兼容 Wokwi，并针对 SPICE 和多板环境提供了额外功能。",
+        "pinTitle": "引脚 I/O",
+        "pinBody": "读取引脚状态、写入数字高/低、配置上拉、通过引脚监视回调响应边沿。",
+        "attrTitle": "属性",
+        "attrBody": "从属性面板读取用户可配置的芯片属性——值、字符串、数字——并在更改时重新读取。",
+        "timersTitle": "定时器",
+        "timersBody": "以微秒分辨率调度回调。运行时将它们与模拟器时钟对齐触发。",
+        "i2cTitle": "I²C 总线",
+        "i2cBody": "连接到 I²C 总线上的任何导线，响应启动/停止条件，确认地址，发送/接收字节。",
+        "spiTitle": "SPI 总线",
+        "spiBody": "带片选处理的双向 SPI。通过一个字节流回调实现移位寄存器、SPI 存储器或传感器。",
+        "wasiTitle": "WASI 垫片",
+        "wasiBody": "一个小型 WASI 垫片让您的 C/Rust 芯片无需重型运行时即可使用标准库调用（printf、字符串操作、数学）。"
+      },
+      "faq": {
+        "heading": "常见问题",
+        "q1": "什么是 Velxio 中的自定义芯片？",
+        "a1": "自定义芯片是用户定义的集成电路。您用 C、Rust 或 AssemblyScript 编写芯片逻辑——Velxio 将其编译为 WebAssembly，像其他组件一样在画布上实例化，并由模拟器驱动其引脚。",
+        "q2": "Velxio 使用哪个 API？",
+        "a2": "Velxio 实现了 Wokwi 自定义芯片 API——与 Wokwi 使用的 API 相同——因此您为 Velxio 编写的芯片可移植到 Wokwi，反之亦然。Velxio 添加了一个 WASI 垫片，以便您可以在芯片代码中使用标准库函数。",
+        "q3": "我可以构建什么？",
+        "a3": "真实 IC 的行为模型（传感器、解码器、电平转换器、协议桥接器）、自定义数字逻辑、尚未拥有的硬件的传感器替代品，以及用于测试固件的协议级模拟。芯片可以驱动引脚、读取属性、注册定时器，并桥接到 I²C/SPI 总线。",
+        "q4": "如何共享或重用芯片？",
+        "a4": "将芯片保存到您的 Velxio 账户，并在项目之间重用。芯片定义包括其引脚布局、属性和编译后的 WASM——像内置组件一样将其拖放到任何项目画布上。",
+        "q5": "运行芯片需要后端吗？",
+        "a5": "不需要。编译后的芯片 WASM 在同一个浏览器标签页中运行，与模拟的其他部分一起。引脚更新、属性读取和定时器滴答都是本地的。",
+        "q6": "我的自定义芯片可以与 Arduino 通信吗？",
+        "a6": "可以——这是典型用例。将其引脚连接到 Arduino 的 GPIO、SPI 或 I²C 线，Arduino 上的固件与您的芯片交互就像与真实 IC 一样。"
+      },
+      "bottom": {
+        "title": "构建您的第一个自定义芯片",
+        "body": "打开编辑器，几秒钟内创建一个芯片——选择 C、Rust 或 AssemblyScript。",
+        "cta": "启动编辑器"
+      }
+    },
+    "electronics": {
+      "hero": {
+        "title": "免费在线电子电路模拟器",
+        "accent": "在浏览器中构建、接线和测试",
+        "subtitle": "一个完整的电子工作台：SPICE 精确的模拟器件、19 种模拟微控制器（Arduino、ESP32、RP2040、ATtiny85、Raspberry Pi 3）、100 多个组件和实时仪器——全部在一个画布上。免费，无需安装，无需账户。",
+        "ctaPrimary": "打开电子电路模拟器",
+        "ctaSecondary": "浏览 100+ 示例",
+        "trust": "免费且开源 · 无需注册 · 真实 SPICE + 真实 CPU 仿真"
+      },
+      "inside": {
+        "heading": "内部包含什么",
+        "lead": "一个工具，涵盖电子项目的每一层——从面包板上的电阻器到微控制器上的固件。",
+        "spiceTitle": "SPICE 模拟求解器",
+        "spiceBody": "通过 WebAssembly 运行真实的 ngspice。100 多种器件模型：无源器件、BJT、MOSFET、运算放大器、稳压器、二极管、光耦、继电器。",
+        "mcuTitle": "19 种微控制器",
+        "mcuBody": "Arduino Uno / Nano / Mega / ATtiny85 / Leonardo / Pro Mini、Raspberry Pi Pico (W)、ESP32 / ESP32-S3 / ESP32-CAM / Nano ESP32、ESP32-C3 系列、CH32V003、Raspberry Pi 3B Linux。",
+        "chipsTitle": "自定义芯片",
+        "chipsBody": "通过 Wokwi 自定义芯片 API 用 C、Rust 或 AssemblyScript 定义您自己的 IC——从代码中驱动引脚、属性、定时器、I²C 和 SPI。",
+        "instrumentsTitle": "实时仪器",
+        "instrumentsBody": "多通道示波器、电压表、电流表、信号发生器（正弦/方波/直流）——拖放到任何节点上实时观察波形。",
+        "componentsTitle": "48 多种可视化组件",
+        "componentsBody": "LED、RGB LED、7 段显示器、16×2 LCD、ILI9341 TFT、NeoPixel 灯带、舵机、蜂鸣器、超声波传感器、DHT22、MPU6050、键盘。",
+        "ideTitle": "内置 Arduino IDE",
+        "ideBody": "Monaco 代码编辑器、多文件工作区、库管理器（完整 Arduino 库索引）、arduino-cli 编译器、串口监视器。"
+      },
+      "audience": {
+        "heading": "面向教师、学生和爱好者",
+        "lead": "Velxio 在 AGPLv3 下免费——无许可费用、无按席位定价、无云账户。通过一个 Docker 命令即可自托管，适用于大学实验室。",
+        "coursesTitle": "用于课程",
+        "coursesBody": "从第一周（欧姆定律、分压器）到 Arduino 项目和运算放大器信号链，使用同一个工具。一个 UI 覆盖整个教学大纲。",
+        "labsTitle": "用于实验室",
+        "labsBody": "在校园服务器上自托管。无需互联网依赖，无需账户障碍——学生只需打开 URL。",
+        "makersTitle": "用于创客",
+        "makersBody": "在订购零件之前验证您的电路和固件。示波器和万用表已经在工作台上。"
+      },
+      "faq": {
+        "heading": "常见问题",
+        "q1": "Velxio 是一个完整的电子电路模拟器吗？",
+        "a1": "是的。Velxio 结合了 SPICE 精确的模拟求解器、19 种模拟微控制器（Arduino、ESP32、RP2040、ATtiny85、Raspberry Pi 3）、100 多个组件、示波器、电压表、电流表和信号发生器——端到端设计和验证电子项目所需的一切。",
+        "q2": "我可以像使用虚拟面包板一样使用它吗？",
+        "a2": "可以。将组件拖放到画布上，在引脚之间拖拽导线，模拟器会自动构建 SPICE 网表。导线对齐到网格；组件以 90° 增量旋转；信号类型颜色标记 VCC、GND、数字和模拟路径。",
+        "q3": "我需要安装任何东西吗？",
+        "a3": "不需要。在任何现代浏览器中打开 velxio.dev 即可开始。SPICE 求解器和 AVR/RP2040 仿真器在浏览器中本地运行；Xtensa 和 RISC-V 板（ESP32、ESP32-C3、CH32V003）以及 Raspberry Pi 3 Linux 通过 QEMU lcgamboa 运行，捆绑在 Docker 镜像中。Arduino 草图的编译使用云端的 arduino-cli 后端。",
+        "q4": "它适合用于电子教学吗？",
+        "a4": "是的——这是设计目标之一。免费、无需安装、无需账户、无许可费用。100 多个预接线示例电路涵盖分压器、RC 滤波器、运算放大器放大器、晶体管开关、整流器和完整的 Arduino 项目。非常适合大学实验室和自学者。",
+        "q5": "Velxio 是 Tinkercad / Falstad 的替代品吗？",
+        "a5": "是的——而且更精确。Velxio 运行真实的 ngspice（专业 EDA 工具使用的引擎），与那些工具不同，它还运行驱动电路的微控制器上的固件。在 AGPLv3 下开源。"
+      },
+      "bottom": {
+        "title": "打开您的虚拟面包板",
+        "body": "几秒钟内连接您的第一个电路——无需设置、无需安装、无需账户。",
+        "cta": "启动电子电路模拟器"
+      }
+    },
+    "arduino": {
+      "hero": {
+        "title": "免费在线 Arduino 模拟器",
+        "accent": "在浏览器中运行草图",
+        "subtitle": "编写 Arduino 代码并立即模拟——以 16 MHz 的真实 AVR8 仿真，搭配 48 多种交互式电子组件。无需安装、无需云、无需账户。",
+        "ctaPrimary": "打开 Arduino 模拟器",
+        "ctaSecondary": "浏览示例",
+        "trust": "免费且开源 · 无需注册 · 100% 在浏览器中运行"
+      },
+      "what": {
+        "heading": "您可以模拟什么？",
+        "lead": "Velxio 以完整的 AVR8 CPU 精度模拟 Arduino 程序——包括 GPIO 端口、硬件定时器、USART、ADC、PWM、SPI 和 I2C。无近似、无捷径。",
+        "unoTitle": "Arduino Uno 和 Nano",
+        "unoBody": "完整的 ATmega328P 仿真，16 MHz。PORTB、PORTC、PORTD 寄存器仿真。所有 14 个数字和 6 个模拟引脚。",
+        "megaTitle": "Arduino Mega 2560",
+        "megaBody": "ATmega2560，256 KB 闪存，54 个数字引脚，16 个模拟输入，4 个硬件 USART 通道。",
+        "componentsTitle": "48 多种电子组件",
+        "componentsBody": "LED、电阻、按钮、蜂鸣器、舵机、超声波传感器、ILI9341 TFT、16×2 LCD、NeoPixel、DHT22 等。",
+        "serialTitle": "串口监视器",
+        "serialBodyPrefix": "实时 TX/RX，自动波特率检测。发送命令并查看 ",
+        "serialBodyCode": "Serial.print()",
+        "serialBodySuffix": " 输出。",
+        "multiTitle": "多文件草图",
+        "multiBody": "在 VS Code 风格的 Monaco 编辑器中编写 .ino、.h 和 .cpp 文件——完整的多文件 Arduino 项目支持。",
+        "libTitle": "库管理器",
+        "libBody": "直接在模拟器中搜索并安装完整 Arduino 库索引中的任何库。"
+      },
+      "how": {
+        "heading": "模拟器的工作原理",
+        "leadPrefix": "Velxio 使用 ",
+        "leadHighlight": "avr8js",
+        "leadSuffix": "——经过实战检验的开源 AVR8 仿真库——逐字节执行您编译的固件，就像在物理硬件上运行一样。",
+        "writeTitle": "1. 编写",
+        "writeBody": "在 Monaco 编辑器中编写您的 Arduino 草图，支持 C++ 语法高亮和自动补全。",
+        "compileTitle": "2. 编译",
+        "compileBody": "点击编译。arduino-cli 生成真实的 .hex 文件——与 Arduino IDE 输出相同。",
+        "simulateTitle": "3. 模拟",
+        "simulateBody": ".hex 文件加载到 AVR8 仿真器中。您的程序以 16 MHz 执行并驱动可视化组件。"
+      },
+      "faq": {
+        "heading": "常见问题",
+        "q1": "这个 Arduino 模拟器免费吗？",
+        "a1": "是的。Velxio 完全免费且开源（GNU AGPLv3）。无需账户、无需付费、无需云订阅——在浏览器中运行或通过一个 Docker 命令自托管。",
+        "q2": "Arduino 模拟器无需安装任何东西就能工作吗？",
+        "a2": "仿真引擎完全在浏览器中运行。编译代码需要 arduino-cli 后端，您可以在本地或通过 Docker 运行。无需安装 IDE。",
+        "q3": "我可以模拟哪些 Arduino 板？",
+        "a3": "Velxio 支持 19 种板：Arduino Uno (ATmega328P)、Arduino Nano、Arduino Mega 2560、ATtiny85、Arduino Leonardo、Arduino Pro Mini (AVR8)——以及 Raspberry Pi Pico (RP2040)、ESP32-C3 / XIAO ESP32-C3 / CH32V003 (RISC-V)、ESP32 / ESP32-S3 / ESP32-CAM (通过 QEMU 的 Xtensa) 和 Raspberry Pi 3B (通过 QEMU 的 Linux)。",
+        "q4": "我可以模拟 LED、传感器和显示器吗？",
+        "a4": "可以。Velxio 包含 48 多种交互式 wokwi-elements：LED、电阻、按钮、舵机、超声波传感器、ILI9341 TFT 显示器、LCD、NeoPixel 灯带、蜂鸣器、DHT22 等。",
+        "q5": "Velxio 是 Wokwi 的替代品吗？",
+        "a5": "是的。Velxio 是 Wokwi 的免费自托管替代品。它使用相同的 avr8js 仿真库和 wokwi-elements 可视化组件，但完全在您自己的机器上运行，无云依赖。"
+      },
+      "bottom": {
+        "title": "准备好模拟您的 Arduino 了吗？",
+        "body": "打开编辑器，几秒钟内开始编码——无需设置、无需安装、无需账户。",
+        "cta": "启动 Arduino 模拟器"
+      }
+    },
+    "links": {
+      "circuit": "电路模拟器",
+      "spice": "SPICE 模拟器",
+      "electronics": "电子电路模拟器",
+      "customChip": "自定义芯片模拟器",
+      "arduino": "Arduino 模拟器",
+      "arduinoEmu": "Arduino 仿真器",
+      "atmega": "ATmega328P 模拟器",
+      "mega": "Mega 2560 模拟器",
+      "attiny85": "ATtiny85 模拟器",
+      "esp32": "ESP32 模拟器",
+      "esp32s3": "ESP32-S3 模拟器",
+      "esp32c3": "ESP32-C3 模拟器",
+      "pico": "Pico 模拟器",
+      "rpiPico": "RP2040 模拟器",
+      "rpi": "Raspberry Pi 3 模拟器",
+      "v25": "Velxio 2.5 发布",
+      "examples": "示例项目",
+      "examplesAnalog": "模拟示例",
+      "examplesAll": "所有示例",
+      "examplesPlain": "示例",
+      "exampleSketches": "示例草图",
+      "esp32Docs": "ESP32 文档",
+      "rp2040Docs": "RP2040 文档",
+      "riscvDocs": "RISC-V 文档",
+      "pi3Docs": "Pi 3 文档"
+    }
+  }
+}

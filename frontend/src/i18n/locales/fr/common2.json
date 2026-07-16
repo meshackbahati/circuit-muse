@@ -1,0 +1,398 @@
+{
+  "editor": {
+    "toolbar": {
+      "languageMode": "Mode de langage",
+      "compile": {
+        "addBoard": "Ajouter une carte à compiler",
+        "loading": "Chargement…",
+        "loadMicropython": "Charger MicroPython",
+        "compile": "Compiler (Ctrl+B)"
+      },
+      "run": {
+        "addBoard": "Ajouter une carte à exécuter",
+        "runMicropython": "Exécuter MicroPython",
+        "run": "Exécuter (auto-compilation si nécessaire)"
+      },
+      "stop": "Arrêter",
+      "reset": "Réinitialiser",
+      "compileAll": "Compiler toutes les cartes",
+      "runAll": "Exécuter toutes les cartes",
+      "libraries": {
+        "title": "Rechercher et installer des bibliothèques Arduino",
+        "label": "Bibliothèques"
+      },
+      "import": "Importer un projet (.vlx Velxio ou .zip Wokwi)",
+      "export": "Exporter le projet actuel en fichier .zip",
+      "uploadFirmware": "Téléverser le firmware (.hex, .bin, .elf, .ihex) pour contourner la compilation",
+      "toggleConsole": "Afficher/Masquer la console de sortie",
+      "libHint": {
+        "message": "Bibliothèque manquante ? Installez-la depuis le",
+        "cta": "Gestionnaire de bibliothèques",
+        "dismiss": "Ignorer"
+      }
+    },
+    "fileExplorer": {
+      "workspace": "ESPACE DE TRAVAIL",
+      "newWorkspace": "Nouvel espace de travail (efface les cartes, composants, fils et fichiers)",
+      "saveProject": "Enregistrer le projet (Ctrl+S)",
+      "clickToEdit": "cliquer pour éditer",
+      "collapse": "Réduire",
+      "expand": "Développer",
+      "newFileInBoard": "Nouveau fichier dans cette carte",
+      "unsavedChanges": "Modifications non enregistrées",
+      "unsavedSuffix": "non enregistré",
+      "emptyState": "Ajoutez une carte au canevas pour commencer à éditer du code.",
+      "confirmDelete": "Supprimer ce fichier ?",
+      "status": {
+        "running": "En cours",
+        "compiled": "Compilé",
+        "idle": "Inactif"
+      },
+      "contextMenu": {
+        "rename": "Renommer",
+        "delete": "Supprimer"
+      }
+    },
+    "fileTabs": {
+      "unsavedChanges": "Modifications non enregistrées",
+      "close": "Fermer",
+      "confirmClose": "Fermer le fichier avec des modifications non enregistrées ?",
+      "closeAnyway": "Fermer quand même",
+      "cancel": "Annuler"
+    },
+    "loginPrompt": {
+      "title": "Connectez-vous pour enregistrer votre projet",
+      "body": "Créez un compte gratuit pour enregistrer et partager vos projets.",
+      "createAccount": "Créer un compte",
+      "cancel": "Annuler"
+    },
+    "saveProject": {
+      "titleSave": "Enregistrer le projet",
+      "titleUpdate": "Mettre à jour le projet",
+      "nameLabel": "Nom du projet *",
+      "namePlaceholder": "Mon super projet",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Optionnel",
+      "save": "Enregistrer",
+      "update": "Mettre à jour",
+      "saving": "Enregistrement…",
+      "cancel": "Annuler",
+      "visibility": {
+        "public": "Public",
+        "publicHint": "Toute personne ayant le lien peut voir",
+        "private": "Privé",
+        "privateHint": "Seul vous pouvez voir ceci"
+      },
+      "errors": {
+        "nameRequired": "Le nom du projet est requis.",
+        "unreachable": "Serveur inaccessible. Vérifiez votre connexion et réessayez.",
+        "notAuth": "Non authentifié. Veuillez vous connecter et réessayer.",
+        "failedStatus": "Échec de l'enregistrement ({{status}})."
+      }
+    },
+    "share": {
+      "title": "Partager le projet",
+      "public": "Public",
+      "private": "Privé",
+      "publicHint": "Toute personne ayant le lien peut voir ce projet",
+      "privateHint": "Seul vous pouvez voir ce projet",
+      "makePrivate": "Rendre privé",
+      "makePublic": "Rendre public",
+      "copy": "Copier",
+      "privateWarning": "Ce projet est privé. Les autres verront une erreur 403 en ouvrant ce lien.",
+      "close": "Fermer"
+    },
+    "canvas": {
+      "status": {
+        "running": "En cours",
+        "stopped": "Arrêté"
+      },
+      "activeBoard": "Carte active",
+      "noBoard": "Aucune carte",
+      "noBoardHint": "Aucune carte sur le canevas — ajoutez-en une avec le bouton Ajouter pour compiler et exécuter du code",
+      "undo": {
+        "label": "Annuler",
+        "title": "Annuler : {{description}} (Ctrl+Z)",
+        "empty": "Rien à annuler"
+      },
+      "redo": {
+        "label": "Rétablir",
+        "title": "Rétablir : {{description}} (Ctrl+Y)",
+        "empty": "Rien à rétablir"
+      },
+      "toggleSerialMonitor": "Afficher/Masquer le moniteur série",
+      "serial": "Série",
+      "toggleScope": "Afficher/Masquer l'oscilloscope / analyseur logique",
+      "scope": "Scope",
+      "zoomIn": "Zoom avant",
+      "zoomOut": "Zoom arrière",
+      "resetView": "Réinitialiser la vue (cliquer pour réinitialiser)",
+      "componentCount_one": "{{count}} composant",
+      "componentCount_other": "{{count}} composants",
+      "addComponentTitle": "Ajouter un composant",
+      "add": "Ajouter",
+      "dismiss": "Ignorer",
+      "removeBoard": "Supprimer la carte",
+      "wireCount_one": "{{count}} fil",
+      "wireCount_other": "{{count}} fils",
+      "removeConfirm": {
+        "boardFallback": "Carte",
+        "title": "Supprimer {{label}} ?",
+        "body": "Cela supprimera la carte de l'espace de travail. Cette action est irréversible.",
+        "bodyWithWires_one": "Cela supprimera la carte de l'espace de travail et {{count}} fil connecté. Cette action est irréversible.",
+        "bodyWithWires_other": "Cela supprimera la carte de l'espace de travail et {{count}} fils connectés. Cette action est irréversible.",
+        "cancel": "Annuler",
+        "remove": "Supprimer"
+      }
+    },
+    "componentPicker": {
+      "title": "Ajouter un composant",
+      "close": "Fermer",
+      "searchPlaceholder": "Rechercher des composants...",
+      "clearSearch": "Effacer la recherche",
+      "allComponents": "Tous les composants",
+      "boards": "Cartes",
+      "loading": "Chargement des composants...",
+      "noResults": "Aucun composant trouvé",
+      "clearFilters": "Effacer les filtres"
+    },
+    "libraryManager": {
+      "title": "GESTIONNAIRE DE BIBLIOTHÈQUES",
+      "searchTab": "Rechercher",
+      "installedTab": "Installées",
+      "filterPlaceholder": "Filtrer votre recherche...",
+      "searchingFor": "Recherche de \"{{query}}\"…",
+      "loadingLibraries": "Chargement des bibliothèques…",
+      "noResults": "Aucune bibliothèque disponible",
+      "noResultsFor": "Aucune bibliothèque trouvée pour \"{{query}}\"",
+      "byAuthor": "par {{author}}",
+      "install": "INSTALLER",
+      "installing": "Installation...",
+      "uninstall": "DÉSINSTALLER",
+      "uninstalling": "Désinstallation...",
+      "loadingInstalled": "Chargement des bibliothèques installées...",
+      "noneInstalled": "Aucune bibliothèque installée pour le moment.",
+      "useSearchTab": "Utilisez l'onglet Rechercher pour installer des bibliothèques."
+    },
+    "installLibs": {
+      "title": "BIBLIOTHÈQUES REQUISES",
+      "installingProgress": "Installation de {{done}} sur {{total}}…",
+      "allDone": "Toutes les bibliothèques installées avec succès",
+      "required_one": "Ce projet nécessite {{count}} bibliothèque. Installez-la pour compiler correctement.",
+      "required_other": "Ce projet nécessite {{count}} bibliothèques. Installez-les pour compiler correctement.",
+      "wokwiHosted": "Bibliothèque hébergée par Wokwi",
+      "pending": "en attente",
+      "installing": "installation…",
+      "installed": "installée",
+      "errorStatus": "erreur",
+      "close": "Fermer",
+      "skip": "Passer",
+      "installAll": "Tout installer ({{count}})",
+      "installingShort": "Installation…"
+    },
+    "shell": {
+      "code": "Code",
+      "both": "Les deux",
+      "circuit": "Circuit",
+      "showExplorer": "Afficher l'explorateur de fichiers",
+      "hideExplorer": "Masquer l'explorateur de fichiers",
+      "viewMode": "Mode d'affichage",
+      "dragResize": "Glisser pour redimensionner"
+    },
+    "oscilloscope": {
+      "title": "Oscilloscope",
+      "addChannelTitle": "Ajouter un canal de broche",
+      "addChannel": "Ajouter un canal",
+      "timeDiv": "Temps/div :",
+      "pauseTitle": "Mettre en pause la capture",
+      "resumeTitle": "Reprendre la capture",
+      "pause": "Pause",
+      "run": "Exécuter",
+      "clearTitle": "Effacer tous les échantillons capturés",
+      "clear": "Effacer",
+      "noChannels": "Aucun canal ajouté.",
+      "noChannelsHint": "Cliquez sur \"+ Ajouter un canal\" pour surveiller une broche.",
+      "removeChannel": "Supprimer {{label}}"
+    },
+    "componentProps": {
+      "close": "Fermer",
+      "tapToConnect": "Appuyez sur une broche pour connecter :",
+      "tapToWire": "Appuyez sur une broche pour câbler :",
+      "pinRoles": "Rôles des broches :",
+      "arduinoPin": "Broche Arduino :",
+      "confirmDelete": "Supprimer {{name}} ?",
+      "confirmDeleteTitle": "Confirmer la suppression",
+      "deleteTitle": "Supprimer le composant",
+      "rotate90": "Rotation 90°",
+      "rotate": "Rotation",
+      "delete": "Supprimer",
+      "cancel": "Annuler"
+    },
+    "selectionBar": {
+      "label": "Actions de sélection",
+      "rotate90": "Rotation 90°",
+      "rotate": "Rotation",
+      "delete": "Supprimer",
+      "deselect": "Désélectionner",
+      "changeColor": "Changer la couleur",
+      "deleteKind": {
+        "wire": "Supprimer le fil",
+        "component": "Supprimer le composant",
+        "board": "Supprimer la carte"
+      }
+    },
+    "console": {
+      "title": "Sortie",
+      "errorCount_one": "{{count}} erreur",
+      "errorCount_other": "{{count}} erreurs",
+      "warningCount_one": "{{count}} avertissement",
+      "warningCount_other": "{{count}} avertissements",
+      "filterAll": "Tout",
+      "filterErrors": "Erreurs",
+      "filterWarnings": "Avertissements",
+      "auto": "Auto",
+      "clear": "Effacer la sortie",
+      "close": "Fermer",
+      "empty": "Aucune sortie de compilation pour le moment. Cliquez sur Compiler pour commencer."
+    },
+    "boardPicker": {
+      "title": "Ajouter une carte"
+    },
+    "pinPicker": {
+      "close": "Fermer",
+      "filterPins": "Filtrer les broches…",
+      "noMatch": "Aucune broche correspondante.",
+      "rotate": "Rotation",
+      "delete": "Supprimer"
+    },
+    "pi": {
+      "connected": "Connecté",
+      "starting": "Démarrage…",
+      "offline": "Hors ligne",
+      "powerOnTitle": "Allumer le Raspberry Pi",
+      "startPi": "Démarrer Pi",
+      "connectTitle": "Connecter le terminal au Pi",
+      "connect": "Connecter",
+      "disconnectTitle": "Déconnecter le terminal",
+      "disconnect": "Déconnecter",
+      "terminal": "Terminal",
+      "close": "Fermer",
+      "offlineTitle": "Raspberry Pi 3B est éteint",
+      "offlineSubtitle": "Démarrez le Pi pour ouvrir un terminal et interagir avec le système Linux.",
+      "offlineNote1": "Remarque : L'explorateur de fichiers affiche une zone de préparation.",
+      "offlineNote2": "Utilisez \"Téléverser vers Pi\" après le démarrage pour transférer des fichiers vers le Pi en cours d'exécution.",
+      "loadingTerminal": "Chargement du terminal…",
+      "selectFile": "Sélectionnez un fichier dans l'explorateur pour l'éditer."
+    },
+    "sensorPanel": {
+      "close": "Fermer"
+    },
+    "customChip": {
+      "title": "Puce personnalisée — {{chipName}}",
+      "tabExamples": "Exemples",
+      "tabEditor": "Éditeur",
+      "attributes": "Attributs",
+      "compiling": "Compilation…",
+      "compile": "Compiler",
+      "compiledOk": "✓ Compilé — {{kb}} Ko",
+      "compileFailed": "Échec de la compilation",
+      "cancel": "Annuler",
+      "savePlace": "Enregistrer & Placer",
+      "compileFirst": "Compiler d'abord"
+    },
+    "serial": {
+      "title": "Moniteur série",
+      "addBoard": "Ajoutez une carte pour démarrer le moniteur série.",
+      "autoscroll": "Défilement auto",
+      "clearTitle": "Effacer la sortie pour cette carte",
+      "clear": "Effacer",
+      "send": "Envoyer",
+      "iotGatewayTitle": "Cliquez pour ouvrir via la passerelle IoT",
+      "openIotGateway": "Ouvrir la passerelle IoT",
+      "waitingData": "En attente de données série...",
+      "startSim": "Démarrez la simulation pour voir la sortie série.",
+      "placeholderText": "Tapez le message à envoyer...",
+      "placeholderPython": "Tapez une expression Python... (Ctrl+C pour interrompre)",
+      "lineEnd": {
+        "none": "Pas de fin de ligne",
+        "nl": "Nouvelle ligne",
+        "cr": "Retour chariot",
+        "both": "NL et CR"
+      }
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "À propos de Velxio",
+      "subtitle": "Un émulateur de systèmes embarqués gratuit et open source — créé par un développeur passionné de matériel et d'open source."
+    },
+    "story": {
+      "heading": "L'histoire",
+      "p1": "Velxio a commencé comme une exploration personnelle du fonctionnement interne des émulateurs de microcontrôleurs — instructions CPU, gestion de la mémoire, temporisation des périphériques et architecture bas niveau. Ce qui a commencé comme un projet d'apprentissage pendant des vacances est rapidement devenu quelque chose de plus grand.",
+      "p2": "L'idée était simple : <strong>et si n'importe qui pouvait simuler des cartes Arduino, ESP32 et Raspberry Pi directement dans le navigateur, sans acheter de matériel, sans installer de chaînes d'outils, sans comptes cloud ?</strong>",
+      "p3": "Velxio v1 a été lancé sur Product Hunt et Hacker News, prenant en charge Arduino Uno et Raspberry Pi Pico. Les retours de la communauté des makers et de l'embarqué ont été incroyables — et ont poussé le projet vers l'avant.",
+      "p4": "<strong>Velxio 2.0</strong> a apporté l'émulation ESP32 via QEMU (en utilisant le fork lcgamboa), un Raspberry Pi 3 faisant tourner un vrai Linux, le support RISC-V pour ESP32-C3 et CH32V003, la simulation réaliste de capteurs (DHT22, HC-SR04, WS2812B NeoPixel), et 19 cartes sur 5 architectures CPU — toutes exécutant du code compilé réel.",
+      "p5": "Le lancement de v2 a atteint la <strong>première page de Hacker News pendant plus de 20 heures</strong>, atteignant près de 600 étoiles GitHub et des milliers de visiteurs en moins de 24 heures. Il est maintenant utilisé par des étudiants, des professeurs et des makers du monde entier."
+    },
+    "howItWorks": {
+      "heading": "Comment ça marche",
+      "avrRp2040Body": "L'émulation précise au cycle près s'exécute entièrement dans votre navigateur en utilisant avr8js et rp2040js. Aucun backend nécessaire pour la simulation.",
+      "esp32Body": "Les Xtensa ESP32 et ESP32-S3 s'exécutent sur le backend QEMU (fork lcgamboa) avec de vraies images flash, GPIO, ADC et temporisateurs.",
+      "riscvBody": "ESP32-C3 (DevKit, XIAO, SuperMini) et CH32V003 sont émulés via le fork QEMU lcgamboa avec libqemu-riscv32, le même modèle de backend que Xtensa ESP32.",
+      "raspiBody": "Linux ARM Cortex-A53 complet via QEMU raspi3b — démarre un vrai Raspberry Pi OS et exécute Python avec RPi.GPIO."
+    },
+    "openSource": {
+      "heading": "Philosophie open source",
+      "lead": "Velxio est <strong>100 % open source</strong> sous licence AGPLv3. Pas de dépendance au cloud, pas de comptes étudiants, pas de données quittant votre réseau. Les universités et bootcamps peuvent le déployer sur leurs propres serveurs avec une seule commande Docker et donner à chaque étudiant l'accès à un environnement de développement embarqué complet — gratuitement.",
+      "creditsIntro": "Le projet s'appuie sur un travail open source incroyable de la communauté :",
+      "credits": {
+        "avr8js": "Émulation CPU AVR8 par Wokwi",
+        "rp2040js": "Émulation RP2040 par Wokwi",
+        "wokwiElements": "48+ composants électroniques visuels par Wokwi",
+        "qemuLcgamboa": "Émulation QEMU ESP32 et Raspberry Pi",
+        "arduinoCli": "Chaîne d'outils de compilation Arduino"
+      },
+      "inspiredBy": "Velxio a été inspiré par <a>Wokwi</a>, qui est un outil fantastique. L'objectif de Velxio est de prendre une voie différente : entièrement open source, auto-hébergeable et prenant en charge plusieurs cartes hétérogènes dans le même circuit."
+    },
+    "creator": {
+      "heading": "Le créateur",
+      "role": "Architecte d'applications @ IBM · Montevideo, Uruguay",
+      "bio1": "Architecte d'applications avec plus de 10 ans d'expérience dans la direction du développement d'écosystèmes d'entreprise à grande échelle. Spécialiste en IA générative (LLM, RAG, LangChain), architectures Cloud-Native (OpenShift, Kubernetes) et expert certifié Odoo ERP. Travaille actuellement chez IBM sur des applications d'entreprise pour la Banque d'Assurance de l'État uruguayen (BSE).",
+      "bio2": "A étudié le génie informatique à l'Universidad de Oriente à Cuba (2012-2017), puis a déménagé en Uruguay où il a construit une carrière à travers des postes chez Quanam (implémentations Odoo pour des institutions gouvernementales) et IBM (architecture d'entreprise pour BPS et BSE).",
+      "bio3": "Passionné de programmation et de robotique. Créateur d'autres projets open source, dont un <a>jeu de course 3D fonctionnant sur un ESP32</a> (viral sur Reddit avec plus de 40 000 vues) et un clone d'iPod Classic pour Raspberry Pi.",
+      "techStack": "Stack technique"
+    },
+    "releases": {
+      "heading": "Versions récentes",
+      "latest": "Dernière",
+      "v25Tagline": "Arduino rencontre SPICE dans votre navigateur",
+      "v25Blurb": "Simulation de circuits analogiques en temps réel via ngspice-WASM, câblée à Arduino, ESP32 et Raspberry Pi Pico. Plus de 100 composants précis SPICE, ampèremètres et voltmètres en direct, 40 nouveaux exemples analogiques/hybrides — co-simulés avec votre firmware.",
+      "v2Tagline": "Canevas multi-cartes, ESP32, Raspberry Pi 3",
+      "v2Blurb": "Émulation ESP32 complète pilotée par QEMU avec WiFi/BLE, Raspberry Pi 3B Linux, support MicroPython sur Pico/ESP32, puces WASM personnalisées et un canevas repensé avec co-simulation multi-cartes.",
+      "readNotes": "Lire les notes de lancement →"
+    },
+    "quote": {
+      "p1": "\"J'ai étudié l'informatique à Cuba de 2012 à 2017, et quand j'ai déménagé en Uruguay, la question la plus courante était : <em>'Comment as-tu obtenu ton diplôme d'ingénieur sans internet, sans ordinateur, sans YouTube ?'</em>",
+      "p2": "Je n'avais que 4 mots pour répondre : <strong>Persévérance ! Persévérance ! Persévérance ! Persévérance !</strong>",
+      "p3": "Il n'y a pas de meilleure motivation que de ne pas avoir de plan B.\""
+    },
+    "community": {
+      "heading": "Communauté et presse",
+      "stats": {
+        "githubStars": "Étoiles GitHub",
+        "countries": "Pays",
+        "supportedBoards": "Cartes supportées",
+        "cpuArchitectures": "Architectures CPU"
+      },
+      "featuredOn": "Présenté sur :",
+      "press": {
+        "hackerNews": "Hacker News (Première page)"
+      }
+    },
+    "cta": {
+      "title": "Prêt à essayer Velxio ?",
+      "subtitle": "Aucune inscription requise. Fonctionne 100 % dans votre navigateur. Gratuit et open source.",
+      "openEditor": "Ouvrir l'éditeur"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "velxio-chip/v1",
+  "name": "i8080 Button Counter",
+  "author": "Velxio",
+  "license": "MIT",
+  "description": "Self-contained Intel 8080 with an embedded button-counter program. Press BTN_INC to increment (counter wraps at 0xFF), BTN_RST to clear. The current value drives LED0..LED7 in binary. 34-byte ROM, clean-room CPU.",
+  "pins": [
+    "LED0", "LED1", "LED2", "LED3", "LED4", "LED5", "LED6", "LED7",
+    "BTN_INC", "BTN_RST", "VCC", "GND"
+  ],
+  "attributes": []
+}
