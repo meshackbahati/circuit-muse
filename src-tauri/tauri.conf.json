@@ -35,6 +35,9 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
+    "externalBin": [
+      "binaries/arduino-cli"
+    ],
     "targets": "all"
   },
   "plugins": {

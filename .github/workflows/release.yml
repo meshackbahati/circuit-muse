@@ -42,10 +42,18 @@ jobs:
             libssl-dev \
             libgtk-3-dev \
             libsoup-3.0-dev \
-            libjavascriptcoregtk-4.1-dev
+            libjavascriptcoregtk-4.1-dev \
+            libudev-dev
 
       - name: Install Tauri CLI
         run: cargo install tauri-cli --version "^2"
+
+      - name: Download arduino-cli
+        run: |
+          mkdir -p src-tauri/binaries
+          curl -sL "https://github.com/arduino/arduino-cli/releases/download/1.2.1/arduino-cli_1.2.1_Linux_64bit.tar.gz" | tar xz -C src-tauri/binaries/
+          mv src-tauri/binaries/arduino-cli src-tauri/binaries/arduino-cli-x86_64-unknown-linux-gnu
+          chmod +x src-tauri/binaries/arduino-cli-x86_64-unknown-linux-gnu
 
       - name: Install app dependencies
         working-directory: app
@@ -89,6 +97,13 @@ jobs:
       - name: Install Tauri CLI
         run: cargo install tauri-cli --version "^2"
 
+      - name: Download arduino-cli
+        run: |
+          mkdir -p src-tauri/binaries
+          curl -sL "https://github.com/arduino/arduino-cli/releases/download/1.2.1/arduino-cli_1.2.1_Windows_64bit.zip" -o arduino-cli.zip
+          7z x arduino-cli.zip -osrc-tauri/binaries/
+          ren src-tauri\binaries\arduino-cli.exe arduino-cli-x86_64-pc-windows-msvc.exe
+
       - name: Install app dependencies
         working-directory: app
         run: npm install
@@ -129,6 +144,13 @@ jobs:
 
       - name: Install Tauri CLI
         run: cargo install tauri-cli --version "^2"
+
+      - name: Download arduino-cli
+        run: |
+          mkdir -p src-tauri/binaries
+          curl -sL "https://github.com/arduino/arduino-cli/releases/download/1.2.1/arduino-cli_1.2.1_macOS_64bit.tar.gz" | tar xz -C src-tauri/binaries/
+          mv src-tauri/binaries/arduino-cli src-tauri/binaries/arduino-cli-x86_64-apple-darwin
+          chmod +x src-tauri/binaries/arduino-cli-x86_64-apple-darwin
 
       - name: Install app dependencies
         working-directory: app
