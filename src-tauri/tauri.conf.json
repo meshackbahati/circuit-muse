@@ -36,9 +36,6 @@
     "externalBin": [
       "binaries/arduino-cli"
     ],
-    "resources": [
-      "binaries/circuit-muse-engine"
-    ],
     "targets": "all"
   },
   "plugins": {
