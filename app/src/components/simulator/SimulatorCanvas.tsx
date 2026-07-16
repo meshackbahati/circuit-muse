@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Undo2, Redo2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { ESP32_ADC_PIN_MAP } from '../circuit-muse-components/Esp32Element';
+import { ESP32_ADC_PIN_MAP } from '../circuit-components/Esp32Element';
 import { ComponentPickerModal } from '../ComponentPickerModal';
 import { ComponentPropertyDialog } from './ComponentPropertyDialog';
 import { CustomChipDialog } from '../customChips/CustomChipDialog';
@@ -2188,8 +2188,8 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
                   // an in-place upgrade modal), so we don't open the tab.
                   // OSS builds have no hook → always open.
                   const gate = (window as unknown as {
-                    __circuit-muse_iot_gateway_open_gate__?: () => boolean;
-                  }).__circuit-muse_iot_gateway_open_gate__;
+                    __cm_iot_gateway_open_gate__?: () => boolean;
+                  }).__cm_iot_gateway_open_gate__;
                   if (gate && gate()) return;
                   window.open(gatewayUrl, '_blank');
                 };

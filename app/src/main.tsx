@@ -5,19 +5,19 @@ import './index.css';
 // useTranslation() always resolves against a live instance. Must come
 // before App.
 import './i18n';
-import './components/circuit-muse-components/IC74HC595';
-import './components/circuit-muse-components/LogicGateElements';
-import './components/circuit-muse-components/TransistorElements';
-import './components/circuit-muse-components/OpAmpElements';
-import './components/circuit-muse-components/PowerElements';
-import './components/circuit-muse-components/DiodeElements';
-import './components/circuit-muse-components/RelayElements';
-import './components/circuit-muse-components/LogicICElements';
-import './components/circuit-muse-components/MotorDriverElements';
-import './components/circuit-muse-components/FlipFlopElements';
-import './components/circuit-muse-components/RaspberryPi3Element';
-import './components/circuit-muse-components/Bmp280Element';
-import './components/circuit-muse-components/EPaperElement';
+import './components/circuit-components/IC74HC595';
+import './components/circuit-components/LogicGateElements';
+import './components/circuit-components/TransistorElements';
+import './components/circuit-components/OpAmpElements';
+import './components/circuit-components/PowerElements';
+import './components/circuit-components/DiodeElements';
+import './components/circuit-components/RelayElements';
+import './components/circuit-components/LogicICElements';
+import './components/circuit-components/MotorDriverElements';
+import './components/circuit-components/FlipFlopElements';
+import './components/circuit-components/RaspberryPi3Element';
+import './components/circuit-components/Bmp280Element';
+import './components/circuit-components/EPaperElement';
 import App from './App.tsx';
 
 // Configure monaco-editor for offline use via local static assets

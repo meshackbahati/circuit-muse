@@ -14,7 +14,7 @@ import { useSEO } from '../utils/useSEO';
 import { getSeoMeta } from '../seoRoutes';
 import { trackClickCTA } from '../utils/analytics';
 import './SEOPage.css';
-import './CircuitMuse2Page.css';
+import './CircuitSimulatorPage2.css';
 
 const GITHUB_URL = 'https://github.com/davidmonterocrespo24/circuit-muse';
 const DISCORD_URL = 'https://discord.gg/3mARjJrh4E';
@@ -285,7 +285,7 @@ const CHANGE_SECTIONS = [
   },
 ];
 
-export const CircuitMuse25Page: React.FC = () => {
+export const CircuitSimulatorPage25: React.FC = () => {
   const { t } = useTranslation();
   const localize = useLocalizedHref();
   useSEO({ ...getSeoMeta('/v2-5')!, jsonLd: JSON_LD });

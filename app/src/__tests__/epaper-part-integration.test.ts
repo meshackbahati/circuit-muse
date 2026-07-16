@@ -127,7 +127,7 @@ beforeAll(async () => {
     (globalThis as Record<string, unknown>)[k] = w[k];
   }
   // Now load the Web Component (after globals are in place).
-  await import('../components/circuit-muse-components/EPaperElement');
+  await import('../components/circuit-components/EPaperElement');
 });
 
 afterEach(() => {

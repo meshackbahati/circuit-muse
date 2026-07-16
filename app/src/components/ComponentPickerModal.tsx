@@ -17,16 +17,16 @@ import type { BoardKind } from '../types/board';
 import { BOARD_KIND_LABELS } from '../types/board';
 import { isProBoardKind } from '../lib/proBoardGate';
 import raspberryPi3Svg from '../assets/Raspberry_Pi_3_illustration.svg';
-import { Attiny85 } from './circuit-muse-components/Attiny85';
-import './circuit-muse-components/Esp32Element'; // registers circuit-muse-esp32
-import './circuit-muse-components/PiPicoWElement'; // registers circuit-muse-pi-pico-w
-import './circuit-muse-components/Stm32BluePillElement'; // registers circuit-muse-stm32-bluepill
+import { Attiny85 } from './circuit-components/Attiny85';
+import './circuit-components/Esp32Element'; // registers circuit-muse-esp32
+import './circuit-components/PiPicoWElement'; // registers circuit-muse-pi-pico-w
+import './circuit-components/Stm32BluePillElement'; // registers circuit-muse-stm32-bluepill
 // Register every wokwi tag that the picker might try to instantiate as a
 // thumbnail. The picker calls `document.createElement(tagName)`, so any tag
 // that isn't already a registered custom element renders as an empty
 // HTMLUnknownElement (blank card preview).
 import '@wokwi/elements';
-import '../circuit-muse-elements';
+import '../circuit-elements';
 import './ComponentPickerModal.css';
 
 interface ComponentPickerModalProps {
@@ -285,12 +285,12 @@ export const ComponentPickerModal: React.FC<ComponentPickerModalProps> = ({
                       component={component}
                       onSelect={() => {
                         // Pro overlays can intercept clicks on pro_only
-                        // components by setting window.__circuit-muse_pro_gate__.
+                        // components by setting window.__cm_pro_gate__.
                         // Returning true means "handled — do not pass through".
                         if (component.pro_only) {
                           const gate = (window as unknown as {
-                            __circuit-muse_pro_gate__?: (c: typeof component) => boolean;
-                          }).__circuit-muse_pro_gate__;
+                            __cm_pro_gate__?: (c: typeof component) => boolean;
+                          }).__cm_pro_gate__;
                           if (gate && gate(component)) return;
                         }
                         onSelectComponent(component);

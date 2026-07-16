@@ -13,7 +13,7 @@ import { getSeoMeta } from '../seoRoutes';
 import { trackClickCTA } from '../utils/analytics';
 import raspberryPi3Svg from '../assets/Raspberry_Pi_3_illustration.svg';
 import './SEOPage.css';
-import './CircuitMuse2Page.css';
+import './CircuitSimulatorPage2.css';
 
 const GITHUB_URL = 'https://github.com/davidmonterocrespo24/circuit-muse';
 const DISCORD_URL = 'https://discord.gg/3mARjJrh4E';
@@ -354,7 +354,7 @@ const CHANGE_SECTIONS = [
   },
 ];
 
-export const CircuitMuse2Page: React.FC = () => {
+export const CircuitSimulatorPage2: React.FC = () => {
   const { t } = useTranslation();
   const localize = useLocalizedHref();
   useSEO({ ...getSeoMeta('/v2')!, jsonLd: JSON_LD });

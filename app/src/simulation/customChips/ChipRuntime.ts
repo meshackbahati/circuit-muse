@@ -186,7 +186,7 @@ export class ChipInstance {
   private _i2cDevice: { address: number } | null = null;
 
   wasi: WasiShim;
-  private _circuit-museImports: Record<string, (...args: any[]) => any>;
+  private _cmImports: Record<string, (...args: any[]) => any>;
 
   static async create(opts: ChipInstanceOptions): Promise<ChipInstance> {
     const inst = new ChipInstance(opts);
@@ -210,7 +210,7 @@ export class ChipInstance {
       opts.log ?? ((s) => console.log(`[chip] ${s.replace(/\n$/, '')}`)),
     );
 
-    this._circuit-museImports = this._buildCircuitMuseImports();
+    this._cmImports = this._buildCmImports();
   }
 
   private async _instantiate(): Promise<void> {
@@ -223,7 +223,7 @@ export class ChipInstance {
     const importObject: WebAssembly.Imports = {
       env: {
         memory: this.memory,
-        ...this._circuit-museImports,
+        ...this._cmImports,
       },
       ...this.wasi.imports(),
     };
@@ -324,7 +324,7 @@ export class ChipInstance {
 
   // ── Build host imports table ─────────────────────────────────────────────
 
-  private _buildCircuitMuseImports(): Record<string, (...args: any[]) => any> {
+  private _buildCmImports(): Record<string, (...args: any[]) => any> {
     return {
       vx_pin_register:    (namePtr: number, mode: number) => this._pin_register(namePtr, mode),
       vx_pin_read:        (handle: number) => this._pin_read(handle),

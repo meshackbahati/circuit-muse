@@ -278,7 +278,7 @@ export async function importFromWokwiZip(file: File): Promise<ImportResult> {
     'arduino-mega': 'arduino-mega',
     'raspberry-pi-pico': 'nano-rp2040',
   };
-  const circuit-museBoardId = CIRCUIT_MUSE_BOARD_ID[boardType] ?? 'arduino-uno';
+  const cmBoardId = CIRCUIT_MUSE_BOARD_ID[boardType] ?? 'arduino-uno';
 
   // Board position from diagram. Apply a minimum offset so the board is never
   // crammed against the canvas top-left corner (Wokwi diagrams often use 0,0).
@@ -315,8 +315,8 @@ export async function importFromWokwiZip(file: File): Promise<ImportResult> {
     const endPin = colonB >= 0 ? endStr.slice(colonB + 1) : '';
 
     // Remap board part id → CircuitMuse internal board id
-    const startId = startCompRaw === boardId ? circuit-museBoardId : startCompRaw;
-    const endId = endCompRaw === boardId ? circuit-museBoardId : endCompRaw;
+    const startId = startCompRaw === boardId ? cmBoardId : startCompRaw;
+    const endId = endCompRaw === boardId ? cmBoardId : endCompRaw;
 
     // Normalize pin names: Wokwi uses signal names (SDA, SCL, VCC) while
     // wokwi-elements use physical/board pin names (DATA, CLK, VIN).

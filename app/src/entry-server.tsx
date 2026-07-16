@@ -24,8 +24,8 @@ import { Esp32S3SimulatorPage } from './pages/Esp32S3SimulatorPage';
 import { Esp32C3SimulatorPage } from './pages/Esp32C3SimulatorPage';
 import { RaspberryPiPicoSimulatorPage } from './pages/RaspberryPiPicoSimulatorPage';
 import { RaspberryPiSimulatorPage } from './pages/RaspberryPiSimulatorPage';
-import { CircuitMuse2Page } from './pages/CircuitMuse2Page';
-import { CircuitMuse25Page } from './pages/CircuitMuse25Page';
+import { CircuitSimulatorPage2 } from './pages/CircuitSimulatorPage2';
+import { CircuitSimulatorPage25 } from './pages/CircuitSimulatorPage25';
 import { DocsPage } from './pages/DocsPage';
 import { ExampleDetailPage } from './pages/ExampleDetailPage';
 
@@ -42,8 +42,8 @@ const ROUTE_COMPONENTS: Record<string, React.FC> = {
   '/esp32-c3-simulator': Esp32C3SimulatorPage,
   '/raspberry-pi-pico-simulator': RaspberryPiPicoSimulatorPage,
   '/raspberry-pi-simulator': RaspberryPiSimulatorPage,
-  '/v2': CircuitMuse2Page,
-  '/v2-5': CircuitMuse25Page,
+  '/v2': CircuitSimulatorPage2,
+  '/v2-5': CircuitSimulatorPage25,
   // Docs sections — all use DocsPage with different URL params
   '/docs': DocsPage,
   '/docs/intro': DocsPage,

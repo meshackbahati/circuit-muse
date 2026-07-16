@@ -11,7 +11,7 @@
  *
  * Side-effect import: each module calls `customElements.define(...)` at
  * load time (guarded against double-registration), so a single
- * `import './circuit-muse-elements';` is enough to make the tags resolvable.
+ * `import './circuit-elements';` is enough to make the tags resolvable.
  */
 
 import './capacitor-element';

@@ -25,7 +25,7 @@ import { useOscilloscopeStore } from './useOscilloscopeStore';
 import { RaspberryPi3Bridge } from '../simulation/RaspberryPi3Bridge';
 import { Esp32Bridge } from '../simulation/Esp32Bridge';
 import { Stm32Bridge, stm32PinNameToLinear } from '../simulation/Stm32Bridge';
-import { STM32_LED } from '../components/circuit-muse-components/Stm32BluePillElement';
+import { STM32_LED } from '../components/circuit-components/Stm32BluePillElement';
 import { useEditorStore } from './useEditorStore';
 import { useVfsStore } from './useVfsStore';
 import { buildProjectSdImage, decodeSdFiles, bytesToB64 } from '../utils/sdCardFiles';

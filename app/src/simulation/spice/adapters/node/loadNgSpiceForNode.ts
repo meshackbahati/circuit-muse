@@ -134,7 +134,7 @@ export function loadNgSpiceForNode(
   const wrapped = `
     var Module = config;
     ${src}
-    var __circuit-museOriginalInit = Module.onRuntimeInitialized;
+    var __cmOriginalInit = Module.onRuntimeInitialized;
     Module.onRuntimeInitialized = function () {
       // Build does not export FS / HEAP* in EXPORTED_RUNTIME_METHODS;
       // those keys on Module trigger abort accessors. Assign to the
@@ -146,7 +146,7 @@ export function loadNgSpiceForNode(
       if (typeof HEAPU32 !== 'undefined') Module._circuit-muse_heapu32 = HEAPU32;
       if (typeof HEAPF64 !== 'undefined') Module._circuit-muse_heapf64 = HEAPF64;
       if (typeof ENV !== 'undefined') Module._circuit-muse_env = ENV;
-      if (__circuit-museOriginalInit) __circuit-museOriginalInit();
+      if (__cmOriginalInit) __cmOriginalInit();
     };
     return Module;
   `;

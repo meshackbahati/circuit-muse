@@ -19,7 +19,7 @@ import type { BoardKind } from '../types/board';
 import type { ExampleProject } from '../data/examples';
 
 /**
- * Strip the brand prefix from a wokwi-elements / circuit-muse-elements
+ * Strip the brand prefix from a wokwi-elements / circuit-elements
  * component tag.  Matches the regex used historically inside
  * `loadExample.ts`.
  *

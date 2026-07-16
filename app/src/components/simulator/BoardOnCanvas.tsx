@@ -1,18 +1,18 @@
 import React from 'react';
 import type { BoardInstance } from '../../types/board';
-import { ArduinoUno } from '../circuit-muse-components/ArduinoUno';
-import { ArduinoNano } from '../circuit-muse-components/ArduinoNano';
-import { ArduinoMega } from '../circuit-muse-components/ArduinoMega';
+import { ArduinoUno } from '../circuit-components/ArduinoUno';
+import { ArduinoNano } from '../circuit-components/ArduinoNano';
+import { ArduinoMega } from '../circuit-components/ArduinoMega';
 // NanoRP2040 (wokwi-nano-rp2040-connect) used to back the 'raspberry-pi-pico'
 // boardKind by mistake — kept the import out so future contributors don't
 // re-wire it back in. If someone genuinely needs a Nano RP2040 Connect
 // board (D2..D13 labels), add a new boardKind 'arduino-nano-rp2040'.
-import { RaspberryPi3 } from '../circuit-muse-components/RaspberryPi3';
-import { RaspberryPi4 } from '../circuit-muse-components/RaspberryPi4';
-import { RaspberryPi5 } from '../circuit-muse-components/RaspberryPi5';
-import { Esp32 } from '../circuit-muse-components/Esp32';
-import { Attiny85 } from '../circuit-muse-components/Attiny85';
-import { PiPicoW } from '../circuit-muse-components/PiPicoW';
+import { RaspberryPi3 } from '../circuit-components/RaspberryPi3';
+import { RaspberryPi4 } from '../circuit-components/RaspberryPi4';
+import { RaspberryPi5 } from '../circuit-components/RaspberryPi5';
+import { Esp32 } from '../circuit-components/Esp32';
+import { Attiny85 } from '../circuit-components/Attiny85';
+import { PiPicoW } from '../circuit-components/PiPicoW';
 import {
   Stm32BluePill,
   Stm32BlackPill,
@@ -22,7 +22,7 @@ import {
   Stm32OlimexH405,
   Stm32NetduinoPlus2,
   Stm32Netduino2,
-} from '../circuit-muse-components/Stm32BluePill';
+} from '../circuit-components/Stm32BluePill';
 import { PinOverlay } from './PinOverlay';
 
 // Board visual dimensions (width × height) for the drag-overlay sizing.

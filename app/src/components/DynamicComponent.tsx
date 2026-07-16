@@ -33,11 +33,11 @@ import { getMixedModeScheduler } from '../simulation/spice/MixedModeScheduler';
 import { getBoardLogicFamily } from '../simulation/LogicFamilies';
 
 // Side-effect imports: register every web component we'll create at runtime.
-// `@wokwi/elements` covers the upstream catalog; `../circuit-muse-elements` adds
+// `@wokwi/elements` covers the upstream catalog; `../circuit-elements` adds
 // the circuit-muse-local elements (e.g. <circuit-muse-capacitor-electrolytic>,
 // <circuit-muse-instr-voltmeter>) that don't exist upstream.
 import '@wokwi/elements';
-import '../circuit-muse-elements';
+import '../circuit-elements';
 
 // Map metadataId → [pinA, pinB] for 2-terminal passives.
 // "Tracing through" means: if the caller arrived on pinA, continue from pinB
