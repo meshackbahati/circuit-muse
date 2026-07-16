@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-app:
+    name: Test App
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: app
+        run: npm install
+
+      - name: TypeScript check
+        working-directory: app
+        run: npx tsc --noEmit
+
+      - name: Build frontend
+        working-directory: app
+        run: npx vite build
+
+  test-engine:
+    name: Test Engine
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        working-directory: engine
+        run: pip install -r requirements.txt
+
+      - name: Start engine
+        working-directory: engine
+        run: uvicorn app.main:app --host 127.0.0.1 --port 8001 &
+        sleep 5
+
+      - name: Health check
+        run: curl -sf http://127.0.0.1:8001/health
+
+  test-rust:
+    name: Test Rust Shell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust
+        uses: actions/cache@v4
+        with:
+          path: |
+            src-tauri/target
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: rust-${{ runner.os }}-${{ hashFiles('src-tauri/Cargo.lock') }}
+          restore-keys: rust-${{ runner.os }}-
+
+      - name: Check Rust
+        working-directory: src-tauri
+        run: cargo check
