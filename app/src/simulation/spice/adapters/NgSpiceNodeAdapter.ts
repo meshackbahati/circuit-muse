@@ -4,7 +4,7 @@
  * Web Worker required.
  *
  * Architecture:
- *   loadNgSpiceForNode → emscripten Module (with _circuit-muse_fs et al.
+ *   loadNgSpiceForNode → emscripten Module (with _cm_fs et al.
  *   patched on)
  *   ↓
  *   stageFilesystem — write the .cm files + spinit to the WASM FS
@@ -153,8 +153,8 @@ export class NgSpiceNodeAdapter implements SolverPort {
 
   private stageFilesystem(): void {
     const M = this.module;
-    if (!M || !M._circuit-muse_fs) throw new Error('Module FS not ready');
-    const FS = M._circuit-muse_fs;
+    if (!M || !M._cm_fs) throw new Error('Module FS not ready');
+    const FS = M._cm_fs;
     // Recursive mkdir — emscripten FS.mkdir is one level at a time
     // and the default mounted root only has `/`.
     const ensureDir = (full: string): void => {
@@ -195,7 +195,7 @@ export class NgSpiceNodeAdapter implements SolverPort {
 
   async loadCircuit(netlist: string): Promise<void> {
     await this.init();
-    if (!this.module || !this.api || !this.module._circuit-muse_fs) throw new Error('not ready');
+    if (!this.module || !this.api || !this.module._cm_fs) throw new Error('not ready');
     this.api.command('remcirc');
     // Strip any inline analysis directives so the engine does NOT
     // auto-run them during `source` — the SolverPort owns analysis
@@ -209,7 +209,7 @@ export class NgSpiceNodeAdapter implements SolverPort {
         return !(l.startsWith('.op') || l.startsWith('.tran ') || l.startsWith('.ac '));
       })
       .join('\n');
-    this.module._circuit-muse_fs.writeFile('/circuit.spc', stripped);
+    this.module._cm_fs.writeFile('/circuit.spc', stripped);
     const rc = this.api.command('source /circuit.spc');
     if (rc !== 0) throw new Error(`source /circuit.spc returned ${rc}`);
   }
@@ -304,7 +304,7 @@ export class NgSpiceNodeAdapter implements SolverPort {
     if (!plot) return [];
     const arrPtr = this.api.allVecs(plot);
     if (!arrPtr) return [];
-    const heapu32 = this.module._circuit-muse_heapu32;
+    const heapu32 = this.module._cm_heapu32;
     if (!heapu32) return [];
     const names: string[] = [];
     // ngSpice_AllVecs returns a NULL-terminated array of char*.
@@ -336,9 +336,9 @@ export class NgSpiceNodeAdapter implements SolverPort {
       if (plot) infoPtr = this.api.getVecInfo(`${plot}.${name}`);
     }
     if (!infoPtr) return null;
-    const heap32 = M._circuit-muse_heap32;
-    const heapu32 = M._circuit-muse_heapu32;
-    const heapf64 = M._circuit-muse_heapf64;
+    const heap32 = M._cm_heap32;
+    const heapu32 = M._cm_heapu32;
+    const heapf64 = M._cm_heapf64;
     if (!heap32 || !heapu32 || !heapf64) return null;
     const realDataPtr = heapu32[(infoPtr + VECTOR_INFO_REALDATA_OFFSET) >> 2]!;
     const compDataPtr = heapu32[(infoPtr + VECTOR_INFO_IMAGDATA_OFFSET) >> 2]!;

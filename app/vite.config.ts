@@ -15,7 +15,7 @@ const proOverlayPath =
     ? path.resolve(process.env.PRO_OVERLAY_PATH)
     : path.resolve(__dirname, 'src/__pro_stub__')
 
-export default defineConfig(({ command }) => ({
+export default defineConfig(({ command: _command }) => ({
   plugins: [react()],
   resolve: {
     alias: {

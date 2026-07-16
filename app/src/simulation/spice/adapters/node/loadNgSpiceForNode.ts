@@ -47,23 +47,23 @@ export interface NgSpiceEmscriptenModule {
   lengthBytesUTF8: (str: string) => number;
   _malloc: (bytes: number) => number;
   _free: (ptr: number) => void;
-  _circuit-muse_heap8?: Int8Array;
-  _circuit-muse_heap32?: Int32Array;
-  _circuit-muse_heapu32?: Uint32Array;
-  _circuit-muse_heapf64?: Float64Array;
+  _cm_heap8?: Int8Array;
+  _cm_heap32?: Int32Array;
+  _cm_heapu32?: Uint32Array;
+  _cm_heapf64?: Float64Array;
   /**
    * Note: the vendored build does NOT include `FS` in
    * EXPORTED_RUNTIME_METHODS, so `Module.FS` triggers an abort
    * accessor on this build.  We expose the closure-captured locals
-   * via the `_circuit-muse_*` namespace instead — see the wrapper in
+   * via the `_cm_*` namespace instead — see the wrapper in
    * loadNgSpiceForNode.
    */
-  _circuit-muse_fs?: {
+  _cm_fs?: {
     writeFile: (path: string, data: Uint8Array | string) => void;
     mkdir: (path: string) => void;
     analyzePath: (path: string) => { exists: boolean };
   };
-  _circuit-muse_env?: Record<string, string>;
+  _cm_env?: Record<string, string>;
   noInitialRun: boolean;
   print?: (text: string) => void;
   printErr?: (text: string) => void;
@@ -140,12 +140,12 @@ export function loadNgSpiceForNode(
       // those keys on Module trigger abort accessors. Assign to the
       // _circuit-muse_ namespace instead and the NgSpiceNodeAdapter reads
       // from there.
-      if (typeof FS !== 'undefined') Module._circuit-muse_fs = FS;
-      if (typeof HEAP8 !== 'undefined') Module._circuit-muse_heap8 = HEAP8;
-      if (typeof HEAP32 !== 'undefined') Module._circuit-muse_heap32 = HEAP32;
-      if (typeof HEAPU32 !== 'undefined') Module._circuit-muse_heapu32 = HEAPU32;
-      if (typeof HEAPF64 !== 'undefined') Module._circuit-muse_heapf64 = HEAPF64;
-      if (typeof ENV !== 'undefined') Module._circuit-muse_env = ENV;
+      if (typeof FS !== 'undefined') Module._cm_fs = FS;
+      if (typeof HEAP8 !== 'undefined') Module._cm_heap8 = HEAP8;
+      if (typeof HEAP32 !== 'undefined') Module._cm_heap32 = HEAP32;
+      if (typeof HEAPU32 !== 'undefined') Module._cm_heapu32 = HEAPU32;
+      if (typeof HEAPF64 !== 'undefined') Module._cm_heapf64 = HEAPF64;
+      if (typeof ENV !== 'undefined') Module._cm_env = ENV;
       if (__cmOriginalInit) __cmOriginalInit();
     };
     return Module;
