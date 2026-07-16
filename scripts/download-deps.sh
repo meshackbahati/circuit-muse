@@ -9,7 +9,7 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 BINARIES_DIR="$PROJECT_ROOT/src-tauri/binaries"
 
 echo "=== Downloading arduino-cli ==="
-ARDUINO_CLI_VERSION="1.2.1"
+ARDUINO_CLI_VERSION="1.5.1"
 
 download_arduino_cli() {
     local os=$1
