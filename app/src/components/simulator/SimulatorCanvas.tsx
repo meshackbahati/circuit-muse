@@ -1,4 +1,4 @@
-import { getEngineUrl } from '../services/engineConfig';
+import { getEngineUrl } from '../../services/engineConfig';
 import { useSimulatorStore, getEsp32Bridge } from '../../store/useSimulatorStore';
 import { useElectricalStore } from '../../store/useElectricalStore';
 import React, { useEffect, useState, useRef, useCallback } from 'react';

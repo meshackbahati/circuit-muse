@@ -1,4 +1,4 @@
-import { getEngineUrl } from '../services/engineConfig';
+import { getEngineUrl } from '../../services/engineConfig';
 /**
  * Serial Monitor — multi-board tabbed view.
  * Each board has its own tab with serial output, input, and clear button.
