@@ -52,7 +52,7 @@ export class GeminiProvider implements LLMProvider {
           id: crypto.randomUUID(),
           type: 'function' as const,
           function: {
-            name: fc.name,
+            name: fc.name ?? '',
             arguments: JSON.stringify(fc.args),
           },
         })),

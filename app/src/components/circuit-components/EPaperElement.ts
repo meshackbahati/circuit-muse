@@ -19,7 +19,7 @@
 
 import {
   PANEL_CONFIGS,
-  DEFAULT_PANEL_KIND,
+  DEFAULT_PANEL_KIND as _DEFAULT_PANEL_KIND,
   getPanelConfig,
   type EPaperPanelConfig,
 } from '../../simulation/displays/EPaperPanels';

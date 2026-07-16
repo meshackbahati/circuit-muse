@@ -1,4 +1,4 @@
-import type { Message, ChatParams, ToolCall, LLMProvider, ToolDefinition } from './types';
+import type { Message, ToolCall } from './types';
 import { createProvider } from './providers/registry';
 import { useProviderStore } from '../store/useProviderStore';
 import { useAgentStore } from '../store/useAgentStore';

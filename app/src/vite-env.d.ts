@@ -101,5 +101,22 @@ declare namespace JSX {
     'circuit-muse-flip-flop-t': any;
     'circuit-muse-flip-flop-jk': any;
     'circuit-muse-motor-driver-l293d': any;
+    'wokwi-arduino-mega': any;
+    'wokwi-arduino-nano': any;
+    'wokwi-arduino-uno': any;
+    'circuit-muse-attiny85': any;
+    'circuit-muse-epaper': any;
+    'circuit-muse-esp32': any;
+    'circuit-muse-pi-pico-w': any;
+    'circuit-muse-raspberry-pi-4': any;
+    'circuit-muse-raspberry-pi-5': any;
+    'circuit-muse-stm32-bluepill': any;
+    'circuit-muse-stm32-blackpill': any;
+    'circuit-muse-stm32-bluepill-f103cb': any;
+    'circuit-muse-stm32-blackpill-f401': any;
+    'circuit-muse-stm32-f4-discovery': any;
+    'circuit-muse-stm32-olimex-h405': any;
+    'circuit-muse-stm32-netduino-plus2': any;
+    'circuit-muse-stm32-netduino2': any;
   }
 }

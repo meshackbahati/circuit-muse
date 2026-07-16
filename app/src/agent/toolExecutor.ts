@@ -33,7 +33,10 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
         top: args.y ?? 200,
         rotate: args.rotation ?? 0,
         attrs: args.attrs ?? {},
-      };
+        x: args.x ?? 200,
+        y: args.y ?? 200,
+        properties: args.attrs ?? {},
+      } as any;
       sim.recordAddComponent(component);
       return JSON.stringify({ success: true, component_id: component.id });
     }
@@ -44,7 +47,8 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
         start: { componentId: args.from_part, pinId: args.from_pin },
         end: { componentId: args.to_part, pinId: args.to_pin },
         color: args.color ?? 'green',
-      };
+        waypoints: [],
+      } as any;
       sim.recordAddWire(wire);
       return JSON.stringify({ success: true, wire_id: wire.id });
     }
@@ -69,16 +73,14 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
     }
     case 'run_simulation': {
       const sim = useSimulatorStore.getState();
-      for (const board of sim.boards) {
-        sim.startSimulation(board.id);
-      }
+      sim.startSimulation();
       return JSON.stringify({ success: true, message: 'Simulation started' });
     }
     case 'get_circuit_state': {
       const sim = useSimulatorStore.getState();
       return JSON.stringify({
         boards: sim.boards.map(b => ({ id: b.id, kind: b.boardKind, x: b.x, y: b.y, running: b.running })),
-        components: sim.components.map(c => ({ id: c.id, type: c.metadataId, left: c.left, top: c.top })),
+        components: sim.components.map(c => ({ id: c.id, type: c.metadataId, x: (c as any).x ?? (c as any).left, y: (c as any).y ?? (c as any).top })),
         wires: sim.wires.map(w => ({ id: w.id, from: w.start, to: w.end })),
       });
     }

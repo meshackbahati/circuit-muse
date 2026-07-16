@@ -1,23 +1,5 @@
 import './Stm32BluePillElement';
 
-type StmIntrinsic = React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace JSX {
-    interface IntrinsicElements {
-      'circuit-muse-stm32-bluepill': StmIntrinsic;
-      'circuit-muse-stm32-blackpill': StmIntrinsic;
-      'circuit-muse-stm32-bluepill-f103cb': StmIntrinsic;
-      'circuit-muse-stm32-blackpill-f401': StmIntrinsic;
-      'circuit-muse-stm32-f4-discovery': StmIntrinsic;
-      'circuit-muse-stm32-olimex-h405': StmIntrinsic;
-      'circuit-muse-stm32-netduino-plus2': StmIntrinsic;
-      'circuit-muse-stm32-netduino2': StmIntrinsic;
-    }
-  }
-}
-
 interface Props {
   id: string;
   x: number;
