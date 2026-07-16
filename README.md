@@ -146,20 +146,9 @@ The setup wizard (gear icon in toolbar) shows what's installed and what's missin
 
 ---
 
-## Release
-
-```bash
-git tag v1.0.1
-git push origin v1.0.1
-```
-
-Triggers GitHub Actions to build for Linux (.deb, .AppImage), Windows (.msi, .exe), macOS (.dmg) and creates a release with all installers.
-
----
-
 ## License
 
-MIT License — fully open source. No restrictions, no commercial tier.
+MIT License
 
 ---
 
