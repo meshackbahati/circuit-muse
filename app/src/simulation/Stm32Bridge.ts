@@ -39,7 +39,7 @@ const API_BASE = (): string => {
       return injected.replace(/\/+$/, '');
     }
   }
-  return (import.meta.env.VITE_API_BASE as string | undefined) ?? 'http://localhost:8001/api';
+  return (import.meta.env.VITE_API_BASE as string | undefined) ?? getEngineUrl() + '/api';
 };
 
 export function getTabSessionId(): string {

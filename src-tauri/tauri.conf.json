@@ -2,12 +2,10 @@
   "$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/dev/crates/tauri-config-schema/schema.json",
   "productName": "CircuitMuse",
   "version": "1.0.1",
-  "identifier": "dev.circuitmuse.app",
+  "identifier": "dev.circuit-muse",
   "build": {
     "frontendDist": "../app/dist",
-    "devUrl": "http://localhost:5173",
-    "beforeDevCommand": "cd ../app && npm run dev",
-    "beforeBuildCommand": "cd ../app && npm run build"
+    "devUrl": "http://localhost:5173"
   },
   "app": {
     "windows": [
@@ -36,7 +34,8 @@
       "icons/icon.ico"
     ],
     "externalBin": [
-      "binaries/arduino-cli"
+      "binaries/arduino-cli",
+      "binaries/circuit-muse-engine"
     ],
     "targets": "all"
   },

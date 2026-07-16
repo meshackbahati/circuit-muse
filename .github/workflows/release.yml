@@ -55,9 +55,11 @@ jobs:
           mv src-tauri/binaries/arduino-cli src-tauri/binaries/arduino-cli-x86_64-unknown-linux-gnu
           chmod +x src-tauri/binaries/arduino-cli-x86_64-unknown-linux-gnu
 
-      - name: Install app dependencies
+      - name: Install app dependencies and build
         working-directory: app
-        run: npm install
+        run: |
+          npm install
+          npm run build
 
       - name: Build Tauri
         working-directory: src-tauri
@@ -104,9 +106,11 @@ jobs:
           7z x arduino-cli.zip -osrc-tauri/binaries/
           ren src-tauri\binaries\arduino-cli.exe arduino-cli-x86_64-pc-windows-msvc.exe
 
-      - name: Install app dependencies
+      - name: Install app dependencies and build
         working-directory: app
-        run: npm install
+        run: |
+          npm install
+          npm run build
 
       - name: Build Tauri
         working-directory: src-tauri
@@ -152,9 +156,11 @@ jobs:
           mv src-tauri/binaries/arduino-cli src-tauri/binaries/arduino-cli-x86_64-apple-darwin
           chmod +x src-tauri/binaries/arduino-cli-x86_64-apple-darwin
 
-      - name: Install app dependencies
+      - name: Install app dependencies and build
         working-directory: app
-        run: npm install
+        run: |
+          npm install
+          npm run build
 
       - name: Build Tauri
         working-directory: src-tauri

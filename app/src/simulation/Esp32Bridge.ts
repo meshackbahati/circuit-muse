@@ -60,7 +60,7 @@ const API_BASE = (): string => {
       return injected.replace(/\/+$/, '');
     }
   }
-  return (import.meta.env.VITE_API_BASE as string | undefined) ?? 'http://localhost:8001/api';
+  return (import.meta.env.VITE_API_BASE as string | undefined) ?? getEngineUrl() + '/api';
 };
 
 /** Returns a stable UUID for this browser tab (persists across reloads, resets on new tab). */

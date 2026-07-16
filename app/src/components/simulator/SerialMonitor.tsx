@@ -1,3 +1,4 @@
+import { getEngineUrl } from '../services/engineConfig';
 /**
  * Serial Monitor — multi-board tabbed view.
  * Each board has its own tab with serial output, input, and clear button.
@@ -270,7 +271,7 @@ export const SerialMonitor: React.FC = () => {
                 const sessionId = getTabSessionId();
                 const backendBase =
                   (import.meta.env.VITE_API_BASE as string | undefined) ??
-                  'http://localhost:8001/api';
+                  getEngineUrl() + '/api';
 
                 matches.forEach((m, i) => {
                   const start = m.index!;

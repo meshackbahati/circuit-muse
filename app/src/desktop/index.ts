@@ -13,6 +13,7 @@ import { Stm32QemuPrompt } from './Stm32QemuPrompt';
 import { UpdateAvailableToast } from './UpdateAvailableToast';
 import { installDesktopMenuListener } from './menu';
 import { dlog } from './log';
+import { detectEnginePort } from '../services/engineConfig';
 import './desktop.css';
 
 let mounted = false;
@@ -42,4 +43,13 @@ export const mountDesktop = (): void => {
 
   void installDesktopMenuListener();
   mountSidePanels();
+
+  // Auto-detect engine port
+  detectEnginePort().then((port) => {
+    if (port) {
+      dlog(`Engine detected on port ${port}`);
+    } else {
+      dlog('Engine not detected - will retry on first request');
+    }
+  });
 };

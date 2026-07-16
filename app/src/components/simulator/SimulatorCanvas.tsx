@@ -1,3 +1,4 @@
+import { getEngineUrl } from '../services/engineConfig';
 import { useSimulatorStore, getEsp32Bridge } from '../../store/useSimulatorStore';
 import { useElectricalStore } from '../../store/useElectricalStore';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
@@ -2177,7 +2178,7 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
                 const clientId = `${sessionId}::${activeBoard.id}`;
                 const backendBase =
                   (import.meta.env.VITE_API_BASE as string | undefined) ??
-                  'http://localhost:8001/api';
+                  getEngineUrl() + '/api';
                 const gatewayUrl = `${backendBase}/gateway/${clientId}/`;
 
                 const openGateway = () => {
