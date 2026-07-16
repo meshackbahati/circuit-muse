@@ -34,7 +34,8 @@
       "icons/icon.ico"
     ],
     "externalBin": [
-      "binaries/arduino-cli"
+      "binaries/arduino-cli",
+      "binaries/circuit-muse-engine"
     ],
     "targets": "all"
   },
