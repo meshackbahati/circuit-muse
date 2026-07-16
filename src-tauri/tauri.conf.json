@@ -4,10 +4,10 @@
   "version": "3.0.0",
   "identifier": "dev.circuitmuse.app",
   "build": {
-    "frontendDist": "../frontend/dist",
+    "frontendDist": "../app/dist",
     "devUrl": "http://localhost:5173",
-    "beforeDevCommand": "cd ../frontend && npm run dev",
-    "beforeBuildCommand": "cd ../frontend && npm run build"
+    "beforeDevCommand": "cd ../app && npm run dev",
+    "beforeBuildCommand": "cd ../app && npm run build"
   },
   "app": {
     "windows": [

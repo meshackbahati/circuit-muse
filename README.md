@@ -45,12 +45,11 @@ LEDs, resistors, capacitors, transistors, op-amps, logic gates, servos, motors, 
 - **Mixed-mode** — digital MCU + analog circuits together
 - **Instruments** — voltmeter, ammeter, oscilloscope, function generator
 
-### Project Persistence
+### Project Persistence & Import/Export
 
-- **`.vlx` file format** — single-file JSON snapshot of the whole workspace
-- **Local storage** — IndexedDB auto-save, projects persist across sessions
-- **Import/Export** — `.vlx` and Wokwi `.zip` formats
-- **Multiple export formats** — `.vlx`, `.zip`, JSON, HTML report
+- **Auto-save** — projects persist in IndexedDB across sessions
+- **Import formats**: `.vlx`, `.zip` (Wokwi), `.fzz` (Fritzing), `.json`
+- **Export formats**: `.vlx`, `.zip` (Wokwi-compatible), `.json`, `.html` report
 
 ### Serial Monitor
 
@@ -61,13 +60,32 @@ LEDs, resistors, capacitors, transistors, op-amps, logic gates, servos, motors, 
 
 ## Desktop App
 
-Native desktop application via Tauri:
+Native desktop application via Tauri — Windows, macOS, Linux.
 
+### Install
+
+Download from [Releases](https://github.com/meshackbahati/circuit-muse/releases):
 - **Windows** — `.msi` installer
 - **macOS** — `.dmg` disk image
 - **Linux** — `.deb`, `.AppImage`, `.rpm`
-- **Serial port access** — enumerate and connect to USB serial devices
-- **QEMU integration** — bundled ESP32/STM32/RPi emulation runtimes
+
+### Development
+
+```bash
+git clone https://github.com/meshackbahati/circuit-muse.git
+cd circuit-muse
+
+# Install dependencies
+cd app && npm install && cd ..
+cd engine && pip install -r requirements.txt && cd ..
+
+# Run development
+cd app && npm run dev    # Frontend on :5173
+cd engine && uvicorn app.main:app --port 8001  # Backend on :8001
+
+# Or run desktop
+cd src-tauri && cargo tauri dev
+```
 
 ---
 
@@ -86,45 +104,21 @@ Configure in the chat panel settings:
 
 ---
 
-## Development
-
-```bash
-git clone https://github.com/meshackbahati/circuit-muse.git
-cd circuit-muse
-
-# Backend
-cd backend
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8001
-
-# Frontend (new terminal)
-cd frontend
-npm install
-npm run dev
-
-# Desktop (optional)
-cd src-tauri
-cargo tauri dev
-```
-
----
-
 ## Project Structure
 
 ```text
 circuit-muse/
-├── frontend/                    # React + Vite + TypeScript
-│   ├── src/agent/               # AI agent (providers, tools, chat UI)
-│   ├── src/components/          # Editor, simulator canvas, modals
-│   ├── src/simulation/          # AVR8, RP2040, ESP32, STM32, Pi bridges
-│   ├── src/store/               # Zustand stores
-│   └── src/desktop/             # Tauri desktop integration
-├── src-tauri/                   # Tauri desktop shell (Rust)
-├── backend/                     # FastAPI + Python
-│   └── app/api/routes/          # compile, agent, libraries, simulation
-└── docs/                        # Technical documentation
+├── app/                     # Application layer (React + Vite + TypeScript)
+│   ├── src/agent/           # AI agent (providers, tools, chat UI)
+│   ├── src/components/      # Editor, simulator canvas, modals
+│   ├── src/simulation/      # CPU emulation bridges
+│   ├── src/store/           # Zustand state stores
+│   ├── src/services/        # API clients, project persistence
+│   └── src/desktop/         # Tauri desktop integration
+├── engine/                  # Simulation engine (FastAPI + Python)
+│   └── app/api/routes/      # compile, agent, libraries, simulation
+├── src-tauri/               # Desktop shell (Rust + Tauri)
+└── docs/                    # Technical documentation
 ```
 
 ---
