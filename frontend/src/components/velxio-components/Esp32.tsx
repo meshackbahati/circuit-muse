@@ -11,13 +11,13 @@ interface Esp32Props {
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      'velxio-esp32': any;
+      'circuit-muse-esp32': any;
     }
   }
 }
 
 export const Esp32 = ({ id = 'esp32', x = 0, y = 0, boardKind = 'esp32' }: Esp32Props) => (
-  <velxio-esp32
+  <circuit-muse-esp32
     id={id}
     board-kind={boardKind}
     style={{ position: 'absolute', left: `${x}px`, top: `${y}px` }}

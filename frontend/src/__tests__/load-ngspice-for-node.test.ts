@@ -25,9 +25,9 @@ describe('Phase 1c F1 — Node WASM loader', () => {
       expect(typeof Module.addFunction).toBe('function');
       expect(typeof Module.UTF8ToString).toBe('function');
       // The vendored build doesn't export FS; the loader exposes it
-      // via _velxio_fs to esquivar the abort accessor.
-      expect(Module._velxio_fs).toBeDefined();
-      expect(typeof Module._velxio_fs?.writeFile).toBe('function');
+      // via _circuit-muse_fs to esquivar the abort accessor.
+      expect(Module._circuit-muse_fs).toBeDefined();
+      expect(typeof Module._circuit-muse_fs?.writeFile).toBe('function');
     },
   );
 

@@ -1,5 +1,5 @@
 /**
- * EPaperElement — `<velxio-epaper>` Web Component for SSD168x ePaper panels.
+ * EPaperElement — `<circuit-muse-epaper>` Web Component for SSD168x ePaper panels.
  *
  * One element class shared by all five Phase-1 panel variants
  * (1.54", 2.13", 2.9", 4.2", 7.5"). Differences are encoded in the
@@ -227,8 +227,8 @@ class EPaperElement extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-epaper')) {
-  customElements.define('velxio-epaper', EPaperElement);
+if (!customElements.get('circuit-muse-epaper')) {
+  customElements.define('circuit-muse-epaper', EPaperElement);
 }
 
 // Re-export so consumers can type-check.

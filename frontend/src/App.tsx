@@ -25,8 +25,8 @@ import { Esp32S3SimulatorPage } from './pages/Esp32S3SimulatorPage';
 import { Esp32C3SimulatorPage } from './pages/Esp32C3SimulatorPage';
 import { RaspberryPiPicoSimulatorPage } from './pages/RaspberryPiPicoSimulatorPage';
 import { RaspberryPiSimulatorPage } from './pages/RaspberryPiSimulatorPage';
-import { Velxio2Page } from './pages/Velxio2Page';
-import { Velxio25Page } from './pages/Velxio25Page';
+import { CircuitMuse2Page } from './pages/CircuitMuse2Page';
+import { CircuitMuse25Page } from './pages/CircuitMuse25Page';
 import { AboutPage } from './pages/AboutPage';
 import { PricingPlaceholder } from './pages/PricingPlaceholder';
 import { LocaleSync } from './i18n/LocaleSync';
@@ -79,8 +79,8 @@ const ROUTES: { path: string; element: ReactElement; index?: boolean }[] = [
   { path: 'esp32-c3-simulator', element: <Esp32C3SimulatorPage /> },
   { path: 'raspberry-pi-pico-simulator', element: <RaspberryPiPicoSimulatorPage /> },
   { path: 'raspberry-pi-simulator', element: <RaspberryPiSimulatorPage /> },
-  { path: 'v2', element: <Velxio2Page /> },
-  { path: 'v2-5', element: <Velxio25Page /> },
+  { path: 'v2', element: <CircuitMuse2Page /> },
+  { path: 'v2-5', element: <CircuitMuse25Page /> },
   { path: 'about', element: <AboutPage /> },
   // Pricing — placeholder by default; private overlays portal-inject the real page
   { path: 'pricing', element: <PricingPlaceholder /> },

@@ -2,11 +2,11 @@
  * Vitest for GraceBanner.bannerFor — pure function that picks the
  * right banner tone based on license status + current time.
  *
- * Run from velxio/frontend:
+ * Run from circuit-muse/frontend:
  *   npx vitest run src/desktop/__tests__/GraceBanner.test.ts
  *
  * Or via the umbrella script:
- *   E:\Hardware\velxio-prod\pro\desktop\testeo\run-tests.bat
+ *   E:\Hardware\circuit-muse-prod\pro\desktop\testeo\run-tests.bat
  *
  * These tests are pure logic (no DOM, no React) so they finish in
  * milliseconds. Render-level assertions for the actual component
@@ -104,7 +104,7 @@ describe('bannerFor — active state pre-expiry', () => {
     const banner = bannerFor({ state: 'active', claims }, nowMs);
     expect(banner).not.toBeNull();
     expect(banner!.tone).toBe('amber');
-    expect(banner!.message).toMatch(/Velxio Pro subscription/);
+    expect(banner!.message).toMatch(/CircuitMuse Pro subscription/);
     expect(banner!.message).not.toMatch(/free trial/);
   });
 

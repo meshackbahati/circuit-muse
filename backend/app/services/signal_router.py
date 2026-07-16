@@ -6,7 +6,7 @@ The ESP32 SoC's IO_MUX + GPIO Matrix decouples *signal sources*
 entry records which signal id drives the pin; any number of pins
 can be routed from the same signal (rare, but legal).
 
-This module is the velxio-side mirror of that routing table. The
+This module is the circuit-muse-side mirror of that routing table. The
 worker (`esp32_worker.py`) feeds it every time the firmware writes
 to a `GPIO_FUNCx_OUT_SEL_CFG_REG` register; the worker then emits
 peripheral-event payloads (LEDC duty changes, RMT pulses, …) that

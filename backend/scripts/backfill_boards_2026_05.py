@@ -46,7 +46,7 @@ Usage::
     python -m backend.scripts.backfill_boards_2026_05 --apply --project-id <uuid>
 
     # Custom DB / data path (defaults to backend/.env's values)
-    python -m backend.scripts.backfill_boards_2026_05 --db data/velxio.db --data-dir data
+    python -m backend.scripts.backfill_boards_2026_05 --db data/circuit-muse.db --data-dir data
 """
 
 from __future__ import annotations
@@ -341,8 +341,8 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument(
         "--db",
         default=None,
-        help="Path to velxio.db (default: derived from DATABASE_URL or "
-        "data/velxio.db).",
+        help="Path to circuit-muse.db (default: derived from DATABASE_URL or "
+        "data/circuit-muse.db).",
     )
     ap.add_argument(
         "--data-dir",
@@ -375,12 +375,12 @@ def resolve_paths(args: argparse.Namespace) -> tuple[Path, Path]:
                 db_path = after
     if not db_path:
         # Fall back to the canonical local restored path
-        for candidate in ("data/velxio.db", "../data/velxio.db", "velxio.db"):
+        for candidate in ("data/circuit-muse.db", "../data/circuit-muse.db", "circuit-muse.db"):
             if Path(candidate).exists():
                 db_path = candidate
                 break
     if not db_path:
-        raise SystemExit("Could not locate velxio.db. Pass --db <path>.")
+        raise SystemExit("Could not locate circuit-muse.db. Pass --db <path>.")
 
     data_dir = args.data_dir or os.environ.get("DATA_DIR")
     if not data_dir:

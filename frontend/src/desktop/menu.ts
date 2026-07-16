@@ -1,10 +1,10 @@
 /**
  * Native menubar event bridge.
  *
- * The Tauri shell (pro/desktop/src-tauri/src/menu.rs in velxio-prod)
- * builds a Velxio / File / Edit / View / Help menubar. Internal items
+ * The Tauri shell (pro/desktop/src-tauri/src/menu.rs in circuit-muse-prod)
+ * builds a CircuitMuse / File / Edit / View / Help menubar. Internal items
  * (Save .vlx, Open .vlx, Toggle Serial Monitor, Find, …) emit a
- * `velxio://menu` event with `{ action: '<id>' }`. URL items (Docs,
+ * `circuit-muse://menu` event with `{ action: '<id>' }`. URL items (Docs,
  * Examples, Discord, GitHub) are opened directly from Rust and don't
  * reach this listener.
  *
@@ -14,7 +14,7 @@
  *   - check-for-updates      → tauri-plugin-updater check()
  *
  * Actions forwarded to whoever's listening as a window CustomEvent
- * `velxio:menu:<action>`:
+ * `circuit-muse:menu:<action>`:
  *   - new-project, find-in-editor, toggle-file-explorer
  *
  * No-op outside Tauri (e.g. running the bundle in a regular browser
@@ -59,7 +59,7 @@ let installed = false;
 export async function installDesktopMenuListener(): Promise<void> {
   if (installed) return;
   installed = true;
-  await listen<MenuEventPayload>('velxio://menu', (event) => {
+  await listen<MenuEventPayload>('circuit-muse://menu', (event) => {
     dlog('menu event', event.payload);
     void handle(event.payload.action, event.payload);
   });
@@ -81,7 +81,7 @@ async function handle(action: MenuAction, payload?: MenuEventPayload): Promise<v
       return;
     case 'find-in-editor':
     case 'toggle-file-explorer':
-      window.dispatchEvent(new CustomEvent(`velxio:menu:${action}`));
+      window.dispatchEvent(new CustomEvent(`circuit-muse:menu:${action}`));
       return;
     case 'check-for-updates':
       await checkForUpdates();
@@ -239,7 +239,7 @@ async function checkForUpdates(): Promise<void> {
       await update.downloadAndInstall();
     } else {
       // eslint-disable-next-line no-alert
-      alert('Velxio Desktop is up to date.');
+      alert('CircuitMuse Desktop is up to date.');
     }
   } catch (err) {
     // eslint-disable-next-line no-alert

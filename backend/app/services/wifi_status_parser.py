@@ -75,7 +75,7 @@ def parse_wifi_line(line: str) -> WifiEvent | None:
         return WifiEvent(status='initializing')
 
     if _RE_WIFI_CONNECTING.search(line):
-        return WifiEvent(status='connected', ssid='Velxio-GUEST')
+        return WifiEvent(status='connected', ssid='CircuitMuse-GUEST')
 
     if _RE_WIFI_DISCONNECT.search(line):
         return WifiEvent(status='disconnected')

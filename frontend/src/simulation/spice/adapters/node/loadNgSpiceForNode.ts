@@ -47,23 +47,23 @@ export interface NgSpiceEmscriptenModule {
   lengthBytesUTF8: (str: string) => number;
   _malloc: (bytes: number) => number;
   _free: (ptr: number) => void;
-  _velxio_heap8?: Int8Array;
-  _velxio_heap32?: Int32Array;
-  _velxio_heapu32?: Uint32Array;
-  _velxio_heapf64?: Float64Array;
+  _circuit-muse_heap8?: Int8Array;
+  _circuit-muse_heap32?: Int32Array;
+  _circuit-muse_heapu32?: Uint32Array;
+  _circuit-muse_heapf64?: Float64Array;
   /**
    * Note: the vendored build does NOT include `FS` in
    * EXPORTED_RUNTIME_METHODS, so `Module.FS` triggers an abort
    * accessor on this build.  We expose the closure-captured locals
-   * via the `_velxio_*` namespace instead — see the wrapper in
+   * via the `_circuit-muse_*` namespace instead — see the wrapper in
    * loadNgSpiceForNode.
    */
-  _velxio_fs?: {
+  _circuit-muse_fs?: {
     writeFile: (path: string, data: Uint8Array | string) => void;
     mkdir: (path: string) => void;
     analyzePath: (path: string) => { exists: boolean };
   };
-  _velxio_env?: Record<string, string>;
+  _circuit-muse_env?: Record<string, string>;
   noInitialRun: boolean;
   print?: (text: string) => void;
   printErr?: (text: string) => void;
@@ -134,19 +134,19 @@ export function loadNgSpiceForNode(
   const wrapped = `
     var Module = config;
     ${src}
-    var __velxioOriginalInit = Module.onRuntimeInitialized;
+    var __circuit-museOriginalInit = Module.onRuntimeInitialized;
     Module.onRuntimeInitialized = function () {
       // Build does not export FS / HEAP* in EXPORTED_RUNTIME_METHODS;
       // those keys on Module trigger abort accessors. Assign to the
-      // _velxio_ namespace instead and the NgSpiceNodeAdapter reads
+      // _circuit-muse_ namespace instead and the NgSpiceNodeAdapter reads
       // from there.
-      if (typeof FS !== 'undefined') Module._velxio_fs = FS;
-      if (typeof HEAP8 !== 'undefined') Module._velxio_heap8 = HEAP8;
-      if (typeof HEAP32 !== 'undefined') Module._velxio_heap32 = HEAP32;
-      if (typeof HEAPU32 !== 'undefined') Module._velxio_heapu32 = HEAPU32;
-      if (typeof HEAPF64 !== 'undefined') Module._velxio_heapf64 = HEAPF64;
-      if (typeof ENV !== 'undefined') Module._velxio_env = ENV;
-      if (__velxioOriginalInit) __velxioOriginalInit();
+      if (typeof FS !== 'undefined') Module._circuit-muse_fs = FS;
+      if (typeof HEAP8 !== 'undefined') Module._circuit-muse_heap8 = HEAP8;
+      if (typeof HEAP32 !== 'undefined') Module._circuit-muse_heap32 = HEAP32;
+      if (typeof HEAPU32 !== 'undefined') Module._circuit-muse_heapu32 = HEAPU32;
+      if (typeof HEAPF64 !== 'undefined') Module._circuit-muse_heapf64 = HEAPF64;
+      if (typeof ENV !== 'undefined') Module._circuit-muse_env = ENV;
+      if (__circuit-museOriginalInit) __circuit-museOriginalInit();
     };
     return Module;
   `;

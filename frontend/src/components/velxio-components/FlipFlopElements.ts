@@ -5,9 +5,9 @@
  * time-domain `ddt()` which doesn't work in `.op`).
  *
  * Tags defined:
- *   velxio-flip-flop-d   — D-type (Q ← D on rising CLK)
- *   velxio-flip-flop-t   — T-type (Q toggles when T=1 on rising CLK)
- *   velxio-flip-flop-jk  — JK (hold/set/reset/toggle on rising CLK)
+ *   circuit-muse-flip-flop-d   — D-type (Q ← D on rising CLK)
+ *   circuit-muse-flip-flop-t   — T-type (Q toggles when T=1 on rising CLK)
+ *   circuit-muse-flip-flop-jk  — JK (hold/set/reset/toggle on rising CLK)
  *
  * Pin layouts (80 × 64 px):
  *   D-FF:   D  (0, 16)  CLK (0, 48)  Q (80, 16)  Qbar (80, 48)
@@ -117,11 +117,11 @@ class JKFlipFlopElement extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-flip-flop-d'))
-  customElements.define('velxio-flip-flop-d', DFlipFlopElement);
-if (!customElements.get('velxio-flip-flop-t'))
-  customElements.define('velxio-flip-flop-t', TFlipFlopElement);
-if (!customElements.get('velxio-flip-flop-jk'))
-  customElements.define('velxio-flip-flop-jk', JKFlipFlopElement);
+if (!customElements.get('circuit-muse-flip-flop-d'))
+  customElements.define('circuit-muse-flip-flop-d', DFlipFlopElement);
+if (!customElements.get('circuit-muse-flip-flop-t'))
+  customElements.define('circuit-muse-flip-flop-t', TFlipFlopElement);
+if (!customElements.get('circuit-muse-flip-flop-jk'))
+  customElements.define('circuit-muse-flip-flop-jk', JKFlipFlopElement);
 
 export {};

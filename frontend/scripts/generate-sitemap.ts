@@ -13,7 +13,7 @@ import { SEO_ROUTES } from '../src/seoRoutes';
 
 const __dirname_resolved = dirname(fileURLToPath(import.meta.url));
 
-const DOMAIN = 'https://velxio.dev';
+const DOMAIN = 'https://circuit-muse.dev';
 const TODAY = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
 const indexableRoutes = SEO_ROUTES.filter((r) => !r.noindex);

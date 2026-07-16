@@ -233,13 +233,13 @@ export const EditorToolbar = ({
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
 
-  // Open the Library Manager when another component (e.g. the velxio.json entry
+  // Open the Library Manager when another component (e.g. the circuit-muse.json entry
   // in the FileExplorer) asks for it via a window event. Avoids prop-drilling
   // the modal state down to the explorer.
   useEffect(() => {
     const open = () => setLibManagerOpen(true);
-    window.addEventListener('velxio-open-library-manager', open);
-    return () => window.removeEventListener('velxio-open-library-manager', open);
+    window.addEventListener('circuit-muse-open-library-manager', open);
+    return () => window.removeEventListener('circuit-muse-open-library-manager', open);
   }, []);
 
   useEffect(() => {
@@ -681,7 +681,7 @@ export const EditorToolbar = ({
 
     // Board-less circuits have no MCU to start. If there are custom-chip CPUs
     // on the canvas, compile them (WASM + ROM) and re-attach so they pick up
-    // the fresh WASM — Velxio runs custom chips with no Arduino/ESP32 board,
+    // the fresh WASM — CircuitMuse runs custom chips with no Arduino/ESP32 board,
     // as a general-purpose electronics simulator. Then resume the electrical
     // solver (replays any switch toggles captured while paused).
     if (isBoardless) {
@@ -1103,7 +1103,7 @@ export const EditorToolbar = ({
         boardType: legacyBoardType,
       } = useSimulatorStore.getState();
       const projectName =
-        files.find((f) => f.name.endsWith('.ino'))?.name.replace('.ino', '') || 'velxio-project';
+        files.find((f) => f.name.endsWith('.ino'))?.name.replace('.ino', '') || 'circuit-muse-project';
       await exportToWokwiZip(files, components, wires, legacyBoardType, projectName, boardPosition);
     } catch (err) {
       setMessage({ type: 'error', text: 'Export failed.' });
@@ -1129,7 +1129,7 @@ export const EditorToolbar = ({
         // Fire the in-place upgrade modal instead of bouncing to /pricing —
         // keeps the user in the editor with full context. The pro overlay's
         // UpgradeGate listens for this event and opens UpgradePromptModal.
-        window.dispatchEvent(new CustomEvent('velxio-pro-upgrade-prompt', {
+        window.dispatchEvent(new CustomEvent('circuit-muse-pro-upgrade-prompt', {
           detail: { componentName: 'Schematic screenshot export' },
         }));
         return;
@@ -1152,7 +1152,7 @@ export const EditorToolbar = ({
       a.href = url;
       const cd = resp.headers.get('Content-Disposition') || '';
       const m = /filename="?([^"]+)"?/.exec(cd);
-      a.download = m ? m[1] : `velxio-${projectId}.png`;
+      a.download = m ? m[1] : `circuit-muse-${projectId}.png`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -1181,7 +1181,7 @@ export const EditorToolbar = ({
         // Fire the in-place upgrade modal instead of bouncing to /pricing —
         // keeps the user in the editor with full context. The pro overlay's
         // UpgradeGate listens for this event and opens UpgradePromptModal.
-        window.dispatchEvent(new CustomEvent('velxio-pro-upgrade-prompt', {
+        window.dispatchEvent(new CustomEvent('circuit-muse-pro-upgrade-prompt', {
           detail: { componentName: 'BOM export' },
         }));
         return;
@@ -1473,7 +1473,7 @@ export const EditorToolbar = ({
 
           <div className="toolbar-group toolbar-group-right">
             {/* Hidden file input for project import. Accepts both .vlx
-                (Velxio native) and .zip (Wokwi bundle); the dispatcher in
+                (CircuitMuse native) and .zip (Wokwi bundle); the dispatcher in
                 utils/importProject.ts picks the right loader by extension. */}
             <input
               ref={importInputRef}
@@ -1652,7 +1652,7 @@ export const EditorToolbar = ({
                     role="menuitem"
                     onClick={() => {
                       setMoreMenuOpen(false);
-                      window.dispatchEvent(new CustomEvent('velxio-pro-github-sync-prompt', {
+                      window.dispatchEvent(new CustomEvent('circuit-muse-pro-github-sync-prompt', {
                         detail: { projectId: currentProject?.id ?? null },
                       }));
                     }}
@@ -1672,7 +1672,7 @@ export const EditorToolbar = ({
                     role="menuitem"
                     onClick={() => {
                       setMoreMenuOpen(false);
-                      window.dispatchEvent(new CustomEvent('velxio-pro-share-prompt', {
+                      window.dispatchEvent(new CustomEvent('circuit-muse-pro-share-prompt', {
                         detail: { projectId: currentProject?.id ?? null },
                       }));
                     }}
@@ -1695,7 +1695,7 @@ export const EditorToolbar = ({
                     role="menuitem"
                     onClick={() => {
                       setMoreMenuOpen(false);
-                      window.dispatchEvent(new CustomEvent('velxio-pro-replay-record-toggle', {
+                      window.dispatchEvent(new CustomEvent('circuit-muse-pro-replay-record-toggle', {
                         detail: { projectId: currentProject?.id ?? null },
                       }));
                     }}

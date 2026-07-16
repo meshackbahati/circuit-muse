@@ -1,6 +1,6 @@
 /**
  * Chip-to-chip net identity — Phase 0 of the multi-chip digital bus track
- * (see project/multichip-bus/ in the velxio-prod repo).
+ * (see project/multichip-bus/ in the circuit-muse-prod repo).
  *
  * THE PROBLEM (root cause A, 00-problem-analysis.md section 2): a digital net
  * is keyed by ONE integer pin number in the per-board PinManager. A board pin
@@ -53,7 +53,7 @@ export interface ChipNetState {
   boards: readonly BoardLike[];
 }
 
-// Endpoint key = `${componentId}::${pinName}`. velxio chip ids
+// Endpoint key = `${componentId}::${pinName}`. circuit-muse chip ids
 // (`custom_chip_<ts>_<rand>`) and chip.json pin names are identifier-like and
 // never contain `::`, so the split back to (componentId, pinName) is exact.
 const SEP = '::';
@@ -86,7 +86,7 @@ interface ChipNetIndex {
 // ── Feature flag (D-007) ─────────────────────────────────────────────────────
 //
 // Off by default. Enable with `?chipbus=on` or
-// `localStorage.velxio.chipbus = 'on'`, mirroring sim-mixedmode's `?mixedmode`.
+// `localStorage.circuit-muse.chipbus = 'on'`, mirroring sim-mixedmode's `?mixedmode`.
 // Guards every browser global so the module is safe under vitest/node.
 
 let testOverride: boolean | null = null;
@@ -104,7 +104,7 @@ export function chipBusEnabled(): boolean {
       if (q === 'off' || q === '0' || q === 'false') return false;
     }
     if (typeof localStorage !== 'undefined') {
-      const v = localStorage.getItem('velxio.chipbus');
+      const v = localStorage.getItem('circuit-muse.chipbus');
       if (v === 'on' || v === '1' || v === 'true') return true;
       if (v === 'off' || v === '0' || v === 'false') return false;
     }
@@ -114,7 +114,7 @@ export function chipBusEnabled(): boolean {
   // On by default: chip-to-chip buses are a core capability now. Single-chip and
   // board nets are unaffected (they never take this path), so the only thing
   // this enables is multi-chip buses, which were simply broken before. Override
-  // with ?chipbus=off or localStorage.velxio.chipbus = 'off'.
+  // with ?chipbus=off or localStorage.circuit-muse.chipbus = 'off'.
   return true;
 }
 

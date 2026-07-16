@@ -5,10 +5,10 @@
  * `console.log` vanishes. This helper round-trips messages to a Rust
  * command (`write_debug_log`) that appends them to
  * `<app_data_dir>/desktop-debug.log` — on Windows that's
- * `%APPDATA%\dev.velxio.desktop\desktop-debug.log`. The user (or
+ * `%APPDATA%\dev.circuit-muse.desktop\desktop-debug.log`. The user (or
  * support) can open the file to see what the webview was doing.
  *
- * The Rust command lives in the velxio-prod overlay, not upstream
+ * The Rust command lives in the circuit-muse-prod overlay, not upstream
  * — the OSS Tauri shell wires it through `pro/desktop/src-tauri/src/
  * lib.rs::write_debug_log`. If the command isn't registered (running
  * an older shell), the log call silently no-ops; we still print to
@@ -17,7 +17,7 @@
 
 import { invoke, isTauri } from './tauriBridge';
 
-const PREFIX = '[velxio-desktop]';
+const PREFIX = '[circuit-muse-desktop]';
 
 export function dlog(message: string, extra?: unknown): void {
   // Always echo to console — `tauri dev` (or browser-loaded dev mode)

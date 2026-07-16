@@ -18,12 +18,12 @@ const META = getSeoMeta('/custom-chip-simulator')!;
 
 const FAQ_ITEMS = [
   {
-    q: 'What is a custom chip in Velxio?',
-    a: 'A custom chip is a user-defined integrated circuit. You write the chip\'s logic in C, Rust, or AssemblyScript — Velxio compiles it to WebAssembly, instantiates it on the canvas like any other component, and drives its pins from the simulator.',
+    q: 'What is a custom chip in CircuitMuse?',
+    a: 'A custom chip is a user-defined integrated circuit. You write the chip\'s logic in C, Rust, or AssemblyScript — CircuitMuse compiles it to WebAssembly, instantiates it on the canvas like any other component, and drives its pins from the simulator.',
   },
   {
-    q: 'Which API does Velxio use?',
-    a: 'Velxio implements the Wokwi Custom Chips API — the same API used by Wokwi — so chips you write for Velxio are portable to Wokwi and vice versa. Velxio adds a WASI shim so you can use standard library functions in your chip code.',
+    q: 'Which API does CircuitMuse use?',
+    a: 'CircuitMuse implements the Wokwi Custom Chips API — the same API used by Wokwi — so chips you write for CircuitMuse are portable to Wokwi and vice versa. CircuitMuse adds a WASI shim so you can use standard library functions in your chip code.',
   },
   {
     q: 'What can I build?',
@@ -31,7 +31,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'How do I share or reuse a chip?',
-    a: 'Save the chip to your Velxio account and reuse it across projects. The chip definition includes its pin layout, attributes, and the compiled WASM — drop it onto any project canvas like a built-in component.',
+    a: 'Save the chip to your CircuitMuse account and reuse it across projects. The chip definition includes its pin layout, attributes, and the compiled WASM — drop it onto any project canvas like a built-in component.',
   },
   {
     q: 'Do I need a backend to run my chip?',
@@ -47,13 +47,13 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Velxio — Free Online Custom Chip Simulator',
+    name: 'CircuitMuse — Free Online Custom Chip Simulator',
     applicationCategory: 'DeveloperApplication',
     applicationSubCategory: 'IC Authoring & Simulation',
     operatingSystem: 'Any (browser-based)',
     description:
       'Define your own integrated circuits in C, Rust, or AssemblyScript using the Wokwi-compatible Custom Chips API. Compile to WebAssembly and drive pins, attributes, timers, I²C and SPI from your simulated chip. Free and open-source.',
-    url: 'https://velxio.dev/custom-chip-simulator',
+    url: 'https://circuit-muse.dev/custom-chip-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -71,12 +71,12 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
+      { '@type': 'ListItem', position: 1, name: 'CircuitMuse', item: 'https://circuit-muse.dev/' },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Custom Chip Simulator',
-        item: 'https://velxio.dev/custom-chip-simulator',
+        item: 'https://circuit-muse.dev/custom-chip-simulator',
       },
     ],
   },

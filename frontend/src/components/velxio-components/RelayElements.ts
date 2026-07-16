@@ -2,7 +2,7 @@
  * RelayElements.ts — Custom Web Components for electromechanical relays.
  *
  * Tag defined:
- *   velxio-relay — 5-pin SPDT relay (COIL+, COIL-, COM, NO, NC)
+ *   circuit-muse-relay — 5-pin SPDT relay (COIL+, COIL-, COM, NO, NC)
  *
  * Pin layout (CSS pixels, 96 × 96):
  *   COIL+ (0,  16)   COIL- (0,  80)
@@ -64,7 +64,7 @@ class RelayElement extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-relay')) customElements.define('velxio-relay', RelayElement);
+if (!customElements.get('circuit-muse-relay')) customElements.define('circuit-muse-relay', RelayElement);
 
 // ─── Optocouplers (DIP-4 package: LED + phototransistor) ─────────────────────
 
@@ -118,8 +118,8 @@ function makeOptoClass(label: string) {
 const Opto4N25 = makeOptoClass('4N25');
 const OptoPC817 = makeOptoClass('PC817');
 
-if (!customElements.get('velxio-opto-4n25')) customElements.define('velxio-opto-4n25', Opto4N25);
-if (!customElements.get('velxio-opto-pc817')) customElements.define('velxio-opto-pc817', OptoPC817);
+if (!customElements.get('circuit-muse-opto-4n25')) customElements.define('circuit-muse-opto-4n25', Opto4N25);
+if (!customElements.get('circuit-muse-opto-pc817')) customElements.define('circuit-muse-opto-pc817', OptoPC817);
 
 // ─── L293D dual H-bridge motor driver (DIP-16) ──────────────────────────────
 
@@ -166,8 +166,8 @@ class L293DElement extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-motor-driver-l293d')) {
-  customElements.define('velxio-motor-driver-l293d', L293DElement);
+if (!customElements.get('circuit-muse-motor-driver-l293d')) {
+  customElements.define('circuit-muse-motor-driver-l293d', L293DElement);
 }
 
 export {};

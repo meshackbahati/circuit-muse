@@ -164,7 +164,7 @@ export function padToFlashSize(firmware: Uint8Array, boardKind?: BoardKind): Uin
   // Using a smaller image makes the SPI flash driver fail with:
   //   E (141) spi_flash: Detected size(2048k) smaller than the size in the
   //                      binary image header(4096k). Probe failed.
-  // (See https://github.com/davidmonterocrespo24/velxio/issues/122)
+  // (See https://github.com/davidmonterocrespo24/circuit-muse/issues/122)
   const MIN_BYTES = 4 * 1024 * 1024;
   const VALID_BYTES = [2, 4, 8, 16].map((mb) => mb * 1024 * 1024);
   const target = VALID_BYTES.find(

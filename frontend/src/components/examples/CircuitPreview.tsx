@@ -57,7 +57,7 @@ const COMP_DEFS: Record<string, CompDef> = {
   'wokwi-photoresistor-sensor': { svg: 'photoresistor-sensor.svg', w: 174, h: 62 },
   'wokwi-pir-motion-sensor': { svg: 'pir-motion-sensor.svg', w: 91, h: 92 },
   'wokwi-ds1307': { svg: 'ds1307.svg', w: 98, h: 84 },
-  'velxio-bmp280': { svg: 'mpu6050.svg', w: 82, h: 61 },
+  'circuit-muse-bmp280': { svg: 'mpu6050.svg', w: 82, h: 61 },
   // Displays
   'wokwi-7segment': { svg: '7segment.svg', w: 47, h: 83 },
   'wokwi-ili9341': { svg: 'ili9341.svg', w: 176, h: 293 },

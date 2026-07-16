@@ -179,7 +179,7 @@
       "defaultValues": {},
       "pinCount": 4,
       "id": "opto-4n25",
-      "tagName": "velxio-opto-4n25",
+      "tagName": "circuit-muse-opto-4n25",
       "name": "4N25 (Optocoupler)",
       "category": "analog",
       "description": "Single-channel optocoupler with IR LED + phototransistor. CTR ≈ 50%. Provides galvanic isolation between two circuits."
@@ -512,7 +512,7 @@
       "defaultValues": {},
       "pinCount": 4,
       "id": "opto-pc817",
-      "tagName": "velxio-opto-pc817",
+      "tagName": "circuit-muse-opto-pc817",
       "name": "PC817 (Optocoupler)",
       "category": "analog",
       "description": "Single-channel optocoupler. CTR 80–600% (typ. 100%). Higher drive than 4N25, commonly used for MCU-to-mains isolation."
@@ -876,9 +876,9 @@
         "refreshMs": 50
       },
       "pinCount": 8,
-      "$comment": "ePaper / e-Ink panels — Velxio-native components. The Web Component is `velxio-epaper`; the panel size + palette is selected via the `panelKind` property. See docs/wiki/epaper-emulation.md.",
+      "$comment": "ePaper / e-Ink panels — CircuitMuse-native components. The Web Component is `circuit-muse-epaper`; the panel size + palette is selected via the `panelKind` property. See docs/wiki/epaper-emulation.md.",
       "id": "epaper-1in54-bw",
-      "tagName": "velxio-epaper",
+      "tagName": "circuit-muse-epaper",
       "name": "ePaper 1.54\" (200×200, B/W)",
       "category": "displays"
     },
@@ -915,7 +915,7 @@
       },
       "pinCount": 8,
       "id": "epaper-2in13-bw",
-      "tagName": "velxio-epaper",
+      "tagName": "circuit-muse-epaper",
       "name": "ePaper 2.13\" (250×122, B/W)",
       "category": "displays"
     },
@@ -953,7 +953,7 @@
       },
       "pinCount": 8,
       "id": "epaper-2in13-bwr",
-      "tagName": "velxio-epaper",
+      "tagName": "circuit-muse-epaper",
       "name": "ePaper 2.13\" (250×122, B/W/Red)",
       "category": "displays"
     },
@@ -989,7 +989,7 @@
       },
       "pinCount": 8,
       "id": "epaper-2in9-bw",
-      "tagName": "velxio-epaper",
+      "tagName": "circuit-muse-epaper",
       "name": "ePaper 2.9\" (296×128, B/W)",
       "category": "displays"
     },
@@ -1027,7 +1027,7 @@
       },
       "pinCount": 8,
       "id": "epaper-2in9-bwr",
-      "tagName": "velxio-epaper",
+      "tagName": "circuit-muse-epaper",
       "name": "ePaper 2.9\" (296×128, B/W/Red)",
       "category": "displays"
     },
@@ -1064,7 +1064,7 @@
       },
       "pinCount": 8,
       "id": "epaper-4in2-bw",
-      "tagName": "velxio-epaper",
+      "tagName": "circuit-muse-epaper",
       "name": "ePaper 4.2\" (400×300, B/W)",
       "category": "displays"
     },
@@ -1102,7 +1102,7 @@
       },
       "pinCount": 8,
       "id": "epaper-5in65-7c",
-      "tagName": "velxio-epaper",
+      "tagName": "circuit-muse-epaper",
       "name": "ePaper 5.65\" (600×448, ACeP 7-colour)",
       "category": "displays"
     },
@@ -1139,7 +1139,7 @@
       },
       "pinCount": 8,
       "id": "epaper-7in5-bw",
-      "tagName": "velxio-epaper",
+      "tagName": "circuit-muse-epaper",
       "name": "ePaper 7.5\" (800×480, B/W)",
       "category": "displays"
     },
@@ -1525,7 +1525,7 @@
       "defaultValues": {},
       "pinCount": 16,
       "id": "motor-driver-l293d",
-      "tagName": "velxio-motor-driver-l293d",
+      "tagName": "circuit-muse-motor-driver-l293d",
       "name": "L293D (Dual H-Bridge Motor Driver)",
       "category": "electromech",
       "description": "Dual H-bridge motor driver IC. Each channel: EN, IN1, IN2 drive OUT1/OUT2 with the motor supply voltage (VCC2). Rated 600 mA continuous / 1.2 A peak per channel."
@@ -1575,7 +1575,7 @@
       },
       "pinCount": 5,
       "id": "relay",
-      "tagName": "velxio-relay",
+      "tagName": "circuit-muse-relay",
       "name": "Relay (SPDT)",
       "category": "electromech",
       "description": "5-pin single-pole double-throw electromechanical relay. Coil drives SPDT contacts with native switch hysteresis. Optional integrated flyback diode."
@@ -2022,7 +2022,7 @@
       "defaultValues": {},
       "pinCount": 3,
       "id": "logic-gate-and",
-      "tagName": "velxio-logic-and",
+      "tagName": "circuit-muse-logic-and",
       "name": "AND Gate",
       "category": "logic",
       "description": "2-input AND logic gate. Output Y = A · B."
@@ -2040,7 +2040,7 @@
       "defaultValues": {},
       "pinCount": 4,
       "id": "logic-gate-and-3",
-      "tagName": "velxio-logic-and-3",
+      "tagName": "circuit-muse-logic-and-3",
       "name": "AND Gate (3-input)",
       "category": "logic",
       "description": "3-input AND gate. Output Y = A · B · C."
@@ -2058,7 +2058,7 @@
       "defaultValues": {},
       "pinCount": 5,
       "id": "logic-gate-and-4",
-      "tagName": "velxio-logic-and-4",
+      "tagName": "circuit-muse-logic-and-4",
       "name": "AND Gate (4-input)",
       "category": "logic",
       "description": "4-input AND gate."
@@ -2078,7 +2078,7 @@
       "defaultValues": {},
       "pinCount": 4,
       "id": "flip-flop-d",
-      "tagName": "velxio-flip-flop-d",
+      "tagName": "circuit-muse-flip-flop-d",
       "name": "D Flip-Flop",
       "category": "logic",
       "description": "Edge-triggered D-type flip-flop. On rising edge of CLK, Q ← D. Digital simulation only (SPICE cannot do edge detection in .op analysis)."
@@ -2097,7 +2097,7 @@
       "defaultValues": {},
       "pinCount": 5,
       "id": "flip-flop-jk",
-      "tagName": "velxio-flip-flop-jk",
+      "tagName": "circuit-muse-flip-flop-jk",
       "name": "JK Flip-Flop",
       "category": "logic",
       "description": "JK flip-flop. On rising CLK: J=0/K=0 hold, J=1/K=0 set, J=0/K=1 reset, J=1/K=1 toggle."
@@ -2114,7 +2114,7 @@
       "defaultValues": {},
       "pinCount": 3,
       "id": "logic-gate-nand",
-      "tagName": "velxio-logic-nand",
+      "tagName": "circuit-muse-logic-nand",
       "name": "NAND Gate",
       "category": "logic",
       "description": "2-input NAND logic gate. Output Y = NOT(A · B)."
@@ -2132,7 +2132,7 @@
       "defaultValues": {},
       "pinCount": 4,
       "id": "logic-gate-nand-3",
-      "tagName": "velxio-logic-nand-3",
+      "tagName": "circuit-muse-logic-nand-3",
       "name": "NAND Gate (3-input)",
       "category": "logic",
       "description": "3-input NAND gate."
@@ -2150,7 +2150,7 @@
       "defaultValues": {},
       "pinCount": 5,
       "id": "logic-gate-nand-4",
-      "tagName": "velxio-logic-nand-4",
+      "tagName": "circuit-muse-logic-nand-4",
       "name": "NAND Gate (4-input)",
       "category": "logic",
       "description": "4-input NAND gate."
@@ -2167,7 +2167,7 @@
       "defaultValues": {},
       "pinCount": 3,
       "id": "logic-gate-nor",
-      "tagName": "velxio-logic-nor",
+      "tagName": "circuit-muse-logic-nor",
       "name": "NOR Gate",
       "category": "logic",
       "description": "2-input NOR logic gate. Output Y = NOT(A + B)."
@@ -2185,7 +2185,7 @@
       "defaultValues": {},
       "pinCount": 4,
       "id": "logic-gate-nor-3",
-      "tagName": "velxio-logic-nor-3",
+      "tagName": "circuit-muse-logic-nor-3",
       "name": "NOR Gate (3-input)",
       "category": "logic",
       "description": "3-input NOR gate."
@@ -2203,7 +2203,7 @@
       "defaultValues": {},
       "pinCount": 5,
       "id": "logic-gate-nor-4",
-      "tagName": "velxio-logic-nor-4",
+      "tagName": "circuit-muse-logic-nor-4",
       "name": "NOR Gate (4-input)",
       "category": "logic",
       "description": "4-input NOR gate."
@@ -2221,7 +2221,7 @@
       "defaultValues": {},
       "pinCount": 2,
       "id": "logic-gate-not",
-      "tagName": "velxio-logic-not",
+      "tagName": "circuit-muse-logic-not",
       "name": "NOT Gate (Inverter)",
       "category": "logic",
       "description": "1-input inverter. Output Y = NOT(A)."
@@ -2238,7 +2238,7 @@
       "defaultValues": {},
       "pinCount": 3,
       "id": "logic-gate-or",
-      "tagName": "velxio-logic-or",
+      "tagName": "circuit-muse-logic-or",
       "name": "OR Gate",
       "category": "logic",
       "description": "2-input OR logic gate. Output Y = A + B."
@@ -2256,7 +2256,7 @@
       "defaultValues": {},
       "pinCount": 4,
       "id": "logic-gate-or-3",
-      "tagName": "velxio-logic-or-3",
+      "tagName": "circuit-muse-logic-or-3",
       "name": "OR Gate (3-input)",
       "category": "logic",
       "description": "3-input OR gate. Output Y = A + B + C."
@@ -2274,7 +2274,7 @@
       "defaultValues": {},
       "pinCount": 5,
       "id": "logic-gate-or-4",
-      "tagName": "velxio-logic-or-4",
+      "tagName": "circuit-muse-logic-or-4",
       "name": "OR Gate (4-input)",
       "category": "logic",
       "description": "4-input OR gate."
@@ -2294,7 +2294,7 @@
       "defaultValues": {},
       "pinCount": 4,
       "id": "flip-flop-t",
-      "tagName": "velxio-flip-flop-t",
+      "tagName": "circuit-muse-flip-flop-t",
       "name": "T Flip-Flop",
       "category": "logic",
       "description": "Toggle flip-flop. On rising CLK, Q ← Q ⊕ T (toggles when T=1). Useful for frequency dividers and counters."
@@ -2311,7 +2311,7 @@
       "defaultValues": {},
       "pinCount": 3,
       "id": "logic-gate-xnor",
-      "tagName": "velxio-logic-xnor",
+      "tagName": "circuit-muse-logic-xnor",
       "name": "XNOR Gate",
       "category": "logic",
       "description": "2-input XNOR logic gate. Output Y = NOT(A ⊕ B)."
@@ -2328,7 +2328,7 @@
       "defaultValues": {},
       "pinCount": 3,
       "id": "logic-gate-xor",
-      "tagName": "velxio-logic-xor",
+      "tagName": "circuit-muse-logic-xor",
       "name": "XOR Gate",
       "category": "logic",
       "description": "2-input XOR logic gate. Output Y = A ⊕ B."
@@ -2349,7 +2349,7 @@
       "defaultValues": {},
       "pinCount": 16,
       "id": "a4988",
-      "tagName": "velxio-a4988",
+      "tagName": "circuit-muse-a4988",
       "name": "A4988 Stepper Driver",
       "category": "motors",
       "description": "A4988 bipolar stepper motor driver (STEP/DIR). Pulse STEP to advance one step; DIR sets the direction; MS1-MS3 select microstepping. Outputs 1A/1B (coil A) and 2A/2B (coil B) to a stepper's A+/A-/B+/B- terminals."
@@ -3596,7 +3596,7 @@
       },
       "pinCount": 0,
       "id": "cap-elec-1u",
-      "tagName": "velxio-capacitor-electrolytic",
+      "tagName": "circuit-muse-capacitor-electrolytic",
       "name": "Electrolytic 1 µF",
       "category": "passive"
     },
@@ -3622,7 +3622,7 @@
       },
       "pinCount": 0,
       "id": "cap-elec-10u",
-      "tagName": "velxio-capacitor-electrolytic",
+      "tagName": "circuit-muse-capacitor-electrolytic",
       "name": "Electrolytic 10 µF",
       "category": "passive"
     },
@@ -3648,7 +3648,7 @@
       },
       "pinCount": 0,
       "id": "cap-elec-100u",
-      "tagName": "velxio-capacitor-electrolytic",
+      "tagName": "circuit-muse-capacitor-electrolytic",
       "name": "Electrolytic 100 µF",
       "category": "passive"
     },
@@ -3674,7 +3674,7 @@
       },
       "pinCount": 0,
       "id": "cap-elec-1000u",
-      "tagName": "velxio-capacitor-electrolytic",
+      "tagName": "circuit-muse-capacitor-electrolytic",
       "name": "Electrolytic 1000 µF",
       "category": "passive"
     },
@@ -3700,7 +3700,7 @@
       },
       "pinCount": 0,
       "id": "cap-elec-47u",
-      "tagName": "velxio-capacitor-electrolytic",
+      "tagName": "circuit-muse-capacitor-electrolytic",
       "name": "Electrolytic 47 µF",
       "category": "passive"
     },
@@ -3726,7 +3726,7 @@
       },
       "pinCount": 0,
       "id": "cap-elec-470u",
-      "tagName": "velxio-capacitor-electrolytic",
+      "tagName": "circuit-muse-capacitor-electrolytic",
       "name": "Electrolytic 470 µF",
       "category": "passive"
     },
@@ -3751,7 +3751,7 @@
       },
       "pinCount": 0,
       "id": "capacitor-electrolytic",
-      "tagName": "velxio-capacitor-electrolytic",
+      "tagName": "circuit-muse-capacitor-electrolytic",
       "name": "Electrolytic Cap. (custom)",
       "category": "passive"
     },
@@ -4219,7 +4219,7 @@
       "defaultValues": {},
       "pinCount": 4,
       "id": "bmp280",
-      "tagName": "velxio-bmp280",
+      "tagName": "circuit-muse-bmp280",
       "name": "BMP280 (Pressure + Temp)",
       "category": "sensor"
     },

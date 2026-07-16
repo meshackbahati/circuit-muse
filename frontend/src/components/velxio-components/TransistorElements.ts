@@ -1,7 +1,7 @@
 /**
  * TransistorElements.ts — Custom Web Components for BJT and MOSFET packages.
  *
- * These elements do NOT exist in wokwi-elements — they are Velxio-specific
+ * These elements do NOT exist in wokwi-elements — they are CircuitMuse-specific
  * parts used by the SPICE electrical-mode simulator. Each element is a thin
  * SVG schematic symbol with 3 pins (collector/base/emitter for BJT,
  * drain/gate/source for MOSFET).

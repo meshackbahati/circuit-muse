@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     """OSS settings — stateless deployment.
 
-    Auth, DB, OAuth, billing, mail relay etc. moved to the velxio-prod
+    Auth, DB, OAuth, billing, mail relay etc. moved to the circuit-muse-prod
     private overlay during the Phase 1-4 OSS/pro split. The overlay
     physically replaces this file at Docker build time with a richer
     Settings class that ADDS those fields on top of FRONTEND_URL (see
@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "http://localhost:5173"
 
     # extra="ignore": tolerate legacy keys (DATA_DIR, SECRET_KEY, DATABASE_URL, …)
-    # left over from pre-split .env files or from the velxio-prod overlay so the
+    # left over from pre-split .env files or from the circuit-muse-prod overlay so the
     # OSS image starts cleanly instead of crashing with extra_forbidden.
     model_config = {
         "env_file": ".env",

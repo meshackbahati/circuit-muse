@@ -5,7 +5,7 @@
  * a Pi 3 example transfer to a Pi 4 or Pi 5 board without re-routing.
  *
  * Coordinates are in CSS pixels relative to the board element's top-left,
- * sized to fit the 250×160 footprint shared by every Velxio Pi element.
+ * sized to fit the 250×160 footprint shared by every CircuitMuse Pi element.
  * Pin "1" sits top-left; odd pins on the top row, even on the bottom.
  *
  * Names follow the Pi 3 wrapper convention (BCM GPIO numbers like

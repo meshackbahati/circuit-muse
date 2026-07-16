@@ -19,18 +19,18 @@ import type { BoardKind } from '../types/board';
 import type { ExampleProject } from '../data/examples';
 
 /**
- * Strip the brand prefix from a wokwi-elements / velxio-elements
+ * Strip the brand prefix from a wokwi-elements / circuit-muse-elements
  * component tag.  Matches the regex used historically inside
  * `loadExample.ts`.
  *
  * Examples:
  *   wokwi-led            → led
  *   wokwi-bjt-2n2222     → bjt-2n2222
- *   velxio-74hc595       → 74hc595
+ *   circuit-muse-74hc595       → 74hc595
  *   resistor             → resistor (no prefix, untouched)
  */
 export function stripBrandPrefix(componentType: string): string {
-  return componentType.replace(/^(wokwi|velxio)-/, '');
+  return componentType.replace(/^(wokwi|circuit-muse)-/, '');
 }
 
 /**

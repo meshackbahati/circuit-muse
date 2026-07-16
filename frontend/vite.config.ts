@@ -7,7 +7,7 @@ import path from 'path'
 // (The third-party/ clones are reference-only — keep them updated for credits.)
 //
 // The `@pro` alias resolves to a no-op stub by default. Private overlays
-// (e.g. velxio-prod) set VITE_PRO_BUILD=true and PRO_OVERLAY_PATH at build
+// (e.g. circuit-muse-prod) set VITE_PRO_BUILD=true and PRO_OVERLAY_PATH at build
 // time to point at their actual pro source tree. See README's "Pro overlay"
 // section.
 const proOverlayPath =
@@ -25,12 +25,12 @@ export default defineConfig(({ command }) => ({
       // of a relative path makes the import location-independent: it works
       // whether the overlay is symlinked into src/pro/ (local dev — Rollup
       // resolves the import from the real overlay path) or physically
-      // COPYed into src/pro/ (Docker build). Either way `@velxio/<x>`
+      // COPYed into src/pro/ (Docker build). Either way `@circuit-muse/<x>`
       // points at the OSS src tree.
-      '@velxio': path.resolve(__dirname, 'src'),
+      '@circuit-muse': path.resolve(__dirname, 'src'),
     },
     // When the pro overlay is wired in via a junction/symlink
-    // (Windows pattern: `frontend/src/pro` → `velxio-prod/pro/frontend/src/pro`),
+    // (Windows pattern: `frontend/src/pro` → `circuit-muse-prod/pro/frontend/src/pro`),
     // Rollup's default behavior walks the symlink to the real path and
     // resolves imports from THAT location — but the real overlay path
     // has no node_modules nearby AND its `../../<x>` paths land outside

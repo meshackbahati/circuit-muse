@@ -1,7 +1,7 @@
 /**
  * Wokwi zip import/export
  *
- * Converts between Wokwi's diagram.json format and Velxio's internal
+ * Converts between Wokwi's diagram.json format and CircuitMuse's internal
  * component/wire format, bundling everything into a .zip file.
  *
  * Wokwi zip structure:
@@ -34,7 +34,7 @@ interface WokwiDiagram {
   connections: [string, string, string, string[]][];
 }
 
-export interface VelxioComponent {
+export interface CircuitMuseComponent {
   id: string;
   metadataId: string;
   x: number;
@@ -45,7 +45,7 @@ export interface VelxioComponent {
 export interface ImportResult {
   boardType: 'arduino-uno' | 'arduino-nano' | 'arduino-mega' | 'raspberry-pi-pico';
   boardPosition: { x: number; y: number };
-  components: VelxioComponent[];
+  components: CircuitMuseComponent[];
   wires: Wire[];
   files: Array<{ name: string; content: string }>;
   /** Library names parsed from libraries.txt. Includes both standard Arduino Library Manager names and Wokwi-hosted entries in the form "LibName@wokwi:hash". */
@@ -54,7 +54,7 @@ export interface ImportResult {
 
 // ── Board mappings ────────────────────────────────────────────────────────────
 
-// Wokwi board type → Velxio boardType
+// Wokwi board type → CircuitMuse boardType
 const WOKWI_TYPE_TO_BOARD: Record<
   string,
   'arduino-uno' | 'arduino-nano' | 'arduino-mega' | 'raspberry-pi-pico'
@@ -65,7 +65,7 @@ const WOKWI_TYPE_TO_BOARD: Record<
   'wokwi-raspberry-pi-pico': 'raspberry-pi-pico',
 };
 
-// Velxio boardType → Wokwi type
+// CircuitMuse boardType → Wokwi type
 const BOARD_TO_WOKWI_TYPE: Record<string, string> = {
   'arduino-uno': 'wokwi-arduino-uno',
   'arduino-nano': 'wokwi-arduino-nano',
@@ -73,7 +73,7 @@ const BOARD_TO_WOKWI_TYPE: Record<string, string> = {
   'raspberry-pi-pico': 'wokwi-raspberry-pi-pico',
 };
 
-// Velxio boardType → default Wokwi part id
+// CircuitMuse boardType → default Wokwi part id
 const BOARD_TO_WOKWI_ID: Record<string, string> = {
   'arduino-uno': 'uno',
   'arduino-nano': 'nano',
@@ -181,7 +181,7 @@ export function parseLibrariesTxt(content: string): string[] {
 
 export async function exportToWokwiZip(
   files: Array<{ name: string; content: string }>,
-  components: VelxioComponent[],
+  components: CircuitMuseComponent[],
   wires: Wire[],
   boardType: string,
   projectName: string,
@@ -227,7 +227,7 @@ export async function exportToWokwiZip(
 
   const diagram: WokwiDiagram = {
     version: 1,
-    author: 'Velxio',
+    author: 'CircuitMuse',
     editor: 'wokwi',
     parts,
     connections,
@@ -236,7 +236,7 @@ export async function exportToWokwiZip(
   zip.file('diagram.json', JSON.stringify(diagram, null, 2));
   zip.file(
     'wokwi-project.txt',
-    `Exported from Velxio\n\nSimulate this project on https://velxio.dev\n`,
+    `Exported from CircuitMuse\n\nSimulate this project on https://circuit-muse.dev\n`,
   );
 
   for (const f of files) {
@@ -247,7 +247,7 @@ export async function exportToWokwiZip(
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${(projectName || 'velxio-project').replace(/[^a-z0-9_-]/gi, '-')}.zip`;
+  a.download = `${(projectName || 'circuit-muse-project').replace(/[^a-z0-9_-]/gi, '-')}.zip`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -271,14 +271,14 @@ export async function importFromWokwiZip(file: File): Promise<ImportResult> {
   const boardType = boardPart ? WOKWI_TYPE_TO_BOARD[boardPart.type] : 'arduino-uno';
   const boardId = boardPart?.id ?? 'uno';
 
-  // Velxio internal component ID for the board element (must match DOM element id)
-  const VELXIO_BOARD_ID: Record<string, string> = {
+  // CircuitMuse internal component ID for the board element (must match DOM element id)
+  const CIRCUIT_MUSE_BOARD_ID: Record<string, string> = {
     'arduino-uno': 'arduino-uno',
     'arduino-nano': 'arduino-nano',
     'arduino-mega': 'arduino-mega',
     'raspberry-pi-pico': 'nano-rp2040',
   };
-  const velxioBoardId = VELXIO_BOARD_ID[boardType] ?? 'arduino-uno';
+  const circuit-museBoardId = CIRCUIT_MUSE_BOARD_ID[boardType] ?? 'arduino-uno';
 
   // Board position from diagram. Apply a minimum offset so the board is never
   // crammed against the canvas top-left corner (Wokwi diagrams often use 0,0).
@@ -292,9 +292,9 @@ export async function importFromWokwiZip(file: File): Promise<ImportResult> {
     y: rawBoardY + offsetY,
   };
 
-  // Convert non-board parts to Velxio components.
+  // Convert non-board parts to CircuitMuse components.
   // Apply the same offset so components keep their relative position to the board.
-  const components: VelxioComponent[] = diagram.parts
+  const components: CircuitMuseComponent[] = diagram.parts
     .filter((p) => !WOKWI_TYPE_TO_BOARD[p.type])
     .map((p) => ({
       id: p.id,
@@ -304,7 +304,7 @@ export async function importFromWokwiZip(file: File): Promise<ImportResult> {
       properties: { ...p.attrs },
     }));
 
-  // Convert connections to Velxio wires
+  // Convert connections to CircuitMuse wires
   const wires: Wire[] = diagram.connections.map((conn, i) => {
     const [startStr, endStr, color] = conn;
     const colonA = startStr.indexOf(':');
@@ -314,9 +314,9 @@ export async function importFromWokwiZip(file: File): Promise<ImportResult> {
     const endCompRaw = colonB >= 0 ? endStr.slice(0, colonB) : endStr;
     const endPin = colonB >= 0 ? endStr.slice(colonB + 1) : '';
 
-    // Remap board part id → Velxio internal board id
-    const startId = startCompRaw === boardId ? velxioBoardId : startCompRaw;
-    const endId = endCompRaw === boardId ? velxioBoardId : endCompRaw;
+    // Remap board part id → CircuitMuse internal board id
+    const startId = startCompRaw === boardId ? circuit-museBoardId : startCompRaw;
+    const endId = endCompRaw === boardId ? circuit-museBoardId : endCompRaw;
 
     // Normalize pin names: Wokwi uses signal names (SDA, SCL, VCC) while
     // wokwi-elements use physical/board pin names (DATA, CLK, VIN).

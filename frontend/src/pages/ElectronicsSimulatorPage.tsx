@@ -18,8 +18,8 @@ const META = getSeoMeta('/electronics-simulator')!;
 
 const FAQ_ITEMS = [
   {
-    q: 'Is Velxio a complete electronics simulator?',
-    a: 'Yes. Velxio combines a SPICE-accurate analog solver, 19 simulated microcontrollers (Arduino, ESP32, RP2040, ATtiny85, Raspberry Pi 3), 100+ components, an oscilloscope, voltmeter, ammeter, and signal generator — everything you need to design and validate an electronics project end-to-end.',
+    q: 'Is CircuitMuse a complete electronics simulator?',
+    a: 'Yes. CircuitMuse combines a SPICE-accurate analog solver, 19 simulated microcontrollers (Arduino, ESP32, RP2040, ATtiny85, Raspberry Pi 3), 100+ components, an oscilloscope, voltmeter, ammeter, and signal generator — everything you need to design and validate an electronics project end-to-end.',
   },
   {
     q: 'Can I use it like a virtual breadboard?',
@@ -27,15 +27,15 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Do I need to install anything?',
-    a: 'No. Open velxio.dev in any modern browser and start. The SPICE solver and the AVR / RP2040 emulators run locally in your browser; Xtensa and RISC-V boards (ESP32, ESP32-C3, CH32V003) plus Raspberry Pi 3 Linux run through QEMU lcgamboa, bundled in the Docker image. Compilation of Arduino sketches uses the cloud arduino-cli backend.',
+    a: 'No. Open circuit-muse.dev in any modern browser and start. The SPICE solver and the AVR / RP2040 emulators run locally in your browser; Xtensa and RISC-V boards (ESP32, ESP32-C3, CH32V003) plus Raspberry Pi 3 Linux run through QEMU lcgamboa, bundled in the Docker image. Compilation of Arduino sketches uses the cloud arduino-cli backend.',
   },
   {
     q: 'Is it good for teaching electronics?',
     a: 'Yes — that is one of the design goals. Free, no install, no account, no licence cost. 100+ pre-wired example circuits cover voltage dividers, RC filters, op-amp amplifiers, transistor switches, rectifiers, and complete Arduino projects. Great for university labs and self-learners.',
   },
   {
-    q: 'Is Velxio a Tinkercad / Falstad alternative?',
-    a: 'Yes — and a more accurate one. Velxio runs real ngspice (the engine professional EDA tools use), and unlike those tools it also runs the firmware on the microcontroller driving the circuit. Open-source under AGPLv3.',
+    q: 'Is CircuitMuse a Tinkercad / Falstad alternative?',
+    a: 'Yes — and a more accurate one. CircuitMuse runs real ngspice (the engine professional EDA tools use), and unlike those tools it also runs the firmware on the microcontroller driving the circuit. Open-source under AGPLv3.',
   },
 ];
 
@@ -43,13 +43,13 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Velxio — Free Online Electronics Simulator',
+    name: 'CircuitMuse — Free Online Electronics Simulator',
     applicationCategory: 'DeveloperApplication',
     applicationSubCategory: 'Electronics Simulator',
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online electronics simulator. SPICE-accurate analog parts wired to 19 simulated microcontrollers. 100+ components, oscilloscope, voltmeter, ammeter — your virtual breadboard.',
-    url: 'https://velxio.dev/electronics-simulator',
+    url: 'https://circuit-muse.dev/electronics-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -67,12 +67,12 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
+      { '@type': 'ListItem', position: 1, name: 'CircuitMuse', item: 'https://circuit-muse.dev/' },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Electronics Simulator',
-        item: 'https://velxio.dev/electronics-simulator',
+        item: 'https://circuit-muse.dev/electronics-simulator',
       },
     ],
   },

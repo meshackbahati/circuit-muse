@@ -34,9 +34,9 @@ while True:
 `;
 
 // NOTE: avoid Pin.toggle() — it was only added to the ESP32 port in
-// MicroPython v1.21 (Oct 2023). The firmware Velxio ships is v1.20.0
+// MicroPython v1.21 (Oct 2023). The firmware CircuitMuse ships is v1.20.0
 // (April 2023), so Pin.toggle() raises AttributeError there.
-// See https://github.com/davidmonterocrespo24/velxio/issues/122
+// See https://github.com/davidmonterocrespo24/circuit-muse/issues/122
 const DEFAULT_ESP32_MICROPYTHON_CONTENT = `# MicroPython Blink for ESP32
 from machine import Pin
 import time

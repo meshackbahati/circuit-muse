@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "MCP3008",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "8-channel 10-bit SPI ADC.",
   "pins": ["CS", "SCK", "MOSI", "MISO", "CH0", "CH1", "CH2", "CH3",

@@ -64,13 +64,13 @@ function sw(id: string, x: number, y: number, initial: 0 | 1 = 0) {
 }
 
 function gate(kind: string, id: string, x: number, y: number) {
-  return { type: `velxio-logic-gate-${kind}`, id, x, y, properties: {} };
+  return { type: `circuit-muse-logic-gate-${kind}`, id, x, y, properties: {} };
 }
 
 /** Edge-triggered flip-flop (kind: 'd' | 't' | 'jk'). Digital-engine only —
  *  no SPICE mapper (no edge detection at DC). Pins: CLK + data + Q + Qbar. */
 function ff(kind: 'd' | 't' | 'jk', id: string, x: number, y: number) {
-  return { type: `velxio-flip-flop-${kind}`, id, x, y, properties: {} };
+  return { type: `circuit-muse-flip-flop-${kind}`, id, x, y, properties: {} };
 }
 
 /** Placeholder code shown in the editor. No MCU is involved. */

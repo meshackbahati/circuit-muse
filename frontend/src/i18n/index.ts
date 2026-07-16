@@ -6,7 +6,7 @@
  *
  * The active locale is determined in priority order:
  *   1. URL prefix (`/es/...`) — the source of truth, what crawlers see.
- *   2. velxio_locale cookie — sticky preference, shared with the blog.
+ *   2. circuit-muse_locale cookie — sticky preference, shared with the blog.
  *   3. Browser languages — Accept-Language fallback.
  *   4. DEFAULT_LOCALE ("en") — last resort.
  *
@@ -100,7 +100,7 @@ void i18n
       // We make the locale decision ourselves in `pickInitialLocale`;
       // detector is left configured for future fallback paths only.
       order: ["path", "cookie", "navigator"],
-      lookupCookie: "velxio_locale",
+      lookupCookie: "circuit-muse_locale",
       caches: [], // we manage the cookie in src/i18n/cookie.ts
     },
   });

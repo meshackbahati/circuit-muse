@@ -1,12 +1,12 @@
 /**
  * Regression test for GitHub issue #122
- * https://github.com/davidmonterocrespo24/velxio/issues/122
+ * https://github.com/davidmonterocrespo24/circuit-muse/issues/122
  *
  * The user (chenxyzj) reported three sub-problems running MicroPython on ESP32:
  *
  *   1. AttributeError: 'Pin' object has no attribute 'toggle'
  *      → Pin.toggle() was added to the ESP32 port in MicroPython v1.21 (Oct
- *        2023). The firmware Velxio bundles is v1.20.0 (April 2023), so the
+ *        2023). The firmware CircuitMuse bundles is v1.20.0 (April 2023), so the
  *        default Blink demo crashes immediately.
  *
  *   2. ESP32-C3: "Detected size(2048k) smaller than the size in the binary
@@ -112,7 +112,7 @@ describe('issue #122 — ESP32-C3 flash size mismatch', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 //
 // Pin.toggle() raises AttributeError on the ESP32 port in v1.20.0 (the
-// firmware Velxio ships). We can't import the constant directly from
+// firmware CircuitMuse ships). We can't import the constant directly from
 // useEditorStore.ts (it isn't exported), but we can grep the source.
 
 import { readFileSync } from 'node:fs';

@@ -1,5 +1,5 @@
 /**
- * Opt-in ESP32 rectifier E2E harness, loaded only when VELXIO_ESP32_E2E=1.
+ * Opt-in ESP32 rectifier E2E harness, loaded only when CIRCUIT_MUSE_ESP32_E2E=1.
  *
  * The scaffold below sketches the contract the test must fulfil:
  *   - Spawn the FastAPI backend (or connect to an already-running one).
@@ -22,5 +22,5 @@ export async function rectifierAdcTest(): Promise<void> {
   //   4. await sendAdcWaveform(clientId, 0, rectifierSamplesU12, periodNs);
   //   5. collect 50 `serial_output` frames; parse `analogRead=<n>` lines.
   //   6. assert max(n) > 3000 && min(n) < 200.
-  expect(process.env.VELXIO_ESP32_E2E).toBe('1');
+  expect(process.env.CIRCUIT_MUSE_ESP32_E2E).toBe('1');
 }

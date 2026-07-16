@@ -1,4 +1,4 @@
-"""POST /api/compile-chip — compile a Velxio custom-chip C source to WASM.
+"""POST /api/compile-chip — compile a CircuitMuse custom-chip C source to WASM.
 
 The request body carries the C source. Optionally a chip.json string can be
 passed for future validation; today it's stored client-side.

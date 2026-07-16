@@ -214,12 +214,12 @@ describe('Esp32Bridge — WiFi/BLE status events (ESP32-C3)', () => {
 
     ws.receive({
       type: 'wifi_status',
-      data: { status: 'got_ip', ssid: 'Velxio-GUEST', ip: '192.168.4.2' },
+      data: { status: 'got_ip', ssid: 'CircuitMuse-GUEST', ip: '192.168.4.2' },
     });
 
     expect(received).toHaveLength(1);
     expect(received[0].status).toBe('got_ip');
-    expect(received[0].ssid).toBe('Velxio-GUEST');
+    expect(received[0].ssid).toBe('CircuitMuse-GUEST');
     expect(received[0].ip).toBe('192.168.4.2');
   });
 
@@ -267,10 +267,10 @@ describe('Esp32Bridge — WiFi/BLE status events (ESP32-C3)', () => {
     bridge.onWifiStatus = (status) => received.push(status);
 
     ws.receive({ type: 'wifi_status', data: { status: 'initializing' } });
-    ws.receive({ type: 'wifi_status', data: { status: 'connected', ssid: 'Velxio-GUEST' } });
+    ws.receive({ type: 'wifi_status', data: { status: 'connected', ssid: 'CircuitMuse-GUEST' } });
     ws.receive({
       type: 'wifi_status',
-      data: { status: 'got_ip', ssid: 'Velxio-GUEST', ip: '192.168.4.2' },
+      data: { status: 'got_ip', ssid: 'CircuitMuse-GUEST', ip: '192.168.4.2' },
     });
 
     expect(received).toHaveLength(3);
@@ -302,7 +302,7 @@ describe('WiFi auto-detection (ESP32-C3 sketches)', () => {
 
   it('detects #include <WiFi.h> in C3 sketch', () => {
     const content = `#include <WiFi.h>
-void setup() { WiFi.begin("Velxio-GUEST", ""); }
+void setup() { WiFi.begin("CircuitMuse-GUEST", ""); }
 void loop() {}`;
     expect(detectWifi(content)).toBe(true);
   });
@@ -338,7 +338,7 @@ describe('BLE detection in ESP32-C3 sketches', () => {
     content.includes('BLEDevice::init(');
 
   it('detects BLEDevice.h include', () => {
-    const content = '#include <BLEDevice.h>\nvoid setup() { BLEDevice::init("Velxio-ESP32C3"); }';
+    const content = '#include <BLEDevice.h>\nvoid setup() { BLEDevice::init("CircuitMuse-ESP32C3"); }';
     expect(detectBLE(content)).toBe(true);
   });
 

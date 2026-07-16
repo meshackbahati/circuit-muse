@@ -1,7 +1,7 @@
 /**
  * i2c-real-firmware.test.ts
  *
- * Full-fidelity end-to-end I2C tests.  The flow mirrors Velxio
+ * Full-fidelity end-to-end I2C tests.  The flow mirrors CircuitMuse
  * production exactly:
  *
  *     [.ino source on disk]
@@ -27,7 +27,7 @@
  *
  * Fixtures
  * --------
- * The sketches live under `velxio/test/test_custom_chips/sketches/`
+ * The sketches live under `circuit-muse/test/test_custom_chips/sketches/`
  * as committed .ino source — the editor content the user would type.
  * Compiled hex files are produced on-demand and cached in the OS
  * tmpdir so subsequent test runs reuse them.
@@ -82,7 +82,7 @@ const ARDUINO_CLI_AVAILABLE = (() => {
  */
 function hasLibrary(header: string): boolean {
   if (!ARDUINO_CLI_AVAILABLE) return false;
-  const dir = mkdtempSync(join(tmpdir(), 'velxio-libprobe-'));
+  const dir = mkdtempSync(join(tmpdir(), 'circuit-muse-libprobe-'));
   const sketchDir = join(dir, 'probe');
   mkdirSync(sketchDir);
   writeFileSync(
@@ -117,7 +117,7 @@ function sketchSourcePath(name: string): string {
 
 /**
  * Compile a sketch with arduino-cli (subprocess), exactly like the
- * Velxio FastAPI backend does in services/arduino_cli.py:compile().
+ * CircuitMuse FastAPI backend does in services/arduino_cli.py:compile().
  * Caches the produced hex per (sketch, fqbn, source mtime) so repeated
  * test runs against unchanged source are instant.
  *
@@ -138,7 +138,7 @@ function compileSketch(name: string, fqbn = 'arduino:avr:uno'): string {
   }
   const hexCache = join(
     tmpdir(),
-    `velxio-${name}-${fqbn.replace(/[^a-z0-9]/gi, '_')}-${hash >>> 0}.hex`,
+    `circuit-muse-${name}-${fqbn.replace(/[^a-z0-9]/gi, '_')}-${hash >>> 0}.hex`,
   );
   if (existsSync(hexCache)) {
     return readFileSync(hexCache, 'utf-8');
@@ -146,7 +146,7 @@ function compileSketch(name: string, fqbn = 'arduino:avr:uno'): string {
 
   // Stage the sketch in a temp dir — arduino-cli requires the
   // directory name to match the sketch name (so name/name.ino).
-  const work = mkdtempSync(join(tmpdir(), `velxio-${name}-`));
+  const work = mkdtempSync(join(tmpdir(), `circuit-muse-${name}-`));
   const sketchDir = join(work, name);
   mkdirSync(sketchDir);
   writeFileSync(join(sketchDir, `${name}.ino`), source);
@@ -224,7 +224,7 @@ function runUntil(sim: AVRSimulator, budget: number, predicate: () => boolean): 
 // ─── EEPROM-demo tests (compile + load + run) ────────────────────────────────
 
 describe.runIf(ARDUINO_CLI_AVAILABLE)(
-  'I2C E2E — Wire master at 0x50 (full Velxio compile flow)',
+  'I2C E2E — Wire master at 0x50 (full CircuitMuse compile flow)',
   () => {
     let HEX: string;
     beforeAll(() => {
@@ -306,7 +306,7 @@ describe.runIf(ARDUINO_CLI_AVAILABLE)(
 // ─── LCD-I2C tests (need the LiquidCrystal_I2C library installed) ────────────
 
 describe.runIf(LIQUID_CRYSTAL_I2C_AVAILABLE)(
-  'I2C E2E — LiquidCrystal_I2C → HD44780 decoder (full Velxio compile flow)',
+  'I2C E2E — LiquidCrystal_I2C → HD44780 decoder (full CircuitMuse compile flow)',
   () => {
     let HEX: string;
     beforeAll(() => {

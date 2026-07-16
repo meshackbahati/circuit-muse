@@ -1,5 +1,5 @@
 /**
- * Smoke test for every example in the velxio gallery.
+ * Smoke test for every example in the circuit-muse gallery.
  *
  * Item #1 of Phase 1d (post-migration cleanup).  After Phase 1c
  * swapped the SPICE engine from `eecircuit-engine` to the vendored

@@ -1,5 +1,5 @@
 /**
- * ATtiny85 — React wrapper around the `velxio-attiny85` Web Component.
+ * ATtiny85 — React wrapper around the `circuit-muse-attiny85` Web Component.
  *
  * The wire system reads `pinInfo` directly from the rendered DOM element,
  * so the actual SVG + pin coordinates live in `Attiny85Element.ts`. This
@@ -20,7 +20,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      'velxio-attiny85': any;
+      'circuit-muse-attiny85': any;
     }
   }
 }
@@ -33,7 +33,7 @@ export const Attiny85 = ({ id = 'attiny85', x = 0, y = 0, led1 = false }: Attiny
   }, [led1]);
 
   return (
-    <velxio-attiny85
+    <circuit-muse-attiny85
       id={id}
       ref={ref}
       style={{ position: 'absolute', left: `${x}px`, top: `${y}px` }}

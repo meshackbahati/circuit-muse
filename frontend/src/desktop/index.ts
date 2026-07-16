@@ -21,7 +21,7 @@ let sidePanelRoot: Root | null = null;
 function mountSidePanels(): void {
   if (sidePanelRoot) return;
   const host = document.createElement('div');
-  host.id = 'velxio-desktop-side-panels';
+  host.id = 'circuit-muse-desktop-side-panels';
   document.body.appendChild(host);
   sidePanelRoot = createRoot(host);
   sidePanelRoot.render(

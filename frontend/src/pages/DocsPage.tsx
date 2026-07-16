@@ -6,8 +6,8 @@ import { CodeBlock } from '../components/layout/CodeBlock';
 import { useLocalizedHref } from '../i18n/useLocalizedNavigate';
 import './DocsPage.css';
 
-const GITHUB_URL = 'https://github.com/davidmonterocrespo24/velxio';
-const BASE_URL = 'https://velxio.dev';
+const GITHUB_URL = 'https://github.com/davidmonterocrespo24/circuit-muse';
+const BASE_URL = 'https://circuit-muse.dev';
 const AUTHOR = {
   '@type': 'Person',
   name: 'David Montero Crespo',
@@ -216,7 +216,7 @@ const IntroSection: React.FC = () => {
           i18nKey="docs.intro.liveDemoCallout"
           components={{
             strong: <strong />,
-            a: <a href="https://velxio.dev" target="_blank" rel="noopener noreferrer" />,
+            a: <a href="https://circuit-muse.dev" target="_blank" rel="noopener noreferrer" />,
           }}
         />
       </div>
@@ -237,7 +237,7 @@ const GettingStartedSection: React.FC = () => {
         <Trans
           i18nKey="docs.gettingStarted.option1Body"
           components={{
-            a: <a href="https://velxio.dev" target="_blank" rel="noopener noreferrer" />,
+            a: <a href="https://circuit-muse.dev" target="_blank" rel="noopener noreferrer" />,
           }}
         />
       </p>
@@ -245,10 +245,10 @@ const GettingStartedSection: React.FC = () => {
       <h2>{t('docs.gettingStarted.option2Heading')}</h2>
       <p>{t('docs.gettingStarted.option2Body')}</p>
       <CodeBlock language="bash">{`docker run -d \\
-  --name velxio \\
+  --name circuit-muse \\
   -p 3080:80 \\
   -v $(pwd)/data:/app/data \\
-  ghcr.io/davidmonterocrespo24/velxio:master`}</CodeBlock>
+  ghcr.io/davidmonterocrespo24/circuit-muse:master`}</CodeBlock>
       <p>
         <Trans i18nKey="docs.gettingStarted.option2After" components={{ strong: <strong /> }} />
       </p>
@@ -262,8 +262,8 @@ const GettingStartedSection: React.FC = () => {
       </p>
 
       <h3>{t('docs.gettingStarted.option3Step1')}</h3>
-      <CodeBlock language="bash">{`git clone https://github.com/davidmonterocrespo24/velxio.git
-cd velxio`}</CodeBlock>
+      <CodeBlock language="bash">{`git clone https://github.com/davidmonterocrespo24/circuit-muse.git
+cd circuit-muse`}</CodeBlock>
 
       <h3>{t('docs.gettingStarted.option3Step2')}</h3>
       <CodeBlock language="bash">{`cd backend
@@ -295,7 +295,7 @@ arduino-cli core install rp2040:rp2040`}</CodeBlock>
             i18nKey="docs.gettingStarted.firstSim1"
             components={{
               strong: <strong />,
-              a: <a href="https://velxio.dev/editor" target="_blank" rel="noopener noreferrer" />,
+              a: <a href="https://circuit-muse.dev/editor" target="_blank" rel="noopener noreferrer" />,
             }}
           />
         </li>
@@ -1372,9 +1372,9 @@ python mcp_server.py`}</CodeBlock>
       </p>
       <CodeBlock language="json">{`{
   "mcpServers": {
-    "velxio": {
+    "circuit-muse": {
       "command": "python",
-      "args": ["/absolute/path/to/velxio/backend/mcp_server.py"]
+      "args": ["/absolute/path/to/circuit-muse/backend/mcp_server.py"]
     }
   }
 }`}</CodeBlock>
@@ -1385,7 +1385,7 @@ python mcp_sse_server.py --port 8002`}</CodeBlock>
       <p>{t('docs.mcp.sseConfigBody')}</p>
       <CodeBlock language="json">{`{
   "mcpServers": {
-    "velxio": { "url": "http://localhost:8002/sse" }
+    "circuit-muse": { "url": "http://localhost:8002/sse" }
   }
 }`}</CodeBlock>
 
@@ -2232,7 +2232,7 @@ const Esp32EmulationSection: React.FC = () => {
           i18nKey="docs.esp32.requirementsBody"
           components={{
             strong: <strong />,
-            a: <a href="https://velxio.dev" target="_blank" rel="noopener noreferrer" />,
+            a: <a href="https://circuit-muse.dev" target="_blank" rel="noopener noreferrer" />,
           }}
         />
       </p>
@@ -2401,7 +2401,7 @@ const Rp2040EmulationSection: React.FC = () => {
           components={{
             a: (
               <a
-                href="https://github.com/davidmonterocrespo24/velxio/blob/master/docs/RP2040_EMULATION.md"
+                href="https://github.com/davidmonterocrespo24/circuit-muse/blob/master/docs/RP2040_EMULATION.md"
                 target="_blank"
                 rel="noopener noreferrer"
               />
@@ -2504,7 +2504,7 @@ const RaspberryPi3EmulationSection: React.FC = () => {
           components={{
             a: (
               <a
-                href="https://github.com/davidmonterocrespo24/velxio/blob/master/docs/RASPBERRYPI3_EMULATION.md"
+                href="https://github.com/davidmonterocrespo24/circuit-muse/blob/master/docs/RASPBERRYPI3_EMULATION.md"
                 target="_blank"
                 rel="noopener noreferrer"
               />
@@ -2518,7 +2518,7 @@ const RaspberryPi3EmulationSection: React.FC = () => {
 
 /* ── Build QEMU from source ───────────────────────────── */
 //
-// Transparency section. The Velxio docker image ships with prebuilt
+// Transparency section. The CircuitMuse docker image ships with prebuilt
 // libqemu-xtensa / libqemu-riscv32 — anyone who'd rather not run
 // third-party binaries can rebuild them from lcgamboa/qemu and drop
 // them in. Body copy is intentionally hardcoded English: the value
@@ -2530,10 +2530,10 @@ const BuildQemuSection: React.FC = () => {
       <span className="docs-label">Self-hosting</span>
       <h1>Build QEMU libraries from source</h1>
       <p>
-        Velxio ships with prebuilt <code>libqemu-xtensa.so</code> and{' '}
+        CircuitMuse ships with prebuilt <code>libqemu-xtensa.so</code> and{' '}
         <code>libqemu-riscv32.so</code> so ESP32 / ESP32-S3 / ESP32-C3
         simulation works the moment you pull the docker image. The
-        prebuilts are a convenience — Velxio is <strong>AGPLv3</strong>{' '}
+        prebuilts are a convenience — CircuitMuse is <strong>AGPLv3</strong>{' '}
         and so is the QEMU fork it depends on, which means you can
         always rebuild the libraries yourself from source and run
         those instead.
@@ -2586,7 +2586,7 @@ ninja
 
       <p>
         Drop both <code>.so</code> files into <code>/app/lib/</code>{' '}
-        inside the running Velxio container (or whatever host path you
+        inside the running CircuitMuse container (or whatever host path you
         bind-mount to it) and restart. The backend dlopens whichever
         library is on disk on the next simulation start, so this
         replaces the shipped binaries cleanly.
@@ -2597,13 +2597,13 @@ ninja
         Step-by-step build instructions, dependency lists per OS
         (Debian / Arch / macOS), the canonical commit ID we anchor the
         prebuilts to, troubleshooting for the common configure / ninja
-        failures, and the licensing notes (QEMU is GPL-2.0, Velxio is
+        failures, and the licensing notes (QEMU is GPL-2.0, CircuitMuse is
         AGPLv3, the dlopen boundary keeps them orthogonal) live in the
         full document:
       </p>
       <p>
         <a
-          href="https://github.com/davidmonterocrespo24/velxio/blob/master/docs/BUILD-QEMU.md"
+          href="https://github.com/davidmonterocrespo24/circuit-muse/blob/master/docs/BUILD-QEMU.md"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -2616,14 +2616,14 @@ ninja
         If you don't have a 15-30 minute build in you, the
         sha256-pinned prebuilts are available at{' '}
         <a
-          href="https://velxio.dev/license/signup"
+          href="https://circuit-muse.dev/license/signup"
           target="_blank"
           rel="noopener noreferrer"
         >
-          velxio.dev/license/signup
+          circuit-muse.dev/license/signup
         </a>{' '}
         (free personal-use key, takes a minute), and the existing
-        public release at <code>github.com/davidmonterocrespo24/velxio
+        public release at <code>github.com/davidmonterocrespo24/circuit-muse
         /releases/tag/qemu-prebuilt</code> still serves the same files
         byte-for-byte. Both produce identical libraries to what this
         guide builds — there's no "blessed" version, just convenience
@@ -2760,7 +2760,7 @@ export const DocsPage: React.FC = () => {
           headline: title,
           description: description,
           url: pageUrl,
-          isPartOf: { '@type': 'WebSite', url: `${BASE_URL}/`, name: 'Velxio' },
+          isPartOf: { '@type': 'WebSite', url: `${BASE_URL}/`, name: 'CircuitMuse' },
           inLanguage: 'en-US',
           author: AUTHOR,
         },

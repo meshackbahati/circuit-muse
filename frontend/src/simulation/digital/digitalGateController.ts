@@ -31,7 +31,7 @@ interface LedEl extends HTMLElement {
   brightness?: number;
 }
 
-const kind = (c: DigitalComponent) => String(c.metadataId ?? c.type ?? '').replace(/^velxio-/, '').replace(/^wokwi-/, '');
+const kind = (c: DigitalComponent) => String(c.metadataId ?? c.type ?? '').replace(/^circuit-muse-/, '').replace(/^wokwi-/, '');
 
 export function mountDigitalGateEngine(): () => void {
   if (typeof window === 'undefined' || !digitalGatesEnabled()) return () => {};

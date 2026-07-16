@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "ROT13 UART",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "UART loopback chip that ROT13-shifts every received byte.",
   "pins": ["RX", "TX", "GND", "VCC"],

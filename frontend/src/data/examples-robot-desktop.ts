@@ -5,7 +5,7 @@
  * ESP32 + SSD1306 128×64 OLED + DHT11 (temp/hum) + PIR (motion) +
  * LDR (ambient light) + sound sensor + 2 servos for eyebrows.
  *
- * Imported as-is — 34 C++ files, ~3.4k lines. Velxio normally
+ * Imported as-is — 34 C++ files, ~3.4k lines. CircuitMuse normally
  * translates examples to a single sketch, but this project's eye-
  * animation engine (Eye/EyeTransition/EyeVariation/FaceBehavior/…)
  * splits its responsibilities across enough classes that flattening

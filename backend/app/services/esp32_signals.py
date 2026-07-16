@@ -4,7 +4,7 @@ Lifted from the ESP32 Technical Reference Manual (Espressif ESP32 TRM
 section 4.11, "IO_MUX and GPIO Matrix"). Each output GPIO has a
 configuration register `GPIO_FUNCx_OUT_SEL_CFG_REG[x]` whose low 9
 bits (`FUNCx_OUT_SEL`) select one of 256 internal peripheral signals
-to drive the pin. The constants below name the signals that velxio
+to drive the pin. The constants below name the signals that circuit-muse
 actually emulates today; add more here when a new peripheral wants
 to participate in the SignalRouter.
 
@@ -39,11 +39,11 @@ SIG_LEDC_LS_CH_LAST     = 86
 
 
 def ledc_signal_for_channel(channel: int) -> int:
-    """Map a velxio-style unified LEDC channel index (0..15) to its
+    """Map a circuit-muse-style unified LEDC channel index (0..15) to its
     GPIO Matrix signal source id.
 
     The ESP32 LEDC hardware has two channel groups: 8 high-speed (HS)
-    and 8 low-speed (LS). velxio unifies them into a single 0..15
+    and 8 low-speed (LS). circuit-muse unifies them into a single 0..15
     space where ch 0-7 = HS, ch 8-15 = LS (matches the encoding the
     QEMU plugin emits on the 0x5000 duty callback).
     """

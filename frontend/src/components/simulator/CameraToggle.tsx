@@ -96,7 +96,7 @@ export const CameraToggle: React.FC<CameraToggleProps> = ({ boardId }) => {
         cursor: boardId ? 'pointer' : 'not-allowed',
         animation:
           status === 'requesting'
-            ? 'velxio-pulse 1s ease-in-out infinite'
+            ? 'circuit-muse-pulse 1s ease-in-out infinite'
             : 'none',
       }}
     >

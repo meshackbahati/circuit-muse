@@ -1,5 +1,5 @@
 /**
- * WasiShim — minimal WASI implementation for Velxio custom chips.
+ * WasiShim — minimal WASI implementation for CircuitMuse custom chips.
  *
  * Implements just the syscalls wasi-libc invokes from the typical chip code
  * path (printf, exit, clock_time_get). Everything else returns ENOSYS (28).

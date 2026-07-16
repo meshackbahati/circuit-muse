@@ -2,7 +2,7 @@
  * LogicFamilies — input/output electrical characteristics per logic family.
  *
  * Phase 3 of the mixed-mode simulator project (see
- * `project/sim-mixedmode/phase-03-logic-families.md` in velxio-prod).
+ * `project/sim-mixedmode/phase-03-logic-families.md` in circuit-muse-prod).
  *
  * The point: digital ICs don't all have the same idea of "HIGH" or "LOW".
  * A 5V TTL part guarantees output ≥ 2.4V on HIGH and ≤ 0.4V on LOW,

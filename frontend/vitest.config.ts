@@ -6,7 +6,7 @@ import path from 'path';
  *
  * `vite.config.ts` no longer owns the `test:` block; vitest auto-loads
  * this file and CI workflows can reference it directly.  Defaults below
- * tune for the velxio test suite:
+ * tune for the circuit-muse test suite:
  *
  *   - 30 s test timeout: smoke tests iterating 200+ examples need
  *     headroom; per-test individual asserts are still fast.
@@ -18,20 +18,20 @@ import path from 'path';
  *     and the test files themselves.
  *
  *   - `resolve.alias` mirrors `vite.config.ts` — vitest's defineConfig
- *     does NOT auto-inherit from vite.config.ts, so the @velxio alias
+ *     does NOT auto-inherit from vite.config.ts, so the @circuit-muse alias
  *     used by overlay tests (e.g. pro/.../snapshot.test.ts importing
- *     `@velxio/store/useEditorStore`) must be declared here too or
- *     test files explode with "Cannot find package '@velxio/...'".
+ *     `@circuit-muse/store/useEditorStore`) must be declared here too or
+ *     test files explode with "Cannot find package '@circuit-muse/...'".
  */
 export default defineConfig({
   resolve: {
     alias: {
-      '@velxio': path.resolve(__dirname, 'src'),
+      '@circuit-muse': path.resolve(__dirname, 'src'),
     },
   },
   // Allow vitest to import test files / sources from outside this
   // project root - specifically `../../pro/frontend/src/pro/...` for
-  // velxio-prod overlay tests. Without this, Vite's fs sandbox blocks
+  // circuit-muse-prod overlay tests. Without this, Vite's fs sandbox blocks
   // the read with "Cannot find module '/@fs/...'".
   server: { fs: { allow: ['..', '../..'] } },
   test: {
@@ -40,7 +40,7 @@ export default defineConfig({
     include: [
       'src/__tests__/**/*.test.ts',
       'src/**/__tests__/**/*.test.ts',
-      // velxio-prod pro overlay tests (when run from a velxio-prod
+      // circuit-muse-prod pro overlay tests (when run from a circuit-muse-prod
       // checkout — these are the source-of-truth pro tests, not the
       // stale copies at src/pro/). Harmless on pure-OSS clones
       // because the glob has nothing to match there.

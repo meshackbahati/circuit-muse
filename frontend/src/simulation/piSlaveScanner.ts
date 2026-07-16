@@ -40,7 +40,7 @@ const UART_PINS = new Set(['8', '10']);
 // Lowercase. Components not in this table get skipped silently.
 const COMPONENT_TO_MODEL: Record<string, string> = {
   'wokwi-bmp280':  'bme280',   // same chip family, treat as superset
-  'velxio-bmp280': 'bme280',
+  'circuit-muse-bmp280': 'bme280',
   'wokwi-bme280':  'bme280',
 };
 

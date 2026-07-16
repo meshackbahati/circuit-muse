@@ -1,9 +1,9 @@
 /**
  * Unified project import dispatcher.
  *
- * Velxio accepts two on-disk project formats:
+ * CircuitMuse accepts two on-disk project formats:
  *
- *   - `.vlx`  — Velxio's native single-file JSON (boards + components + wires +
+ *   - `.vlx`  — CircuitMuse's native single-file JSON (boards + components + wires +
  *               file groups, optionally multi-board).  Handled by importVlxFile,
  *               which writes directly into the simulator + editor stores.
  *
@@ -21,7 +21,7 @@
 
 import type { Wire } from '../types/wire';
 import { importVlxFile, VlxParseError } from './vlxFile';
-import { importFromWokwiZip, type VelxioComponent } from './wokwiZip';
+import { importFromWokwiZip, type CircuitMuseComponent } from './wokwiZip';
 
 /**
  * Common result shape: `kind` tells callers which path ran, so they can
@@ -34,7 +34,7 @@ export type ProjectImportResult =
       kind: 'zip';
       boardType: 'arduino-uno' | 'arduino-nano' | 'arduino-mega' | 'raspberry-pi-pico';
       boardPosition: { x: number; y: number };
-      components: VelxioComponent[];
+      components: CircuitMuseComponent[];
       wires: Wire[];
       files: Array<{ name: string; content: string }>;
       libraries: string[];
@@ -73,7 +73,7 @@ export async function importProjectFile(file: File): Promise<ProjectImportResult
 
   throw new Error(
     `Unsupported project file: ${file.name}.\n` +
-      `Velxio accepts .vlx (Velxio projects) and .zip (Wokwi bundles).`,
+      `CircuitMuse accepts .vlx (CircuitMuse projects) and .zip (Wokwi bundles).`,
   );
 }
 

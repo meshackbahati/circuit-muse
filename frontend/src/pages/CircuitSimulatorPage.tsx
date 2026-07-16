@@ -19,11 +19,11 @@ const META = getSeoMeta('/circuit-simulator')!;
 const FAQ_ITEMS = [
   {
     q: 'Is this circuit simulator really free?',
-    a: 'Yes. Velxio is fully free and open-source under the GNU AGPLv3 license. No account required, no cloud subscription, no paywalled components — every part of the simulator runs in your browser.',
+    a: 'Yes. CircuitMuse is fully free and open-source under the GNU AGPLv3 license. No account required, no cloud subscription, no paywalled components — every part of the simulator runs in your browser.',
   },
   {
-    q: 'What kind of analog simulation does Velxio use?',
-    a: 'Velxio runs ngspice — the open-source SPICE simulator used by professional EDA tools — compiled to WebAssembly via eecircuit-engine. Each tick performs a full Modified Nodal Analysis solve, so non-linear devices (diodes, BJTs, MOSFETs, op-amps with saturation) behave like real silicon, not idealised approximations.',
+    q: 'What kind of analog simulation does CircuitMuse use?',
+    a: 'CircuitMuse runs ngspice — the open-source SPICE simulator used by professional EDA tools — compiled to WebAssembly via eecircuit-engine. Each tick performs a full Modified Nodal Analysis solve, so non-linear devices (diodes, BJTs, MOSFETs, op-amps with saturation) behave like real silicon, not idealised approximations.',
   },
   {
     q: 'Can I connect a microcontroller to my circuit?',
@@ -35,11 +35,11 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Does the simulator have an oscilloscope and voltmeter?',
-    a: 'Yes. Velxio includes a multi-channel oscilloscope, voltmeter, ammeter, and signal generator (sine, square, DC) as live instruments you can drop on the canvas. They probe any node or wire and update in real time as the simulation runs.',
+    a: 'Yes. CircuitMuse includes a multi-channel oscilloscope, voltmeter, ammeter, and signal generator (sine, square, DC) as live instruments you can drop on the canvas. They probe any node or wire and update in real time as the simulation runs.',
   },
   {
     q: 'Is this a Falstad / CircuitLab / Tinkercad alternative?',
-    a: 'For analog circuits, yes — and a more accurate one, since Velxio runs the real ngspice engine instead of a simplified solver. Unlike those tools, Velxio also runs the firmware on the microcontroller driving the circuit, so you can validate firmware + hardware together without leaving the browser.',
+    a: 'For analog circuits, yes — and a more accurate one, since CircuitMuse runs the real ngspice engine instead of a simplified solver. Unlike those tools, CircuitMuse also runs the firmware on the microcontroller driving the circuit, so you can validate firmware + hardware together without leaving the browser.',
   },
 ];
 
@@ -47,13 +47,13 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Velxio — Free Online Circuit Simulator',
+    name: 'CircuitMuse — Free Online Circuit Simulator',
     applicationCategory: 'DeveloperApplication',
     applicationSubCategory: 'Electronics Simulator',
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online circuit simulator with real-time SPICE analog simulation via ngspice-WASM. 100+ components co-simulated with Arduino, ESP32, RP2040, and ATtiny85 firmware. Live oscilloscope, voltmeter, ammeter.',
-    url: 'https://velxio.dev/circuit-simulator',
+    url: 'https://circuit-muse.dev/circuit-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -71,12 +71,12 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
+      { '@type': 'ListItem', position: 1, name: 'CircuitMuse', item: 'https://circuit-muse.dev/' },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Circuit Simulator',
-        item: 'https://velxio.dev/circuit-simulator',
+        item: 'https://circuit-muse.dev/circuit-simulator',
       },
     ],
   },

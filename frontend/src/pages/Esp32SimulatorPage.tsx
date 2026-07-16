@@ -19,15 +19,15 @@ const META = getSeoMeta('/esp32-simulator')!;
 const FAQ_ITEMS = [
   {
     q: 'Is this ESP32 simulator free?',
-    a: 'Yes. Velxio is completely free and open-source (GNU AGPLv3). Simulate ESP32 code in your browser or self-host the entire platform with one Docker command — no account, no payment.',
+    a: 'Yes. CircuitMuse is completely free and open-source (GNU AGPLv3). Simulate ESP32 code in your browser or self-host the entire platform with one Docker command — no account, no payment.',
   },
   {
     q: 'How does the ESP32 emulation work?',
-    a: 'Velxio uses QEMU (lcgamboa fork) to emulate the Xtensa LX6 CPU at 240 MHz. Your Arduino sketch is compiled with the official ESP32 Arduino core and the resulting firmware runs on the emulated hardware — same as real silicon.',
+    a: 'CircuitMuse uses QEMU (lcgamboa fork) to emulate the Xtensa LX6 CPU at 240 MHz. Your Arduino sketch is compiled with the official ESP32 Arduino core and the resulting firmware runs on the emulated hardware — same as real silicon.',
   },
   {
     q: 'Which ESP32 boards are supported?',
-    a: 'Velxio supports ESP32 DevKit V1, ESP32 DevKit C V4, ESP32-CAM, Arduino Nano ESP32, ESP32-S3 DevKitC, XIAO ESP32-S3, ESP32-C3 DevKit, XIAO ESP32-C3, and ESP32-C3 SuperMini.',
+    a: 'CircuitMuse supports ESP32 DevKit V1, ESP32 DevKit C V4, ESP32-CAM, Arduino Nano ESP32, ESP32-S3 DevKitC, XIAO ESP32-S3, ESP32-C3 DevKit, XIAO ESP32-C3, and ESP32-C3 SuperMini.',
   },
   {
     q: 'Can I simulate ESP32 with sensors and displays?',
@@ -43,12 +43,12 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Velxio — Free ESP32 Simulator & Emulator',
+    name: 'CircuitMuse — Free ESP32 Simulator & Emulator',
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online ESP32 simulator with real Xtensa LX6 emulation via QEMU. Simulate ESP32, ESP32-S3, and ESP32-CAM code with 48+ interactive components — no install, no account.',
-    url: 'https://velxio.dev/esp32-simulator',
+    url: 'https://circuit-muse.dev/esp32-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -66,12 +66,12 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
+      { '@type': 'ListItem', position: 1, name: 'CircuitMuse', item: 'https://circuit-muse.dev/' },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'ESP32 Simulator',
-        item: 'https://velxio.dev/esp32-simulator',
+        item: 'https://circuit-muse.dev/esp32-simulator',
       },
     ],
   },

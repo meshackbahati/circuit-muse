@@ -104,7 +104,7 @@ def test_render_partition_csv_unknown_falls_back(compiler: ESPIDFCompiler) -> No
 
 def test_partition_huge_app_layout(compiler: ESPIDFCompiler) -> None:
     """huge_app must keep app0 at 0x10000 with 0x300000 size — matches the
-    historical Velxio layout, so projects without options remain bit-for-bit
+    historical CircuitMuse layout, so projects without options remain bit-for-bit
     compatible after upgrade.
     """
     entries = compiler._parse_partition_csv(

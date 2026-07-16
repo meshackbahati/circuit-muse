@@ -63,6 +63,6 @@ class Bmp280Element extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-bmp280')) {
-  customElements.define('velxio-bmp280', Bmp280Element);
+if (!customElements.get('circuit-muse-bmp280')) {
+  customElements.define('circuit-muse-bmp280', Bmp280Element);
 }

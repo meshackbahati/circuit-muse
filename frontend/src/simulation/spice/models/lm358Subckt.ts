@@ -15,8 +15,8 @@
  * Pin order (subckt declaration):
  *   1  IN+
  *   2  IN-
- *   99 V+   (positive supply — wired to vcc_rail in velxio emissions)
- *   50 V-   (negative supply — wired to 0 in velxio emissions)
+ *   99 V+   (positive supply — wired to vcc_rail in circuit-muse emissions)
+ *   50 V-   (negative supply — wired to 0 in circuit-muse emissions)
  *   28 OUT
  *
  * Used by componentToSpice.ts:opamp-lm358 to replace the prior

@@ -1,7 +1,7 @@
 """Tiny two-pass 8080 assembler.
 
 Just enough to assemble the bundled-chip ROM monitors that ship with
-Velxio's i8080-repl / i8080-counter custom chips. Not a full assembler:
+CircuitMuse's i8080-repl / i8080-counter custom chips. Not a full assembler:
 no macros, no expressions, no LO/HI operators. Plain labels and
 immediates only. Outputs a Python literal byte list which we paste
 straight into the .c chip ROM table.

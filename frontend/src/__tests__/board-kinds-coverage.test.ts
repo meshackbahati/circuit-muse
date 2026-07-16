@@ -1,7 +1,7 @@
 /**
  * Board-kind coverage matrix (Phase 1d-tests D).
  *
- * Every velxio `BoardKind` is exercised by at least one example
+ * Every circuit-muse `BoardKind` is exercised by at least one example
  * across all six `examples-*.ts` modules.  Adding a new board kind
  * to `src/types/board.ts` without adding at least one gallery
  * example for it should fail this test — keeps the demo coverage in

@@ -1,7 +1,7 @@
 /**
  * Types shared between NetlistBuilder, componentToSpice, and store integration.
  *
- * These are deliberately **narrow** re-shapes of the Velxio store types so
+ * These are deliberately **narrow** re-shapes of the CircuitMuse store types so
  * that the SPICE subsystem does not couple to the full simulator state shape.
  */
 

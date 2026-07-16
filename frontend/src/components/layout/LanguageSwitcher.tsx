@@ -4,7 +4,7 @@
  * rewrites the current URL under the chosen locale's prefix; the
  * `LocaleSync` wrapper at the top of the router picks up the change,
  * lazy-loads the resource bundle, and persists the choice to the
- * `velxio_locale` cookie shared with the blog.
+ * `circuit-muse_locale` cookie shared with the blog.
  */
 
 import { useEffect, useRef, useState } from 'react';
@@ -52,10 +52,10 @@ export const LanguageSwitcher: React.FC = () => {
   };
 
   return (
-    <div ref={rootRef} className="velxio-language-switcher">
+    <div ref={rootRef} className="circuit-muse-language-switcher">
       <button
         type="button"
-        className="velxio-language-btn"
+        className="circuit-muse-language-btn"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label="Language"
@@ -63,11 +63,11 @@ export const LanguageSwitcher: React.FC = () => {
         onClick={() => setOpen((v) => !v)}
       >
         <Globe size={16} strokeWidth={1.8} aria-hidden="true" />
-        <span className="velxio-language-current">{current.toUpperCase()}</span>
+        <span className="circuit-muse-language-current">{current.toUpperCase()}</span>
       </button>
       {open && (
         <ul
-          className="velxio-language-menu"
+          className="circuit-muse-language-menu"
           role="listbox"
           aria-label="Language"
         >
@@ -83,16 +83,16 @@ export const LanguageSwitcher: React.FC = () => {
                 <button
                   type="button"
                   className={
-                    'velxio-language-item' +
-                    (active ? ' velxio-language-item-active' : '')
+                    'circuit-muse-language-item' +
+                    (active ? ' circuit-muse-language-item-active' : '')
                   }
                   onClick={() => choose(loc)}
                   lang={meta.htmlLang}
                 >
-                  <span className="velxio-language-native">
+                  <span className="circuit-muse-language-native">
                     {meta.nativeName}
                   </span>
-                  <span className="velxio-language-code">
+                  <span className="circuit-muse-language-code">
                     {loc.toUpperCase()}
                   </span>
                 </button>

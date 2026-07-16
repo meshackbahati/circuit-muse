@@ -10,7 +10,7 @@
  * Pure desktop concern: web has no access to local serial ports
  * without WebSerial which is a separate sprint. The board context
  * menu hides the entry entirely in web builds; if the modal IS
- * mounted in web (defensive), it shows a "requires Velxio Desktop"
+ * mounted in web (defensive), it shows a "requires CircuitMuse Desktop"
  * fallback.
  */
 
@@ -45,7 +45,7 @@ export const FlashModal = ({ board, fqbn, onClose }: Props) => {
         kind: 'error',
         port: null,
         message:
-          'Hardware flashing requires Velxio Desktop. The web app cannot ' +
+          'Hardware flashing requires CircuitMuse Desktop. The web app cannot ' +
           'access local USB serial ports.',
         log: [],
       });

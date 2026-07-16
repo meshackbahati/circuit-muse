@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "Pulse Counter",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "Counts rising edges on PULSE; toggles OVF every `threshold` pulses. RST clears.",
   "pins": ["PULSE", "OVF", "RST", "GND", "VCC"],

@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 # Network reach is gated on this single env-var so it can be disabled
 # in CI / sandboxed environments. When False, every outbound IP packet
 # is silently dropped at deliver_packet_out().
-_NET_ENABLED = os.environ.get('VELXIO_PICOW_NET', 'true').lower() not in (
+_NET_ENABLED = os.environ.get('CIRCUIT_MUSE_PICOW_NET', 'true').lower() not in (
     '0', 'false', 'no',
 )
 

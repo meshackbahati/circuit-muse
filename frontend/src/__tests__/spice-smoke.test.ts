@@ -1,5 +1,5 @@
 /**
- * SpiceEngine smoke test — verifies eecircuit-engine boots in the Velxio
+ * SpiceEngine smoke test — verifies eecircuit-engine boots in the CircuitMuse
  * test environment and that the wrapper returns the expected result for a
  * trivial voltage divider.
  *

@@ -73,7 +73,7 @@ export function boardGateDecision(kind: BoardKind): BoardGateDecision {
  * proComponentInjector.ts). The event name is the stable contract — the OSS
  * app does not import from the overlay.
  */
-const PRO_UPGRADE_EVENT = 'velxio-pro-upgrade-prompt';
+const PRO_UPGRADE_EVENT = 'circuit-muse-pro-upgrade-prompt';
 
 export function triggerProUpgradePrompt(featureName: string): void {
   if (typeof window === 'undefined') return;

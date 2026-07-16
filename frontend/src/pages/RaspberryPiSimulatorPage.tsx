@@ -19,11 +19,11 @@ const META = getSeoMeta('/raspberry-pi-simulator')!;
 const FAQ_ITEMS = [
   {
     q: 'Can I simulate a Raspberry Pi 3 in my browser?',
-    a: 'Yes. Velxio emulates a full Raspberry Pi 3B using QEMU raspi3b — ARM Cortex-A53 quad-core at 1.2 GHz running Raspberry Pi OS (Linux). You get a real terminal to run Python, bash, and system commands.',
+    a: 'Yes. CircuitMuse emulates a full Raspberry Pi 3B using QEMU raspi3b — ARM Cortex-A53 quad-core at 1.2 GHz running Raspberry Pi OS (Linux). You get a real terminal to run Python, bash, and system commands.',
   },
   {
     q: 'Is this Raspberry Pi simulator free?',
-    a: 'Yes. Velxio is 100% free and open-source (GNU AGPLv3). No account, no subscription — simulate Raspberry Pi 3 code in your browser or self-host with Docker.',
+    a: 'Yes. CircuitMuse is 100% free and open-source (GNU AGPLv3). No account, no subscription — simulate Raspberry Pi 3 code in your browser or self-host with Docker.',
   },
   {
     q: 'Can I run Python scripts on the Raspberry Pi simulator?',
@@ -31,7 +31,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'What is the difference between Pi Pico and Pi 3 simulation?',
-    a: 'Raspberry Pi Pico (RP2040) is a microcontroller — runs Arduino C++ code, no OS. Raspberry Pi 3 is a full Linux computer — runs Python, bash, and system services. Velxio supports both.',
+    a: 'Raspberry Pi Pico (RP2040) is a microcontroller — runs Arduino C++ code, no OS. Raspberry Pi 3 is a full Linux computer — runs Python, bash, and system services. CircuitMuse supports both.',
   },
   {
     q: 'Does it support GPIO on Raspberry Pi 3?',
@@ -43,12 +43,12 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Velxio — Free Raspberry Pi 3 Simulator',
+    name: 'CircuitMuse — Free Raspberry Pi 3 Simulator',
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online Raspberry Pi 3 simulator with full ARM Cortex-A53 Linux emulation via QEMU. Run Python, bash, and RPi.GPIO in your browser — no Raspberry Pi hardware needed.',
-    url: 'https://velxio.dev/raspberry-pi-simulator',
+    url: 'https://circuit-muse.dev/raspberry-pi-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
   },
@@ -65,12 +65,12 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
+      { '@type': 'ListItem', position: 1, name: 'CircuitMuse', item: 'https://circuit-muse.dev/' },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Raspberry Pi Simulator',
-        item: 'https://velxio.dev/raspberry-pi-simulator',
+        item: 'https://circuit-muse.dev/raspberry-pi-simulator',
       },
     ],
   },

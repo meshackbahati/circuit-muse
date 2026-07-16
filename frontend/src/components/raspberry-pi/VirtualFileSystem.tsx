@@ -361,7 +361,7 @@ export const VirtualFileSystem: React.FC<VirtualFileSystemProps> = ({ boardId, o
 
       // Write file via shell heredoc.
       // Use a unique random delimiter so it never collides with file content.
-      const delim = `VELXIO_${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+      const delim = `CIRCUIT_MUSE_${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
       const normalized = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
       // Send the entire heredoc as one string so the shell receives it atomically
       send(`cat > ${path} << '${delim}'\n${normalized}\n${delim}\n`);

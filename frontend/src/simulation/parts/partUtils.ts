@@ -9,7 +9,7 @@ import type { AnySimulator } from './PartSimulationRegistry';
 import { RP2040Simulator } from '../RP2040Simulator';
 
 /** DOM event fired when a runtime part mutates a user-facing property. */
-export const PROPERTY_CHANGE_EVENT = 'velxio:property-change';
+export const PROPERTY_CHANGE_EVENT = 'circuit-muse:property-change';
 
 export interface PropertyChangeDetail {
   componentId: string;

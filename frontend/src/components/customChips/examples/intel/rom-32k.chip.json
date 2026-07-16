@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "27C256 ROM (32 KB)",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "Generic 32 KB EPROM. 15-bit address bus, 8-bit data bus, /CE chip enable, /OE output enable. Pairs cleanly with the 8080/Z80 for retro computer builds.",
   "pins": [

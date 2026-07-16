@@ -21,8 +21,8 @@ export const SIG_LEDC_LS_CH0_OUT_IDX = 79;
 export const SIG_LEDC_LS_CH_LAST = 86;
 
 /**
- * Map a velxio-style unified LEDC channel index (0..15) to its GPIO
- * Matrix signal source id. velxio unifies HS + LS into 0..15 where
+ * Map a circuit-muse-style unified LEDC channel index (0..15) to its GPIO
+ * Matrix signal source id. circuit-muse unifies HS + LS into 0..15 where
  * 0-7 = HS, 8-15 = LS — matches the encoding the QEMU plugin emits
  * on the 0x5000 duty callback.
  */

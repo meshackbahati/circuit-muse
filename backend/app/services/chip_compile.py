@@ -4,7 +4,7 @@ using clang from the WASI-SDK toolchain. Mirrors the patterns used by
 
 Toolchain layout:
   - WASI-SDK installed in the Docker image at /opt/wasi-sdk (Apache-2.0).
-  - velxio-chip.h shipped at /app/sdk/velxio-chip.h (or backend/sdk/ in dev).
+  - circuit-muse-chip.h shipped at /app/sdk/circuit-muse-chip.h (or backend/sdk/ in dev).
 
 The compile command mirrors the sandbox script verbatim:
   clang --target=wasm32-unknown-wasip1 -O2 -nostartfiles
@@ -45,25 +45,25 @@ def _resolve_wasi_sdk() -> Path | None:
 
 
 def _resolve_sdk_include() -> Path | None:
-    """Locate the directory containing velxio-chip.h."""
+    """Locate the directory containing circuit-muse-chip.h."""
     here = Path(__file__).resolve()
     # Production: backend/sdk/
     backend_sdk = here.parents[2] / "sdk"
-    if (backend_sdk / "velxio-chip.h").is_file():
+    if (backend_sdk / "circuit-muse-chip.h").is_file():
         return backend_sdk
     # In Docker the WORKDIR is /app, so /app/sdk:
     docker_sdk = Path("/app/sdk")
-    if (docker_sdk / "velxio-chip.h").is_file():
+    if (docker_sdk / "circuit-muse-chip.h").is_file():
         return docker_sdk
     # Dev fallback: the sandbox copy
     sandbox_sdk = here.parents[3] / "test" / "test_custom_chips" / "sdk" / "include"
-    if (sandbox_sdk / "velxio-chip.h").is_file():
+    if (sandbox_sdk / "circuit-muse-chip.h").is_file():
         return sandbox_sdk
     return None
 
 
 class ChipCompileService:
-    """Compiles a single Velxio custom-chip C source file to a WASM blob."""
+    """Compiles a single CircuitMuse custom-chip C source file to a WASM blob."""
 
     def __init__(self) -> None:
         self.wasi_sdk = _resolve_wasi_sdk()

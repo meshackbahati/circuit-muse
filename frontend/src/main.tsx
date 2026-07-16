@@ -5,19 +5,19 @@ import './index.css';
 // useTranslation() always resolves against a live instance. Must come
 // before App.
 import './i18n';
-import './components/velxio-components/IC74HC595';
-import './components/velxio-components/LogicGateElements';
-import './components/velxio-components/TransistorElements';
-import './components/velxio-components/OpAmpElements';
-import './components/velxio-components/PowerElements';
-import './components/velxio-components/DiodeElements';
-import './components/velxio-components/RelayElements';
-import './components/velxio-components/LogicICElements';
-import './components/velxio-components/MotorDriverElements';
-import './components/velxio-components/FlipFlopElements';
-import './components/velxio-components/RaspberryPi3Element';
-import './components/velxio-components/Bmp280Element';
-import './components/velxio-components/EPaperElement';
+import './components/circuit-muse-components/IC74HC595';
+import './components/circuit-muse-components/LogicGateElements';
+import './components/circuit-muse-components/TransistorElements';
+import './components/circuit-muse-components/OpAmpElements';
+import './components/circuit-muse-components/PowerElements';
+import './components/circuit-muse-components/DiodeElements';
+import './components/circuit-muse-components/RelayElements';
+import './components/circuit-muse-components/LogicICElements';
+import './components/circuit-muse-components/MotorDriverElements';
+import './components/circuit-muse-components/FlipFlopElements';
+import './components/circuit-muse-components/RaspberryPi3Element';
+import './components/circuit-muse-components/Bmp280Element';
+import './components/circuit-muse-components/EPaperElement';
 import App from './App.tsx';
 
 // Configure monaco-editor for offline use via local static assets
@@ -52,7 +52,7 @@ requestAnimationFrame(() => {
 //   - VITE_PRO_BUILD + VITE_DESKTOP → slim pro entry (@pro/desktop_index)
 //     that ONLY mounts the AI agent + DiagnoseCompileButton, no analytics
 //     / sessions / billing / admin / save overrides (those talk to
-//     velxio.dev with cookies the desktop doesn't have).
+//     circuit-muse.dev with cookies the desktop doesn't have).
 //   - VITE_PRO_BUILD only (web) → full mountPro with every surface.
 // VITE_DESKTOP alone (no pro) stays a pure-OSS desktop build.
 if (import.meta.env.VITE_PRO_BUILD) {

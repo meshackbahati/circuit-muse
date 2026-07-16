@@ -4,12 +4,12 @@
  * In the open-source build this renders a minimal heading + slot div. It
  * exists so that:
  *  1. Private overlays can portal-inject a real PricingPage into the slot
- *     (data-velxio-slot="pricing-page") without forking this file.
+ *     (data-circuit-muse-slot="pricing-page") without forking this file.
  *  2. Self-hosters who navigate to /pricing get a polite "this image
  *     doesn't sell anything" page rather than a 404.
  *
  * The route is registered in App.tsx. The slot pattern is the same as
- * data-velxio-slot="user-menu" / "admin-tabs" / "admin-tab-content".
+ * data-circuit-muse-slot="user-menu" / "admin-tabs" / "admin-tab-content".
  */
 
 import { useEffect } from 'react';
@@ -19,13 +19,13 @@ import { AppHeader } from '../components/layout/AppHeader';
 export const PricingPlaceholder = () => {
   const { t } = useTranslation();
   useEffect(() => {
-    document.title = 'Pricing — Velxio';
+    document.title = 'Pricing — CircuitMuse';
   }, []);
 
   return (
     <div style={{ minHeight: '100vh', background: '#1e1e1e', color: '#e8e8e8' }}>
       <AppHeader />
-      <div data-velxio-slot="pricing-page">
+      <div data-circuit-muse-slot="pricing-page">
         {/* Default content — only visible if no overlay is mounted (i.e.
             self-hosted OSS image without a private pricing overlay). */}
         <main
@@ -45,7 +45,7 @@ export const PricingPlaceholder = () => {
               components={{
                 link: (
                   <a
-                    href="https://velxio.dev"
+                    href="https://circuit-muse.dev"
                     style={{ color: '#4fc3f7', textDecoration: 'none' }}
                   />
                 ),
@@ -58,7 +58,7 @@ export const PricingPlaceholder = () => {
               components={{
                 link: (
                   <a
-                    href="https://github.com/davidmonterocrespo24/velxio"
+                    href="https://github.com/davidmonterocrespo24/circuit-muse"
                     style={{ color: '#888' }}
                   />
                 ),

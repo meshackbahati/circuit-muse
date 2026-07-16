@@ -2,7 +2,7 @@
  * UUID v4 generator with a polyfill for non-secure contexts.
  *
  * `crypto.randomUUID()` is only exposed on secure contexts (HTTPS, localhost,
- * 127.0.0.1, ::1). When Velxio is self-hosted and accessed via a LAN IP over
+ * 127.0.0.1, ::1). When CircuitMuse is self-hosted and accessed via a LAN IP over
  * plain HTTP (e.g. `http://192.168.31.139:3080/`), `crypto.randomUUID` is
  * `undefined` and any code path that calls it throws `TypeError`. That bug
  * silently broke ESP32 simulation start for self-hosters — frontend never sent

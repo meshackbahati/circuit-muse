@@ -1,5 +1,5 @@
 /**
- * <velxio-capacitor-electrolytic> — polarized aluminum-can capacitor.
+ * <circuit-muse-capacitor-electrolytic> — polarized aluminum-can capacitor.
  *
  * Vertical cylinder seen from the side, with a stripe down one side
  * marking the negative terminal (real-world convention). Two leads come
@@ -68,6 +68,6 @@ export class CapacitorElectrolyticElement extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-capacitor-electrolytic')) {
-  customElements.define('velxio-capacitor-electrolytic', CapacitorElectrolyticElement);
+if (!customElements.get('circuit-muse-capacitor-electrolytic')) {
+  customElements.define('circuit-muse-capacitor-electrolytic', CapacitorElectrolyticElement);
 }

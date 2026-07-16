@@ -1,6 +1,6 @@
 """WASM Chip Runtime — Python port of frontend/src/simulation/customChips/ChipRuntime.ts.
 
-Loads a Velxio Custom Chip (.wasm compiled from C against velxio-chip.h) and
+Loads a CircuitMuse Custom Chip (.wasm compiled from C against circuit-muse-chip.h) and
 runs it inside the same process as the QEMU worker, so I2C events the firmware
 generates are answered SYNCHRONOUSLY by the chip — no WebSocket round-trip,
 no race condition.
@@ -33,7 +33,7 @@ from typing import Callable, Optional
 import wasmtime
 
 
-# I2C config struct layout (must match velxio-chip.h's vx_i2c_config — 64 bytes)
+# I2C config struct layout (must match circuit-muse-chip.h's vx_i2c_config — 64 bytes)
 #   offset 0  : address      (uint8_t  + 3 bytes pad)
 #   offset 4  : scl          (int32_t)
 #   offset 8  : sda          (int32_t)
@@ -77,7 +77,7 @@ class WasmChipRuntime:
         # → wrap it in WasmChipI2CSlave and register in _i2c_slaves
     """
 
-    # Pin mode constants (mirror velxio-chip.h)
+    # Pin mode constants (mirror circuit-muse-chip.h)
     MODE_OUTPUT_LOW = 16
     MODE_OUTPUT_HIGH = 17
 
@@ -160,7 +160,7 @@ class WasmChipRuntime:
         # Build the linker
         linker = wasmtime.Linker(self._engine)
         self._define_wasi(linker)
-        self._define_velxio(linker)
+        self._define_circuit-muse(linker)
         linker.define(self._store, "env", "memory", self._memory)
 
         self._instance = linker.instantiate(self._store, self._module)
@@ -338,9 +338,9 @@ class WasmChipRuntime:
             linker.define_func(ns, "fd_prestat_get",      sig_i_ii,   fd_prestat_get)
             linker.define_func(ns, "fd_prestat_dir_name", sig_i_iiii, fd_prestat_dir_name)
 
-    # ── Velxio host imports ──────────────────────────────────────────────────
+    # ── CircuitMuse host imports ──────────────────────────────────────────────────
 
-    def _define_velxio(self, linker: wasmtime.Linker) -> None:
+    def _define_circuit-muse(self, linker: wasmtime.Linker) -> None:
         i32 = wasmtime.ValType.i32()
         i64 = wasmtime.ValType.i64()
         f64 = wasmtime.ValType.f64()

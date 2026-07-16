@@ -18,7 +18,7 @@ const META = getSeoMeta('/arduino-simulator')!;
 const FAQ_ITEMS = [
   {
     q: 'Is this Arduino simulator free?',
-    a: 'Yes. Velxio is completely free and open-source (GNU AGPLv3). No account, no payment, no cloud subscription — run it in your browser or self-host it with one Docker command.',
+    a: 'Yes. CircuitMuse is completely free and open-source (GNU AGPLv3). No account, no payment, no cloud subscription — run it in your browser or self-host it with one Docker command.',
   },
   {
     q: 'Does the Arduino simulator work without installing anything?',
@@ -26,15 +26,15 @@ const FAQ_ITEMS = [
   },
   {
     q: 'What Arduino boards can I simulate?',
-    a: 'Velxio supports 19 boards: Arduino Uno (ATmega328P), Arduino Nano, Arduino Mega 2560, ATtiny85, Arduino Leonardo, Arduino Pro Mini (AVR8) — plus Raspberry Pi Pico (RP2040), ESP32-C3 / XIAO ESP32-C3 / CH32V003 (RISC-V), ESP32 / ESP32-S3 / ESP32-CAM (Xtensa via QEMU), and Raspberry Pi 3B (Linux via QEMU).',
+    a: 'CircuitMuse supports 19 boards: Arduino Uno (ATmega328P), Arduino Nano, Arduino Mega 2560, ATtiny85, Arduino Leonardo, Arduino Pro Mini (AVR8) — plus Raspberry Pi Pico (RP2040), ESP32-C3 / XIAO ESP32-C3 / CH32V003 (RISC-V), ESP32 / ESP32-S3 / ESP32-CAM (Xtensa via QEMU), and Raspberry Pi 3B (Linux via QEMU).',
   },
   {
     q: 'Can I simulate LEDs, sensors, and displays?',
-    a: 'Yes. Velxio includes 48+ interactive wokwi-elements: LEDs, resistors, buttons, servo motors, ultrasonic sensors, ILI9341 TFT displays, LCD, NeoPixel strips, buzzers, DHT22, and more.',
+    a: 'Yes. CircuitMuse includes 48+ interactive wokwi-elements: LEDs, resistors, buttons, servo motors, ultrasonic sensors, ILI9341 TFT displays, LCD, NeoPixel strips, buzzers, DHT22, and more.',
   },
   {
-    q: 'Is Velxio a Wokwi alternative?',
-    a: 'Yes. Velxio is a free, self-hosted alternative to Wokwi. It uses the same avr8js emulation library and wokwi-elements visual components, but runs entirely on your own machine with no cloud dependency.',
+    q: 'Is CircuitMuse a Wokwi alternative?',
+    a: 'Yes. CircuitMuse is a free, self-hosted alternative to Wokwi. It uses the same avr8js emulation library and wokwi-elements visual components, but runs entirely on your own machine with no cloud dependency.',
   },
 ];
 
@@ -42,12 +42,12 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Velxio — Free Online Arduino Simulator',
+    name: 'CircuitMuse — Free Online Arduino Simulator',
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online Arduino simulator with real AVR8 emulation at 16 MHz. Simulate Arduino code with 48+ interactive electronic components directly in your browser — no install, no account.',
-    url: 'https://velxio.dev/arduino-simulator',
+    url: 'https://circuit-muse.dev/arduino-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -65,12 +65,12 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
+      { '@type': 'ListItem', position: 1, name: 'CircuitMuse', item: 'https://circuit-muse.dev/' },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Arduino Simulator',
-        item: 'https://velxio.dev/arduino-simulator',
+        item: 'https://circuit-muse.dev/arduino-simulator',
       },
     ],
   },

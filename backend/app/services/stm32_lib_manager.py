@@ -12,7 +12,7 @@ can treat STM32 like any other QEMU board:
     start_instance / stop_instance / load_firmware / set_pin_state / get_status
 
 Activation: set QEMU_STM32_LIB to the library path, or drop
-libqemu-arm.<ext> beside this module (or in VELXIO_QEMU_PATH).
+libqemu-arm.<ext> beside this module (or in CIRCUIT_MUSE_QEMU_PATH).
 
 Events emitted via callback(event_type, data):
   system        {event: 'booting'|'booted'|'crash'|'exited'}
@@ -74,11 +74,11 @@ _MACHINE: dict[str, str] = {
 
 def _resolve_lib(env_var: str, lib_name: str, default_path: str) -> str:
     """Same three-step resolution as the ESP32 manager: env var, then
-    VELXIO_QEMU_PATH directory, then beside this module."""
+    CIRCUIT_MUSE_QEMU_PATH directory, then beside this module."""
     direct = os.environ.get(env_var, '')
     if direct and os.path.isfile(direct):
         return direct
-    qemu_dir = os.environ.get('VELXIO_QEMU_PATH', '')
+    qemu_dir = os.environ.get('CIRCUIT_MUSE_QEMU_PATH', '')
     if qemu_dir:
         candidate = os.path.join(qemu_dir, lib_name)
         if os.path.isfile(candidate):

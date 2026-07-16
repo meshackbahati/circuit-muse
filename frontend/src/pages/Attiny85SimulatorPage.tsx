@@ -19,15 +19,15 @@ const META = getSeoMeta('/attiny85-simulator')!;
 const FAQ_ITEMS = [
   {
     q: 'Is this a real ATtiny85 emulator?',
-    a: 'Yes. Velxio uses avr8js — the cycle-accurate AVR8 emulator — to execute compiled ATtiny85 firmware byte-for-byte exactly as it would run on a real DIP-8 chip.',
+    a: 'Yes. CircuitMuse uses avr8js — the cycle-accurate AVR8 emulator — to execute compiled ATtiny85 firmware byte-for-byte exactly as it would run on a real DIP-8 chip.',
   },
   {
     q: 'Which ATtiny85 features are supported?',
     a: 'All 6 GPIO pins (PB0–PB5), Timer0 (8-bit) with PWM, Timer1 (8-bit) with PWM and high-speed mode, the watchdog timer, 10-bit ADC with 4 input channels (ADC0–ADC3), USI peripheral for I²C (TWI) and SPI bit-banging, pin-change interrupts, and external interrupts (INT0).',
   },
   {
-    q: 'How do I program the ATtiny85 in Velxio?',
-    a: 'Write your sketch in the Monaco editor in C/C++ (Arduino syntax). Velxio compiles it via the bundled arduino-cli using the ATTinyCore board package and produces a real .hex file — the same one you would flash via USBasp.',
+    q: 'How do I program the ATtiny85 in CircuitMuse?',
+    a: 'Write your sketch in the Monaco editor in C/C++ (Arduino syntax). CircuitMuse compiles it via the bundled arduino-cli using the ATTinyCore board package and produces a real .hex file — the same one you would flash via USBasp.',
   },
   {
     q: 'Can I use Arduino-compatible libraries?',
@@ -35,11 +35,11 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Can I wire it to analog circuits?',
-    a: 'Yes. Velxio includes a real-time SPICE solver — wire the ATtiny85 ADC pin to a voltage divider, an op-amp output, or an NTC thermistor bridge and analogRead() will return the actual SPICE-solved voltage at that pin.',
+    a: 'Yes. CircuitMuse includes a real-time SPICE solver — wire the ATtiny85 ADC pin to a voltage divider, an op-amp output, or an NTC thermistor bridge and analogRead() will return the actual SPICE-solved voltage at that pin.',
   },
   {
     q: 'Is it free?',
-    a: 'Yes — Velxio is fully free and open-source under GNU AGPLv3. No account required.',
+    a: 'Yes — CircuitMuse is fully free and open-source under GNU AGPLv3. No account required.',
   },
 ];
 
@@ -47,13 +47,13 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Velxio — Free Online ATtiny85 Simulator',
+    name: 'CircuitMuse — Free Online ATtiny85 Simulator',
     applicationCategory: 'DeveloperApplication',
     applicationSubCategory: 'AVR Microcontroller Emulator',
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online ATtiny85 simulator with cycle-accurate AVR8 emulation. All 6 I/O pins, Timer0/Timer1 PWM, 10-bit ADC, USI for I²C/SPI, watchdog. Wire it to real SPICE analog circuits.',
-    url: 'https://velxio.dev/attiny85-simulator',
+    url: 'https://circuit-muse.dev/attiny85-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -71,12 +71,12 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
+      { '@type': 'ListItem', position: 1, name: 'CircuitMuse', item: 'https://circuit-muse.dev/' },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'ATtiny85 Simulator',
-        item: 'https://velxio.dev/attiny85-simulator',
+        item: 'https://circuit-muse.dev/attiny85-simulator',
       },
     ],
   },

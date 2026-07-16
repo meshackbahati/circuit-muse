@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "Intel 8086",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "Clean-room Intel 8086 (1978) — 16-bit ISA, 1 MB addressable via segments, multiplexed AD0..AD15 bus latched by ALE. Minimum mode by default. Boots a memory-mapped UART hello-world end-to-end.",
   "pins": [

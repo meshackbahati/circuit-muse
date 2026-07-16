@@ -1,18 +1,18 @@
 import React from 'react';
 import type { BoardInstance } from '../../types/board';
-import { ArduinoUno } from '../velxio-components/ArduinoUno';
-import { ArduinoNano } from '../velxio-components/ArduinoNano';
-import { ArduinoMega } from '../velxio-components/ArduinoMega';
+import { ArduinoUno } from '../circuit-muse-components/ArduinoUno';
+import { ArduinoNano } from '../circuit-muse-components/ArduinoNano';
+import { ArduinoMega } from '../circuit-muse-components/ArduinoMega';
 // NanoRP2040 (wokwi-nano-rp2040-connect) used to back the 'raspberry-pi-pico'
 // boardKind by mistake — kept the import out so future contributors don't
 // re-wire it back in. If someone genuinely needs a Nano RP2040 Connect
 // board (D2..D13 labels), add a new boardKind 'arduino-nano-rp2040'.
-import { RaspberryPi3 } from '../velxio-components/RaspberryPi3';
-import { RaspberryPi4 } from '../velxio-components/RaspberryPi4';
-import { RaspberryPi5 } from '../velxio-components/RaspberryPi5';
-import { Esp32 } from '../velxio-components/Esp32';
-import { Attiny85 } from '../velxio-components/Attiny85';
-import { PiPicoW } from '../velxio-components/PiPicoW';
+import { RaspberryPi3 } from '../circuit-muse-components/RaspberryPi3';
+import { RaspberryPi4 } from '../circuit-muse-components/RaspberryPi4';
+import { RaspberryPi5 } from '../circuit-muse-components/RaspberryPi5';
+import { Esp32 } from '../circuit-muse-components/Esp32';
+import { Attiny85 } from '../circuit-muse-components/Attiny85';
+import { PiPicoW } from '../circuit-muse-components/PiPicoW';
 import {
   Stm32BluePill,
   Stm32BlackPill,
@@ -22,7 +22,7 @@ import {
   Stm32OlimexH405,
   Stm32NetduinoPlus2,
   Stm32Netduino2,
-} from '../velxio-components/Stm32BluePill';
+} from '../circuit-muse-components/Stm32BluePill';
 import { PinOverlay } from './PinOverlay';
 
 // Board visual dimensions (width × height) for the drag-overlay sizing.
@@ -33,7 +33,7 @@ const BOARD_SIZE: Record<string, { w: number; h: number }> = {
   'arduino-nano': { w: 170, h: 67 }, // 44.9mm  × 17.8mm
   'arduino-mega': { w: 388, h: 192 }, // 102.66mm × 50.80mm
   // Pi Pico physical board is 51mm × 21mm vertical-narrow. The render
-  // uses velxio's <velxio-pi-pico-w>, same Web Component as 'pi-pico-w'
+  // uses circuit-muse's <circuit-muse-pi-pico-w>, same Web Component as 'pi-pico-w'
   // because the Pico and Pico W are pin-compatible. Used to render the
   // wokwi-nano-rp2040-connect (168×68) — that was a completely different
   // board with D2-D13 pin labels, so wires in pico examples that

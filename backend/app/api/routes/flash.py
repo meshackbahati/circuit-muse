@@ -162,7 +162,7 @@ async def flash_upload(
     # the right uploader. Wrong extension = wrong uploader = silent
     # failure or a confusing "format not recognised" error.
     suffix = _FORMAT_EXTENSIONS[program_format]
-    fd, tmp_path_str = tempfile.mkstemp(prefix="velxio-flash-", suffix=suffix)
+    fd, tmp_path_str = tempfile.mkstemp(prefix="circuit-muse-flash-", suffix=suffix)
     tmp_path = Path(tmp_path_str)
     total = 0
     try:

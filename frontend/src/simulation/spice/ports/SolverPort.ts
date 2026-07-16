@@ -1,5 +1,5 @@
 /**
- * SolverPort — the abstract contract for a SPICE solver as Velxio
+ * SolverPort — the abstract contract for a SPICE solver as CircuitMuse
  * consumes it.  This is a Hexagonal-style port: domain code depends on
  * the interface, and adapters in ./adapters/ implement it against
  * concrete WASM builds or test fakes.
@@ -15,7 +15,7 @@
  */
 
 /**
- * The analysis kinds a Velxio canvas can request.  Mirrors
+ * The analysis kinds a CircuitMuse canvas can request.  Mirrors
  * `AnalysisMode` in ../types.ts but lives here so the port doesn't
  * import from outside the SPICE subsystem.
  */

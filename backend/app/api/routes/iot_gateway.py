@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 async def gateway_proxy(client_id: str, path: str, request: Request) -> Response:
     """Reverse-proxy an HTTP request to the ESP32's web server."""
     # Plan gate (overlay-supplied). OSS image has no gate → allow everyone.
-    # When the velxio-prod overlay is loaded, the gateway is a Maker+ feature;
+    # When the circuit-muse-prod overlay is loaded, the gateway is a Maker+ feature;
     # free / anonymous callers get a 402 with an upgrade pointer.
     block_detail = await iot_gateway_gate(request)
     if block_detail is not None:
@@ -44,7 +44,7 @@ async def gateway_proxy(client_id: str, path: str, request: Request) -> Response
         if accepts_html:
             html = (
                 '<!doctype html><html><head><meta charset="utf-8">'
-                '<title>Velxio — upgrade required</title>'
+                '<title>CircuitMuse — upgrade required</title>'
                 '<meta name="viewport" content="width=device-width, initial-scale=1">'
                 '<style>body{background:#1e1e1e;color:#ddd;font-family:-apple-system,'
                 'BlinkMacSystemFont,sans-serif;display:flex;min-height:100vh;margin:0;'
@@ -56,7 +56,7 @@ async def gateway_proxy(client_id: str, path: str, request: Request) -> Response
                 '<h1>IoT gateway is a Maker feature</h1>'
                 f'<p>{msg} Upgrade to access live ESP32 web servers running in your '
                 'simulated circuit.</p>'
-                f'<a href="https://velxio.dev{upgrade_url}">See plans</a>'
+                f'<a href="https://circuit-muse.dev{upgrade_url}">See plans</a>'
                 '</div></body></html>'
             )
             return Response(content=html, status_code=402, media_type='text/html')

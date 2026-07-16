@@ -66,7 +66,7 @@ class PicowNetBridge:
     async def start(self) -> None:
         await self._emit('wifi_status', {
             'status': 'started',
-            'ssid': 'Velxio-GUEST' if self.wifi_enabled else None,
+            'ssid': 'CircuitMuse-GUEST' if self.wifi_enabled else None,
             'ip': STA_IP if self.wifi_enabled else None,
         })
 

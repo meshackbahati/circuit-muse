@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "HM62256 SRAM (64 KB)",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "Generic 64 KB static RAM. 16-bit address bus, 8-bit data bus, /CE chip enable, /OE output enable, /WE write enable. The standard companion to the rom-32k for an 8080/Z80 minimum board.",
   "pins": [

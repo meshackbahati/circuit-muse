@@ -1,7 +1,7 @@
 /**
  * Reproduce the live-app failure of the "Half-Wave Rectifier" example.
  *
- * This test recreates every layer of Velxio's runtime pipeline so we can
+ * This test recreates every layer of CircuitMuse's runtime pipeline so we can
  * pinpoint which step fails when `analogRead(A0)` always returns 0 in the
  * running app:
  *

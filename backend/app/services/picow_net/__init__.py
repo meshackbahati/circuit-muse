@@ -1,5 +1,5 @@
 """
-picow_net — Userspace network stack for Velxio's Pico W emulator.
+picow_net — Userspace network stack for CircuitMuse's Pico W emulator.
 
 Public surface is the ``PicowNetBridge`` class. Everything else
 (``protocols``, ``tcp_nat``, ``udp_nat``, ``arp``, ``dhcp``,

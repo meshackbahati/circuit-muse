@@ -67,7 +67,7 @@ describe('cyw43 barrel exports', () => {
     expect(F0.READ_TEST).toBe(0x14);
     expect(F1.SDIO_CHIP_CLOCK_CSR).toBe(0x1000e);
     expect(SdpcmChannel.CONTROL).toBe(0);
-    expect(DEFAULT_AP.ssid).toBe('Velxio-GUEST');
+    expect(DEFAULT_AP.ssid).toBe('CircuitMuse-GUEST');
     expect(DEFAULT_STA_MAC.length).toBe(6);
   });
 });
@@ -95,7 +95,7 @@ describe('Cyw43Emulator bus handshake', () => {
   });
 });
 
-describe('Cyw43Emulator IOCTL — SET_SSID Velxio-GUEST', () => {
+describe('Cyw43Emulator IOCTL — SET_SSID CircuitMuse-GUEST', () => {
   it('drives the chip to link-up and emits WLC_E_LINK', () => {
     const chip = new Cyw43Emulator();
     // WLC_UP
@@ -103,7 +103,7 @@ describe('Cyw43Emulator IOCTL — SET_SSID Velxio-GUEST', () => {
     expect(chip.isUp()).toBe(true);
 
     // SET_SSID
-    const ssid = new TextEncoder().encode('Velxio-GUEST');
+    const ssid = new TextEncoder().encode('CircuitMuse-GUEST');
     const payload = new Uint8Array(36);
     new DataView(payload.buffer).setUint32(0, ssid.length, true);
     payload.set(ssid, 4);

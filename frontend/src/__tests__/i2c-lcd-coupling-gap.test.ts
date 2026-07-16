@@ -23,7 +23,7 @@
  * nibble, then a follow-up with EN=0 settles it; same for the
  * low nibble.
  *
- * Velxio's wokwi-lcd1602 element accepts characters through its
+ * CircuitMuse's wokwi-lcd1602 element accepts characters through its
  * own DOM property (`characters`) — it is NOT driven by the
  * PCF8574 device.  There is no decoder in the codebase that
  * watches PCF8574.onWrite, reassembles bytes into HD44780

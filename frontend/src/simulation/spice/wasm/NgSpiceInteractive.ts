@@ -2,7 +2,7 @@
  * NgSpiceInteractive — TypeScript client for the interactive ngspice
  * worker.  Phase 1a of the mixed-mode simulator project
  * (see project/sim-mixedmode/phase-01-mixed-mode-coupling.md in the
- * velxio-prod repo).
+ * circuit-muse-prod repo).
  *
  * Wraps the vendored `ngspice-interactive-worker.js` with a Promise-based
  * API.  Each public method posts a uniquely-id'd message to the worker

@@ -3,8 +3,8 @@
  * changes by:
  *   1. Telling i18next to use the locale that the URL implies.
  *   2. Loading the locale's resource bundle on demand (English is preloaded).
- *   3. Persisting the locale to the `velxio_locale` cookie so the blog at
- *      velxio.dev/blog/ picks it up on the next navigation.
+ *   3. Persisting the locale to the `circuit-muse_locale` cookie so the blog at
+ *      circuit-muse.dev/blog/ picks it up on the next navigation.
  *   4. Mirroring the locale onto `<html lang>` and `dir`.
  *
  * Should wrap the entire `<Routes>` tree.

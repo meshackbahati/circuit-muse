@@ -1,7 +1,7 @@
 /**
  * Path helpers that translate between locale-prefixed URLs and their
  * locale-less canonical form. Mirrors `pro/blog/src/utils/i18n.ts` so a
- * round-trip across the velxio ↔ blog boundary always lands on the right
+ * round-trip across the circuit-muse ↔ blog boundary always lands on the right
  * locale variant.
  *
  * Routing convention (matches the blog):

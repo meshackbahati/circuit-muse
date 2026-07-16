@@ -23,15 +23,15 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Is the ESP32-S3 simulator free?',
-    a: 'Yes. Velxio is 100% free and open-source. Simulate ESP32-S3 code in your browser with real Xtensa LX7 emulation via QEMU — no cloud, no subscription.',
+    a: 'Yes. CircuitMuse is 100% free and open-source. Simulate ESP32-S3 code in your browser with real Xtensa LX7 emulation via QEMU — no cloud, no subscription.',
   },
   {
     q: 'Which ESP32-S3 boards are supported?',
-    a: 'Velxio supports ESP32-S3 DevKitC-1, Seeed XIAO ESP32-S3, and Arduino Nano ESP32 (which uses the ESP32-S3 chip).',
+    a: 'CircuitMuse supports ESP32-S3 DevKitC-1, Seeed XIAO ESP32-S3, and Arduino Nano ESP32 (which uses the ESP32-S3 chip).',
   },
   {
     q: 'Can I use Arduino libraries with ESP32-S3?',
-    a: 'Yes. Velxio compiles your sketch with the official ESP32 Arduino core. Install any library from the Arduino Library Manager and use it in your ESP32-S3 project.',
+    a: 'Yes. CircuitMuse compiles your sketch with the official ESP32 Arduino core. Install any library from the Arduino Library Manager and use it in your ESP32-S3 project.',
   },
   {
     q: 'What is the difference between ESP32 and ESP32-S3?',
@@ -43,12 +43,12 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Velxio — Free ESP32-S3 Simulator',
+    name: 'CircuitMuse — Free ESP32-S3 Simulator',
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online ESP32-S3 simulator with real Xtensa LX7 emulation via QEMU at 240 MHz. Simulate ESP32-S3 DevKitC, XIAO ESP32-S3, and Arduino Nano ESP32.',
-    url: 'https://velxio.dev/esp32-s3-simulator',
+    url: 'https://circuit-muse.dev/esp32-s3-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
   },
@@ -65,12 +65,12 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
+      { '@type': 'ListItem', position: 1, name: 'CircuitMuse', item: 'https://circuit-muse.dev/' },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'ESP32-S3 Simulator',
-        item: 'https://velxio.dev/esp32-s3-simulator',
+        item: 'https://circuit-muse.dev/esp32-s3-simulator',
       },
     ],
   },

@@ -2,7 +2,7 @@
 
 Two implementations ship in the box:
 
-* :class:`LicenseGatedDownloader` — talks to the velxio.dev licence-
+* :class:`LicenseGatedDownloader` — talks to the circuit-muse.dev licence-
   gated download endpoint (the same one ``Dockerfile.prod`` uses to
   pull ``libqemu-xtensa.so`` at image-build time).
 
@@ -47,7 +47,7 @@ class AssetDownloader(Protocol):
 
 
 class LicenseGatedDownloader:
-    """Fetch from ``${VELXIO_BINARY_BASE_URL}/{asset_id}?key=$KEY``.
+    """Fetch from ``${CIRCUIT_MUSE_BINARY_BASE_URL}/{asset_id}?key=$KEY``.
 
     Mirrors the URL pattern the ``qemu-provider`` stage of
     ``Dockerfile.prod`` uses for ESP32 / RISC-V libs, so adding a new
@@ -114,7 +114,7 @@ class LocalDirectoryDownloader:
       ``binary_filename`` from the manifest.
 
     The licence-module layout flavour is what lets the in-prod backend
-    point at ``/var/velxio-pro/binaries`` directly for boot-image
+    point at ``/var/circuit-muse-pro/binaries`` directly for boot-image
     resolution (skipping the round-trip through the HTTP endpoint) if
     that's ever desired for tests or co-located deployments.
     """
@@ -163,27 +163,27 @@ def build_downloader_from_env() -> AssetDownloader:
 
     Resolution order — first match wins:
 
-    1. ``VELXIO_BOOT_IMAGES_LOCAL_DIR`` → :class:`LocalDirectoryDownloader`
+    1. ``CIRCUIT_MUSE_BOOT_IMAGES_LOCAL_DIR`` → :class:`LocalDirectoryDownloader`
        (preferred for tests / air-gapped self-hosting).
-    2. ``VELXIO_BINARY_BASE_URL`` + ``VELXIO_LICENSE_KEY`` →
+    2. ``CIRCUIT_MUSE_BINARY_BASE_URL`` + ``CIRCUIT_MUSE_LICENSE_KEY`` →
        :class:`LicenseGatedDownloader` (production default).
 
     Raises :class:`NoDownloaderConfiguredError` if neither path is
     configured — fail-fast at startup so deployments without the
     correct env hit the error in CI rather than at first user request.
     """
-    local_dir = os.environ.get("VELXIO_BOOT_IMAGES_LOCAL_DIR", "").strip()
+    local_dir = os.environ.get("CIRCUIT_MUSE_BOOT_IMAGES_LOCAL_DIR", "").strip()
     if local_dir:
         return LocalDirectoryDownloader(Path(local_dir))
 
-    base_url = os.environ.get("VELXIO_BINARY_BASE_URL", "").strip()
-    license_key = os.environ.get("VELXIO_LICENSE_KEY", "").strip()
+    base_url = os.environ.get("CIRCUIT_MUSE_BINARY_BASE_URL", "").strip()
+    license_key = os.environ.get("CIRCUIT_MUSE_LICENSE_KEY", "").strip()
     if base_url and license_key:
         return LicenseGatedDownloader(base_url, license_key)
 
     raise NoDownloaderConfiguredError(
         "Boot-image downloader is not configured. Set "
-        "VELXIO_BINARY_BASE_URL + VELXIO_LICENSE_KEY for the velxio.dev "
-        "licence flow, or VELXIO_BOOT_IMAGES_LOCAL_DIR pointing at a "
+        "CIRCUIT_MUSE_BINARY_BASE_URL + CIRCUIT_MUSE_LICENSE_KEY for the circuit-muse.dev "
+        "licence flow, or CIRCUIT_MUSE_BOOT_IMAGES_LOCAL_DIR pointing at a "
         "directory holding the asset files."
     )

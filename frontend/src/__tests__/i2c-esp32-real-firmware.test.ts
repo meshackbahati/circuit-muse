@@ -22,7 +22,7 @@
  *
  * Prerequisites (auto-skipped when missing — same convention as the
  * pong/mega/ili9341 emulation suites that came before):
- *   - Backend reachable at `${VELXIO_BACKEND}/api` (default
+ *   - Backend reachable at `${CIRCUIT_MUSE_BACKEND}/api` (default
  *     http://127.0.0.1:8001/api).
  *   - The backend has ESP-IDF wired up (espidf_compiler.available
  *     returns true server-side) AND libqemu-xtensa with ROM files
@@ -53,7 +53,7 @@ import { join, resolve } from 'node:path';
 // ─── Configuration ───────────────────────────────────────────────────────────
 
 const BACKEND_URL =
-  process.env.VELXIO_BACKEND ?? 'http://127.0.0.1:8001';
+  process.env.CIRCUIT_MUSE_BACKEND ?? 'http://127.0.0.1:8001';
 const FQBN = 'esp32:esp32:esp32';
 
 const SKETCH_PATH = resolve(
@@ -99,7 +99,7 @@ async function compileViaBackend(source: string): Promise<CompileResult> {
   }
   const cachePath = join(
     tmpdir(),
-    `velxio-esp32-fw-${FQBN.replace(/[^a-z0-9]/gi, '_')}-${hash >>> 0}.b64`,
+    `circuit-muse-esp32-fw-${FQBN.replace(/[^a-z0-9]/gi, '_')}-${hash >>> 0}.b64`,
   );
   if (existsSync(cachePath)) {
     return { success: true, binary_content: readFileSync(cachePath, 'utf-8') };
@@ -367,7 +367,7 @@ describe('ESP32 I2C — reverse-direction proxy (ESP32 master reads peer device)
         }
         const cachePath = join(
           tmpdir(),
-          `velxio-esp32-fw-${FQBN.replace(/[^a-z0-9]/gi, '_')}-${hash >>> 0}.b64`,
+          `circuit-muse-esp32-fw-${FQBN.replace(/[^a-z0-9]/gi, '_')}-${hash >>> 0}.b64`,
         );
         if (existsSync(cachePath)) {
           return { success: true, binary_content: readFileSync(cachePath, 'utf-8') };

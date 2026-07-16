@@ -3,25 +3,25 @@
   "version": 1,
   "image_sets": {
     "raspberry-pi-3-virt": {
-      "description": "Raspberry Pi 3 simulator on QEMU -M virt + cortex-a53. Velxio-built minimal ARM64 kernel + initramfs + Alpine-based rootfs. Replaces the broken raspi3b path (pl011 RX bug in QEMU 10 + kernel 6.12 \u2014 see project/pi-emulation/decisions.md for the full trail). Used by app.services.qemu_manager.",
+      "description": "Raspberry Pi 3 simulator on QEMU -M virt + cortex-a53. CircuitMuse-built minimal ARM64 kernel + initramfs + Alpine-based rootfs. Replaces the broken raspi3b path (pl011 RX bug in QEMU 10 + kernel 6.12 \u2014 see project/pi-emulation/decisions.md for the full trail). Used by app.services.qemu_manager.",
       "images": [
         {
-          "name": "velxio-kernel-arm64",
-          "asset_id": "velxio-kernel-arm64",
+          "name": "circuit-muse-kernel-arm64",
+          "asset_id": "circuit-muse-kernel-arm64",
           "sha256": "76652d46bee27fe46f92c21adf9e67964356774ff4f6abe4f009344aacd3acd9",
           "size_bytes": 30697408,
           "version": "2026.05+v6.12.88-deb13-cloud"
         },
         {
-          "name": "velxio-initramfs-arm64.cpio.gz",
-          "asset_id": "velxio-initramfs-arm64",
+          "name": "circuit-muse-initramfs-arm64.cpio.gz",
+          "asset_id": "circuit-muse-initramfs-arm64",
           "sha256": "9a1ecd1c83a65207562b8395fcc57cc9218f16cf240dd4b5cf84e13ef0b34efe",
           "size_bytes": 1032327,
           "version": "2026.05"
         },
         {
-          "name": "velxio-pi-rootfs-arm64.ext4",
-          "asset_id": "velxio-pi-rootfs-arm64-zst",
+          "name": "circuit-muse-pi-rootfs-arm64.ext4",
+          "asset_id": "circuit-muse-pi-rootfs-arm64-zst",
           "sha256": "d6d4a2747d18055493a621f28bf2552e94dc2a11b1586d64b0eeb3847c7e06be",
           "size_bytes": 629145600,
           "version": "2026.05+phase2-shims-final",
@@ -34,25 +34,25 @@
       ]
     },
     "raspberry-pi-armhf": {
-      "description": "Raspberry Pi Zero / 1 / 2 simulator on QEMU -M virt + cortex-a7. Velxio-built armhf kernel (Debian armmp) + initramfs (bundled ext4 + jbd2 + mbcache + crc16 + crc32c_generic + virtio_blk + virtio_mmio) + Alpine-based armhf rootfs. arm-32 virt PCI is broken (missing reg DT prop) so the QEMU command uses the mmio virtio transport; Pi Zero / Pi 1 share this image set with Pi 2 because the real ARMv6 silicon they have isn't supported by any QEMU-virt-capable upstream kernel.",
+      "description": "Raspberry Pi Zero / 1 / 2 simulator on QEMU -M virt + cortex-a7. CircuitMuse-built armhf kernel (Debian armmp) + initramfs (bundled ext4 + jbd2 + mbcache + crc16 + crc32c_generic + virtio_blk + virtio_mmio) + Alpine-based armhf rootfs. arm-32 virt PCI is broken (missing reg DT prop) so the QEMU command uses the mmio virtio transport; Pi Zero / Pi 1 share this image set with Pi 2 because the real ARMv6 silicon they have isn't supported by any QEMU-virt-capable upstream kernel.",
       "images": [
         {
-          "name": "velxio-kernel-armhf",
-          "asset_id": "velxio-kernel-armhf",
+          "name": "circuit-muse-kernel-armhf",
+          "asset_id": "circuit-muse-kernel-armhf",
           "sha256": "9d7377c33b9a5631e99ab109c8d3d9d89f99331b53eb8cc755cd76e775c9d0d5",
           "size_bytes": 6033920,
           "version": "2026.05+v6.12.88-armmp+ext4mods"
         },
         {
-          "name": "velxio-initramfs-armhf.cpio.gz",
-          "asset_id": "velxio-initramfs-armhf",
+          "name": "circuit-muse-initramfs-armhf.cpio.gz",
+          "asset_id": "circuit-muse-initramfs-armhf",
           "sha256": "611eb3d219cb5d71a534d417dea564ed6eadbd2d1b40e33d28bb4a5a5f5829f5",
           "size_bytes": 1390924,
           "version": "2026.05+ext4mods"
         },
         {
-          "name": "velxio-pi-rootfs-armhf.ext4",
-          "asset_id": "velxio-pi-rootfs-armhf-zst",
+          "name": "circuit-muse-pi-rootfs-armhf.ext4",
+          "asset_id": "circuit-muse-pi-rootfs-armhf-zst",
           "sha256": "5f2eafc0e76acc9ecc79da42313c1ffaacd577f42df5a58934d97ea167fab4ee",
           "size_bytes": 629145600,
           "version": "2026.05+phase2-shims-armhf",

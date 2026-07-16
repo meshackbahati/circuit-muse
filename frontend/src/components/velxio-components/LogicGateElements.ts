@@ -1,17 +1,17 @@
 /**
  * LogicGateElements.ts — Custom Web Components for standard logic gates.
  *
- * Implements SVG-rendered logic gate elements for use in the Velxio simulator.
+ * Implements SVG-rendered logic gate elements for use in the CircuitMuse simulator.
  * These do NOT exist in wokwi-elements, so we define them here.
  *
  * Tags defined:
- *   velxio-logic-and  — 2-input AND gate
- *   velxio-logic-nand — 2-input NAND gate
- *   velxio-logic-or   — 2-input OR gate
- *   velxio-logic-nor  — 2-input NOR gate
- *   velxio-logic-xor  — 2-input XOR gate
- *   velxio-logic-xnor — 2-input XNOR gate
- *   velxio-logic-not  — 1-input NOT (inverter)
+ *   circuit-muse-logic-and  — 2-input AND gate
+ *   circuit-muse-logic-nand — 2-input NAND gate
+ *   circuit-muse-logic-or   — 2-input OR gate
+ *   circuit-muse-logic-nor  — 2-input NOR gate
+ *   circuit-muse-logic-xor  — 2-input XOR gate
+ *   circuit-muse-logic-xnor — 2-input XNOR gate
+ *   circuit-muse-logic-not  — 1-input NOT (inverter)
  *
  * Pin layout (in CSS pixels, used by PinOverlay):
  *   2-input gates (72 × 48 px): A(0,14)  B(0,34)  Y(72,24)
@@ -204,19 +204,19 @@ class NotGateElement extends HTMLElement {
 
 // ─── Register custom elements ─────────────────────────────────────────────────
 
-if (!customElements.get('velxio-logic-and'))
-  customElements.define('velxio-logic-and', AndGateElement);
-if (!customElements.get('velxio-logic-nand'))
-  customElements.define('velxio-logic-nand', NandGateElement);
-if (!customElements.get('velxio-logic-or')) customElements.define('velxio-logic-or', OrGateElement);
-if (!customElements.get('velxio-logic-nor'))
-  customElements.define('velxio-logic-nor', NorGateElement);
-if (!customElements.get('velxio-logic-xor'))
-  customElements.define('velxio-logic-xor', XorGateElement);
-if (!customElements.get('velxio-logic-xnor'))
-  customElements.define('velxio-logic-xnor', XnorGateElement);
-if (!customElements.get('velxio-logic-not'))
-  customElements.define('velxio-logic-not', NotGateElement);
+if (!customElements.get('circuit-muse-logic-and'))
+  customElements.define('circuit-muse-logic-and', AndGateElement);
+if (!customElements.get('circuit-muse-logic-nand'))
+  customElements.define('circuit-muse-logic-nand', NandGateElement);
+if (!customElements.get('circuit-muse-logic-or')) customElements.define('circuit-muse-logic-or', OrGateElement);
+if (!customElements.get('circuit-muse-logic-nor'))
+  customElements.define('circuit-muse-logic-nor', NorGateElement);
+if (!customElements.get('circuit-muse-logic-xor'))
+  customElements.define('circuit-muse-logic-xor', XorGateElement);
+if (!customElements.get('circuit-muse-logic-xnor'))
+  customElements.define('circuit-muse-logic-xnor', XnorGateElement);
+if (!customElements.get('circuit-muse-logic-not'))
+  customElements.define('circuit-muse-logic-not', NotGateElement);
 
 // ─── 3/4-input gate elements ──────────────────────────────────────────────────
 // Generic N-input gates (96 × 72 for 3-in, 108 × 84 for 4-in). Inputs spaced
@@ -319,20 +319,20 @@ const Or4Gate = makeMultiInputGateClass('or', 4);
 const Nand4Gate = makeMultiInputGateClass('nand', 4);
 const Nor4Gate = makeMultiInputGateClass('nor', 4);
 
-if (!customElements.get('velxio-logic-and-3'))
-  customElements.define('velxio-logic-and-3', And3Gate);
-if (!customElements.get('velxio-logic-or-3')) customElements.define('velxio-logic-or-3', Or3Gate);
-if (!customElements.get('velxio-logic-nand-3'))
-  customElements.define('velxio-logic-nand-3', Nand3Gate);
-if (!customElements.get('velxio-logic-nor-3'))
-  customElements.define('velxio-logic-nor-3', Nor3Gate);
-if (!customElements.get('velxio-logic-and-4'))
-  customElements.define('velxio-logic-and-4', And4Gate);
-if (!customElements.get('velxio-logic-or-4')) customElements.define('velxio-logic-or-4', Or4Gate);
-if (!customElements.get('velxio-logic-nand-4'))
-  customElements.define('velxio-logic-nand-4', Nand4Gate);
-if (!customElements.get('velxio-logic-nor-4'))
-  customElements.define('velxio-logic-nor-4', Nor4Gate);
+if (!customElements.get('circuit-muse-logic-and-3'))
+  customElements.define('circuit-muse-logic-and-3', And3Gate);
+if (!customElements.get('circuit-muse-logic-or-3')) customElements.define('circuit-muse-logic-or-3', Or3Gate);
+if (!customElements.get('circuit-muse-logic-nand-3'))
+  customElements.define('circuit-muse-logic-nand-3', Nand3Gate);
+if (!customElements.get('circuit-muse-logic-nor-3'))
+  customElements.define('circuit-muse-logic-nor-3', Nor3Gate);
+if (!customElements.get('circuit-muse-logic-and-4'))
+  customElements.define('circuit-muse-logic-and-4', And4Gate);
+if (!customElements.get('circuit-muse-logic-or-4')) customElements.define('circuit-muse-logic-or-4', Or4Gate);
+if (!customElements.get('circuit-muse-logic-nand-4'))
+  customElements.define('circuit-muse-logic-nand-4', Nand4Gate);
+if (!customElements.get('circuit-muse-logic-nor-4'))
+  customElements.define('circuit-muse-logic-nor-4', Nor4Gate);
 
 // Mark as a module (all symbols are internal — this file is imported for side effects only)
 export {};

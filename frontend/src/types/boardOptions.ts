@@ -11,7 +11,7 @@ import type { BoardKind } from './board';
 export type ESP32PartitionScheme =
   | 'default'           // 1.2MB APP / 1.5MB SPIFFS (OTA)
   | 'defaults_ffat'     // 1.2MB APP / 1.5MB FATFS (OTA)
-  | 'min_spiffs'        // 1.9MB APP / 190KB SPIFFS (OTA) — current Velxio default
+  | 'min_spiffs'        // 1.9MB APP / 190KB SPIFFS (OTA) — current CircuitMuse default
   | 'no_ota'            // 2MB APP / 2MB SPIFFS
   | 'no_fs'             // 2MB APP x2, no filesystem
   | 'huge_app'          // 3MB APP / 1MB SPIFFS (no OTA)
@@ -49,7 +49,7 @@ export interface SpiffsFile {
   size: number;
 }
 
-// Defaults match the historical `sdkconfig.defaults` baked into Velxio
+// Defaults match the historical `sdkconfig.defaults` baked into CircuitMuse
 // (DIO @ 40 MHz / 4 MB, min_spiffs, no PSRAM). Picking these as the
 // fallback means projects saved before this feature compile bit-for-bit
 // the same way after upgrade.

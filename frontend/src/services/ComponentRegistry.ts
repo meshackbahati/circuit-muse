@@ -69,7 +69,7 @@ export class ComponentRegistry {
       // different QEMU CPU model per board (Cortex-A53/A72/A76).
       data.components.push({
         id: 'raspberry-pi-zero',
-        tagName: 'velxio-raspberry-pi-3',   // reuse 40-pin board art
+        tagName: 'circuit-muse-raspberry-pi-3',   // reuse 40-pin board art
         name: 'Raspberry Pi Zero',
         category: 'boards',
         description: 'Raspberry Pi Zero with 40-pin GPIO. QEMU virt + Cortex-A7 (armhf) backend; presents the Pi Zero memory/SMP profile (1 core, 512 MB).',
@@ -82,7 +82,7 @@ export class ComponentRegistry {
       });
       data.components.push({
         id: 'raspberry-pi-1',
-        tagName: 'velxio-raspberry-pi-3',   // reuse 40-pin board art
+        tagName: 'circuit-muse-raspberry-pi-3',   // reuse 40-pin board art
         name: 'Raspberry Pi 1',
         category: 'boards',
         description: 'Raspberry Pi 1 Model B+ with 40-pin GPIO. QEMU virt + Cortex-A7 (armhf) backend; 1 core / 512 MB profile.',
@@ -95,7 +95,7 @@ export class ComponentRegistry {
       });
       data.components.push({
         id: 'raspberry-pi-2',
-        tagName: 'velxio-raspberry-pi-3',
+        tagName: 'circuit-muse-raspberry-pi-3',
         name: 'Raspberry Pi 2',
         category: 'boards',
         description: 'Raspberry Pi 2 Model B with 40-pin GPIO. QEMU virt + Cortex-A7 (armhf) backend; 4 cores / 1 GB.',
@@ -108,7 +108,7 @@ export class ComponentRegistry {
       });
       data.components.push({
         id: 'raspberry-pi-3',
-        tagName: 'velxio-raspberry-pi-3',
+        tagName: 'circuit-muse-raspberry-pi-3',
         name: 'Raspberry Pi 3',
         category: 'boards',
         description: 'Raspberry Pi 3 Model B with 40-pin GPIO. QEMU virt + Cortex-A53 backend.',
@@ -121,7 +121,7 @@ export class ComponentRegistry {
       });
       data.components.push({
         id: 'raspberry-pi-4',
-        tagName: 'velxio-raspberry-pi-4',
+        tagName: 'circuit-muse-raspberry-pi-4',
         name: 'Raspberry Pi 4',
         category: 'boards',
         description: 'Raspberry Pi 4 Model B with 40-pin GPIO. QEMU virt + Cortex-A72 backend.',
@@ -134,7 +134,7 @@ export class ComponentRegistry {
       });
       data.components.push({
         id: 'raspberry-pi-5',
-        tagName: 'velxio-raspberry-pi-5',
+        tagName: 'circuit-muse-raspberry-pi-5',
         name: 'Raspberry Pi 5',
         category: 'boards',
         description: 'Raspberry Pi 5 with 40-pin GPIO + RP1 southbridge. QEMU virt + Cortex-A76 backend.',
@@ -146,13 +146,13 @@ export class ComponentRegistry {
         tags: ['raspberry', 'pi', 'rp5', 'board', 'qemu', 'linux'],
       });
 
-      // Inject SPICE probe instruments — these are Velxio-specific React
+      // Inject SPICE probe instruments — these are CircuitMuse-specific React
       // components (not wokwi web elements), so they have no auto-generated
       // metadata but still need a registry entry so the picker can offer
       // them and the canvas can resolve them by id.
       data.components.push({
         id: 'instr-voltmeter',
-        tagName: 'velxio-instr-voltmeter',
+        tagName: 'circuit-muse-instr-voltmeter',
         name: 'Voltmeter',
         category: 'analog',
         description:
@@ -166,7 +166,7 @@ export class ComponentRegistry {
       });
       data.components.push({
         id: 'instr-ammeter',
-        tagName: 'velxio-instr-ammeter',
+        tagName: 'circuit-muse-instr-ammeter',
         name: 'Ammeter',
         category: 'analog',
         description:
@@ -184,7 +184,7 @@ export class ComponentRegistry {
       // pinCount=0 is just a placeholder for the picker grid.
       data.components.push({
         id: 'custom-chip',
-        tagName: 'velxio-custom-chip',
+        tagName: 'circuit-muse-custom-chip',
         name: 'Custom Chip',
         category: 'logic',
         description:
@@ -255,7 +255,7 @@ export class ComponentRegistry {
   /**
    * Merge additional components into the registry from an external source.
    *
-   * Used by private overlays (e.g. the velxio.dev pro overlay) to add
+   * Used by private overlays (e.g. the circuit-muse.dev pro overlay) to add
    * premium components after the default `/components-metadata.json` has
    * loaded. Components with an existing `id` are replaced; new ones are
    * appended. Categories and search index are rebuilt.

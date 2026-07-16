@@ -106,7 +106,7 @@ import type { WifiStatus } from '../simulation/Esp32Bridge';
 const WEBSERVER_SKETCH = `#include <WiFi.h>
 #include <WebServer.h>
 
-const char* ssid = "Velxio-GUEST";
+const char* ssid = "CircuitMuse-GUEST";
 const char* password = "";
 
 WebServer server(80);
@@ -140,8 +140,8 @@ void loop() {
 
 const EXPECTED_SERIAL_OUTPUT = [
   'I (432) wifi:wifi sta start',
-  'I (500) wifi:new:Velxio-GUEST, old: , ASSOC',
-  'I (800) wifi:connected with Velxio-GUEST, aid = 1, channel 6',
+  'I (500) wifi:new:CircuitMuse-GUEST, old: , ASSOC',
+  'I (800) wifi:connected with CircuitMuse-GUEST, aid = 1, channel 6',
   'I (1200) esp_netif_handlers: sta ip: 192.168.4.2, mask: 255.255.255.0',
   'Conectando',
   '...',
@@ -160,8 +160,8 @@ describe('WebServer sketch — structure validation', () => {
     expect(WEBSERVER_SKETCH).toContain('#include <WebServer.h>');
   });
 
-  it('uses Velxio-GUEST SSID with empty password', () => {
-    expect(WEBSERVER_SKETCH).toContain('"Velxio-GUEST"');
+  it('uses CircuitMuse-GUEST SSID with empty password', () => {
+    expect(WEBSERVER_SKETCH).toContain('"CircuitMuse-GUEST"');
     expect(WEBSERVER_SKETCH).toMatch(/password\s*=\s*""/);
   });
 
@@ -284,16 +284,16 @@ describe('WebServer sketch — WiFi connection lifecycle', () => {
 
     // Simulate QEMU WiFi status events from serial parsing
     ws.receive({ type: 'wifi_status', data: { status: 'initializing' } });
-    ws.receive({ type: 'wifi_status', data: { status: 'connected', ssid: 'Velxio-GUEST' } });
+    ws.receive({ type: 'wifi_status', data: { status: 'connected', ssid: 'CircuitMuse-GUEST' } });
     ws.receive({
       type: 'wifi_status',
-      data: { status: 'got_ip', ssid: 'Velxio-GUEST', ip: '192.168.4.2' },
+      data: { status: 'got_ip', ssid: 'CircuitMuse-GUEST', ip: '192.168.4.2' },
     });
 
     expect(statuses).toHaveLength(3);
     expect(statuses[0].status).toBe('initializing');
     expect(statuses[1].status).toBe('connected');
-    expect(statuses[1].ssid).toBe('Velxio-GUEST');
+    expect(statuses[1].ssid).toBe('CircuitMuse-GUEST');
     expect(statuses[2].status).toBe('got_ip');
     expect(statuses[2].ip).toBe('192.168.4.2');
   });
@@ -304,22 +304,22 @@ describe('WebServer sketch — WiFi connection lifecycle', () => {
 
     ws.receive({
       type: 'wifi_status',
-      data: { status: 'got_ip', ssid: 'Velxio-GUEST', ip: '192.168.4.2' },
+      data: { status: 'got_ip', ssid: 'CircuitMuse-GUEST', ip: '192.168.4.2' },
     });
 
     expect(statuses[0].ip).toMatch(/^192\.168\.4\.\d+$/);
   });
 
-  it('connects to Velxio-GUEST SSID (channel 6, open, no password)', () => {
+  it('connects to CircuitMuse-GUEST SSID (channel 6, open, no password)', () => {
     const statuses: WifiStatus[] = [];
     bridge.onWifiStatus = (s) => statuses.push(s);
 
     ws.receive({
       type: 'wifi_status',
-      data: { status: 'connected', ssid: 'Velxio-GUEST' },
+      data: { status: 'connected', ssid: 'CircuitMuse-GUEST' },
     });
 
-    expect(statuses[0].ssid).toBe('Velxio-GUEST');
+    expect(statuses[0].ssid).toBe('CircuitMuse-GUEST');
   });
 });
 
@@ -333,9 +333,9 @@ describe('WebServer sketch — serial output verification', () => {
     expect(output).toContain('wifi sta start');
   });
 
-  it('serial output contains connection to Velxio-GUEST', () => {
+  it('serial output contains connection to CircuitMuse-GUEST', () => {
     const output = EXPECTED_SERIAL_OUTPUT.join('\n');
-    expect(output).toContain('Velxio-GUEST');
+    expect(output).toContain('CircuitMuse-GUEST');
   });
 
   it('serial output contains assigned IP address', () => {

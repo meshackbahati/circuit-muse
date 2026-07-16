@@ -1,7 +1,7 @@
 /**
  * Monaco language definition for retro CPU assembly (Intel 8080 + Zilog Z80).
  *
- * Used when the editor opens a .s / .asm file in a Velxio project — the
+ * Used when the editor opens a .s / .asm file in a CircuitMuse project — the
  * `/api/compile-rom` backend then assembles it into a ROM image for the
  * programmable i8080-cpu / z80-cpu chip.
  *

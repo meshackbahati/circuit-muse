@@ -162,7 +162,7 @@ PartSimulationRegistry.register('led', {
 
     // Phase 0 of the mixed-mode simulator project — see
     // ../../../project/sim-mixedmode/phase-00-pin-resolver.md in the
-    // velxio-prod repo. PinResolver replaces the direct
+    // circuit-muse-prod repo. PinResolver replaces the direct
     // pinManager.onPinChange + getArduinoPinHelper pattern. For the
     // Phase-0 default impl it's functionally identical; Phase 1+ will
     // swap in a SPICE-resolved impl that watches node voltages and

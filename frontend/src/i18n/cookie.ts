@@ -1,6 +1,6 @@
 /**
- * Cookie helpers for the `velxio_locale` cookie shared between the React
- * app and the Astro blog at velxio.dev/blog/. Both surfaces read this
+ * Cookie helpers for the `circuit-muse_locale` cookie shared between the React
+ * app and the Astro blog at circuit-muse.dev/blog/. Both surfaces read this
  * cookie on initial render so a locale change in one carries over to the
  * other on next navigation.
  *
@@ -13,7 +13,7 @@
 
 import { isLocale, type Locale } from "./config";
 
-const COOKIE_NAME = "velxio_locale";
+const COOKIE_NAME = "circuit-muse_locale";
 const ONE_YEAR_S = 60 * 60 * 24 * 365;
 
 export function readLocaleCookie(): Locale | null {

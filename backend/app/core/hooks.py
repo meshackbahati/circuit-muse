@@ -1,5 +1,5 @@
 """
-Extension hooks for the velxio backend.
+Extension hooks for the circuit-muse backend.
 
 Routes that stay in OSS (compile, libraries, simulation, iot_gateway) used to
 import directly from `app.core.dependencies`, `app.database.session`,
@@ -8,7 +8,7 @@ to ship without the auth/DB stack — deleting any of those modules would
 crash the route layer at import time.
 
 This module is the seam. OSS routes import only from here. Each hook is a
-no-op by default; a private overlay (e.g. velxio-prod's `app.pro`) calls the
+no-op by default; a private overlay (e.g. circuit-muse-prod's `app.pro`) calls the
 `register_*` setter inside its own `register_pro(app)` to plug in a real
 implementation. When the overlay is absent, the routes still load and the
 hooks just return None / yield no events.
@@ -275,7 +275,7 @@ async def run_lifespan_startup() -> None:
 # ── iot_gateway_gate ──────────────────────────────────────────────────────────
 # Decides whether a given request may use the private IoT gateway proxy.
 # OSS-default: allow everyone (the gateway is a free feature in the open
-# image). A private overlay (velxio-prod) registers a real implementation
+# image). A private overlay (circuit-muse-prod) registers a real implementation
 # that gates it to paid plans + grandfathered users. Returns None to allow,
 # or a `detail` dict that the route turns into a 402 response when blocking.
 

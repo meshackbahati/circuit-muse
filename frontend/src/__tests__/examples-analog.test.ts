@@ -20,7 +20,7 @@ import { mappedMetadataIds } from '../simulation/spice/componentToSpice';
 function toSpiceComponents(example: (typeof analogExamples)[number]) {
   return example.components.map((c) => ({
     id: c.id,
-    metadataId: c.type.replace(/^(wokwi|velxio)-/, ''),
+    metadataId: c.type.replace(/^(wokwi|circuit-muse)-/, ''),
     properties: c.properties ?? {},
   }));
 }
@@ -51,9 +51,9 @@ describe('analogExamples — shape', () => {
       'wokwi-esp32',
       'wokwi-raspberry-',
       'wokwi-nano-rp',
-      'velxio-esp32',
-      'velxio-raspberry-',
-      'velxio-pi-pico-w',
+      'circuit-muse-esp32',
+      'circuit-muse-raspberry-',
+      'circuit-muse-pi-pico-w',
     ];
     for (const ex of analogExamples) {
       const boards = ex.components.filter((c) => BOARD_PREFIXES.some((p) => c.type.startsWith(p)));
@@ -75,7 +75,7 @@ describe('analogExamples — shape', () => {
     const unmapped = new Set<string>();
     for (const ex of analogExamples) {
       for (const c of ex.components) {
-        const id = c.type.replace(/^(wokwi|velxio)-/, '');
+        const id = c.type.replace(/^(wokwi|circuit-muse)-/, '');
         if (!mapped.has(id)) unmapped.add(`${ex.id}:${c.id}(${id})`);
       }
     }

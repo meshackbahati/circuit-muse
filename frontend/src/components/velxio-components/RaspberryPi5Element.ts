@@ -1,5 +1,5 @@
 /**
- * Raspberry Pi 5 — Velxio board art.
+ * Raspberry Pi 5 — CircuitMuse board art.
  *
  * Uses a realistic top-down product photo of the Raspberry Pi 5 as the board
  * sprite. The source shipped on a solid white background; it was flood-filled
@@ -114,8 +114,8 @@ class RaspberryPi5Element extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-raspberry-pi-5')) {
-  customElements.define('velxio-raspberry-pi-5', RaspberryPi5Element);
+if (!customElements.get('circuit-muse-raspberry-pi-5')) {
+  customElements.define('circuit-muse-raspberry-pi-5', RaspberryPi5Element);
 }
 
 export {};

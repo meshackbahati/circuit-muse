@@ -6,7 +6,7 @@
  *
  *   • Every metadata entry has the required shape.
  *   • IDs are unique.
- *   • tagName matches the wokwi/velxio prefix convention.
+ *   • tagName matches the wokwi/circuit-muse prefix convention.
  *   • Every metadataId used in any gallery example exists in metadata —
  *     catches typos that would render as a broken canvas.
  *   • Every metadataId registered in PartSimulationRegistry exists in
@@ -112,15 +112,15 @@ describe('components-metadata.json — file integrity', () => {
     expect(bad.map((e) => e.id), 'entries with invalid pinCount').toEqual([]);
   });
 
-  it('every entry has a tagName matching the wokwi/velxio convention', () => {
-    const pattern = /^(wokwi|velxio)-/;
+  it('every entry has a tagName matching the wokwi/circuit-muse convention', () => {
+    const pattern = /^(wokwi|circuit-muse)-/;
     const bad = entries.filter((e) => !pattern.test(e.tagName));
     expect(bad.map((e) => `${e.id}: ${e.tagName}`), 'malformed tagName').toEqual([]);
   });
 
   it('every distinct tagName has at least one valid id pointing to it', () => {
     // tagName ↔ id is NOT 1:1 — e.g. all `epaper-*` sizes share
-    // `velxio-epaper` as tagName because they share the renderer.
+    // `circuit-muse-epaper` as tagName because they share the renderer.
     // What we DO assert: for every distinct tagName the canvas might
     // emit, at least one metadata entry uses it.
     const tagNames = new Set(entries.map((e) => e.tagName));

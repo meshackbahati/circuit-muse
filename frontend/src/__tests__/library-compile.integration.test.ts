@@ -96,7 +96,7 @@ describe.skipIf(!RUN_LIBRARY_TESTS)(
           }
         }
         // Sketch dir + .ino file.
-        const dir = mkdtempSync(path.join(tmpdir(), `velxio-${example.id}-`));
+        const dir = mkdtempSync(path.join(tmpdir(), `circuit-muse-${example.id}-`));
         const inoPath = path.join(dir, `${path.basename(dir)}.ino`);
         writeFileSync(inoPath, example.code ?? '', 'utf8');
         try {

@@ -99,8 +99,8 @@ class Attiny85Element extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-attiny85')) {
-  customElements.define('velxio-attiny85', Attiny85Element);
+if (!customElements.get('circuit-muse-attiny85')) {
+  customElements.define('circuit-muse-attiny85', Attiny85Element);
 }
 
 export {};

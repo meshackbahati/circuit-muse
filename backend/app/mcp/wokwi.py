@@ -1,6 +1,6 @@
 """
 Wokwi diagram.json parse/format utilities (Python port of frontend/src/utils/wokwiZip.ts).
-Handles conversion between Wokwi diagram format and the Velxio internal circuit format.
+Handles conversion between Wokwi diagram format and the CircuitMuse internal circuit format.
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ from typing import Any
 # Board type mappings
 # ---------------------------------------------------------------------------
 
-WOKWI_TO_VELXIO_BOARD: dict[str, str] = {
+WOKWI_TO_CIRCUIT_MUSE_BOARD: dict[str, str] = {
     "wokwi-arduino-uno": "arduino:avr:uno",
     "wokwi-arduino-mega": "arduino:avr:mega",
     "wokwi-arduino-nano": "arduino:avr:nano",
@@ -33,7 +33,7 @@ WOKWI_TO_VELXIO_BOARD: dict[str, str] = {
     "wokwi-esp32-devkit-v1": "esp32:esp32:esp32",
 }
 
-VELXIO_TO_WOKWI_BOARD: dict[str, str] = {v: k for k, v in WOKWI_TO_VELXIO_BOARD.items()}
+CIRCUIT_MUSE_TO_WOKWI_BOARD: dict[str, str] = {v: k for k, v in WOKWI_TO_CIRCUIT_MUSE_BOARD.items()}
 
 # Default board FQBN when none can be detected
 DEFAULT_BOARD_FQBN = "arduino:avr:uno"
@@ -82,24 +82,24 @@ def hex_to_color_name(hex_color: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Wokwi → Velxio conversion
+# Wokwi → CircuitMuse conversion
 # ---------------------------------------------------------------------------
 
-BOARD_PART_TYPES = set(WOKWI_TO_VELXIO_BOARD.keys())
+BOARD_PART_TYPES = set(WOKWI_TO_CIRCUIT_MUSE_BOARD.keys())
 
 
 def _detect_board_fqbn(parts: list[dict[str, Any]]) -> str:
     """Return the board FQBN inferred from the parts list."""
     for part in parts:
         part_type = part.get("type", "")
-        if part_type in WOKWI_TO_VELXIO_BOARD:
-            return WOKWI_TO_VELXIO_BOARD[part_type]
+        if part_type in WOKWI_TO_CIRCUIT_MUSE_BOARD:
+            return WOKWI_TO_CIRCUIT_MUSE_BOARD[part_type]
     return DEFAULT_BOARD_FQBN
 
 
 def parse_wokwi_diagram(diagram: dict[str, Any]) -> dict[str, Any]:
     """
-    Convert a Wokwi diagram.json payload into a Velxio circuit object.
+    Convert a Wokwi diagram.json payload into a CircuitMuse circuit object.
 
     The returned object has the shape:
     {
@@ -161,19 +161,19 @@ def parse_wokwi_diagram(diagram: dict[str, Any]) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
-# Velxio → Wokwi conversion
+# CircuitMuse → Wokwi conversion
 # ---------------------------------------------------------------------------
 
 
 def format_wokwi_diagram(
     circuit: dict[str, Any],
-    author: str = "velxio",
+    author: str = "circuit-muse",
 ) -> dict[str, Any]:
     """
-    Convert a Velxio circuit object back into a Wokwi diagram.json payload.
+    Convert a CircuitMuse circuit object back into a Wokwi diagram.json payload.
     """
     board_fqbn: str = circuit.get("board_fqbn", DEFAULT_BOARD_FQBN)
-    wokwi_board_type: str = VELXIO_TO_WOKWI_BOARD.get(board_fqbn, "wokwi-arduino-uno")
+    wokwi_board_type: str = CIRCUIT_MUSE_TO_WOKWI_BOARD.get(board_fqbn, "wokwi-arduino-uno")
 
     # Build parts list; inject board part first if not already present
     raw_components: list[dict[str, Any]] = circuit.get("components", [])
@@ -216,7 +216,7 @@ def format_wokwi_diagram(
     return {
         "version": int(circuit.get("version", 1)),
         "author": author,
-        "editor": "velxio",
+        "editor": "circuit-muse",
         "parts": parts,
         "connections": connections,
     }
@@ -236,7 +236,7 @@ COMPONENT_PIN_TEMPLATES: dict[str, str] = {
 
 def generate_arduino_sketch(circuit: dict[str, Any], sketch_name: str = "sketch") -> str:
     """
-    Generate a minimal Arduino sketch (.ino) from a Velxio circuit definition.
+    Generate a minimal Arduino sketch (.ino) from a CircuitMuse circuit definition.
 
     Returns the .ino file content as a string.
     """

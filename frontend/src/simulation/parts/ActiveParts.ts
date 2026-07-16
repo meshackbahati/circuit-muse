@@ -5,7 +5,7 @@
  * tracer can approximate — active devices (transistors, op-amps, regulators,
  * relays, optocouplers, diodes, batteries) have polarity, non-linear I-V
  * curves, or reverse-leakage that only a full circuit solver can represent
- * faithfully. Velxio always runs SPICE so every circuit is solved with
+ * faithfully. CircuitMuse always runs SPICE so every circuit is solved with
  * real-world fidelity; this set is retained as documentation of the active
  * device catalogue and for any future UI that needs to flag them.
  *

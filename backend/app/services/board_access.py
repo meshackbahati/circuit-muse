@@ -1,9 +1,9 @@
 """
 Pro board-access gate — server-side enforcement seam.
 
-STM32 and the QEMU-backed Raspberry Pi boards are Pro-only on velxio.dev. The
+STM32 and the QEMU-backed Raspberry Pi boards are Pro-only on circuit-muse.dev. The
 frontend gate (picker add + run) is the UX layer; this is the server-side
-enforcement for the WebSocket simulation start, because on velxio.dev the QEMU
+enforcement for the WebSocket simulation start, because on circuit-muse.dev the QEMU
 binary is present for every session, so the frontend gate alone is bypassable.
 
 OSS / self-hosted has no binary at all (the start fails with a Pro-framed
@@ -11,7 +11,7 @@ message regardless), so this gate is a no-op there.
 
 The pro overlay calls ``register_board_access_gate()`` from ``register_pro()``
 with an implementation that resolves the user from the WebSocket cookies and
-returns False for a non-paid web user. The desktop sidecar (VELXIO_DESKTOP=1)
+returns False for a non-paid web user. The desktop sidecar (CIRCUIT_MUSE_DESKTOP=1)
 always allows — the Tauri license already gates the whole app. Default with no
 overlay installed: allow.
 
@@ -31,8 +31,8 @@ BoardAccessGate = Callable[[object, str], Awaitable[bool]]
 _gate: Optional[BoardAccessGate] = None
 
 PRO_BOARD_MESSAGE = (
-    'STM32 and Raspberry Pi emulation are Velxio Pro features. '
-    'Use them on velxio.dev with a paid plan, or install Velxio Desktop.'
+    'STM32 and Raspberry Pi emulation are CircuitMuse Pro features. '
+    'Use them on circuit-muse.dev with a paid plan, or install CircuitMuse Desktop.'
 )
 
 

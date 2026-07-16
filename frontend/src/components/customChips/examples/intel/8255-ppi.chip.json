@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "Intel 8255 PPI",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "Programmable Peripheral Interface — 3× 8-bit parallel I/O ports (PA, PB, PC) with mode-0 (basic I/O) implemented. Address-selectable via A0/A1, used everywhere from 8086 boards to the IBM PC.",
   "pins": [

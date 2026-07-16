@@ -73,7 +73,7 @@ export function resolveNet(drives: Iterable<Drive>): Resolved {
   return { v: val === 1 ? '1' : '0', strength: maxS };
 }
 
-// Chip pin modes (mirror ChipInstance MODE_* / velxio-chip.h vx_pin_mode).
+// Chip pin modes (mirror ChipInstance MODE_* / circuit-muse-chip.h vx_pin_mode).
 const VX_INPUT = 0;
 const VX_OUTPUT = 1;
 const VX_INPUT_PULLUP = 2;

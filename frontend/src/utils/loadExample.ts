@@ -377,7 +377,7 @@ export async function loadExample(
 
   // P2.4 — assign this example's declared manifest to every board it created
   // (the per-board compile scope). Examples declare one library set today, so
-  // each board gets it; the user can refine per board via velxio.json.
+  // each board gets it; the user can refine per board via circuit-muse.json.
   {
     const sim = useSimulatorStore.getState();
     const libs =

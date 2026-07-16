@@ -1,5 +1,5 @@
 /**
- * CustomChipDialog — modal for editing/compiling a Velxio custom chip.
+ * CustomChipDialog — modal for editing/compiling a CircuitMuse custom chip.
  *
  * Two tabs:
  *   - "Examples": gallery of pre-built chips. Click → loads the source.
@@ -294,7 +294,7 @@ export const CustomChipDialog = ({ initial, onClose, onSave }: CustomChipDialogP
   );
 };
 
-// ── Inline styles (matches the visual language of other Velxio modals) ──
+// ── Inline styles (matches the visual language of other CircuitMuse modals) ──
 
 const overlayStyle: React.CSSProperties = {
   position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)',

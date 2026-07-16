@@ -64,7 +64,7 @@ void setup() {
   // Write a file, then read it straight back.
   File w = SD.open("/log.txt", FILE_WRITE);
   if (w) {
-    w.println("hello from velxio");
+    w.println("hello from circuit-muse");
     w.close();
     Serial.println(F("Wrote /log.txt"));
   }
@@ -115,7 +115,7 @@ void setup() {
 
   File w = SD.open("/log.txt", FILE_WRITE);
   if (w) {
-    w.println("hello from velxio");
+    w.println("hello from circuit-muse");
     w.close();
     Serial.println("Wrote /log.txt");
   }

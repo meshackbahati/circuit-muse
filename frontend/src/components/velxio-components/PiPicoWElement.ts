@@ -82,6 +82,6 @@ class PiPicoWElement extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-pi-pico-w')) {
-  customElements.define('velxio-pi-pico-w', PiPicoWElement);
+if (!customElements.get('circuit-muse-pi-pico-w')) {
+  customElements.define('circuit-muse-pi-pico-w', PiPicoWElement);
 }

@@ -329,7 +329,7 @@ def main() -> None:  # noqa: C901  (complexity OK for inline worker)
     # symbol is absent (= stock library, no camera patch yet), we keep a
     # no-op so the worker stays compatible with un-patched libraries.
     try:
-        _push_camera_frame_c = lib.velxio_push_camera_frame
+        _push_camera_frame_c = lib.circuit-muse_push_camera_frame
         _push_camera_frame_c.restype  = None
         _push_camera_frame_c.argtypes = [ctypes.c_char_p, ctypes.c_size_t]
         def _push_camera_frame(payload: bytes) -> None:
@@ -349,7 +349,7 @@ def main() -> None:  # noqa: C901  (complexity OK for inline worker)
             # understands why fb_get returns nothing; subsequent calls
             # are silent.
             if not getattr(_push_camera_frame, '_warned', False):
-                _log('camera_frame: velxio_push_camera_frame symbol '
+                _log('camera_frame: circuit-muse_push_camera_frame symbol '
                      'missing — rebuild libqemu-xtensa with the '
                      'OV2640+I²S patch (test/test-esp32-cam/autosearch).')
                 _push_camera_frame._warned = True  # type: ignore[attr-defined]
@@ -505,7 +505,7 @@ def main() -> None:  # noqa: C901  (complexity OK for inline worker)
             snapshot: dict[int, int] = {}
             for gpio_pin in range(40):
                 signal_id = int(out_sel[gpio_pin]) & 0xFF
-                # 0..71 / 88..255 are signal sources velxio doesn't
+                # 0..71 / 88..255 are signal sources circuit-muse doesn't
                 # model yet; include them in the snapshot only if the
                 # firmware actively routed them so future peripherals
                 # can opt in without code changes here.
@@ -1933,7 +1933,7 @@ def main() -> None:  # noqa: C901  (complexity OK for inline worker)
 
         # ── ESP32-CAM frame injection ────────────────────────────────────
         # Pushes a JPEG (or other format) into the QEMU OV2640 device's
-        # frame buffer via the velxio_push_camera_frame() symbol exported
+        # frame buffer via the circuit-muse_push_camera_frame() symbol exported
         # by the rebuilt libqemu-xtensa. Feature-detected at runtime so
         # this branch is a no-op on a stock library.
         elif c == 'camera_attach':

@@ -1,9 +1,9 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "Intel 8251 USART",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
-  "description": "Programmable async serial interface — TXD, RXD, status, command. Hooked into Velxio's vx_uart_attach so bytes are routed to and from the simulator's Serial monitor.",
+  "description": "Programmable async serial interface — TXD, RXD, status, command. Hooked into CircuitMuse's vx_uart_attach so bytes are routed to and from the simulator's Serial monitor.",
   "pins": [
     "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
     "RD", "WR", "CS", "CD", "RESET", "CLK",

@@ -1,6 +1,6 @@
 /**
- * <velxio-custom-chip> — Web Component that renders a Velxio custom chip
- * (DIP-style chip body + labelled pins) on the Velxio canvas.
+ * <circuit-muse-custom-chip> — Web Component that renders a CircuitMuse custom chip
+ * (DIP-style chip body + labelled pins) on the CircuitMuse canvas.
  *
  * Reads `chipJson` (JSON string with `pins: string[]`) from a property and
  * exposes a `pinInfo` getter that DynamicComponent + PinOverlay consume to
@@ -24,7 +24,7 @@ interface PinInfo {
   signals?: string[];
 }
 
-class VelxioCustomChip extends HTMLElement {
+class CircuitMuseCustomChip extends HTMLElement {
   private _chipJson: string =
     '{"name":"Custom Chip","pins":["IN","OUT","GND","VCC"]}';
   private _chipName: string = 'Custom Chip';
@@ -226,8 +226,8 @@ function escapeText(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-if (typeof customElements !== 'undefined' && !customElements.get('velxio-custom-chip')) {
-  customElements.define('velxio-custom-chip', VelxioCustomChip);
+if (typeof customElements !== 'undefined' && !customElements.get('circuit-muse-custom-chip')) {
+  customElements.define('circuit-muse-custom-chip', CircuitMuseCustomChip);
 }
 
 // React JSX intrinsic typing
@@ -235,7 +235,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      'velxio-custom-chip': any;
+      'circuit-muse-custom-chip': any;
     }
   }
 }

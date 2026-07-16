@@ -1,5 +1,5 @@
 /**
- * .vlx file format — portable project export/import for OSS Velxio.
+ * .vlx file format — portable project export/import for OSS CircuitMuse.
  *
  * Phase 4 of the OSS / pro split. The OSS image has no auth, no DB, no
  * server-side project persistence. The user's work is otherwise ephemeral
@@ -7,7 +7,7 @@
  * round-trips everything the server-side Save flow captures:
  *
  *   {
- *     "format": "velxio-project",
+ *     "format": "circuit-muse-project",
  *     "version": 1,
  *     "exportedAt": "ISO timestamp",
  *     "name": "project name (optional)",
@@ -35,7 +35,7 @@ import type { Wire } from '../types/wire';
 import { useEditorStore, chipFileGroupId } from '../store/useEditorStore';
 import { useSimulatorStore } from '../store/useSimulatorStore';
 
-const VLX_FORMAT = 'velxio-project';
+const VLX_FORMAT = 'circuit-muse-project';
 const VLX_VERSION = 1;
 
 export interface VlxPayload {
@@ -119,12 +119,12 @@ export function buildVlxBlob(opts: { name?: string } = {}): Blob {
 
 /** Sanitise a filename: keep letters, digits, dashes, dots, underscores. */
 function safeFilename(name?: string): string {
-  const base = (name ?? 'velxio-project').trim() || 'velxio-project';
+  const base = (name ?? 'circuit-muse-project').trim() || 'circuit-muse-project';
   const cleaned = base
     .replace(/[^a-zA-Z0-9._-]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 80);
-  return `${cleaned || 'velxio-project'}.vlx`;
+  return `${cleaned || 'circuit-muse-project'}.vlx`;
 }
 
 /**
@@ -172,7 +172,7 @@ function validatePayload(data: unknown): VlxPayload {
   }
   if (data.format !== VLX_FORMAT) {
     throw new VlxParseError(
-      `Not a Velxio project file (expected format="${VLX_FORMAT}", got ${JSON.stringify(
+      `Not a CircuitMuse project file (expected format="${VLX_FORMAT}", got ${JSON.stringify(
         data.format,
       )}).`,
     );
@@ -182,7 +182,7 @@ function validatePayload(data: unknown): VlxPayload {
   }
   if (data.version > VLX_VERSION) {
     throw new VlxParseError(
-      `This file uses .vlx format version ${data.version}, but this Velxio supports up to v${VLX_VERSION}. Update Velxio to open it.`,
+      `This file uses .vlx format version ${data.version}, but this CircuitMuse supports up to v${VLX_VERSION}. Update CircuitMuse to open it.`,
     );
   }
   if (!Array.isArray(data.boards)) {

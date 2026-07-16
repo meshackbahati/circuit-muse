@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "Intel 4002 RAM",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "320-bit RAM (4×20 nibbles) with 4 output lines — the 4004 system RAM companion. Talks to the 4004 over the multiplexed nibble bus, addressed via SRC.",
   "pins": [

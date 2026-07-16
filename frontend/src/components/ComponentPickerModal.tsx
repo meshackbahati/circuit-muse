@@ -17,16 +17,16 @@ import type { BoardKind } from '../types/board';
 import { BOARD_KIND_LABELS } from '../types/board';
 import { isProBoardKind } from '../lib/proBoardGate';
 import raspberryPi3Svg from '../assets/Raspberry_Pi_3_illustration.svg';
-import { Attiny85 } from './velxio-components/Attiny85';
-import './velxio-components/Esp32Element'; // registers velxio-esp32
-import './velxio-components/PiPicoWElement'; // registers velxio-pi-pico-w
-import './velxio-components/Stm32BluePillElement'; // registers velxio-stm32-bluepill
+import { Attiny85 } from './circuit-muse-components/Attiny85';
+import './circuit-muse-components/Esp32Element'; // registers circuit-muse-esp32
+import './circuit-muse-components/PiPicoWElement'; // registers circuit-muse-pi-pico-w
+import './circuit-muse-components/Stm32BluePillElement'; // registers circuit-muse-stm32-bluepill
 // Register every wokwi tag that the picker might try to instantiate as a
 // thumbnail. The picker calls `document.createElement(tagName)`, so any tag
 // that isn't already a registered custom element renders as an empty
 // HTMLUnknownElement (blank card preview).
 import '@wokwi/elements';
-import '../velxio-elements';
+import '../circuit-muse-elements';
 import './ComponentPickerModal.css';
 
 interface ComponentPickerModalProps {
@@ -285,12 +285,12 @@ export const ComponentPickerModal: React.FC<ComponentPickerModalProps> = ({
                       component={component}
                       onSelect={() => {
                         // Pro overlays can intercept clicks on pro_only
-                        // components by setting window.__velxio_pro_gate__.
+                        // components by setting window.__circuit-muse_pro_gate__.
                         // Returning true means "handled — do not pass through".
                         if (component.pro_only) {
                           const gate = (window as unknown as {
-                            __velxio_pro_gate__?: (c: typeof component) => boolean;
-                          }).__velxio_pro_gate__;
+                            __circuit-muse_pro_gate__?: (c: typeof component) => boolean;
+                          }).__circuit-muse_pro_gate__;
                           if (gate && gate(component)) return;
                         }
                         onSelectComponent(component);
@@ -332,7 +332,7 @@ interface ComponentCardProps {
 const PASSIVE_TAGS = new Set([
   'wokwi-resistor',
   'wokwi-capacitor',
-  'velxio-capacitor-electrolytic',
+  'circuit-muse-capacitor-electrolytic',
   'wokwi-inductor',
 ]);
 
@@ -423,25 +423,25 @@ const BOARD_TAG: Partial<Record<BoardKind, string>> = {
   'arduino-nano': 'wokwi-arduino-nano',
   'arduino-mega': 'wokwi-arduino-mega',
   'raspberry-pi-pico': 'wokwi-nano-rp2040-connect',
-  'pi-pico-w': 'velxio-pi-pico-w',
-  esp32: 'velxio-esp32',
-  'esp32-devkit-c-v4': 'velxio-esp32',
-  'esp32-cam': 'velxio-esp32',
-  'wemos-lolin32-lite': 'velxio-esp32',
-  'esp32-s3': 'velxio-esp32',
-  'xiao-esp32-s3': 'velxio-esp32',
-  'arduino-nano-esp32': 'velxio-esp32',
-  'esp32-c3': 'velxio-esp32',
-  'xiao-esp32-c3': 'velxio-esp32',
-  'aitewinrobot-esp32c3-supermini': 'velxio-esp32',
-  'stm32-bluepill': 'velxio-stm32-bluepill',
-  'stm32-blackpill': 'velxio-stm32-blackpill',
-  'stm32-bluepill-f103cb': 'velxio-stm32-bluepill-f103cb',
-  'stm32-blackpill-f401': 'velxio-stm32-blackpill-f401',
-  'stm32-f4-discovery': 'velxio-stm32-f4-discovery',
-  'stm32-olimex-h405': 'velxio-stm32-olimex-h405',
-  'stm32-netduino-plus2': 'velxio-stm32-netduino-plus2',
-  'stm32-netduino2': 'velxio-stm32-netduino2',
+  'pi-pico-w': 'circuit-muse-pi-pico-w',
+  esp32: 'circuit-muse-esp32',
+  'esp32-devkit-c-v4': 'circuit-muse-esp32',
+  'esp32-cam': 'circuit-muse-esp32',
+  'wemos-lolin32-lite': 'circuit-muse-esp32',
+  'esp32-s3': 'circuit-muse-esp32',
+  'xiao-esp32-s3': 'circuit-muse-esp32',
+  'arduino-nano-esp32': 'circuit-muse-esp32',
+  'esp32-c3': 'circuit-muse-esp32',
+  'xiao-esp32-c3': 'circuit-muse-esp32',
+  'aitewinrobot-esp32c3-supermini': 'circuit-muse-esp32',
+  'stm32-bluepill': 'circuit-muse-stm32-bluepill',
+  'stm32-blackpill': 'circuit-muse-stm32-blackpill',
+  'stm32-bluepill-f103cb': 'circuit-muse-stm32-bluepill-f103cb',
+  'stm32-blackpill-f401': 'circuit-muse-stm32-blackpill-f401',
+  'stm32-f4-discovery': 'circuit-muse-stm32-f4-discovery',
+  'stm32-olimex-h405': 'circuit-muse-stm32-olimex-h405',
+  'stm32-netduino-plus2': 'circuit-muse-stm32-netduino-plus2',
+  'stm32-netduino2': 'circuit-muse-stm32-netduino2',
 };
 
 interface BoardCardProps {
@@ -455,11 +455,11 @@ const BoardCard: React.FC<BoardCardProps> = ({ kind, onSelect }) => {
   React.useEffect(() => {
     if (!thumbnailRef.current) return;
     // React-rendered boards and Pi family handled below: Pi 3 has a custom
-    // illustration SVG; Pi 4 / Pi 5 instantiate their own velxio-* custom
+    // illustration SVG; Pi 4 / Pi 5 instantiate their own circuit-muse-* custom
     // element directly because they don't go through BOARD_TAG.
     if (kind === 'raspberry-pi-3' || kind === 'attiny85') return;
     if (kind === 'raspberry-pi-4' || kind === 'raspberry-pi-5') {
-      const tagName = kind === 'raspberry-pi-4' ? 'velxio-raspberry-pi-4' : 'velxio-raspberry-pi-5';
+      const tagName = kind === 'raspberry-pi-4' ? 'circuit-muse-raspberry-pi-4' : 'circuit-muse-raspberry-pi-5';
       const el = document.createElement(tagName) as HTMLElement;
       el.style.transform = 'scale(0.35)';
       el.style.transformOrigin = 'center center';
@@ -504,7 +504,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ kind, onSelect }) => {
     <button className="component-card" onClick={onSelect} style={{ position: 'relative' }}>
       {isProBoardKind(kind) && (
         <span
-          title="Pro feature — paid plan or Velxio Desktop"
+          title="Pro feature — paid plan or CircuitMuse Desktop"
           style={{
             position: 'absolute',
             top: 6,

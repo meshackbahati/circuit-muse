@@ -98,7 +98,7 @@ export interface BoardInstance {
   // Types live in `./boardOptions` to avoid a circular import.
   boardOptions?: import('./boardOptions').ESP32BoardOptions;
   spiffsFiles?: import('./boardOptions').SpiffsFile[];
-  // P2.4 — this board's declared library manifest (its velxio.json). The ESP32
+  // P2.4 — this board's declared library manifest (its circuit-muse.json). The ESP32
   // compile scope: each board resolves ONLY its own declared libraries, so two
   // boards in the same project can use different (even conflicting) libraries
   // without clashing. Undefined for pre-feature boards (-> legacy scan-all).

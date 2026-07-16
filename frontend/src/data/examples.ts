@@ -163,7 +163,7 @@ void loop() {
 void setup() {
   pinMode(PC13, OUTPUT);
   Serial.begin(115200);
-  Serial.println("velxio stm32 blink");
+  Serial.println("circuit-muse stm32 blink");
 }
 
 void loop() {
@@ -236,7 +236,7 @@ void loop() {
 void setup() {
   pinMode(PD12, OUTPUT);
   Serial.begin(115200);
-  Serial.println("velxio stm32f4 discovery");
+  Serial.println("circuit-muse stm32f4 discovery");
 }
 
 void loop() {
@@ -270,7 +270,7 @@ void loop() {
 void setup() {
   pinMode(PC12, OUTPUT);
   Serial.begin(115200);
-  Serial.println("velxio olimex h405");
+  Serial.println("circuit-muse olimex h405");
 }
 
 void loop() {
@@ -304,7 +304,7 @@ void loop() {
 void setup() {
   pinMode(PA10, OUTPUT);
   Serial.begin(115200);
-  Serial.println("velxio netduino plus 2");
+  Serial.println("circuit-muse netduino plus 2");
 }
 
 void loop() {
@@ -377,7 +377,7 @@ void loop() {
 void setup() {
   pinMode(PC13, OUTPUT);
   Serial.begin(115200);
-  Serial.println("velxio stm32 f401 blackpill");
+  Serial.println("circuit-muse stm32 f401 blackpill");
 }
 
 void loop() {
@@ -411,7 +411,7 @@ void loop() {
 void setup() {
   pinMode(PC13, OUTPUT);
   Serial.begin(115200);
-  Serial.println("velxio stm32 f103cb blue pill");
+  Serial.println("circuit-muse stm32 f103cb blue pill");
 }
 
 void loop() {
@@ -653,7 +653,7 @@ void loop() {
 void setup() {
   pinMode(PC13, OUTPUT);
   Serial.begin(115200);
-  Serial.println("velxio black pill blink");
+  Serial.println("circuit-muse black pill blink");
 }
 
 void loop() {
@@ -787,7 +787,7 @@ void loop() {
     code: '',
     components: [
       {
-        type: 'velxio-bmp280',
+        type: 'circuit-muse-bmp280',
         id: 'bmp1',
         x: 460,
         y: 150,
@@ -826,7 +826,7 @@ void loop() {
     id: 'stm32-bluepill-oled',
     title: 'STM32: SSD1306 OLED Display (I2C)',
     description:
-      'Drive a 128x64 SSD1306 OLED over I2C1 from an STM32 Blue Pill (SCL=PB6, SDA=PB7). The framebuffer writes are captured by the QEMU I2C slave and rendered on the canvas. Shows "Hello Velxio!" with a live frame counter.',
+      'Drive a 128x64 SSD1306 OLED over I2C1 from an STM32 Blue Pill (SCL=PB6, SDA=PB7). The framebuffer writes are captured by the QEMU I2C slave and rendered on the canvas. Shows "Hello CircuitMuse!" with a live frame counter.',
     libraries: ['Adafruit SSD1306', 'Adafruit GFX Library'],
     category: 'displays',
     difficulty: 'intermediate',
@@ -863,7 +863,7 @@ void setup() {
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
   display.println("Hello");
-  display.println("Velxio!");
+  display.println("CircuitMuse!");
   display.display();
   Serial.println("OLED ready");
 }
@@ -875,7 +875,7 @@ void loop() {
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
   display.println("Hello");
-  display.println("Velxio!");
+  display.println("CircuitMuse!");
   display.setTextSize(1);
   display.setCursor(0, 48);
   display.print("Count: ");
@@ -1131,7 +1131,7 @@ void loop() {
   float p = bmp.readPressure() / 100.0F;   // hPa
   display.clearDisplay();
   display.setTextSize(1); display.setCursor(0, 0);
-  display.println("Velxio Weather");
+  display.println("CircuitMuse Weather");
   display.setTextSize(2); display.setCursor(0, 16);
   display.print(t, 1); display.println(" C");
   display.setTextSize(1); display.setCursor(0, 52);
@@ -1144,7 +1144,7 @@ void loop() {
     ],
     code: '',
     components: [
-      { type: 'velxio-bmp280', id: 'wbmp1', x: 470, y: 80, properties: { temperature: '23.5', pressure: '1011.2' } },
+      { type: 'circuit-muse-bmp280', id: 'wbmp1', x: 470, y: 80, properties: { temperature: '23.5', pressure: '1011.2' } },
       { type: 'wokwi-ssd1306', id: 'woled1', x: 470, y: 250, properties: {} },
     ],
     wires: [
@@ -1446,7 +1446,7 @@ void loop() {
     ],
     code: '',
     components: [
-      { type: 'velxio-a4988', id: 'drv1', x: 330, y: 70, properties: {} },
+      { type: 'circuit-muse-a4988', id: 'drv1', x: 330, y: 70, properties: {} },
       { type: 'wokwi-stepper-motor', id: 'stp1', x: 560, y: 120, properties: {} },
     ],
     wires: [
@@ -1494,7 +1494,7 @@ void loop() {
     ],
     code: '',
     components: [
-      { type: 'velxio-a4988', id: 'drv1', x: 330, y: 70, properties: {} },
+      { type: 'circuit-muse-a4988', id: 'drv1', x: 330, y: 70, properties: {} },
       { type: 'wokwi-stepper-motor', id: 'stp1', x: 560, y: 120, properties: {} },
     ],
     wires: [
@@ -1542,7 +1542,7 @@ void loop() {
     ],
     code: '',
     components: [
-      { type: 'velxio-a4988', id: 'drv1', x: 330, y: 70, properties: {} },
+      { type: 'circuit-muse-a4988', id: 'drv1', x: 330, y: 70, properties: {} },
       { type: 'wokwi-stepper-motor', id: 'stp1', x: 560, y: 120, properties: {} },
     ],
     wires: [
@@ -2622,7 +2622,7 @@ void drawStaticUI() {
   tft.setTextSize(3);
   tft.setTextColor(tft.color565(255, 220, 0));
   tft.setCursor(20, 10);
-  tft.print("VELXIO TFT");
+  tft.print("CIRCUIT_MUSE TFT");
 
   // Subtitle
   tft.setTextSize(2);
@@ -2743,7 +2743,7 @@ void setup() {
   // Print a message to the LCD.
   lcd.print("Hello, Arduino!");
   lcd.setCursor(0, 1);
-  lcd.print("Velxio Emulator");
+  lcd.print("CircuitMuse Emulator");
   lcd.setCursor(0, 2);
   lcd.print("LCD 2004 Test");
 }
@@ -4559,7 +4559,7 @@ void processCommand(const String& cmd) {
 
   // ─── Dual Raspberry Pi Pico W — Multi-protocol bench ────────────────────────
   // These three examples reproduce the exact wiring patterns the user reported
-  // at https://velxio.dev/project/cb406120-d40e-4225-bbfd-1b362a64445a — two
+  // at https://circuit-muse.dev/project/cb406120-d40e-4225-bbfd-1b362a64445a — two
   // Pico W boards talking to each other over UART / I2C / digital GPIO.
   // The wire-aware Interconnect router (see frontend/src/simulation/Interconnect.ts)
   // routes pin transitions and UART byte shortcuts between any two simulators
@@ -6655,7 +6655,7 @@ const float NOM_TEMP_K  = 298.15;   // 25 °C in Kelvin
 float readTempC() {
   int   raw  = analogRead(NTC_PIN);
   float v    = raw * (VCC / 1023.0);
-  // Voltage divider topology used by standard NTC modules and by Velxio's
+  // Voltage divider topology used by standard NTC modules and by CircuitMuse's
   // wokwi-ntc-temperature-sensor: VCC → R_NTC → A1 → R_pull (10k) → GND.
   // Higher temperature → R_NTC drops → V rises, so the NTC resistance is
   //   r = R_pull * (VCC - v) / v
@@ -7807,7 +7807,7 @@ void loop() {
     id: 'esp32c3-wifi-scan',
     title: 'ESP32-C3 WiFi Scan',
     description:
-      'Scan for available WiFi networks on the ESP32-C3 (RISC-V). The emulated ESP32-C3 will find the "Velxio-GUEST" access point.',
+      'Scan for available WiFi networks on the ESP32-C3 (RISC-V). The emulated ESP32-C3 will find the "CircuitMuse-GUEST" access point.',
     category: 'communication',
     difficulty: 'beginner',
     boardType: 'esp32-c3',
@@ -7854,14 +7854,14 @@ void loop() {
     id: 'esp32c3-wifi-connect',
     title: 'ESP32-C3 WiFi Connect',
     description:
-      'Connect the ESP32-C3 to the virtual "Velxio-GUEST" WiFi network and print the assigned IP address. Uses channel 6 for faster connection.',
+      'Connect the ESP32-C3 to the virtual "CircuitMuse-GUEST" WiFi network and print the assigned IP address. Uses channel 6 for faster connection.',
     category: 'communication',
     difficulty: 'beginner',
     boardType: 'esp32-c3',
     boardFilter: 'esp32-c3',
     code: `#include <WiFi.h>
 
-const char* ssid = "Velxio-GUEST";
+const char* ssid = "CircuitMuse-GUEST";
 
 void setup() {
   Serial.begin(115200);
@@ -7909,7 +7909,7 @@ void loop() {
     code: `#include <WiFi.h>
 #include <WebServer.h>
 
-const char* ssid = "Velxio-GUEST";
+const char* ssid = "CircuitMuse-GUEST";
 WebServer server(80);
 
 int requestCount = 0;
@@ -7925,7 +7925,7 @@ void handleRoot() {
   html += ".card{background:#16213e;padding:20px;border-radius:10px;margin:10px 0}";
   html += ".stat{color:#00d4ff;font-size:1.2em}</style></head><body>";
   html += "<h1>Hello from ESP32-C3!</h1>";
-  html += "<div class='card'><p>This page is served by an ESP32-C3 (RISC-V) running in the Velxio simulator.</p>";
+  html += "<div class='card'><p>This page is served by an ESP32-C3 (RISC-V) running in the CircuitMuse simulator.</p>";
   html += "<p>Requests served: <span class='stat'>" + String(requestCount) + "</span></p>";
   html += "<p>Uptime: <span class='stat'>" + String(millis() / 1000) + "s</span></p>";
   html += "<p>Free heap: <span class='stat'>" + String(ESP.getFreeHeap()) + " bytes</span></p>";
@@ -8007,7 +8007,7 @@ void setup() {
   Serial.println("BLE init is detected but communication is not emulated.");
   Serial.println();
 
-  BLEDevice::init("Velxio-ESP32C3");
+  BLEDevice::init("CircuitMuse-ESP32C3");
   pServer = BLEDevice::createServer();
   pServer->setCallbacks(new MyServerCallbacks());
 
@@ -8019,7 +8019,7 @@ void setup() {
     BLECharacteristic::PROPERTY_NOTIFY
   );
   pCharacteristic->addDescriptor(new BLE2902());
-  pCharacteristic->setValue("Hello from Velxio C3!");
+  pCharacteristic->setValue("Hello from CircuitMuse C3!");
 
   pService->start();
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -8028,7 +8028,7 @@ void setup() {
   pAdvertising->start();
 
   Serial.println("BLE advertising started!");
-  Serial.println("Device name: Velxio-ESP32C3");
+  Serial.println("Device name: CircuitMuse-ESP32C3");
   Serial.printf("Service UUID: %s\\n", SERVICE_UUID);
 }
 
@@ -8053,7 +8053,7 @@ void loop() {
     id: 'esp32-wifi-scan',
     title: 'ESP32 WiFi Scan',
     description:
-      'Scan for available WiFi networks and display them in Serial Monitor. The emulated ESP32 will find the "Velxio-GUEST" access point.',
+      'Scan for available WiFi networks and display them in Serial Monitor. The emulated ESP32 will find the "CircuitMuse-GUEST" access point.',
     category: 'communication',
     difficulty: 'beginner',
     boardType: 'esp32',
@@ -8100,14 +8100,14 @@ void loop() {
     id: 'esp32-wifi-connect',
     title: 'ESP32 WiFi Connect',
     description:
-      'Connect to the virtual "Velxio-GUEST" WiFi network and print the assigned IP address. Uses channel 6 for faster connection.',
+      'Connect to the virtual "CircuitMuse-GUEST" WiFi network and print the assigned IP address. Uses channel 6 for faster connection.',
     category: 'communication',
     difficulty: 'beginner',
     boardType: 'esp32',
     boardFilter: 'esp32',
     code: `#include <WiFi.h>
 
-const char* ssid = "Velxio-GUEST";
+const char* ssid = "CircuitMuse-GUEST";
 
 void setup() {
   Serial.begin(115200);
@@ -8155,7 +8155,7 @@ void loop() {
     code: `#include <WiFi.h>
 #include <WebServer.h>
 
-const char* ssid = "Velxio-GUEST";
+const char* ssid = "CircuitMuse-GUEST";
 WebServer server(80);
 
 int requestCount = 0;
@@ -8171,7 +8171,7 @@ void handleRoot() {
   html += ".card{background:#16213e;padding:20px;border-radius:10px;margin:10px 0}";
   html += ".stat{color:#00d4ff;font-size:1.2em}</style></head><body>";
   html += "<h1>Hello from ESP32!</h1>";
-  html += "<div class='card'><p>This page is served by an ESP32 running in the Velxio simulator.</p>";
+  html += "<div class='card'><p>This page is served by an ESP32 running in the CircuitMuse simulator.</p>";
   html += "<p>Requests served: <span class='stat'>" + String(requestCount) + "</span></p>";
   html += "<p>Uptime: <span class='stat'>" + String(millis() / 1000) + "s</span></p>";
   html += "<p>Free heap: <span class='stat'>" + String(ESP.getFreeHeap()) + " bytes</span></p>";
@@ -8254,7 +8254,7 @@ void setup() {
   Serial.println("is not emulated in the simulator.");
   Serial.println();
 
-  BLEDevice::init("Velxio-ESP32");
+  BLEDevice::init("CircuitMuse-ESP32");
   pServer = BLEDevice::createServer();
   pServer->setCallbacks(new MyServerCallbacks());
 
@@ -8266,7 +8266,7 @@ void setup() {
     BLECharacteristic::PROPERTY_NOTIFY
   );
   pCharacteristic->addDescriptor(new BLE2902());
-  pCharacteristic->setValue("Hello from Velxio!");
+  pCharacteristic->setValue("Hello from CircuitMuse!");
 
   pService->start();
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -8275,7 +8275,7 @@ void setup() {
   pAdvertising->start();
 
   Serial.println("BLE advertising started!");
-  Serial.println("Device name: Velxio-ESP32");
+  Serial.println("Device name: CircuitMuse-ESP32");
   Serial.printf("Service UUID: %s\\n", SERVICE_UUID);
 }
 
@@ -8340,7 +8340,7 @@ void loop() {
 }`,
     components: [
       {
-        type: 'velxio-bmp280',
+        type: 'circuit-muse-bmp280',
         id: 'e32-bmp1',
         x: 420,
         y: 150,
@@ -8412,7 +8412,7 @@ void setup() {
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
   display.println("Hello");
-  display.println("Velxio!");
+  display.println("CircuitMuse!");
   display.display();
   Serial.println("OLED ready!");
 }
@@ -8424,7 +8424,7 @@ void loop() {
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
   display.println("Hello");
-  display.println("Velxio!");
+  display.println("CircuitMuse!");
   display.setTextSize(1);
   display.setCursor(0, 48);
   display.printf("Count: %d", counter);
@@ -8773,7 +8773,7 @@ void loop() {
   // ── ESP32-CAM examples ─────────────────────────────────────────────────────
   // Demos the QEMU-emulated OV2640 + I²S camera path. The user's webcam
   // (browser getUserMedia) feeds the firmware's esp_camera_fb_get() through
-  // the simulator's velxio_push_camera_frame ctypes binding. See
+  // the simulator's circuit-muse_push_camera_frame ctypes binding. See
   // test/test-esp32-cam/autosearch/14_complete_emulation.md for the
   // forensic trace of the 9 silent bugs that had to be fixed to make this
   // work. Both examples assume the user clicks the "Camera" button in the
@@ -8788,7 +8788,7 @@ void loop() {
     difficulty: 'beginner',
     boardType: 'esp32-cam',
     boardFilter: 'esp32-cam',
-    code: `// Velxio ESP32-CAM webcam demo — minimal
+    code: `// CircuitMuse ESP32-CAM webcam demo — minimal
 // Click the "Camera" button in the canvas header to start streaming
 // your webcam frames into the emulated OV2640.
 
@@ -8815,7 +8815,7 @@ void loop() {
 void setup() {
   Serial.begin(115200);
   delay(1000);
-  Serial.println("=== Velxio ESP32-CAM webcam demo ===");
+  Serial.println("=== CircuitMuse ESP32-CAM webcam demo ===");
 
   camera_config_t cfg = {};
   cfg.ledc_channel = LEDC_CHANNEL_0;
@@ -8947,7 +8947,7 @@ void draw_status_bar(uint32_t bytes_in, bool decoded) {
   tft.setTextSize(1);
   tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
   tft.setCursor(8, 6);
-  tft.print("VELXIO ESP32-CAM live preview");
+  tft.print("CIRCUIT_MUSE ESP32-CAM live preview");
   tft.setCursor(8, 22);
   tft.printf("frame %4u   %4u B   %s",
              (unsigned)frame_count, (unsigned)bytes_in,
@@ -8972,7 +8972,7 @@ void setup() {
   tft.fillScreen(ILI9341_NAVY);
   tft.setTextSize(3);
   tft.setTextColor(ILI9341_WHITE);
-  tft.setCursor(20, 10); tft.print("VELXIO");
+  tft.setCursor(20, 10); tft.print("CIRCUIT_MUSE");
   tft.setTextSize(1);
   tft.setCursor(20, 38);
   tft.setTextColor(ILI9341_CYAN);
@@ -9124,9 +9124,9 @@ void loop() {
     boardType: 'esp32',
     tags: ['esp32', 'doom', 'raycaster', 'ili9341', 'tft', '3d', 'game', 'benchmark'],
     code: `/*
- * VELXIO DOOM - ESP32 raycaster on an ILI9341 320x240 color TFT.
+ * CIRCUIT_MUSE DOOM - ESP32 raycaster on an ILI9341 320x240 color TFT.
  *
- * Purpose: stress-test Velxio's QEMU ESP32 emulation by redrawing the whole
+ * Purpose: stress-test CircuitMuse's QEMU ESP32 emulation by redrawing the whole
  * 320x240 screen every frame with a Wolfenstein/early-Doom style raycaster.
  * Rendering uses Adafruit_ILI9341 over HARDWARE SPI (VSPI) with the fast
  * block-transfer transaction API: a single startWrite()/endWrite() per frame
@@ -9311,7 +9311,7 @@ static void drawHud() {
   tft.setTextSize(1);
   tft.setTextColor(RGB565(0, 255, 80));
   tft.setCursor(4, 4);
-  tft.print("VELXIO DOOM  FPS ");
+  tft.print("CIRCUIT_MUSE DOOM  FPS ");
   tft.print(fpsWhole);
   tft.print('.');
   tft.print(fpsFrac);
@@ -9320,7 +9320,7 @@ static void drawHud() {
 void setup() {
   Serial.begin(115200);
   delay(200);
-  Serial.println("VELXIO DOOM raycaster -- ESP32 + ILI9341 (Adafruit, HW SPI)");
+  Serial.println("CIRCUIT_MUSE DOOM raycaster -- ESP32 + ILI9341 (Adafruit, HW SPI)");
   pinMode(BTN_FWD,   INPUT_PULLUP);
   pinMode(BTN_BACK,  INPUT_PULLUP);
   pinMode(BTN_LEFT,  INPUT_PULLUP);
@@ -9333,7 +9333,7 @@ void setup() {
   tft.setTextSize(3);
   tft.setTextColor(RGB565(0, 255, 80));
   tft.setCursor(36, 96);
-  tft.print("VELXIO DOOM");
+  tft.print("CIRCUIT_MUSE DOOM");
   tft.setTextSize(1);
   tft.setTextColor(RGB565(180, 180, 180));
   tft.setCursor(60, 140);

@@ -64,7 +64,7 @@ __all__ = [
 
 
 _DEFAULT_MANIFEST_PATH = Path(__file__).parent / "manifest.json"
-_DEFAULT_CACHE_DIR = Path("/var/cache/velxio/boot-images")
+_DEFAULT_CACHE_DIR = Path("/var/cache/circuit-muse/boot-images")
 
 
 _provider_cache: Optional[BootImageProvider] = None
@@ -74,7 +74,7 @@ def get_default_provider() -> BootImageProvider:
     """Lazy process-wide singleton.
 
     Built once from the bundled ``manifest.json`` + ``build_downloader_from_env()``
-    + ``VELXIO_BOOT_IMAGE_CACHE_DIR`` (or the default mount path).
+    + ``CIRCUIT_MUSE_BOOT_IMAGE_CACHE_DIR`` (or the default mount path).
     Re-imported tests should call :func:`reset_default_provider`
     between fixtures.
     """
@@ -83,7 +83,7 @@ def get_default_provider() -> BootImageProvider:
         manifest = load_manifest(_DEFAULT_MANIFEST_PATH)
         cache_dir = Path(
             os.environ.get(
-                "VELXIO_BOOT_IMAGE_CACHE_DIR",
+                "CIRCUIT_MUSE_BOOT_IMAGE_CACHE_DIR",
                 str(_DEFAULT_CACHE_DIR),
             )
         )

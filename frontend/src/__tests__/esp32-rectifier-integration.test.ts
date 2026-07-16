@@ -12,13 +12,13 @@
  *
  * Because QEMU binaries, the backend, and a running ESP32 toolchain are NOT
  * part of the default CI image, this test is **gated** behind the env var
- *   VELXIO_ESP32_E2E=1
+ *   CIRCUIT_MUSE_ESP32_E2E=1
  * Run locally with:
- *   VELXIO_ESP32_E2E=1 npm test -- esp32-rectifier-integration
+ *   CIRCUIT_MUSE_ESP32_E2E=1 npm test -- esp32-rectifier-integration
  */
 import { describe, it } from 'vitest';
 
-const GATE = process.env.VELXIO_ESP32_E2E === '1';
+const GATE = process.env.CIRCUIT_MUSE_ESP32_E2E === '1';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const maybe: any = GATE ? describe : describe.skip;

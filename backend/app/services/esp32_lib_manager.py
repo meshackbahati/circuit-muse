@@ -77,7 +77,7 @@ def _resolve_lib(env_var: str, lib_name: str, default_path: str) -> str:
     1. Explicit env var (`QEMU_ESP32_LIB` / `QEMU_RISCV32_LIB`) — full
        path including filename, used by Docker images that download the
        library to a fixed location at build time.
-    2. `VELXIO_QEMU_PATH` directory — set by the Tauri desktop wrapper
+    2. `CIRCUIT_MUSE_QEMU_PATH` directory — set by the Tauri desktop wrapper
        when the user runs the in-app "Install ESP32 support" download.
        The Tauri side drops the file as `libqemu-xtensa.<ext>` /
        `libqemu-riscv32.<ext>` inside that directory; we just join.
@@ -94,7 +94,7 @@ def _resolve_lib(env_var: str, lib_name: str, default_path: str) -> str:
     direct = os.environ.get(env_var, '')
     if direct and os.path.isfile(direct):
         return direct
-    qemu_dir = os.environ.get('VELXIO_QEMU_PATH', '')
+    qemu_dir = os.environ.get('CIRCUIT_MUSE_QEMU_PATH', '')
     if qemu_dir:
         candidate = os.path.join(qemu_dir, lib_name)
         if os.path.isfile(candidate):
@@ -506,7 +506,7 @@ class EspLibManager:
 
     # ── ESP32-CAM: OV2640 frame injection ─────────────────────────────────────
     # The QEMU peripheral (hw/misc/esp32_i2s_cam.c) accepts host-pushed
-    # frames via velxio_push_camera_frame(). We forward the JPEG/RGB565
+    # frames via circuit-muse_push_camera_frame(). We forward the JPEG/RGB565
     # payload to the worker which calls the ctypes binding. Once the .so
     # is rebuilt with the camera patches, this path delivers the bytes
     # the upstream esp32-camera driver returns from esp_camera_fb_get().

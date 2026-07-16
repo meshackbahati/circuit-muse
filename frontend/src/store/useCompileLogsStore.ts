@@ -1,7 +1,7 @@
 /**
  * Zustand store for the editor's compile output.
  *
- * Lives outside <EditorPage> so other components (notably the velxio-pro
+ * Lives outside <EditorPage> so other components (notably the circuit-muse-pro
  * agent overlay, mounted into a different React tree via slotMounter) can
  * subscribe without prop-drilling.  The overlay reads `logs` to build a
  * "diagnose this compile failure with AI" prompt; without the store it

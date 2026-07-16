@@ -53,7 +53,7 @@ describe('proSdCardGate', () => {
     });
     triggerSdCardUpgradePrompt();
     expect(events).toHaveLength(1);
-    expect(events[0].type).toBe('velxio-pro-upgrade-prompt');
+    expect(events[0].type).toBe('circuit-muse-pro-upgrade-prompt');
     expect(events[0].detail.componentName).toContain('microSD');
   });
 });

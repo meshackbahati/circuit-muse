@@ -1,5 +1,5 @@
 /**
- * MotorDriverElements.ts — velxio-a4988 bipolar stepper driver (Pololu-style).
+ * MotorDriverElements.ts — circuit-muse-a4988 bipolar stepper driver (Pololu-style).
  *
  * Logic side (left column) takes STEP / DIR (+ EN, MS1-3, RST, SLP) from the
  * MCU; the motor side (right column) outputs the two coil pairs 1A/1B (coil A)
@@ -9,7 +9,7 @@
  * in simulation/parts/MotorDriverParts.ts: on each STEP rising edge it advances
  * the connected wokwi-stepper-motor by one (micro)step in the DIR direction.
  *
- * Tag: velxio-a4988  (metadataId 'a4988' via stripBrandPrefix).
+ * Tag: circuit-muse-a4988  (metadataId 'a4988' via stripBrandPrefix).
  */
 
 const STYLE = ':host{display:inline-block;line-height:0;position:relative}';
@@ -56,8 +56,8 @@ class A4988Element extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-a4988')) {
-  customElements.define('velxio-a4988', A4988Element);
+if (!customElements.get('circuit-muse-a4988')) {
+  customElements.define('circuit-muse-a4988', A4988Element);
 }
 
 export {};

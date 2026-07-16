@@ -1,7 +1,7 @@
 /**
- * velxio-74hc595 — 8-bit Serial-to-Parallel Shift Register (SN74HC595)
+ * circuit-muse-74hc595 — 8-bit Serial-to-Parallel Shift Register (SN74HC595)
  *
- * DIP-16 package custom element for use in Velxio/Wokwi simulations.
+ * DIP-16 package custom element for use in CircuitMuse/Wokwi simulations.
  */
 
 class IC74HC595Element extends HTMLElement {
@@ -128,8 +128,8 @@ class IC74HC595Element extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-74hc595')) {
-  customElements.define('velxio-74hc595', IC74HC595Element);
+if (!customElements.get('circuit-muse-74hc595')) {
+  customElements.define('circuit-muse-74hc595', IC74HC595Element);
 }
 
 export { IC74HC595Element };

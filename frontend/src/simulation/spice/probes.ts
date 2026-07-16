@@ -1,7 +1,7 @@
 /**
  * Measurement probes (voltmeters, ammeters, scope probes).
  *
- * Probes are Velxio components with `metadataId` starting with `instr-`.
+ * Probes are CircuitMuse components with `metadataId` starting with `instr-`.
  * They do NOT contribute SPICE cards themselves (so `componentToSpice`
  * returns null for them). Instead, they read the already-solved result
  * via net names derived from the same Union-Find used in NetlistBuilder.

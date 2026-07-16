@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "Intel 8080",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "Clean-room Intel 8080A (1975) — 8-bit ISA, 16-bit address bus, separate D0..D7 data bus, status byte on D during SYNC. Validated against the 1980 Microcosm CPUDIAG ROM (\"CPU IS OPERATIONAL\").",
   "pins": [

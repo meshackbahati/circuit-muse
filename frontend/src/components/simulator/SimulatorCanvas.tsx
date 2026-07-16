@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Undo2, Redo2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { ESP32_ADC_PIN_MAP } from '../velxio-components/Esp32Element';
+import { ESP32_ADC_PIN_MAP } from '../circuit-muse-components/Esp32Element';
 import { ComponentPickerModal } from '../ComponentPickerModal';
 import { ComponentPropertyDialog } from './ComponentPropertyDialog';
 import { CustomChipDialog } from '../customChips/CustomChipDialog';
@@ -414,7 +414,7 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
   }, [initSimulator]);
 
   // Runtime parts (pots, switches, sensor panels) emit
-  // `velxio:property-change` instead of writing the store directly — one
+  // `circuit-muse:property-change` instead of writing the store directly — one
   // listener here routes every mutation through `updateComponent()`, which
   // is the same path the Property Dialog uses. Keeps parts decoupled from
   // Zustand and guarantees the SPICE netlist memo invalidates on every
@@ -2182,14 +2182,14 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
 
                 const openGateway = () => {
                   if (!hasIp) return;
-                  // A private overlay (velxio.dev) can install a synchronous
+                  // A private overlay (circuit-muse.dev) can install a synchronous
                   // gate to keep the IoT gateway behind a paid plan. When it
                   // returns true it has already handled the click (e.g. shown
                   // an in-place upgrade modal), so we don't open the tab.
                   // OSS builds have no hook → always open.
                   const gate = (window as unknown as {
-                    __velxio_iot_gateway_open_gate__?: () => boolean;
-                  }).__velxio_iot_gateway_open_gate__;
+                    __circuit-muse_iot_gateway_open_gate__?: () => boolean;
+                  }).__circuit-muse_iot_gateway_open_gate__;
                   if (gate && gate()) return;
                   window.open(gatewayUrl, '_blank');
                 };
@@ -2199,9 +2199,9 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
                     onClick={openGateway}
                     title={
                       hasIp
-                        ? `WiFi: ${activeBoard.wifiStatus.ssid ?? 'Velxio-GUEST'} — IP: ${activeBoard.wifiStatus.ip}\nClick to open IoT Gateway ↗`
+                        ? `WiFi: ${activeBoard.wifiStatus.ssid ?? 'CircuitMuse-GUEST'} — IP: ${activeBoard.wifiStatus.ip}\nClick to open IoT Gateway ↗`
                         : status === 'connected'
-                          ? `WiFi: ${activeBoard.wifiStatus.ssid ?? 'Velxio-GUEST'} — Connecting...`
+                          ? `WiFi: ${activeBoard.wifiStatus.ssid ?? 'CircuitMuse-GUEST'} — Connecting...`
                           : status === 'initializing'
                             ? 'WiFi: Initializing...'
                             : 'WiFi: Disconnected'

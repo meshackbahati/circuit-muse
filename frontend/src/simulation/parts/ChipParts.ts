@@ -231,7 +231,7 @@ PartSimulationRegistry.register('74hc595', {
             (connected.element as any).value = state ? 1 : 0;
           }
           // Update 74HC595 chained via Q7S
-          if (tagName === 'velxio-74hc595' && outputPins[i] === 'Q7S') {
+          if (tagName === 'circuit-muse-74hc595' && outputPins[i] === 'Q7S') {
             // Q7S is serial out — drives DS of next chip (handled via wire logic)
           }
         }

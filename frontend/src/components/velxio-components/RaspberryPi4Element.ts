@@ -1,5 +1,5 @@
 /**
- * Raspberry Pi 4 Model B — Velxio board art.
+ * Raspberry Pi 4 Model B — CircuitMuse board art.
  *
  * Uses a realistic top-down product photo of the Raspberry Pi 4 as the board
  * sprite. The source shipped on a solid white background; it was flood-filled
@@ -112,8 +112,8 @@ class RaspberryPi4Element extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-raspberry-pi-4')) {
-  customElements.define('velxio-raspberry-pi-4', RaspberryPi4Element);
+if (!customElements.get('circuit-muse-raspberry-pi-4')) {
+  customElements.define('circuit-muse-raspberry-pi-4', RaspberryPi4Element);
 }
 
 export {};

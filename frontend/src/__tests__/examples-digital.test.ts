@@ -22,7 +22,7 @@ import type { ExampleProject } from '../data/examples';
 function toSpiceComponents(example: (typeof digitalExamples)[number]) {
   return example.components.map((c) => ({
     id: c.id,
-    metadataId: c.type.replace(/^(wokwi|velxio)-/, ''),
+    metadataId: c.type.replace(/^(wokwi|circuit-muse)-/, ''),
     properties: c.properties ?? {},
   }));
 }
@@ -59,9 +59,9 @@ describe('digitalExamples — shape', () => {
       'wokwi-esp32',
       'wokwi-raspberry-',
       'wokwi-nano-rp',
-      'velxio-esp32',
-      'velxio-raspberry-',
-      'velxio-pi-pico-w',
+      'circuit-muse-esp32',
+      'circuit-muse-raspberry-',
+      'circuit-muse-pi-pico-w',
       'wokwi-attiny',
     ];
     for (const ex of digitalExamples) {
@@ -84,7 +84,7 @@ describe('digitalExamples — shape', () => {
     const unmapped = new Set<string>();
     for (const ex of digitalExamples) {
       for (const c of ex.components) {
-        const id = c.type.replace(/^(wokwi|velxio)-/, '');
+        const id = c.type.replace(/^(wokwi|circuit-muse)-/, '');
         // Flip-flops have no SPICE mapper by design (no edge detection at DC);
         // they are evaluated by the digital gate engine, not ngspice.
         if (id.startsWith('flip-flop')) continue;
@@ -116,7 +116,7 @@ describe('digitalExamples — shape', () => {
   it('every example has at least one logic gate or flip-flop', () => {
     for (const ex of digitalExamples) {
       const logic = ex.components.filter(
-        (c) => c.type.startsWith('velxio-logic-gate-') || c.type.startsWith('velxio-flip-flop-'),
+        (c) => c.type.startsWith('circuit-muse-logic-gate-') || c.type.startsWith('circuit-muse-flip-flop-'),
       );
       expect(logic.length, `${ex.id} has no logic gate or flip-flop`).toBeGreaterThanOrEqual(1);
     }
@@ -126,7 +126,7 @@ describe('digitalExamples — shape', () => {
 /** A sequential example contains a flip-flop — it is evaluated by the digital
  *  gate engine, not ngspice, so it is exempt from the SPICE netlist checks. */
 const isSequential = (ex: (typeof digitalExamples)[number]) =>
-  ex.components.some((c) => c.type.startsWith('velxio-flip-flop-'));
+  ex.components.some((c) => c.type.startsWith('circuit-muse-flip-flop-'));
 
 describe('digitalExamples — netlist generation', () => {
   it('each example produces a non-empty netlist with a ground net', () => {
@@ -157,7 +157,7 @@ describe('digitalExamples — netlist generation', () => {
         boards: [],
         analysis: { kind: 'op' },
       });
-      const gates = ex.components.filter((c) => c.type.startsWith('velxio-logic-gate-'));
+      const gates = ex.components.filter((c) => c.type.startsWith('circuit-muse-logic-gate-'));
       for (const g of gates) {
         const bre = new RegExp(`^B_${g.id}\\b`, 'm');
         const rre = new RegExp(`^R_${g.id}_load\\b`, 'm');
@@ -196,7 +196,7 @@ describe('digitalExamples — no loose wires', () => {
     const failures: string[] = [];
     for (const ex of digitalExamples) {
       for (const c of ex.components) {
-        const metaId = c.type.replace(/^(wokwi|velxio)-/, '');
+        const metaId = c.type.replace(/^(wokwi|circuit-muse)-/, '');
         const inputPins = GATE_INPUT_PINS[metaId];
         if (!inputPins) continue;
         for (const pin of inputPins) {
@@ -220,7 +220,7 @@ describe('digitalExamples — no loose wires', () => {
     const failures: string[] = [];
     for (const ex of digitalExamples) {
       for (const c of ex.components) {
-        const metaId = c.type.replace(/^(wokwi|velxio)-/, '');
+        const metaId = c.type.replace(/^(wokwi|circuit-muse)-/, '');
         if (!GATE_INPUT_PINS[metaId]) continue;
         const wired = ex.wires.some(
           (w) =>
@@ -302,7 +302,7 @@ describe('digitalExamples — no loose wires', () => {
         for (const ep of [wire.start, wire.end]) {
           const c = byId.get(ep.componentId);
           if (!c) continue; // already caught by a previous test
-          const metaId = c.type.replace(/^(wokwi|velxio)-/, '');
+          const metaId = c.type.replace(/^(wokwi|circuit-muse)-/, '');
           const valid = VALID_PINS[metaId];
           if (!valid) continue; // skip components we haven't catalogued
           if (!valid.includes(ep.pinName)) {
@@ -354,9 +354,9 @@ describe('digitalExamples — no loose wires', () => {
         const startC = byId.get(w.start.componentId);
         const endC = byId.get(w.end.componentId);
         const startIsGateY =
-          startC?.type.startsWith('velxio-logic-gate-') && w.start.pinName === 'Y';
+          startC?.type.startsWith('circuit-muse-logic-gate-') && w.start.pinName === 'Y';
         const endIsGateY =
-          endC?.type.startsWith('velxio-logic-gate-') && w.end.pinName === 'Y';
+          endC?.type.startsWith('circuit-muse-logic-gate-') && w.end.pinName === 'Y';
         const startIsSwitch = startC?.type === 'wokwi-slide-switch';
         const endIsSwitch = endC?.type === 'wokwi-slide-switch';
         if ((startIsGateY && endIsSwitch) || (endIsGateY && startIsSwitch)) {

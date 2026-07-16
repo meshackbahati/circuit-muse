@@ -1,5 +1,5 @@
 /**
- * Frontend wrapper for POST /api/compile-chip — compiles a Velxio custom-chip
+ * Frontend wrapper for POST /api/compile-chip — compiles a CircuitMuse custom-chip
  * C source to a base64-encoded WASM blob via the backend.
  */
 

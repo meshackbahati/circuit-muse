@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "DS3231",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "Extremely accurate I2C real-time clock (address 0x68).",
   "pins": ["SDA", "SCL", "INT", "RST", "32K", "GND", "VCC"],

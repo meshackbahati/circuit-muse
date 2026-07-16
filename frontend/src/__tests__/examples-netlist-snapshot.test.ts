@@ -34,13 +34,13 @@ import type { ExampleProject } from '../data/examples';
 
 /**
  * Normalise the netlist before snapshotting:
- *   - strip the leading `* Velxio circuit @ <ISO timestamp>` comment
+ *   - strip the leading `* CircuitMuse circuit @ <ISO timestamp>` comment
  *     (timestamp would flake every run)
  *
  * Everything else is verbatim — model lines, source ordering, etc.
  */
 function snapshotNetlist(netlist: string): string {
-  return netlist.replace(/^\* Velxio circuit @[^\n]*\n/, '* Velxio circuit\n');
+  return netlist.replace(/^\* CircuitMuse circuit @[^\n]*\n/, '* CircuitMuse circuit\n');
 }
 
 function snapshotExample(example: ExampleProject): string {

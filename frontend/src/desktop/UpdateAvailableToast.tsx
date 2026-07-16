@@ -14,7 +14,7 @@
  *
  * Auto-check fires once on mount with a 30 s delay so it doesn't
  * compete with sidecar startup and the first paint. Manual re-check
- * still works via the Velxio menu's "Check for Updates..." item.
+ * still works via the CircuitMuse menu's "Check for Updates..." item.
  *
  * State machine:
  *   idle          → no update detected, render nothing
@@ -211,7 +211,7 @@ export const UpdateAvailableToast = () => {
                 Update available
               </div>
               <div className="vlx-desktop-update-toast-version">
-                Velxio Desktop {state.version}
+                CircuitMuse Desktop {state.version}
               </div>
             </div>
           </div>
@@ -269,7 +269,7 @@ export const UpdateAvailableToast = () => {
             Installing {state.version}...
           </div>
           <div className="vlx-desktop-update-toast-progress-label">
-            Velxio Desktop will restart automatically.
+            CircuitMuse Desktop will restart automatically.
           </div>
         </>
       )}

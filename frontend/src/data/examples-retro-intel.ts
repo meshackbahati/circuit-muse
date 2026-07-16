@@ -1,7 +1,7 @@
 /**
  * Retro Intel/Zilog CPU examples.
  *
- * These projects place Velxio's bundled "i8080 mini-computer" custom chips
+ * These projects place CircuitMuse's bundled "i8080 mini-computer" custom chips
  * on the canvas pre-wired to Arduino Uno boards. Because custom chips are
  * shipped as C source (the WASM is compiled on demand by the backend), each
  * example arrives with sourceC + chipJson populated and wasmBase64 empty —
@@ -156,7 +156,7 @@ inner:
 
 const killbitsAsm = `; Kill the Bit -- Dean McDaniel, May 15, 1975. Public domain.
 ;
-; The classic Altair 8800 front-panel reflex game adapted to Velxio.
+; The classic Altair 8800 front-panel reflex game adapted to CircuitMuse.
 ; A single LED walks across the 8 LEDs; press the matching button at
 ; the right moment to "kill" the bit. Miss, and an extra bit lights up
 ; next pass. Get all bits out to win.
@@ -747,7 +747,7 @@ export const retroIntelExamples: ExampleProject[] = [
 
   // ── Z80 Larson Scanner — NO board (general-purpose electronics) ──
   // A programmable Z80 chip + 8 LEDs + a regulated power supply, with NO
-  // Arduino/ESP32 on the canvas. Demonstrates that Velxio runs custom chips
+  // Arduino/ESP32 on the canvas. Demonstrates that CircuitMuse runs custom chips
   // standalone. Board-less (boardFilter: 'digital'); larson.s is the chip's
   // editable program (its own section in the file explorer) — Run assembles
   // it to ROM and compiles the chip WASM.
@@ -756,7 +756,7 @@ export const retroIntelExamples: ExampleProject[] = [
     title: 'Z80 Larson Scanner (no board)',
     description:
       'The programmable Z80 chip drives 8 LEDs with NO Arduino — powered by a ' +
-      'regulated bench supply. Velxio runs custom chips as a general-purpose ' +
+      'regulated bench supply. CircuitMuse runs custom chips as a general-purpose ' +
       'electronics simulator. Click Run: a single LED walks back and forth.',
     category: 'circuits',
     difficulty: 'intermediate',

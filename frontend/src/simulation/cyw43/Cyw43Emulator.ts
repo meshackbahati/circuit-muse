@@ -16,7 +16,7 @@
  *
  *   Tier 0  ✅  — handshake, F0/F1 register state, gpioout LED IOCTL
  *   Tier 1  ✅  — full IOCTL surface (UP/DOWN/SET_INFRA/SET_AUTH/…),
- *                 SDPCM event injection, scan returns Velxio-GUEST,
+ *                 SDPCM event injection, scan returns CircuitMuse-GUEST,
  *                 SET_SSID drives the link state machine
  *   Tier 2  🟡  — outbound Ethernet frames on F2 fire ``onPacketOut``;
  *                 inbound packets accepted via ``injectPacket``. The
@@ -72,7 +72,7 @@ export interface PacketOutEvent {
 }
 
 export interface Cyw43EmulatorOptions {
-  /** Override the AP that scan() returns. Defaults to Velxio-GUEST. */
+  /** Override the AP that scan() returns. Defaults to CircuitMuse-GUEST. */
   ap?: VirtualAp;
   /** Override the STA MAC the chip reports. */
   staMac?: Uint8Array;
@@ -448,7 +448,7 @@ export class Cyw43Emulator {
     }
     if (name === 'ver') {
       // Synthetic firmware version banner; the driver only uses the prefix.
-      return new TextEncoder().encode('velxio-cyw43-emu 1.0\0');
+      return new TextEncoder().encode('circuit-muse-cyw43-emu 1.0\0');
     }
     return new Uint8Array(0);
   }

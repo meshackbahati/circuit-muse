@@ -17,7 +17,7 @@ import { getSeoMeta } from '../seoRoutes';
 import raspberryPi3Svg from '../assets/Raspberry_Pi_3_illustration.svg';
 import './LandingPage.css';
 
-const GITHUB_URL = 'https://github.com/davidmonterocrespo24/velxio';
+const GITHUB_URL = 'https://github.com/davidmonterocrespo24/circuit-muse';
 const PAYPAL_URL = 'https://paypal.me/odoonext';
 const GITHUB_SPONSORS_URL = 'https://github.com/sponsors/davidmonterocrespo24';
 
@@ -617,18 +617,18 @@ export const LandingPage: React.FC = () => {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'Is Velxio free?',
+          name: 'Is CircuitMuse free?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes. Velxio is completely free and open-source under the GNU AGPLv3 license. No account required, no cloud subscription. Run it at velxio.dev or self-host with one Docker command.',
+            text: 'Yes. CircuitMuse is completely free and open-source under the GNU AGPLv3 license. No account required, no cloud subscription. Run it at circuit-muse.dev or self-host with one Docker command.',
           },
         },
         {
           '@type': 'Question',
-          name: 'Can Velxio simulate analog circuits?',
+          name: 'Can CircuitMuse simulate analog circuits?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes. Velxio 2.5 includes real-time SPICE analog simulation via ngspice compiled to WebAssembly. You can mix passive and active analog parts (resistors, capacitors, op-amps, BJTs, MOSFETs, regulators, diodes) with Arduino, ESP32, and RP2040 firmware on the same canvas — GPIO drives SPICE nets, ADC reads solved node voltages.',
+            text: 'Yes. CircuitMuse 2.5 includes real-time SPICE analog simulation via ngspice compiled to WebAssembly. You can mix passive and active analog parts (resistors, capacitors, op-amps, BJTs, MOSFETs, regulators, diodes) with Arduino, ESP32, and RP2040 firmware on the same canvas — GPIO drives SPICE nets, ADC reads solved node voltages.',
           },
         },
         {
@@ -636,7 +636,7 @@ export const LandingPage: React.FC = () => {
           name: 'Can I create my own custom chips?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes. Velxio implements the Wokwi Custom Chips API. Write your chip in C, Rust, or AssemblyScript; Velxio compiles it to WebAssembly and runs it on the canvas like any other component, with pin I/O, attribute reads, timers, and I²C/SPI bus integration.',
+            text: 'Yes. CircuitMuse implements the Wokwi Custom Chips API. Write your chip in C, Rust, or AssemblyScript; CircuitMuse compiles it to WebAssembly and runs it on the canvas like any other component, with pin I/O, attribute reads, timers, and I²C/SPI bus integration.',
           },
         },
         {
@@ -701,12 +701,12 @@ export const LandingPage: React.FC = () => {
             </a>
           </div>
           {/*
-            Slot for the pro overlay's OS-detect Velxio Desktop download
+            Slot for the pro overlay's OS-detect CircuitMuse Desktop download
             CTA. Sits BELOW the online-editor CTAs so users see "try
             online" first, then a softer "or download to go faster
             offline" affordance. Pure OSS leaves it empty.
           */}
-          <div data-velxio-slot="landing-hero-download-cta" />
+          <div data-circuit-muse-slot="landing-hero-download-cta" />
           <p className="hero-trust-line">{t('landing.hero.trustLine')}</p>
         </div>
         <div className="hero-right">
@@ -1156,7 +1156,7 @@ export const LandingPage: React.FC = () => {
           <span>
             {t(
               'landing.pricing.classroomBanner',
-              'Bringing Velxio into a course? Velxio for Classroom gives every student Pro access from $40/year.',
+              'Bringing CircuitMuse into a course? CircuitMuse for Classroom gives every student Pro access from $40/year.',
             )}
           </span>
           <Link to={localize('/classroom')} className="pricing-classroom-banner-cta">

@@ -1,6 +1,6 @@
 """POST /api/compile-rom — assemble or convert a chip-program source to ROM bytes.
 
-Used by Velxio's "Compile" button when the active file is a chip-program file
+Used by CircuitMuse's "Compile" button when the active file is a chip-program file
 (`.s` / `.asm` / `.hex` / `.bin`). The compiled ROM is base64 bytes that the
 frontend stashes in the chip's `romBytes` property; the chip reads them on
 chip_setup via the new `vx_rom_size` / `vx_rom_read` SDK calls.

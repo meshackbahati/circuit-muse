@@ -1,5 +1,5 @@
 /**
- * Pre-built example chips shipped with Velxio. Sources live in `examples/`
+ * Pre-built example chips shipped with CircuitMuse. Sources live in `examples/`
  * (and `examples/intel/` for the retro CPU collection) and are loaded at
  * build time via Vite's `?raw` query so they end up as inline string
  * constants in the bundle.
@@ -8,7 +8,7 @@
  * sandbox at `test/test_custom_chips/` and `test/test_intel/`.
  */
 
-// .c sources — original Velxio chip collection
+// .c sources — original CircuitMuse chip collection
 import inverterC      from './examples/inverter.c?raw';
 import xorC           from './examples/xor.c?raw';
 import cd4094C        from './examples/cd4094.c?raw';
@@ -346,7 +346,7 @@ export const CHIP_EXAMPLES: ChipExample[] = [
     name: 'Intel 8251 USART',
     description:
       'Programmable async serial — TXD/RXD/status/command. ' +
-      "Routed to Velxio's UART bridge for Serial Monitor I/O.",
+      "Routed to CircuitMuse's UART bridge for Serial Monitor I/O.",
     category: 'retro-bus',
     sourceC: bus8251UsartC,
     chipJson: bus8251UsartJ,
@@ -382,7 +382,7 @@ export const BLANK_CHIP: ChipExample = {
   name: 'Blank',
   description: 'Start from scratch.',
   category: 'utility',
-  sourceC: `#include "velxio-chip.h"
+  sourceC: `#include "circuit-muse-chip.h"
 #include <stdlib.h>
 
 typedef struct {
@@ -404,7 +404,7 @@ void chip_setup(void) {
 }
 `,
   chipJson: `{
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "My Chip",
   "author": "",
   "license": "MIT",

@@ -1,5 +1,5 @@
 /**
- * EPaper — React wrapper around the `<velxio-epaper>` Web Component.
+ * EPaper — React wrapper around the `<circuit-muse-epaper>` Web Component.
  *
  * Same shape as PiPicoW.tsx / Esp32.tsx: renders the custom element and
  * forwards `panel-kind` + `refresh-ms` props to attributes. The wire
@@ -21,7 +21,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      'velxio-epaper': any;
+      'circuit-muse-epaper': any;
     }
   }
 }
@@ -33,7 +33,7 @@ export const EPaper = ({
   panelKind = 'epaper-1in54-bw',
   refreshMs,
 }: EPaperProps) => (
-  <velxio-epaper
+  <circuit-muse-epaper
     id={id}
     panel-kind={panelKind}
     refresh-ms={refreshMs}

@@ -57,10 +57,10 @@ const resizeHandleStyle: React.CSSProperties = {
 export const EditorPage: React.FC = () => {
   const { t } = useTranslation();
   useSEO({
-    title: 'Multi-Board Simulator Editor — Arduino, ESP32, RP2040, RISC-V | Velxio',
+    title: 'Multi-Board Simulator Editor — Arduino, ESP32, RP2040, RISC-V | CircuitMuse',
     description:
       'Write, compile and simulate Arduino, ESP32, Raspberry Pi Pico, ESP32-C3, and Raspberry Pi 3 code in your browser. 19 boards, 5 CPU architectures, 48+ components. Free and open-source.',
-    url: 'https://velxio.dev/editor',
+    url: 'https://circuit-muse.dev/editor',
   });
 
   // Silent auto-save for the loaded project (only fires when authed AND
@@ -82,7 +82,7 @@ export const EditorPage: React.FC = () => {
   const isRaspberryPi3 = activeBoardKind === 'raspberry-pi-3';
   const oscilloscopeOpen = useOscilloscopeStore((s) => s.open);
   const [consoleOpen, setConsoleOpen] = useState(false);
-  // compileLogs live in a Zustand store so the velxio-pro agent overlay
+  // compileLogs live in a Zustand store so the circuit-muse-pro agent overlay
   // (mounted in a separate React tree via slotMounter) can subscribe and
   // build a "diagnose this failure" prompt without prop-drilling.
   const compileLogs = useCompileLogsStore((s) => s.logs);
@@ -103,9 +103,9 @@ export const EditorPage: React.FC = () => {
 
   // ── GitHub star prompt (show once: 2nd visit OR after 3 min) ──────────────
   useEffect(() => {
-    const STAR_KEY = 'velxio_star_prompted';
-    const VISITS_KEY = 'velxio_editor_visits';
-    const FIRST_VISIT_KEY = 'velxio_editor_first_visit';
+    const STAR_KEY = 'circuit-muse_star_prompted';
+    const VISITS_KEY = 'circuit-muse_editor_visits';
+    const FIRST_VISIT_KEY = 'circuit-muse_editor_first_visit';
     const THREE_MIN = 3 * 60 * 1000;
 
     if (localStorage.getItem(STAR_KEY)) return;
@@ -136,7 +136,7 @@ export const EditorPage: React.FC = () => {
   }, []);
 
   const handleDismissStarBanner = () => {
-    localStorage.setItem('velxio_star_prompted', '1');
+    localStorage.setItem('circuit-muse_star_prompted', '1');
     setShowStarBanner(false);
   };
   const [explorerOpen, setExplorerOpen] = useState(true);

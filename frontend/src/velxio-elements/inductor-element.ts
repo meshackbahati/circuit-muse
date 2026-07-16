@@ -1,6 +1,6 @@
 /**
  * <wokwi-inductor> — local replacement for the upstream wokwi-elements
- * version. Kept inside velxio because we cannot push the original Lit
+ * version. Kept inside circuit-muse because we cannot push the original Lit
  * sources to wokwi/wokwi-elements.
  *
  * Plain HTMLElement (no Lit) — the SVG is static and `value` is read by

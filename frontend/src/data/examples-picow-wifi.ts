@@ -1,5 +1,5 @@
 /**
- * Pico W WiFi showcase — curated examples that highlight Velxio's
+ * Pico W WiFi showcase — curated examples that highlight CircuitMuse's
  * new CYW43439 chip emulation (see frontend/src/simulation/cyw43/).
  *
  * Source projects come from
@@ -7,7 +7,7 @@
  * (cloned at third-party/100_Days_100_IoT_Projects/) — every example
  * here is a verbatim copy of the upstream `Main Files/main.py` for the
  * matching project, with the WiFi credentials replaced by the synthetic
- * `Velxio-GUEST` AP that the emulator advertises.
+ * `CircuitMuse-GUEST` AP that the emulator advertises.
  *
  * Each example is wired up to load with:
  *   boardType: 'pi-pico-w'           ← triggers Cyw43Bridge attachment
@@ -23,11 +23,11 @@ import type { ExampleProject } from './examples';
 const TAGS_WIFI = ['100-days', 'pi-pico-w', 'micropython', 'wifi', 'cyw43'];
 
 /** Replace placeholder SSID/password lines with our virtual AP. */
-function withVelxioGuest(source: string): string {
+function withCircuitMuseGuest(source: string): string {
   return source
-    .replace(/SSID\s*=\s*"[^"]*"/g, 'SSID = "Velxio-GUEST"')
-    .replace(/ssid\s*=\s*"[^"]*"/g, 'ssid = "Velxio-GUEST"')
-    .replace(/WIFI_SSID\s*=\s*"[^"]*"/g, 'WIFI_SSID = "Velxio-GUEST"')
+    .replace(/SSID\s*=\s*"[^"]*"/g, 'SSID = "CircuitMuse-GUEST"')
+    .replace(/ssid\s*=\s*"[^"]*"/g, 'ssid = "CircuitMuse-GUEST"')
+    .replace(/WIFI_SSID\s*=\s*"[^"]*"/g, 'WIFI_SSID = "CircuitMuse-GUEST"')
     .replace(/PASSWORD\s*=\s*"[^"]*"/g, 'PASSWORD = ""')
     .replace(/password\s*=\s*"[^"]*"/g, 'password = ""')
     .replace(/PASS\s*=\s*"[^"]*"/g, 'PASS = ""')
@@ -40,20 +40,20 @@ function withVelxioGuest(source: string): string {
 // string credit the original author/repo. Anyone can re-extract these by
 // running `python test/test_100_days/_emit_examples_data.py`.
 
-const ASYNC_LED_CONTROL_PY = withVelxioGuest(`# Pico W Async LED Control — MicroPython
+const ASYNC_LED_CONTROL_PY = withCircuitMuseGuest(`# Pico W Async LED Control — MicroPython
 # Source: github.com/KritishMohapatra/100_Days_100_IoT_Projects
 # Project: Pico_W_Async_LED_Control_(MicroPython)
 #
-# Connects to Velxio-GUEST and runs a tiny async HTTP server on :80
+# Connects to CircuitMuse-GUEST and runs a tiny async HTTP server on :80
 # that toggles the on-board LED via Pin('LED'). The LED is wired
-# through the CYW43439 chip — Velxio's new emulator picks up the
+# through the CYW43439 chip — CircuitMuse's new emulator picks up the
 # gpioout IOCTL and drives the LED in the canvas.
 
 import uasyncio as asyncio
 import network
 from machine import Pin
 
-SSID = "Velxio-GUEST"
+SSID = "CircuitMuse-GUEST"
 PASSWORD = ""
 
 led = Pin("LED", Pin.OUT)
@@ -99,13 +99,13 @@ async def main():
 asyncio.run(main())
 `);
 
-const RELAY_WEB_SERVER_PY = withVelxioGuest(`# IoT Relay Control Web Server — MicroPython
+const RELAY_WEB_SERVER_PY = withCircuitMuseGuest(`# IoT Relay Control Web Server — MicroPython
 # Source: github.com/KritishMohapatra/100_Days_100_IoT_Projects
 # Project: IoT_Relay_Control_Web_Server_(Raspberry_Pi_Pico_2W)
 #
 # A blocking-style HTTP server on port 80 that flips a relay on
 # GP2 in response to GET /on and GET /off. The server runs on the
-# IP that Velxio's emulator hands out (10.13.37.42).
+# IP that CircuitMuse's emulator hands out (10.13.37.42).
 
 import network
 import socket
@@ -116,7 +116,7 @@ relay = machine.Pin(2, machine.Pin.OUT)
 relay_state = 1
 relay.value(relay_state)
 
-ssid = "Velxio-GUEST"
+ssid = "CircuitMuse-GUEST"
 password = ""
 
 wlan = network.WLAN(network.STA_IF)
@@ -150,7 +150,7 @@ while True:
     conn.close()
 `);
 
-const SERVO_WEB_PY = withVelxioGuest(`# Pico W Web Servo Controller — MicroPython
+const SERVO_WEB_PY = withCircuitMuseGuest(`# Pico W Web Servo Controller — MicroPython
 # Source: github.com/KritishMohapatra/100_Days_100_IoT_Projects
 # Project: Pico_W_Web_Servo_Controller
 
@@ -159,7 +159,7 @@ import socket
 from machine import Pin, PWM
 import time
 
-ssid = "Velxio-GUEST"
+ssid = "CircuitMuse-GUEST"
 password = ""
 
 print("Connecting to WiFi...")
@@ -207,7 +207,7 @@ while True:
     conn.close()
 `);
 
-const WS_LED_PY = withVelxioGuest(`# WebSocket LED Control — MicroPython
+const WS_LED_PY = withCircuitMuseGuest(`# WebSocket LED Control — MicroPython
 # Source: github.com/KritishMohapatra/100_Days_100_IoT_Projects
 # Project: WebSocket_LED_Control_using_Raspberry_Pi_Pico_W
 
@@ -216,7 +216,7 @@ from machine import Pin
 
 led = Pin(15, Pin.OUT); led.value(0)
 
-SSID = "Velxio-GUEST"
+SSID = "CircuitMuse-GUEST"
 PASSWORD = ""
 
 def ws_accept(key):
@@ -266,7 +266,7 @@ export const picowWifiExamples: ExampleProject[] = [
     id: 'picow-wifi-async-led',
     title: 'Pico W — Async LED control over Wi-Fi',
     description:
-      'Pico W joins Velxio-GUEST then runs an async HTTP server on :80. /on and /off toggle the on-board LED through the CYW43 chip — the same path the real driver takes.',
+      'Pico W joins CircuitMuse-GUEST then runs an async HTTP server on :80. /on and /off toggle the on-board LED through the CYW43 chip — the same path the real driver takes.',
     category: 'communication',
     difficulty: 'beginner',
     boardType: 'pi-pico-w',

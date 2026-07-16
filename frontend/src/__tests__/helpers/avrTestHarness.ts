@@ -2,10 +2,10 @@
  * Minimal AVR harness for Phase 8.1 ngspice co-simulation tests.
  *
  * Mirrors what test/test_circuit/src/avr/AVRHarness.js does and what
- * Velxio's main AVRSimulator does, but in a test-scoped form that does
+ * CircuitMuse's main AVRSimulator does, but in a test-scoped form that does
  * not require requestAnimationFrame mocking. Use only from tests.
  *
- * For Phase 8.3+ co-sim wiring (inside the running Velxio app), we'll
+ * For Phase 8.3+ co-sim wiring (inside the running CircuitMuse app), we'll
  * reuse the production AVRSimulator and add a SPICE bridge around it.
  */
 import {

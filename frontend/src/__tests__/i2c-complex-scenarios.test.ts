@@ -3,7 +3,7 @@
  *
  * Complex multi-device / multi-board I2C scenarios driven by REAL
  * Arduino sketches compiled on demand by arduino-cli — the exact
- * production flow Velxio runs when a user clicks Run.
+ * production flow CircuitMuse runs when a user clicks Run.
  *
  * Coverage matrix
  * ---------------
@@ -56,7 +56,7 @@ const ARDUINO_CLI_AVAILABLE = (() => {
 
 function hasLibrary(header: string): boolean {
   if (!ARDUINO_CLI_AVAILABLE) return false;
-  const dir = mkdtempSync(join(tmpdir(), 'velxio-libprobe-'));
+  const dir = mkdtempSync(join(tmpdir(), 'circuit-muse-libprobe-'));
   const sketchDir = join(dir, 'probe');
   mkdirSync(sketchDir);
   writeFileSync(
@@ -88,7 +88,7 @@ function sketchSourcePath(name: string): string {
 
 /**
  * Compile a sketch.  Returns the artifact contents — `.hex` text for
- * AVR boards, base64 of `.bin` for RP2040.  Velxio's frontend follows
+ * AVR boards, base64 of `.bin` for RP2040.  CircuitMuse's frontend follows
  * the same split (AVRSimulator.loadHex vs RP2040Simulator.loadBinary).
  */
 function compileSketch(name: string, fqbn = 'arduino:avr:uno'): string {
@@ -104,13 +104,13 @@ function compileSketch(name: string, fqbn = 'arduino:avr:uno'): string {
   const ext = fqbn.startsWith('rp2040:') ? 'binb64' : 'hex';
   const cachePath = join(
     tmpdir(),
-    `velxio-${name}-${fqbn.replace(/[^a-z0-9]/gi, '_')}-${hash >>> 0}.${ext}`,
+    `circuit-muse-${name}-${fqbn.replace(/[^a-z0-9]/gi, '_')}-${hash >>> 0}.${ext}`,
   );
   if (existsSync(cachePath)) {
     return readFileSync(cachePath, 'utf-8');
   }
 
-  const work = mkdtempSync(join(tmpdir(), `velxio-${name}-`));
+  const work = mkdtempSync(join(tmpdir(), `circuit-muse-${name}-`));
   const sketchDir = join(work, name);
   mkdirSync(sketchDir);
   writeFileSync(join(sketchDir, `${name}.ino`), source);

@@ -176,8 +176,8 @@ export const LibraryManagerModal: React.FC<LibraryManagerModalProps> = ({ isOpen
       if (name) addToManifest(name);
       fetchInstalled();
     };
-    window.addEventListener('velxio-custom-library-installed', onUploaded);
-    return () => window.removeEventListener('velxio-custom-library-installed', onUploaded);
+    window.addEventListener('circuit-muse-custom-library-installed', onUploaded);
+    return () => window.removeEventListener('circuit-muse-custom-library-installed', onUploaded);
   }, [addToManifest, fetchInstalled]);
 
   // ── actions ────────────────────────────────────────────────────────────────

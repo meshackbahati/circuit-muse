@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "Zilog Z80",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "Clean-room Zilog Z80 (1976) — 8080-compatible ISA plus IX/IY, shadow registers, block ops, IM 0/1/2 interrupts, NMI. Validated against Frank Cringle's ZEXDOC test ROM (1994).",
   "pins": [

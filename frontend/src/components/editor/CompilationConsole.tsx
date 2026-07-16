@@ -122,7 +122,7 @@ export const CompilationConsole: React.FC<CompilationConsoleProps> = ({
                 errorCount > 0. Empty in the OSS image — slotMounter
                 only fires when the pro tree is present. */}
             {errorCount > 0 && (
-              <div data-velxio-slot="compile-console-actions" />
+              <div data-circuit-muse-slot="compile-console-actions" />
             )}
           </div>
         </div>

@@ -1,7 +1,7 @@
 /**
  * ChipRuntime — TypeScript port of test/test_custom_chips/src/ChipRuntime.js.
  *
- * Loads a Velxio custom-chip WASM, wires its imports to host services
+ * Loads a CircuitMuse custom-chip WASM, wires its imports to host services
  * (PinManager, I2CBusManager, SPIBus, attribute storage, timer queue), and
  * dispatches its callbacks back into the simulator. One ChipInstance per
  * chip dropped on the canvas.
@@ -186,7 +186,7 @@ export class ChipInstance {
   private _i2cDevice: { address: number } | null = null;
 
   wasi: WasiShim;
-  private _velxioImports: Record<string, (...args: any[]) => any>;
+  private _circuit-museImports: Record<string, (...args: any[]) => any>;
 
   static async create(opts: ChipInstanceOptions): Promise<ChipInstance> {
     const inst = new ChipInstance(opts);
@@ -210,7 +210,7 @@ export class ChipInstance {
       opts.log ?? ((s) => console.log(`[chip] ${s.replace(/\n$/, '')}`)),
     );
 
-    this._velxioImports = this._buildVelxioImports();
+    this._circuit-museImports = this._buildCircuitMuseImports();
   }
 
   private async _instantiate(): Promise<void> {
@@ -223,7 +223,7 @@ export class ChipInstance {
     const importObject: WebAssembly.Imports = {
       env: {
         memory: this.memory,
-        ...this._velxioImports,
+        ...this._circuit-museImports,
       },
       ...this.wasi.imports(),
     };
@@ -324,7 +324,7 @@ export class ChipInstance {
 
   // ── Build host imports table ─────────────────────────────────────────────
 
-  private _buildVelxioImports(): Record<string, (...args: any[]) => any> {
+  private _buildCircuitMuseImports(): Record<string, (...args: any[]) => any> {
     return {
       vx_pin_register:    (namePtr: number, mode: number) => this._pin_register(namePtr, mode),
       vx_pin_read:        (handle: number) => this._pin_read(handle),

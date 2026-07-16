@@ -6,7 +6,7 @@ Architecture
 Each Pi board instance gets:
   - qemu-system-aarch64 process (-M virt -cpu cortex-a53 for Pi 3, other
     cpu models for the rest of the family — see Phase 3 plan)
-  - Velxio-built kernel + initramfs + rootfs (not the rpi-firmware kernel
+  - CircuitMuse-built kernel + initramfs + rootfs (not the rpi-firmware kernel
     and not raspios; see ``project/pi-emulation/`` for why)
   - virtio-blk root from a qcow2 overlay over the cached rootfs ext4
   - virtio-console on chardev 0 (TCP socket) — the user shell at /dev/hvc0
@@ -20,7 +20,7 @@ The ``raspberry-pi-3`` manifest entry remains around (marked deprecated)
 to ease rollback; ``raspberry-pi-3-virt`` is the live one.
 
 Boot files are resolved at runtime via BootImageProvider (downloads,
-verifies, caches under /var/cache/velxio/boot-images/...). The lifespan
+verifies, caches under /var/cache/circuit-muse/boot-images/...). The lifespan
 hook at the bottom pre-warms the cache so first-time user requests
 don't pay the download latency.
 
@@ -63,9 +63,9 @@ PI_CONFIGS: dict[str, dict] = {
         'smp':        '4',
         'memory':     '1G',
         'image_set':  'raspberry-pi-3-virt',
-        'kernel':     'velxio-kernel-arm64',
-        'initramfs':  'velxio-initramfs-arm64.cpio.gz',
-        'rootfs':     'velxio-pi-rootfs-arm64.ext4',
+        'kernel':     'circuit-muse-kernel-arm64',
+        'initramfs':  'circuit-muse-initramfs-arm64.cpio.gz',
+        'rootfs':     'circuit-muse-pi-rootfs-arm64.ext4',
         'bus':        'pci',
     },
     'raspberry-pi-4': {
@@ -74,9 +74,9 @@ PI_CONFIGS: dict[str, dict] = {
         'smp':        '4',
         'memory':     '2G',
         'image_set':  'raspberry-pi-3-virt',   # same arm64 image set as Pi 3
-        'kernel':     'velxio-kernel-arm64',
-        'initramfs':  'velxio-initramfs-arm64.cpio.gz',
-        'rootfs':     'velxio-pi-rootfs-arm64.ext4',
+        'kernel':     'circuit-muse-kernel-arm64',
+        'initramfs':  'circuit-muse-initramfs-arm64.cpio.gz',
+        'rootfs':     'circuit-muse-pi-rootfs-arm64.ext4',
         'bus':        'pci',
     },
     'raspberry-pi-5': {
@@ -85,9 +85,9 @@ PI_CONFIGS: dict[str, dict] = {
         'smp':        '4',
         'memory':     '2G',
         'image_set':  'raspberry-pi-3-virt',   # same arm64 image set
-        'kernel':     'velxio-kernel-arm64',
-        'initramfs':  'velxio-initramfs-arm64.cpio.gz',
-        'rootfs':     'velxio-pi-rootfs-arm64.ext4',
+        'kernel':     'circuit-muse-kernel-arm64',
+        'initramfs':  'circuit-muse-initramfs-arm64.cpio.gz',
+        'rootfs':     'circuit-muse-pi-rootfs-arm64.ext4',
         'bus':        'pci',
     },
     # ── armhf (32-bit ARM, Pi Zero / 1 / 2) ─────────────────────────────
@@ -106,9 +106,9 @@ PI_CONFIGS: dict[str, dict] = {
         'smp':        '4',
         'memory':     '1G',
         'image_set':  'raspberry-pi-armhf',
-        'kernel':     'velxio-kernel-armhf',
-        'initramfs':  'velxio-initramfs-armhf.cpio.gz',
-        'rootfs':     'velxio-pi-rootfs-armhf.ext4',
+        'kernel':     'circuit-muse-kernel-armhf',
+        'initramfs':  'circuit-muse-initramfs-armhf.cpio.gz',
+        'rootfs':     'circuit-muse-pi-rootfs-armhf.ext4',
         'bus':        'mmio',
     },
     # Pi 1 / Pi Zero are ARMv6 on real silicon (arm1176, BCM2835). Debian
@@ -126,9 +126,9 @@ PI_CONFIGS: dict[str, dict] = {
         'smp':        '1',
         'memory':     '512M',
         'image_set':  'raspberry-pi-armhf',
-        'kernel':     'velxio-kernel-armhf',
-        'initramfs':  'velxio-initramfs-armhf.cpio.gz',
-        'rootfs':     'velxio-pi-rootfs-armhf.ext4',
+        'kernel':     'circuit-muse-kernel-armhf',
+        'initramfs':  'circuit-muse-initramfs-armhf.cpio.gz',
+        'rootfs':     'circuit-muse-pi-rootfs-armhf.ext4',
         'bus':        'mmio',
     },
     'raspberry-pi-zero': {
@@ -137,9 +137,9 @@ PI_CONFIGS: dict[str, dict] = {
         'smp':        '1',
         'memory':     '512M',
         'image_set':  'raspberry-pi-armhf',
-        'kernel':     'velxio-kernel-armhf',
-        'initramfs':  'velxio-initramfs-armhf.cpio.gz',
-        'rootfs':     'velxio-pi-rootfs-armhf.ext4',
+        'kernel':     'circuit-muse-kernel-armhf',
+        'initramfs':  'circuit-muse-initramfs-armhf.cpio.gz',
+        'rootfs':     'circuit-muse-pi-rootfs-armhf.ext4',
         'bus':        'mmio',
     },
 }
@@ -311,7 +311,7 @@ class QemuManager:
             # OSS / self-hosted has no boot-image downloader configured (no
             # license key) -> frame Raspberry Pi as the Pro feature it is,
             # rather than surfacing a raw "not configured" provisioning error.
-            # A genuine boot failure on velxio.dev still shows the detail.
+            # A genuine boot failure on circuit-muse.dev still shows the detail.
             from app.services.board_access import PRO_BOARD_MESSAGE
             if 'not configured' in str(exc).lower():
                 message = PRO_BOARD_MESSAGE
@@ -339,7 +339,7 @@ class QemuManager:
         # Make a fresh FIFO pair per session. QEMU's pipe chardev
         # appends ".in" (host writes / guest reads) and ".out"
         # (guest writes / host reads) to the path.
-        inst.proto_pipe_base = tempfile.mktemp(prefix="velxio-pi-proto-")
+        inst.proto_pipe_base = tempfile.mktemp(prefix="circuit-muse-pi-proto-")
         for suffix in (".in", ".out"):
             path = inst.proto_pipe_base + suffix
             try:
@@ -347,7 +347,7 @@ class QemuManager:
             except FileExistsError:
                 pass
 
-        # Create overlay qcow2 backed by the velxio rootfs ext4. Each
+        # Create overlay qcow2 backed by the circuit-muse rootfs ext4. Each
         # session gets its own writable layer; reads cascade down to
         # the shared base, writes go into the per-session overlay
         # which is deleted on stop.
@@ -425,9 +425,9 @@ class QemuManager:
             # Pipe creates <path>.in (host→guest) + <path>.out
             # (guest→host) as named FIFOs that QEMU opens lazily.
             # Inside the guest this still appears as /dev/vport<N>p<M>
-            # with the name "velxio-protocol".
+            # with the name "circuit-muse-protocol".
             '-chardev', f'pipe,id=proto,path={inst.proto_pipe_base}',
-            '-device', 'virtserialport,chardev=proto,name=velxio-protocol',
+            '-device', 'virtserialport,chardev=proto,name=circuit-muse-protocol',
             # Kernel cmdline:
             #   console=hvc0 — the virtio-console is the user terminal.
             #   root=/dev/vda — the virtio-blk overlay is the rootfs.
@@ -598,7 +598,7 @@ class QemuManager:
     async def _handle_gpio_line(self, inst: PiInstance, line: str) -> None:
         """Dispatch a single text-protocol line from the Pi shim layer.
 
-        Phase 2 supports the velxio Pi shim wire format:
+        Phase 2 supports the circuit-muse Pi shim wire format:
           GPIO <bcm> <0|1>                  → gpio_change event
           GPIO_SETUP <bcm> <in|out> <pud>   → noted (no canvas effect)
           GPIO_IN <bcm>                     → reply VAL <bcm> <0|1>

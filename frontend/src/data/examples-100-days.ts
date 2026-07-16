@@ -8,7 +8,7 @@
  *
  *     python test/test_100_days/_emit_examples_data.py
  *
- * Only the projects Velxio can run end-to-end are emitted (49/78 at the
+ * Only the projects CircuitMuse can run end-to-end are emitted (49/78 at the
  * time of generation — see test/test_100_days/README.md for the full
  * compatibility matrix). Each example is a MicroPython project; the
  * editor switches into MicroPython mode automatically when one of these
@@ -1962,7 +1962,7 @@ OWM_API_KEY = "key"
 CITY = "city"
 
 # ================= HARDWARE =================
-# Hardware I2C (peripheral 0) — SoftI2C bit-bangs GPIO and the Velxio
+# Hardware I2C (peripheral 0) — SoftI2C bit-bangs GPIO and the CircuitMuse
 # ESP32 QEMU bridge can't route GPIO toggles back to the wokwi-ssd1306
 # slave registered at 0x3C, so write_cmd fails with ENODEV. Hardware
 # I2C goes through the emulated I2C controller and reaches the slave.

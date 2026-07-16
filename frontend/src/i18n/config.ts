@@ -1,11 +1,11 @@
 /**
  * Locale registry — must stay in lockstep with `pro/blog/src/i18n/config.ts`
- * in the velxio_blog repo (the static blog at velxio.dev/blog/). Cookie sync
- * uses the `velxio_locale` cookie shared between both surfaces, so the lists
+ * in the circuit-muse_blog repo (the static blog at circuit-muse.dev/blog/). Cookie sync
+ * uses the `circuit-muse_locale` cookie shared between both surfaces, so the lists
  * MUST agree on locale codes character-for-character.
  *
  * When adding or removing a locale, update both files plus
- * `scripts/translate/locales.mjs` in velxio_blog.
+ * `scripts/translate/locales.mjs` in circuit-muse_blog.
  */
 
 export const LOCALES = [

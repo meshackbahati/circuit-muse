@@ -27,7 +27,7 @@
  *
  * See ../../project/sim-mixedmode/phase-00-pin-resolver.md
  *     ../../project/sim-mixedmode/phase-01-mixed-mode-coupling.md
- *     (in the velxio-prod repo)
+ *     (in the circuit-muse-prod repo)
  */
 
 import type { Wire } from '../types/wire';

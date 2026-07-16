@@ -19,7 +19,7 @@ const META = getSeoMeta('/spice-simulator')!;
 const FAQ_ITEMS = [
   {
     q: 'Is this real ngspice running in my browser?',
-    a: 'Yes. Velxio loads ngspice compiled to WebAssembly via the open-source eecircuit-engine. The same SPICE engine that powers professional EDA workflows runs in your browser tab — no server, no install.',
+    a: 'Yes. CircuitMuse loads ngspice compiled to WebAssembly via the open-source eecircuit-engine. The same SPICE engine that powers professional EDA workflows runs in your browser tab — no server, no install.',
   },
   {
     q: 'What kind of analysis does it run?',
@@ -31,7 +31,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Can I write raw SPICE netlists?',
-    a: 'Velxio builds the netlist for you from the schematic — wire components on the canvas and the simulator generates the SPICE cards. You don’t have to handwrite netlists, but the underlying engine is full ngspice and accepts standard device cards.',
+    a: 'CircuitMuse builds the netlist for you from the schematic — wire components on the canvas and the simulator generates the SPICE cards. You don’t have to handwrite netlists, but the underlying engine is full ngspice and accepts standard device cards.',
   },
   {
     q: 'Does it include instruments?',
@@ -47,13 +47,13 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Velxio — Free Online SPICE Simulator (ngspice-WASM)',
+    name: 'CircuitMuse — Free Online SPICE Simulator (ngspice-WASM)',
     applicationCategory: 'DeveloperApplication',
     applicationSubCategory: 'SPICE Circuit Simulator',
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online SPICE simulator running ngspice in WebAssembly. Real device models, full Modified Nodal Analysis, live oscilloscope and meters. Co-simulates with Arduino, ESP32, RP2040, and ATtiny85 firmware.',
-    url: 'https://velxio.dev/spice-simulator',
+    url: 'https://circuit-muse.dev/spice-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -71,12 +71,12 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
+      { '@type': 'ListItem', position: 1, name: 'CircuitMuse', item: 'https://circuit-muse.dev/' },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'SPICE Simulator',
-        item: 'https://velxio.dev/spice-simulator',
+        item: 'https://circuit-muse.dev/spice-simulator',
       },
     ],
   },

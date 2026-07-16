@@ -3,7 +3,7 @@
  * =====================================================
  *
  * Reproduces the user-reported bug:
- *   https://velxio.dev/project/cb406120-d40e-4225-bbfd-1b362a64445a
+ *   https://circuit-muse.dev/project/cb406120-d40e-4225-bbfd-1b362a64445a
  *
  * Setup:
  *   - Two Raspberry Pi Pico W boards
@@ -138,7 +138,7 @@ function fullReset() {
  * (GND<->GND, GP0<->GP1, GP1<->GP0) and return the board ids.
  *
  * Mirrors what the user did at
- *   https://velxio.dev/project/cb406120-d40e-4225-bbfd-1b362a64445a
+ *   https://circuit-muse.dev/project/cb406120-d40e-4225-bbfd-1b362a64445a
  */
 function setupTwoPicosWithSerial1Crossover(): { picoA: string; picoB: string } {
   const store = useSimulatorStore.getState();

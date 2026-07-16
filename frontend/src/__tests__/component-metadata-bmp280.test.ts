@@ -10,11 +10,11 @@ interface ComponentMetadataEntry {
 }
 
 describe('component metadata — BMP280 entry', () => {
-  it('is registered with id "bmp280" and tagName "velxio-bmp280"', () => {
+  it('is registered with id "bmp280" and tagName "circuit-muse-bmp280"', () => {
     const components = (metadata as { components: ComponentMetadataEntry[] }).components;
     const entry = components.find((c) => c.id === 'bmp280');
     expect(entry, 'BMP280 missing from components-metadata.json').toBeDefined();
-    expect(entry!.tagName).toBe('velxio-bmp280');
+    expect(entry!.tagName).toBe('circuit-muse-bmp280');
     expect(entry!.category).toBe('sensor');
     expect(entry!.pinCount).toBe(4);
   });

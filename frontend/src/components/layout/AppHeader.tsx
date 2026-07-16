@@ -10,7 +10,7 @@ import { trackVisitGitHub, trackVisitDiscord } from '../../utils/analytics';
 import type { AutoSaveState } from '../../hooks/useAutoSaveProject';
 import './LanguageSwitcher.css';
 
-const GITHUB_URL = 'https://github.com/davidmonterocrespo24/velxio';
+const GITHUB_URL = 'https://github.com/davidmonterocrespo24/circuit-muse';
 const DISCORD_URL = 'https://discord.gg/3mARjJrh4E';
 
 interface AppHeaderProps {
@@ -54,7 +54,7 @@ const AutoSaveIndicator: React.FC<{ state: AutoSaveState }> = ({ state }) => {
           borderRadius: '50%',
           background: meta.color,
           opacity: state.status === 'saving' ? 0.7 : 1,
-          animation: state.status === 'saving' ? 'velxio-pulse 1s ease-in-out infinite' : 'none',
+          animation: state.status === 'saving' ? 'circuit-muse-pulse 1s ease-in-out infinite' : 'none',
         }}
       />
       <span>{meta.label}</span>
@@ -79,9 +79,9 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ autoSave }) => {
   // Tauri desktop: skip the header entirely. The marketing nav was
   // already hidden, but the strip itself was still painting an empty
   // black bar over the editor. Brand/auto-save/share/auth-slot all
-  // live elsewhere in desktop: title bar shows "Velxio Desktop", the
+  // live elsewhere in desktop: title bar shows "CircuitMuse Desktop", the
   // native menubar has File/Edit/View/Help, auto-save is a Pro cloud
-  // feature (desktop saves to .vlx), share generates a velxio.dev URL
+  // feature (desktop saves to .vlx), share generates a circuit-muse.dev URL
   // that doesn't apply to a desktop session, and the license flow
   // owns its own DesktopWelcomePage.
   if (import.meta.env.VITE_DESKTOP) {
@@ -105,7 +105,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ autoSave }) => {
           {/* Main nav links (web only). The Tauri desktop build hides
               this nav and surfaces the equivalent actions via the
               native menubar (see pro/desktop/src-tauri/src/menu.rs in
-              velxio-prod). VITE_DESKTOP is the env flag the Tauri
+              circuit-muse-prod). VITE_DESKTOP is the env flag the Tauri
               build sets — main.tsx already uses it to gate the @pro
               overlay, same pattern here. */}
           {!import.meta.env.VITE_DESKTOP && (
@@ -236,7 +236,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ autoSave }) => {
               via mountIntoSlot('header-auth'). In OSS without the
               overlay this slot stays empty, which is correct because the
               OSS image has no auth backend either. */}
-          <div data-velxio-slot="header-auth" style={{ display: 'contents' }} />
+          <div data-circuit-muse-slot="header-auth" style={{ display: 'contents' }} />
 
           {/* Mobile hamburger — useless in desktop where the nav it
               would expand is itself hidden. */}

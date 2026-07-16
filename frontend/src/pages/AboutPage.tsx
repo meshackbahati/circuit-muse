@@ -6,15 +6,15 @@ import { useSEO } from '../utils/useSEO';
 import { getSeoMeta } from '../seoRoutes';
 import './AboutPage.css';
 
-const GITHUB_URL = 'https://github.com/davidmonterocrespo24/velxio';
+const GITHUB_URL = 'https://github.com/davidmonterocrespo24/circuit-muse';
 const LINKEDIN_URL = 'https://www.linkedin.com/in/davidmonterocrespo24';
 const GITHUB_PROFILE = 'https://github.com/davidmonterocrespo24';
 const MEDIUM_URL = 'https://medium.com/@davidmonterocrespo24';
 const MEDIUM_ARTICLE_URL =
-  'https://medium.com/@davidmonterocrespo24/velxio-architecture-and-development-of-a-strictly-local-execution-microcontroller-emulator-62b4c1157a72';
+  'https://medium.com/@davidmonterocrespo24/circuit-muse-architecture-and-development-of-a-strictly-local-execution-microcontroller-emulator-62b4c1157a72';
 const HN_THREAD_V2 = 'https://news.ycombinator.com/item?id=47548013';
-const PRODUCT_HUNT_URL = 'https://www.producthunt.com/products/velxio';
-const HACKADAY_URL = 'https://hackaday.io/project/205186-velxio-browser-based-arduino-emulator';
+const PRODUCT_HUNT_URL = 'https://www.producthunt.com/products/circuit-muse';
+const HACKADAY_URL = 'https://hackaday.io/project/205186-circuit-muse-browser-based-arduino-emulator';
 const REDDIT_URL =
   'https://www.reddit.com/r/esp32/comments/1s2naya/a_browserbased_esp32_emulator_using_qemu_supports/';
 
@@ -61,9 +61,9 @@ export const AboutPage: React.FC = () => {
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'AboutPage',
-      name: 'About Velxio',
-      description: 'Learn about Velxio and its creator David Montero Crespo.',
-      url: 'https://velxio.dev/about',
+      name: 'About CircuitMuse',
+      description: 'Learn about CircuitMuse and its creator David Montero Crespo.',
+      url: 'https://circuit-muse.dev/about',
     },
   });
 
@@ -304,13 +304,13 @@ export const AboutPage: React.FC = () => {
           <div className="about-releases">
             <Link to={localize('/v2-5')} className="about-release-card about-release-card-latest">
               <span className="about-release-tag">{t('about.releases.latest')}</span>
-              <h3>Velxio 2.5</h3>
+              <h3>CircuitMuse 2.5</h3>
               <p className="about-release-tagline">{t('about.releases.v25Tagline')}</p>
               <p className="about-release-blurb">{t('about.releases.v25Blurb')}</p>
               <span className="about-release-link">{t('about.releases.readNotes')}</span>
             </Link>
             <Link to={localize('/v2')} className="about-release-card">
-              <h3>Velxio 2.0</h3>
+              <h3>CircuitMuse 2.0</h3>
               <p className="about-release-tagline">{t('about.releases.v2Tagline')}</p>
               <p className="about-release-blurb">{t('about.releases.v2Blurb')}</p>
               <span className="about-release-link">{t('about.releases.readNotes')}</span>
@@ -430,7 +430,7 @@ export const AboutPage: React.FC = () => {
       <footer className="landing-footer">
         <div className="footer-brand">
           <IcoChip />
-          <span>Velxio</span>
+          <span>CircuitMuse</span>
         </div>
         <div className="footer-links">
           <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">

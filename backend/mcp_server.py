@@ -1,5 +1,5 @@
 """
-Velxio MCP Server — stdio entry point
+CircuitMuse MCP Server — stdio entry point
 
 Run this script to start the MCP server in stdio mode, which is compatible
 with Claude Desktop and other stdio-based MCP clients.
@@ -10,9 +10,9 @@ Usage:
 Claude Desktop configuration (~/.claude/claude_desktop_config.json):
     {
       "mcpServers": {
-        "velxio": {
+        "circuit-muse": {
           "command": "python",
-          "args": ["/path/to/velxio/backend/mcp_server.py"],
+          "args": ["/path/to/circuit-muse/backend/mcp_server.py"],
           "env": {}
         }
       }

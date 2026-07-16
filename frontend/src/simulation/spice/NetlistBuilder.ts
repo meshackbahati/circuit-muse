@@ -1,8 +1,8 @@
 /**
- * NetlistBuilder — turn a Velxio circuit (components + wires + board pin
+ * NetlistBuilder — turn a CircuitMuse circuit (components + wires + board pin
  * state) into a complete ngspice netlist string.
  *
- * Algorithm (see plan phase_8_velxio_implementation §5):
+ * Algorithm (see plan phase_8_circuit-muse_implementation §5):
  *   1. Union-Find on wires to identify nets.
  *   2. Canonicalize known-special nets: GND → "0", VCC/VDD/5V/3V3 → "vcc_rail".
  *   3. Auto-name remaining nets "n0", "n1", ... deterministically.
@@ -191,7 +191,7 @@ export function buildNetlist(input: BuildNetlistInput): BuildNetlistResult {
   }
 
   // ── 8. Compose netlist ────────────────────────────────────────────────────
-  const lines: string[] = [`* Velxio circuit @ ${new Date().toISOString()}`];
+  const lines: string[] = [`* CircuitMuse circuit @ ${new Date().toISOString()}`];
   lines.push(...cards);
   lines.push(...modelLines);
   lines.push(...extraCards);

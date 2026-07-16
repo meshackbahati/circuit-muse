@@ -197,14 +197,14 @@ const CONFIGS: Record<string, BoardConfig> = {
 
 /** Tag name -> CONFIGS key. One custom element per board kind. */
 const TAG_TO_KIND: Record<string, string> = {
-  'velxio-stm32-bluepill': 'stm32-bluepill',
-  'velxio-stm32-blackpill': 'stm32-blackpill',
-  'velxio-stm32-bluepill-f103cb': 'stm32-bluepill-f103cb',
-  'velxio-stm32-blackpill-f401': 'stm32-blackpill-f401',
-  'velxio-stm32-f4-discovery': 'stm32-f4-discovery',
-  'velxio-stm32-olimex-h405': 'stm32-olimex-h405',
-  'velxio-stm32-netduino-plus2': 'stm32-netduino-plus2',
-  'velxio-stm32-netduino2': 'stm32-netduino2',
+  'circuit-muse-stm32-bluepill': 'stm32-bluepill',
+  'circuit-muse-stm32-blackpill': 'stm32-blackpill',
+  'circuit-muse-stm32-bluepill-f103cb': 'stm32-bluepill-f103cb',
+  'circuit-muse-stm32-blackpill-f401': 'stm32-blackpill-f401',
+  'circuit-muse-stm32-f4-discovery': 'stm32-f4-discovery',
+  'circuit-muse-stm32-olimex-h405': 'stm32-olimex-h405',
+  'circuit-muse-stm32-netduino-plus2': 'stm32-netduino-plus2',
+  'circuit-muse-stm32-netduino2': 'stm32-netduino2',
 };
 
 // Import-safe base. vitest runs in the 'node' environment where HTMLElement is

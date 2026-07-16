@@ -1,5 +1,5 @@
 /**
- * Bridge between Velxio's simulator store (components, wires, boards) and
+ * Bridge between CircuitMuse's simulator store (components, wires, boards) and
  * the NetlistBuilder inputs. Kept separate so the SPICE engine never has
  * to import the full Zustand store or its types.
  *
@@ -165,7 +165,7 @@ export interface StoreSnapshot {
 }
 
 /**
- * Convert a Velxio store snapshot into the `BuildNetlistInput` consumed
+ * Convert a CircuitMuse store snapshot into the `BuildNetlistInput` consumed
  * by the NetlistBuilder.
  */
 export function buildInputFromStore(snap: StoreSnapshot): BuildNetlistInput {

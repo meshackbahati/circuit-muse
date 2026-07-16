@@ -1,5 +1,5 @@
 """
-Velxio MCP Server — HTTP/SSE entry point
+CircuitMuse MCP Server — HTTP/SSE entry point
 
 Run this script to start the MCP server using the SSE transport, which is
 compatible with HTTP-based MCP clients (e.g. web applications, Cursor IDE).
@@ -13,7 +13,7 @@ Usage:
 MCP client configuration (SSE transport):
     {
       "mcpServers": {
-        "velxio": {
+        "circuit-muse": {
           "url": "http://localhost:8002/sse"
         }
       }
@@ -32,12 +32,12 @@ sys.path.insert(0, str(Path(__file__).parent))
 from app.mcp.server import mcp  # noqa: E402
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Velxio MCP SSE Server")
+    parser = argparse.ArgumentParser(description="CircuitMuse MCP SSE Server")
     parser.add_argument("--host", default="0.0.0.0", help="Host to bind to")
     parser.add_argument("--port", type=int, default=8002, help="Port to listen on")
     args = parser.parse_args()
 
-    print(f"Starting Velxio MCP SSE server on {args.host}:{args.port}")
+    print(f"Starting CircuitMuse MCP SSE server on {args.host}:{args.port}")
     print(f"SSE endpoint: http://{args.host}:{args.port}/sse")
     print(f"Tools: compile_project, run_project, import_wokwi_json, export_wokwi_json,")
     print(f"       create_circuit, update_circuit, generate_code_files")

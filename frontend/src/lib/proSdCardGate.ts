@@ -42,7 +42,7 @@ export function sdCardUploadAllowed(): boolean {
 export function triggerSdCardUpgradePrompt(): void {
   if (typeof window === 'undefined') return;
   window.dispatchEvent(
-    new CustomEvent('velxio-pro-upgrade-prompt', {
+    new CustomEvent('circuit-muse-pro-upgrade-prompt', {
       detail: { componentName: 'microSD file upload' },
     }),
   );

@@ -1,5 +1,5 @@
 """
-Network parameters for Velxio's Pico W virtual network.
+Network parameters for CircuitMuse's Pico W virtual network.
 
 The simulated STA lives on its own /24 ("10.13.37.0/24") with a
 synthetic gateway at .1 and the chip at .42 (the same address the

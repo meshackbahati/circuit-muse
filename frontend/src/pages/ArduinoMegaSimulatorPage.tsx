@@ -22,11 +22,11 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Can I simulate Arduino Mega 2560 code in my browser?',
-    a: 'Yes. Velxio provides full ATmega2560 AVR8 emulation. Select "Arduino Mega 2560" in the board picker, write your sketch, compile, and simulate — with all 54 digital pins and 16 analog inputs available.',
+    a: 'Yes. CircuitMuse provides full ATmega2560 AVR8 emulation. Select "Arduino Mega 2560" in the board picker, write your sketch, compile, and simulate — with all 54 digital pins and 16 analog inputs available.',
   },
   {
     q: 'Is the Arduino Mega 2560 emulation accurate?',
-    a: 'Velxio uses avr8js for cycle-accurate AVR8 instruction emulation. The ATmega2560 shares the same AVR8 core as the ATmega328P but with extended memory, more ports (PORTA–PORTL), and additional timers (Timer3, Timer4, Timer5) — all emulated.',
+    a: 'CircuitMuse uses avr8js for cycle-accurate AVR8 instruction emulation. The ATmega2560 shares the same AVR8 core as the ATmega328P but with extended memory, more ports (PORTA–PORTL), and additional timers (Timer3, Timer4, Timer5) — all emulated.',
   },
   {
     q: 'What additional features does the Mega have over Arduino Uno?',
@@ -42,12 +42,12 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Arduino Mega 2560 Simulator — Velxio',
+    name: 'Arduino Mega 2560 Simulator — CircuitMuse',
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Any (browser-based)',
     description:
       'Free online Arduino Mega 2560 simulator. Emulate ATmega2560 with 256 KB flash, 54 digital pins, 16 analog inputs, and 4 serial ports — full AVR8 emulation in your browser.',
-    url: 'https://velxio.dev/arduino-mega-simulator',
+    url: 'https://circuit-muse.dev/arduino-mega-simulator',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -65,12 +65,12 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
+      { '@type': 'ListItem', position: 1, name: 'CircuitMuse', item: 'https://circuit-muse.dev/' },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Arduino Mega 2560 Simulator',
-        item: 'https://velxio.dev/arduino-mega-simulator',
+        item: 'https://circuit-muse.dev/arduino-mega-simulator',
       },
     ],
   },

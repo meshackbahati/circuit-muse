@@ -361,13 +361,13 @@ class ArduinoCLIService:
                     compile_env["ARDUINO_DIRECTORIES_USER"] = str(scope_dir.parent)
                 else:
                     # P2.1h: NO manifest -> point the default sketchbook at the
-                    # content-addressed cache (VELXIO_FALLBACK_SKETCHBOOK, whose
+                    # content-addressed cache (CIRCUIT_MUSE_FALLBACK_SKETCHBOOK, whose
                     # libraries/ is the cache root) instead of the shared global
                     # volume, so a from-scratch / no-manifest compile (and the
                     # scan-all retry, which re-enters here unscoped) resolves user
                     # libraries from the cache. Unset (OSS self-host) -> arduino-
                     # cli's default sketchbook (legacy global volume).
-                    _fb = os.environ.get("VELXIO_FALLBACK_SKETCHBOOK")
+                    _fb = os.environ.get("CIRCUIT_MUSE_FALLBACK_SKETCHBOOK")
                     if _fb:
                         compile_env["ARDUINO_DIRECTORIES_USER"] = _fb
 
@@ -812,7 +812,7 @@ class ArduinoCLIService:
             def _download():
                 req = urllib.request.Request(
                     url,
-                    headers={"User-Agent": "velxio-arduino-emulator/1.0"},
+                    headers={"User-Agent": "circuit-muse-arduino-emulator/1.0"},
                 )
                 try:
                     with urllib.request.urlopen(req, timeout=30) as resp, \
@@ -873,14 +873,14 @@ class ArduinoCLIService:
         """
         List all installed Arduino libraries.
 
-        P2.1h: when VELXIO_FALLBACK_SKETCHBOOK is set (pro overlay), list the
+        P2.1h: when CIRCUIT_MUSE_FALLBACK_SKETCHBOOK is set (pro overlay), list the
         content-addressed cache (its libraries/ is the cache root) instead of the
         shared global volume, so the Library Manager 'Installed' view survives the
         global volume's retirement. Unset (OSS) -> arduino-cli's default sketchbook.
         """
         try:
             list_env = dict(os.environ)
-            _fb = os.environ.get("VELXIO_FALLBACK_SKETCHBOOK")
+            _fb = os.environ.get("CIRCUIT_MUSE_FALLBACK_SKETCHBOOK")
             if _fb:
                 list_env["ARDUINO_DIRECTORIES_USER"] = _fb
 

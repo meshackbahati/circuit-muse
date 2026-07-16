@@ -434,6 +434,6 @@ class Esp32Element extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-esp32')) {
-  customElements.define('velxio-esp32', Esp32Element);
+if (!customElements.get('circuit-muse-esp32')) {
+  customElements.define('circuit-muse-esp32', Esp32Element);
 }

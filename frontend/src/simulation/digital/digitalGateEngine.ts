@@ -34,7 +34,7 @@ const PULL = (v: 0 | 1): Drive => ({ value: v, strength: Strength.PULL });
 
 export interface DigitalComponent {
   id: string;
-  /** Raw example type (`velxio-logic-gate-and`, `wokwi-slide-switch`, …). */
+  /** Raw example type (`circuit-muse-logic-gate-and`, `wokwi-slide-switch`, …). */
   type?: string;
   /** Store-normalised id (`logic-gate-and`, `slide-switch`, …). */
   metadataId?: string;
@@ -47,13 +47,13 @@ export interface DigitalWire {
 
 /**
  * Canonical kind for a component, tolerant of both shapes: the raw example data
- * carries `type: 'velxio-logic-gate-and'` / `'wokwi-led'`, the loaded store
+ * carries `type: 'circuit-muse-logic-gate-and'` / `'wokwi-led'`, the loaded store
  * carries `metadataId: 'logic-gate-and'` / `'led'`. Strip the vendor prefixes so
  * both resolve to the same kind.
  */
 function kindOf(c: DigitalComponent): string {
   const raw = String(c.metadataId ?? c.type ?? '');
-  return raw.replace(/^velxio-/, '').replace(/^wokwi-/, '');
+  return raw.replace(/^circuit-muse-/, '').replace(/^wokwi-/, '');
 }
 
 // Boolean primitives (match parts/LogicGateParts.ts; XOR = parity).
@@ -112,7 +112,7 @@ export function digitalGatesEnabled(): boolean {
       if (q === 'off' || q === '0' || q === 'false') return false;
     }
     if (typeof localStorage !== 'undefined') {
-      const v = localStorage.getItem('velxio.digitalgates');
+      const v = localStorage.getItem('circuit-muse.digitalgates');
       if (v === 'on' || v === '1' || v === 'true') return true;
       if (v === 'off' || v === '0' || v === 'false') return false;
     }

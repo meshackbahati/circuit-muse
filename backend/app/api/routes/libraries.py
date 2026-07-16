@@ -44,7 +44,7 @@ async def install_library(
     """
     Install a specific Arduino library by name.
 
-    On velxio.dev this WARMS the shared content-addressed cache (the global
+    On circuit-muse.dev this WARMS the shared content-addressed cache (the global
     mutable libraries volume is being retired) rather than mutating that volume;
     the overlay also enforces the anonymous policy. With no overlay (OSS
     self-host) it falls back to the legacy arduino-cli global install.

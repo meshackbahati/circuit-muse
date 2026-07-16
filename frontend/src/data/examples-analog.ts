@@ -101,10 +101,10 @@ function opamp(id: string, x: number, y: number) {
   return { type: 'wokwi-opamp-lm358', id, x, y, properties: {} };
 }
 function vmeter(id: string, x: number, y: number) {
-  return { type: 'velxio-instr-voltmeter', id, x, y, properties: {} };
+  return { type: 'circuit-muse-instr-voltmeter', id, x, y, properties: {} };
 }
 function ammeter(id: string, x: number, y: number) {
-  return { type: 'velxio-instr-ammeter', id, x, y, properties: {} };
+  return { type: 'circuit-muse-instr-ammeter', id, x, y, properties: {} };
 }
 
 // ── Examples ───────────────────────────────────────────────────────────────

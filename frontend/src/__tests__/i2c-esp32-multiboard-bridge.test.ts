@@ -331,7 +331,7 @@ describe('Per-peer proxy ownership (multiple concurrent bridges to one ESP32)', 
     // Wire BOTH peer buses to the SAME ESP32 I2C pins (21/22 = bus 0).
     // In physical hardware a single I2C bus can have devices from
     // multiple boards if they're all on the shared SDA/SCL.  In
-    // velxio's Interconnect model this manifests as TWO distinct
+    // circuit-muse's Interconnect model this manifests as TWO distinct
     // bridge routes (Uno↔ESP32 and Pico↔ESP32), each tracked
     // separately in the ESP32 shim's `_proxiedByPeer` map.
     setWires(useSimulatorStore, [

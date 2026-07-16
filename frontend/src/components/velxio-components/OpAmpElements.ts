@@ -7,7 +7,7 @@
  *   - OUT                       on the right tip
  *
  * Tags defined:
- *   wokwi-opamp-ideal   — generic ideal op-amp (already used by Velxio)
+ *   wokwi-opamp-ideal   — generic ideal op-amp (already used by CircuitMuse)
  *   wokwi-opamp-lm358   — dual rail-to-rail, single supply
  *   wokwi-opamp-lm741   — single, conventional
  *   wokwi-opamp-tl072   — dual, JFET input (audio)

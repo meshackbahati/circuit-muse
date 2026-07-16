@@ -112,8 +112,8 @@ class RaspberryPi3Element extends HTMLElement {
   }
 }
 
-if (!customElements.get('velxio-raspberry-pi-3')) {
-  customElements.define('velxio-raspberry-pi-3', RaspberryPi3Element);
+if (!customElements.get('circuit-muse-raspberry-pi-3')) {
+  customElements.define('circuit-muse-raspberry-pi-3', RaspberryPi3Element);
 }
 
 export {};

@@ -33,11 +33,11 @@ import { getMixedModeScheduler } from '../simulation/spice/MixedModeScheduler';
 import { getBoardLogicFamily } from '../simulation/LogicFamilies';
 
 // Side-effect imports: register every web component we'll create at runtime.
-// `@wokwi/elements` covers the upstream catalog; `../velxio-elements` adds
-// the velxio-local elements (e.g. <velxio-capacitor-electrolytic>,
-// <velxio-instr-voltmeter>) that don't exist upstream.
+// `@wokwi/elements` covers the upstream catalog; `../circuit-muse-elements` adds
+// the circuit-muse-local elements (e.g. <circuit-muse-capacitor-electrolytic>,
+// <circuit-muse-instr-voltmeter>) that don't exist upstream.
 import '@wokwi/elements';
-import '../velxio-elements';
+import '../circuit-muse-elements';
 
 // Map metadataId → [pinA, pinB] for 2-terminal passives.
 // "Tracing through" means: if the caller arrived on pinA, continue from pinB
@@ -488,7 +488,7 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
       };
 
       // PinResolver factory — Phase 0 of the mixed-mode simulator project
-      // (see project/sim-mixedmode/ in the velxio-prod repo). For now it
+      // (see project/sim-mixedmode/ in the circuit-muse-prod repo). For now it
       // wraps getArduinoPin + pinManager.onPinChange — zero behavioral
       // change vs the legacy path. Phase 1+ will swap in a SPICE-resolved
       // implementation that watches node voltages and threshold-converts

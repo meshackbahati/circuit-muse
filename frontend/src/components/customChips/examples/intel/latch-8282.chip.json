@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "Intel 8282 Latch",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "Octal address latch. 8 inputs (DI0..DI7), 8 outputs (DO0..DO7), strobe (STB), output enable (/OE). The classic 8086 address demuxer that captures AD0..AD7 on ALE.",
   "pins": [

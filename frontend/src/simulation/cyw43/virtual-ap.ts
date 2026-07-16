@@ -4,11 +4,11 @@
  * Synthetic access point that the emulated CYW43 advertises to scans
  * and accepts joins from. Mirrors the role of slirp's virtual NIC on
  * the ESP32 path — the simulated board sees a real-looking AP and
- * gets an IP, while traffic above L2 is bridged out by Velxio.
+ * gets an IP, while traffic above L2 is bridged out by CircuitMuse.
  *
- * SSID and BSSID are deliberately Velxio-namespaced ("Velxio-GUEST"
+ * SSID and BSSID are deliberately CircuitMuse-namespaced ("CircuitMuse-GUEST"
  * with a locally-administered MAC) so this code carries no Wokwi
- * marks. If you fork Velxio and want a different default, change
+ * marks. If you fork CircuitMuse and want a different default, change
  * DEFAULT_AP — every test/example uses this single source of truth.
  */
 
@@ -26,8 +26,8 @@ export interface VirtualAp {
 
 /** The default AP every Pico W simulation joins. */
 export const DEFAULT_AP: VirtualAp = {
-  ssid: 'Velxio-GUEST',
-  // 02:42:DA:42:00:01 — locally-administered, "DA" mnemonic = David / Velxio.
+  ssid: 'CircuitMuse-GUEST',
+  // 02:42:DA:42:00:01 — locally-administered, "DA" mnemonic = David / CircuitMuse.
   bssid: new Uint8Array([0x02, 0x42, 0xda, 0x42, 0x00, 0x01]),
   channel: 6,
   rssi: -40,

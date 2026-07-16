@@ -28,7 +28,7 @@ arduino_cli = ArduinoCLIService()
 # that hits any single HTTP request. The async path lets the client poll a
 # short-lived status endpoint instead of holding one long-lived POST open.
 #
-# Single-instance only: if velxio ever scales to multiple FastAPI workers, this
+# Single-instance only: if circuit-muse ever scales to multiple FastAPI workers, this
 # needs to move to Redis or the sqlite database. For now one process is fine.
 COMPILE_JOBS: dict[str, dict[str, Any]] = {}
 JOB_BY_KEY: dict[str, str] = {}  # content_hash → job_id, for deduplication
@@ -233,7 +233,7 @@ async def _resolve_compile_scope(
 
     Manifest = resolution SCOPE for BOTH compile paths (ESP-IDF and arduino-cli /
     AVR / RP2040 / ATtiny). Manifests are PER-BOARD (each board carries its own
-    velxio.json); the client sends the COMPILING board's manifest in
+    circuit-muse.json); the client sends the COMPILING board's manifest in
     request.libraries, so it takes precedence (two boards in one project can
     scope to different libraries). Fall back to the project-level manifest (read
     server-side) only when the client sends none — an anonymous compile or an old
@@ -356,7 +356,7 @@ async def _run_compile(
         error=result.get("error"),
         core_install_log=core_log if core_log else None,
         # P2.1f: set when the scoped compile missed a header and recovered via a
-        # scan-all retry — signals the project's velxio.json manifest is
+        # scan-all retry — signals the project's circuit-muse.json manifest is
         # incomplete (a needed / transitive lib not declared).
         manifest_incomplete=result.get("manifest_incomplete", False),
     )

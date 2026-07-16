@@ -1,5 +1,5 @@
 /**
- * Map Velxio components (identified by `metadataId`) to SPICE netlist cards.
+ * Map CircuitMuse components (identified by `metadataId`) to SPICE netlist cards.
  *
  * Public contract:
  *   componentToSpice(comp, netLookup, context)
@@ -124,7 +124,7 @@ const MAPPERS: Record<string, Mapper> = {
     return { cards, modelsUsed: new Set() };
   },
 
-  // Passive — Velxio existing parts
+  // Passive — CircuitMuse existing parts
   resistor: (comp, netLookup) => {
     const pins = twoPin(comp, netLookup, '1', '2');
     if (!pins) return null;
@@ -1251,7 +1251,7 @@ for (const [presetId, baseId] of Object.entries(PASSIVE_PRESETS)) {
 MAPPERS['photoresistor-sensor'] = MAPPERS['photoresistor'];
 
 /**
- * Public entry: map one Velxio component to SPICE cards.
+ * Public entry: map one CircuitMuse component to SPICE cards.
  * Returns null if we have no mapping for this metadataId (caller should
  * skip the component gracefully — it just won't participate in the solve).
  */

@@ -25,7 +25,7 @@ import { useOscilloscopeStore } from './useOscilloscopeStore';
 import { RaspberryPi3Bridge } from '../simulation/RaspberryPi3Bridge';
 import { Esp32Bridge } from '../simulation/Esp32Bridge';
 import { Stm32Bridge, stm32PinNameToLinear } from '../simulation/Stm32Bridge';
-import { STM32_LED } from '../components/velxio-components/Stm32BluePillElement';
+import { STM32_LED } from '../components/circuit-muse-components/Stm32BluePillElement';
 import { useEditorStore } from './useEditorStore';
 import { useVfsStore } from './useVfsStore';
 import { buildProjectSdImage, decodeSdFiles, bytesToB64 } from '../utils/sdCardFiles';
@@ -1491,7 +1491,7 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
             '        self._calls += 1',
             '        return self._calls > 2',
             '    def ifconfig(self, c=None): return ("10.0.2.15", "255.255.255.0", "10.0.2.2", "10.0.2.3")',
-            '    def config(self, *a, **k): return b"velxio"',
+            '    def config(self, *a, **k): return b"circuit-muse"',
             '    def status(self, *a): return 1010',
             '    def scan(self): return []',
             'class _StubNetwork:',

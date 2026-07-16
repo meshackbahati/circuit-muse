@@ -31,7 +31,7 @@ const WIFI_CONNECT_SKETCH = `#include <WiFi.h>
 void setup() {
   Serial.begin(115200);
   Serial.print("Connecting to WiFi");
-  WiFi.begin("Velxio-GUEST", "", 6);
+  WiFi.begin("CircuitMuse-GUEST", "", 6);
   while (WiFi.status() != WL_CONNECTED) {
     delay(100);
     Serial.print(".");
@@ -51,7 +51,7 @@ WebServer server(80);
 
 void setup() {
   Serial.begin(115200);
-  WiFi.begin("Velxio-GUEST", "", 6);
+  WiFi.begin("CircuitMuse-GUEST", "", 6);
   while (WiFi.status() != WL_CONNECTED) delay(100);
   server.on("/", []() {
     server.send(200, "text/html", "<h1>Hello from ESP32!</h1>");
@@ -70,7 +70,7 @@ const BLE_ADVERTISE_SKETCH = `#include <BLEDevice.h>
 
 void setup() {
   Serial.begin(115200);
-  BLEDevice::init("Velxio-ESP32");
+  BLEDevice::init("CircuitMuse-ESP32");
   BLEServer *pServer = BLEDevice::createServer();
   BLEAdvertising *pAdv = BLEDevice::getAdvertising();
   pAdv->start();
@@ -89,9 +89,9 @@ describe('ESP32 WiFi example sketches — structure validation', () => {
     expect(WIFI_SCAN_SKETCH).toContain('WiFi.SSID(');
   });
 
-  it('WiFi Connect sketch uses Velxio-GUEST SSID', () => {
+  it('WiFi Connect sketch uses CircuitMuse-GUEST SSID', () => {
     expect(WIFI_CONNECT_SKETCH).toContain('#include <WiFi.h>');
-    expect(WIFI_CONNECT_SKETCH).toContain('Velxio-GUEST');
+    expect(WIFI_CONNECT_SKETCH).toContain('CircuitMuse-GUEST');
     expect(WIFI_CONNECT_SKETCH).toContain('WiFi.begin(');
     expect(WIFI_CONNECT_SKETCH).toContain('WiFi.localIP()');
   });

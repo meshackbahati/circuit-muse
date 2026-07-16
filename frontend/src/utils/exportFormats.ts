@@ -8,7 +8,7 @@ import { useSimulatorStore } from '../store/useSimulatorStore';
 import { useEditorStore } from '../store/useEditorStore';
 import type { BoardKind } from '../types/board';
 
-// ─── Board type mapping (Velxio → Wokwi) ─────────────────────────────────
+// ─── Board type mapping (CircuitMuse → Wokwi) ─────────────────────────────────
 const BOARD_TO_WOKWI: Record<string, string> = {
   'arduino-uno': 'wokwi-arduino-uno',
   'arduino-nano': 'wokwi-arduino-nano',

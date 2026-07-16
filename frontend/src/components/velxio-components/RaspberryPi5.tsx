@@ -1,5 +1,5 @@
 /**
- * Raspberry Pi 5 React wrapper — renders the velxio-raspberry-pi-5 custom
+ * Raspberry Pi 5 React wrapper — renders the circuit-muse-raspberry-pi-5 custom
  * element at an absolute position.  Pin info lives on the custom element
  * via its `pinInfo` getter; the wire system reads it from the DOM.
  */
@@ -8,7 +8,7 @@ import './RaspberryPi5Element';
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      'velxio-raspberry-pi-5': any; // eslint-disable-line @typescript-eslint/no-explicit-any
+      'circuit-muse-raspberry-pi-5': any; // eslint-disable-line @typescript-eslint/no-explicit-any
     }
   }
 }
@@ -20,7 +20,7 @@ interface RaspberryPi5Props {
 }
 
 export const RaspberryPi5 = ({ id = 'raspberry-pi-5', x = 0, y = 0 }: RaspberryPi5Props) => (
-  <velxio-raspberry-pi-5
+  <circuit-muse-raspberry-pi-5
     id={id}
     style={{
       position: 'absolute',

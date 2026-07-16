@@ -2,7 +2,7 @@
  * EPaperPart hook integration test
  *
  * This test pins down the wire-up between:
- *   - the `<velxio-epaper>` Web Component
+ *   - the `<circuit-muse-epaper>` Web Component
  *   - the `EPaperPart.attachEvents` hook
  *   - a fake AVR-shaped simulator (matches the surface the hook expects)
  *
@@ -109,7 +109,7 @@ let cleanup: (() => void) | null = null;
 beforeAll(async () => {
   // One jsdom for the whole file — `customElements.define` is global per
   // window, so we can't re-create the window between tests without losing
-  // the `velxio-epaper` registration.
+  // the `circuit-muse-epaper` registration.
   const dom = new JSDOM('<!doctype html><html><body></body></html>', {
     pretendToBeVisual: true,
   });
@@ -127,7 +127,7 @@ beforeAll(async () => {
     (globalThis as Record<string, unknown>)[k] = w[k];
   }
   // Now load the Web Component (after globals are in place).
-  await import('../components/velxio-components/EPaperElement');
+  await import('../components/circuit-muse-components/EPaperElement');
 });
 
 afterEach(() => {
@@ -178,7 +178,7 @@ describe('EPaperPart — AVR hook integration', () => {
 
   it('hooks SPI, drives BUSY high on flush, and restores cleanup', () => {
     const sim = new FakeAvrSimulator();
-    const el = document.createElement('velxio-epaper') as HTMLElement;
+    const el = document.createElement('circuit-muse-epaper') as HTMLElement;
     el.setAttribute('panel-kind', 'epaper-1in54-bw');
     el.setAttribute('refresh-ms', '1');
     document.body.appendChild(el);
@@ -251,7 +251,7 @@ describe('EPaperPart — AVR hook integration', () => {
 
   it('does NOT feed bytes to the decoder while CS is HIGH (de-asserted)', () => {
     const sim = new FakeAvrSimulator();
-    const el = document.createElement('velxio-epaper') as HTMLElement;
+    const el = document.createElement('circuit-muse-epaper') as HTMLElement;
     el.setAttribute('panel-kind', 'epaper-1in54-bw');
     el.setAttribute('refresh-ms', '1');
     document.body.appendChild(el);
@@ -277,7 +277,7 @@ describe('EPaperPart — AVR hook integration', () => {
   it('cleanup restores a callable SPI onByte', () => {
     const sim = new FakeAvrSimulator();
     const installed = sim.spi.onByte;
-    const el = document.createElement('velxio-epaper') as HTMLElement;
+    const el = document.createElement('circuit-muse-epaper') as HTMLElement;
     el.setAttribute('panel-kind', 'epaper-2in13-bwr');
     document.body.appendChild(el);
 
@@ -310,7 +310,7 @@ describe('EPaperPart — Web Component pinInfo', () => {
       'epaper-2in13-bwr',
       'epaper-7in5-bw',
     ]) {
-      const el = document.createElement('velxio-epaper') as HTMLElement & {
+      const el = document.createElement('circuit-muse-epaper') as HTMLElement & {
         pinInfo: Array<{ name: string; x: number; y: number }>;
       };
       el.setAttribute('panel-kind', kind);

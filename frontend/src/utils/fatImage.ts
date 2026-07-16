@@ -136,7 +136,7 @@ export function buildFat16Image(files: SdFile[], opts: BuildFatOptions = {}): Ui
   img[0] = 0xeb;
   img[1] = 0x3c;
   img[2] = 0x90;
-  writeAscii(img, 3, 'VELXIO  ', 8); // OEM name
+  writeAscii(img, 3, 'CIRCUIT_MUSE  ', 8); // OEM name
   writeU16(img, 11, SEC); // bytes per sector
   img[13] = spc; // sectors per cluster
   writeU16(img, 14, reserved); // reserved sectors
@@ -152,7 +152,7 @@ export function buildFat16Image(files: SdFile[], opts: BuildFatOptions = {}): Ui
   img[36] = 0x80; // drive number
   img[38] = 0x29; // extended boot signature
   writeU32(img, 39, 0x564c5849); // volume id ("VLXI")
-  writeAscii(img, 43, (opts.label ?? 'VELXIO SD').toUpperCase(), 11);
+  writeAscii(img, 43, (opts.label ?? 'CIRCUIT_MUSE SD').toUpperCase(), 11);
   writeAscii(img, 54, 'FAT16   ', 8);
   img[510] = 0x55;
   img[511] = 0xaa;

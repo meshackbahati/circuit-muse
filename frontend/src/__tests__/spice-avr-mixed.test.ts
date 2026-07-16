@@ -1,9 +1,9 @@
 /**
  * Mixed-signal co-simulation tests: avr8js running alongside ngspice.
  *
- * These are the flagship demonstrations that Velxio can emulate real
+ * These are the flagship demonstrations that CircuitMuse can emulate real
  * Arduino sketches interacting with real analog circuits. Ports the
- * sandbox's spice_avr_mixed.test.js directly into the Velxio frontend.
+ * sandbox's spice_avr_mixed.test.js directly into the CircuitMuse frontend.
  */
 import { describe, it, expect } from 'vitest';
 import { runNetlist } from './helpers/testSolver';

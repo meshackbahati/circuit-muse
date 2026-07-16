@@ -62,9 +62,9 @@ app = FastAPI(
     openapi_url="/api/openapi.json",
 )
 
-# CORS — local Vite dev, the prod web origin, AND the Velxio Desktop
+# CORS — local Vite dev, the prod web origin, AND the CircuitMuse Desktop
 # Tauri origins. The desktop bundle runs from a non-http scheme so
-# every fetch to velxio.dev is cross-origin and the browser blocks
+# every fetch to circuit-muse.dev is cross-origin and the browser blocks
 # preflight unless we explicitly allow the Tauri scheme(s).
 #
 # Tauri origin per OS:

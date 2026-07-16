@@ -1,7 +1,7 @@
 {
-  "schema": "velxio-chip/v1",
+  "schema": "circuit-muse-chip/v1",
   "name": "Intel 4001 ROM",
-  "author": "Velxio",
+  "author": "CircuitMuse",
   "license": "MIT",
   "description": "256-byte ROM with 4 I/O lines. The original 4004 system companion — multiple chips chain on the nibble bus, chip-id selects which 256-byte page responds.",
   "pins": [

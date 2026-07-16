@@ -202,7 +202,7 @@ function toInput(ex: { components: any[]; wires: any[] }): BuildNetlistInput {
   return {
     components: ex.components.map((c: any) => ({
       id: c.id,
-      metadataId: c.type.replace(/^(wokwi|velxio)-/, ''),
+      metadataId: c.type.replace(/^(wokwi|circuit-muse)-/, ''),
       properties: c.properties ?? {},
     })),
     wires: ex.wires.map((wire: any) => ({

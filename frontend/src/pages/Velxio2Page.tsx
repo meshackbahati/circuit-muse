@@ -1,5 +1,5 @@
 /**
- * /v2 — Velxio 2.0 Release Landing Page
+ * /v2 — CircuitMuse 2.0 Release Landing Page
  * Showcases all new features, supported boards, and community CTAs
  */
 
@@ -13,9 +13,9 @@ import { getSeoMeta } from '../seoRoutes';
 import { trackClickCTA } from '../utils/analytics';
 import raspberryPi3Svg from '../assets/Raspberry_Pi_3_illustration.svg';
 import './SEOPage.css';
-import './Velxio2Page.css';
+import './CircuitMuse2Page.css';
 
-const GITHUB_URL = 'https://github.com/davidmonterocrespo24/velxio';
+const GITHUB_URL = 'https://github.com/davidmonterocrespo24/circuit-muse';
 const DISCORD_URL = 'https://discord.gg/3mARjJrh4E';
 
 /* ── SVG Icons (no emojis) ─────────────────────────────── */
@@ -235,13 +235,13 @@ const JSON_LD: object[] = [
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Velxio 2.0 — Multi-Board Embedded Systems Simulator',
+    name: 'CircuitMuse 2.0 — Multi-Board Embedded Systems Simulator',
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Any (browser-based)',
     softwareVersion: '2.0.0',
     description:
-      'Velxio 2.0 — simulate Arduino, ESP32, Raspberry Pi Pico, and Raspberry Pi 3 in your browser. 19 boards, 68+ examples, realistic sensor simulation. Free and open-source.',
-    url: 'https://velxio.dev/v2',
+      'CircuitMuse 2.0 — simulate Arduino, ESP32, Raspberry Pi Pico, and Raspberry Pi 3 in your browser. 19 boards, 68+ examples, realistic sensor simulation. Free and open-source.',
+    url: 'https://circuit-muse.dev/v2',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Person', name: 'David Montero Crespo' },
     license: 'https://www.gnu.org/licenses/agpl-3.0.html',
@@ -250,8 +250,8 @@ const JSON_LD: object[] = [
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Velxio', item: 'https://velxio.dev/' },
-      { '@type': 'ListItem', position: 2, name: 'Velxio 2.0', item: 'https://velxio.dev/v2' },
+      { '@type': 'ListItem', position: 1, name: 'CircuitMuse', item: 'https://circuit-muse.dev/' },
+      { '@type': 'ListItem', position: 2, name: 'CircuitMuse 2.0', item: 'https://circuit-muse.dev/v2' },
     ],
   },
 ];
@@ -354,7 +354,7 @@ const CHANGE_SECTIONS = [
   },
 ];
 
-export const Velxio2Page: React.FC = () => {
+export const CircuitMuse2Page: React.FC = () => {
   const { t } = useTranslation();
   const localize = useLocalizedHref();
   useSEO({ ...getSeoMeta('/v2')!, jsonLd: JSON_LD });
@@ -369,7 +369,7 @@ export const Velxio2Page: React.FC = () => {
             <IcoRocket /> {t('v2.versionBadge')}
           </div>
           <h1>
-            Velxio 2.0
+            CircuitMuse 2.0
             <br />
             <span className="accent">{t('v2.heroAccent')}</span>
           </h1>
@@ -378,7 +378,7 @@ export const Velxio2Page: React.FC = () => {
             <Link
               to={localize('/editor')}
               className="seo-btn-primary"
-              onClick={() => trackClickCTA('velxio-v2', '/editor')}
+              onClick={() => trackClickCTA('circuit-muse-v2', '/editor')}
             >
               <svg
                 width="16"
@@ -571,7 +571,7 @@ export const Velxio2Page: React.FC = () => {
         <section className="seo-section">
           <h2>{t('v2.multipleBoards')}</h2>
           <p className="lead">
-            Most simulators limit you to one board at a time. Velxio lets you place multiple boards
+            Most simulators limit you to one board at a time. CircuitMuse lets you place multiple boards
             on the same canvas and wire them together — just like a real workbench.
           </p>
           <div className="v2-multiboard">
@@ -806,7 +806,7 @@ export const Velxio2Page: React.FC = () => {
             >
               <IcoGitHub />
               <div>
-                <h3>Velxio</h3>
+                <h3>CircuitMuse</h3>
                 <p>This project — free, open-source multi-board embedded simulator</p>
               </div>
             </a>
@@ -820,7 +820,7 @@ export const Velxio2Page: React.FC = () => {
           <Link
             to={localize('/editor')}
             className="seo-btn-primary"
-            onClick={() => trackClickCTA('velxio-v2', '/editor')}
+            onClick={() => trackClickCTA('circuit-muse-v2', '/editor')}
           >
             {t('v2.bottom.cta')}
           </Link>
