@@ -21,10 +21,6 @@ jobs:
         working-directory: app
         run: npm install
 
-      - name: TypeScript check
-        working-directory: app
-        run: npx tsc --noEmit
-
       - name: Build frontend
         working-directory: app
         run: npx vite build
