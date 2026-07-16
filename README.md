@@ -131,6 +131,32 @@ circuit-muse/
 
 ---
 
+## System Requirements
+
+| Component | Required | Auto-installed |
+|-----------|----------|----------------|
+| Node.js 20+ | App build | No |
+| Python 3.12+ | Engine | No |
+| arduino-cli | AVR/RP2040 compilation | Cores auto-install on first compile |
+| ESP-IDF (optional) | ESP32 QEMU builds | No |
+| Ollama (optional) | Local AI agent | No |
+| Tauri CLI | Desktop build | `cargo install tauri-cli` |
+
+The setup wizard (gear icon in toolbar) shows what's installed and what's missing on first launch.
+
+---
+
+## Release
+
+```bash
+git tag v1.0.1
+git push origin v1.0.1
+```
+
+Triggers GitHub Actions to build for Linux (.deb, .AppImage), Windows (.msi, .exe), macOS (.dmg) and creates a release with all installers.
+
+---
+
 ## License
 
 MIT License — fully open source. No restrictions, no commercial tier.

@@ -43,13 +43,12 @@ jobs:
         working-directory: engine
         run: pip install -r requirements.txt
 
-      - name: Start engine
-        working-directory: engine
-        run: uvicorn app.main:app --host 127.0.0.1 --port 8001 &
-        sleep 5
-
-      - name: Health check
-        run: curl -sf http://127.0.0.1:8001/health
+      - name: Start engine and health check
+        run: |
+          cd engine
+          uvicorn app.main:app --host 127.0.0.1 --port 8001 &
+          sleep 5
+          curl -sf http://127.0.0.1:8001/health
 
   test-rust:
     name: Test Rust Shell
