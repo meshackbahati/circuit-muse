@@ -1,9 +1,0 @@
-{
-  "schema": "velxio-chip/v1",
-  "name": "Bus Reader (8 LEDs)",
-  "author": "Velxio",
-  "license": "MIT",
-  "description": "Reads an 8-bit data bus D0..D7 and mirrors it onto OUT0..OUT7. Phase 0 chip-to-chip bus proof.",
-  "pins": ["D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "OUT0", "OUT1", "OUT2", "OUT3", "OUT4", "OUT5", "OUT6", "OUT7"],
-  "attributes": []
-}

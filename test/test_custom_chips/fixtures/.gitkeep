@@ -1,2 +1,0 @@
-# Compiled .wasm files land here after running scripts/compile-all.sh
-# This directory is checked in but the .wasm artifacts are git-ignored.

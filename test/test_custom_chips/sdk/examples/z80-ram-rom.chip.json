@@ -1,9 +1,0 @@
-{
-  "schema": "velxio-chip/v1",
-  "name": "Z80 RAM-test ROM",
-  "author": "Velxio",
-  "license": "MIT",
-  "description": "A rom-32k variant holding a Z80 RAM round-trip program (write 0x5A to 0x8000, read back, HALT on match). Fixture for the Phase 3 computer-core proof (Z80 + ROM + RAM + address decode).",
-  "pins": ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "CE", "OE", "VCC", "GND"],
-  "attributes": []
-}

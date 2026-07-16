@@ -1,9 +1,0 @@
-{
-  "schema": "velxio-chip/v1",
-  "name": "Bus Driver (0xA5)",
-  "author": "Velxio",
-  "license": "MIT",
-  "description": "Drives the constant byte 0xA5 onto an 8-bit data bus D0..D7. Phase 0 chip-to-chip bus proof.",
-  "pins": ["D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7"],
-  "attributes": []
-}
