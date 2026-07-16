@@ -129,11 +129,11 @@ jobs:
         run: |
           cd engine
           python -m venv venv-build
-          source venv-build/Scripts/activate
+          .\venv-build\Scripts\activate
           pip install -r requirements.txt
           pip install pyinstaller
           pyinstaller --clean --noconfirm --onefile --name circuit-muse-engine app/main.py
-          cp dist/circuit-muse-engine.exe ../src-tauri/binaries/circuit-muse-engine-x86_64-pc-windows-msvc.exe
+          copy dist\circuit-muse-engine.exe ..\src-tauri\binaries\circuit-muse-engine-x86_64-pc-windows-msvc.exe
 
       - name: Install app dependencies and build
         working-directory: app
@@ -185,9 +185,9 @@ jobs:
       - name: Download arduino-cli
         run: |
           mkdir -p src-tauri/binaries
-          curl -sL "https://github.com/arduino/arduino-cli/releases/download/v1.5.1/arduino-cli_1.5.1_macOS_64bit.tar.gz" | tar xz -C src-tauri/binaries/
-          mv src-tauri/binaries/arduino-cli src-tauri/binaries/arduino-cli-x86_64-apple-darwin
-          chmod +x src-tauri/binaries/arduino-cli-x86_64-apple-darwin
+          curl -sL "https://github.com/arduino/arduino-cli/releases/download/v1.5.1/arduino-cli_1.5.1_macOS_ARM64.tar.gz" | tar xz -C src-tauri/binaries/
+          mv src-tauri/binaries/arduino-cli src-tauri/binaries/arduino-cli-aarch64-apple-darwin
+          chmod +x src-tauri/binaries/arduino-cli-aarch64-apple-darwin
 
       - name: Build engine with PyInstaller
         run: |
@@ -197,8 +197,8 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
           pyinstaller --clean --noconfirm --onefile --name circuit-muse-engine app/main.py
-          cp dist/circuit-muse-engine ../src-tauri/binaries/circuit-muse-engine-x86_64-apple-darwin
-          chmod +x ../src-tauri/binaries/circuit-muse-engine-x86_64-apple-darwin
+          cp dist/circuit-muse-engine ../src-tauri/binaries/circuit-muse-engine-aarch64-apple-darwin
+          chmod +x ../src-tauri/binaries/circuit-muse-engine-aarch64-apple-darwin
 
       - name: Install app dependencies and build
         working-directory: app
