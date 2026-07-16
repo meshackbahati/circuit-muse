@@ -1,6 +1,6 @@
 use std::fs::OpenOptions;
 use std::io::Write;
-use tauri::AppHandle;
+use tauri::{AppHandle, Manager};
 
 #[tauri::command]
 pub fn write_debug_log(app: AppHandle, message: String) -> Result<(), String> {

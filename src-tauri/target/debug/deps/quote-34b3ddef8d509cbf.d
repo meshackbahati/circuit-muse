@@ -1,0 +1,11 @@
+/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/deps/quote-34b3ddef8d509cbf.d: /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/lib.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/ext.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/format.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/ident_fragment.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/to_tokens.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/runtime.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/spanned.rs
+
+/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/deps/libquote-34b3ddef8d509cbf.rmeta: /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/lib.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/ext.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/format.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/ident_fragment.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/to_tokens.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/runtime.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/spanned.rs
+
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/lib.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/ext.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/format.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/ident_fragment.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/to_tokens.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/runtime.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.46/src/spanned.rs:

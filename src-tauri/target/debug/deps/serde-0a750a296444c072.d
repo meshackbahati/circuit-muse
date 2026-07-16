@@ -1,0 +1,14 @@
+/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/deps/serde-0a750a296444c072.d: /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/build/serde-9d18533f5d534864/out/private.rs
+
+/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/deps/libserde-0a750a296444c072.rlib: /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/build/serde-9d18533f5d534864/out/private.rs
+
+/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/deps/libserde-0a750a296444c072.rmeta: /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/build/serde-9d18533f5d534864/out/private.rs
+
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/build/serde-9d18533f5d534864/out/private.rs:
+
+# env-dep:OUT_DIR=/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/build/serde-9d18533f5d534864/out

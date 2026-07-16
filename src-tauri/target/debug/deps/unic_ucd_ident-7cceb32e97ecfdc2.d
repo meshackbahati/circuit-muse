@@ -1,0 +1,17 @@
+/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/deps/unic_ucd_ident-7cceb32e97ecfdc2.d: /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/lib.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/pkg_info.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/xid.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/id.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/xid_start.rsv /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/xid_continue.rsv /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/id_start.rsv /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/id_continue.rsv /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/unicode_version.rsv
+
+/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/deps/libunic_ucd_ident-7cceb32e97ecfdc2.rmeta: /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/lib.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/pkg_info.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/xid.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/id.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/xid_start.rsv /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/xid_continue.rsv /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/id_start.rsv /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/id_continue.rsv /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/unicode_version.rsv
+
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/lib.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/pkg_info.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/xid.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/id.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/xid_start.rsv:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/xid_continue.rsv:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/id_start.rsv:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/id_continue.rsv:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unic-ucd-ident-0.9.0/src/../tables/unicode_version.rsv:
+
+# env-dep:CARGO_PKG_DESCRIPTION=UNIC — Unicode Character Database — Identifier Properties
+# env-dep:CARGO_PKG_NAME=unic-ucd-ident
+# env-dep:CARGO_PKG_VERSION=0.9.0

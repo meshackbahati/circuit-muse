@@ -1,6 +1,6 @@
 use serde::Serialize;
 use std::path::PathBuf;
-use tauri::AppHandle;
+use tauri::{AppHandle, Emitter, Manager};
 
 #[derive(Serialize)]
 pub struct QemuStatus {
@@ -9,42 +9,30 @@ pub struct QemuStatus {
 }
 
 fn qemu_dir(app: &AppHandle, arch: &str) -> Result<PathBuf, String> {
-    let data_dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    let data_dir = app.path().app_data_dir().map_err(|e: tauri::Error| e.to_string())?;
     Ok(data_dir.join("qemu").join(arch))
 }
 
-fn lib_name(arch: &str) -> &'static str {
+fn qemu_binary_name(arch: &str) -> &'static str {
     match arch {
-        "esp32" => {
-            if cfg!(target_os = "windows") { "libqemu-xtensa.dll" }
-            else if cfg!(target_os = "macos") { "libqemu-xtensa.dylib" }
-            else { "libqemu-xtensa.so" }
-        }
-        "stm32" => {
-            if cfg!(target_os = "windows") { "libqemu-arm.dll" }
-            else if cfg!(target_os = "macos") { "libqemu-arm.dylib" }
-            else { "libqemu-arm.so" }
-        }
-        "riscv32" => {
-            if cfg!(target_os = "windows") { "libqemu-riscv32.dll" }
-            else if cfg!(target_os = "macos") { "libqemu-riscv32.dylib" }
-            else { "libqemu-riscv32.so" }
-        }
+        "esp32" => "qemu-system-xtensa",
+        "riscv32" => "qemu-system-riscv32",
         _ => "unknown",
     }
 }
 
-/// Download URL for QEMU shared libraries.
-/// Points to lcgamboa/PICSimLab releases which publish the exact
-/// shared libraries we need for ESP32 (Xtensa) and STM32 (ARM) emulation.
-fn download_url(arch: &str) -> Result<String, String> {
-    let base = "https://github.com/lcgamboa/PICSimLab/releases/latest/download";
-    match arch {
-        "esp32" => Ok(format!("{}/libqemu-xtensa.so", base)),
-        "stm32" => Ok(format!("{}/libqemu-arm.so", base)),
-        "riscv32" => Ok(format!("{}/libqemu-riscv32.so", base)),
-        _ => Err(format!("Unknown architecture: {}", arch)),
-    }
+fn qemu_status_for(app: &AppHandle, arch: &str) -> Result<QemuStatus, String> {
+    let dir = qemu_dir(app, arch)?;
+    let bin_name = if cfg!(target_os = "windows") {
+        format!("{}.exe", qemu_binary_name(arch))
+    } else {
+        qemu_binary_name(arch).to_string()
+    };
+    let bin_path = dir.join("bin").join(&bin_name);
+    Ok(QemuStatus {
+        installed: bin_path.exists(),
+        path: Some(dir.to_string_lossy().to_string()),
+    })
 }
 
 #[tauri::command]
@@ -53,93 +41,61 @@ pub fn esp32_qemu_status(app: AppHandle) -> Result<QemuStatus, String> {
 }
 
 #[tauri::command]
-pub async fn esp32_qemu_install(app: AppHandle, window: tauri::Window) -> Result<(), String> {
-    qemu_install_for(&app, &window, "esp32").await
-}
-
-#[tauri::command]
 pub fn stm32_qemu_status(app: AppHandle) -> Result<QemuStatus, String> {
-    qemu_status_for(&app, "stm32")
-}
-
-#[tauri::command]
-pub async fn stm32_qemu_install(app: AppHandle, window: tauri::Window) -> Result<(), String> {
-    qemu_install_for(&app, &window, "stm32").await
-}
-
-fn qemu_status_for(app: &AppHandle, arch: &str) -> Result<QemuStatus, String> {
-    let dir = qemu_dir(app, arch)?;
-    let name = lib_name(arch);
-    let lib_path = dir.join(name);
+    let dir = qemu_dir(&app, "stm32").unwrap_or_default();
+    let bin_path = dir.join("bin").join("qemu-system-arm");
     Ok(QemuStatus {
-        installed: lib_path.exists(),
+        installed: bin_path.exists(),
         path: Some(dir.to_string_lossy().to_string()),
     })
 }
 
-async fn qemu_install_for(app: &AppHandle, window: &tauri::Window, arch: &str) -> Result<(), String> {
-    let dir = qemu_dir(app, arch)?;
-    std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+#[tauri::command]
+pub async fn esp32_qemu_install(app: AppHandle, window: tauri::Window) -> Result<(), String> {
+    let dir = qemu_dir(&app, "esp32")?;
+    std::fs::create_dir_all(&dir).map_err(|e: std::io::Error| e.to_string())?;
+    let event_name = "esp32-qemu-progress".to_string();
+    let _ = window.emit(&event_name, serde_json::json!({"phase": "downloading"}));
 
-    let url = download_url(arch)?;
-    let name = lib_name(arch);
-    let dest = dir.join(name);
+    // Download Espressif QEMU for the current platform
+    let tag = "esp-develop-9.2.2-20260417";
+    let base = format!("https://github.com/espressif/qemu/releases/download/{}", tag);
+    let filename = if cfg!(target_os = "linux") && cfg!(target_arch = "x86_64") {
+        "qemu-xtensa-softmmu-esp_develop_9.2.2_20260417-x86_64-linux-gnu.tar.xz"
+    } else if cfg!(target_os = "linux") && cfg!(target_arch = "aarch64") {
+        "qemu-xtensa-softmmu-esp_develop_9.2.2_20260417-aarch64-linux-gnu.tar.xz"
+    } else if cfg!(target_os = "macos") && cfg!(target_arch = "aarch64") {
+        "qemu-xtensa-softmmu-esp_develop_9.2.2_20260417-aarch64-apple-darwin.tar.xz"
+    } else if cfg!(target_os = "macos") && cfg!(target_arch = "x86_64") {
+        "qemu-xtensa-softmmu-esp_develop_9.2.2_20260417-x86_64-apple-darwin.tar.xz"
+    } else if cfg!(target_os = "windows") {
+        "qemu-xtensa-softmmu-esp_develop_9.2.2_20260417-x86_64-w64-mingw32.tar.xz"
+    } else {
+        return Err("Unsupported platform".to_string());
+    };
+    let url = format!("{}/{}", base, filename);
 
-    // Emit progress: starting
-    window.emit(&format!("{}-qemu-progress", arch), serde_json::json!({
-        "bytes_downloaded": 0,
-        "total_bytes": null,
-        "phase": "downloading"
-    })).map_err(|e| e.to_string())?;
+    // Download and extract
+    let resp = reqwest::blocking::get(&url).map_err(|e| format!("Download failed: {}", e))?;
+    let bytes = resp.bytes().map_err(|e| format!("Read failed: {}", e))?;
+    let tarball = dir.join("download.tar.xz");
+    std::fs::write(&tarball, &bytes).map_err(|e| format!("Write failed: {}", e))?;
 
-    // Download using httpx-like approach via ureq or reqwest
-    // We use a simple HTTP GET with progress reporting
-    let client = reqwest::Client::new();
-    let response = client.get(&url)
-        .send()
-        .await
-        .map_err(|e| format!("Download failed: {}", e))?;
+    let status = std::process::Command::new("tar")
+        .args(["xf", tarball.to_str().unwrap(), "-C", dir.to_str().unwrap(), "--strip-components=1"])
+        .status()
+        .map_err(|e| format!("tar failed: {}", e))?;
+    std::fs::remove_file(&tarball).ok();
 
-    let total = response.content_length().unwrap_or(0);
-    let mut downloaded: u64 = 0;
-    let mut bytes = Vec::new();
-
-    let mut stream = response.bytes_stream();
-    use futures_util::StreamExt;
-    while let Some(chunk) = stream.next().await {
-        let chunk = chunk.map_err(|e| format!("Download error: {}", e))?;
-        downloaded += chunk.len() as u64;
-        bytes.extend_from_slice(&chunk);
-
-        // Emit progress every ~5%
-        if total > 0 && (downloaded * 20 / total) != ((downloaded - chunk.len() as u64) * 20 / total) {
-            let pct = (downloaded * 100 / total) as u64;
-            window.emit(&format!("{}-qemu-progress", arch), serde_json::json!({
-                "bytes_downloaded": downloaded,
-                "total_bytes": total,
-                "phase": "downloading",
-                "progress": pct
-            })).map_err(|e| e.to_string())?;
-        }
+    if !status.success() {
+        return Err("Extract failed".to_string());
     }
 
-    // Write to disk
-    std::fs::write(&dest, &bytes).map_err(|e| format!("Failed to write file: {}", e))?;
-
-    // Make executable on Unix
-    #[cfg(unix)]
-    {
-        use std::os::unix::fs::PermissionsExt;
-        let perms = std::fs::Permissions::from_mode(0o755);
-        std::fs::set_permissions(&dest, perms).map_err(|e| e.to_string())?;
-    }
-
-    // Emit progress: done
-    window.emit(&format!("{}-qemu-progress", arch), serde_json::json!({
-        "bytes_downloaded": downloaded,
-        "total_bytes": total,
-        "phase": "done"
-    })).map_err(|e| e.to_string())?;
-
+    let _ = window.emit(&event_name, serde_json::json!({"phase": "done"}));
     Ok(())
+}
+
+#[tauri::command]
+pub async fn stm32_qemu_install(_app: AppHandle, _window: tauri::Window) -> Result<(), String> {
+    Err("STM32 QEMU not available for automatic installation yet".to_string())
 }

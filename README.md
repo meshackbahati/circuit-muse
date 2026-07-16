@@ -1,5 +1,13 @@
 # CircuitMuse
 
+<p align="center">
+  <img src="src-tauri/icons/source.png" alt="CircuitMuse Logo" width="400">
+</p>
+
+<p align="center">
+  <strong>DESIGN • SIMULATE • CODE • CREATE</strong>
+</p>
+
 AI-powered circuit simulator and embedded board emulator for desktop. Write Arduino C++ or MicroPython, compile it, simulate it with real CPU emulation and 100+ interactive electronic components — and chat with an AI to design circuits, debug code, and wire components.
 
 **31 boards · 6 CPU architectures**: AVR8 (ATmega/ATtiny), ARM Cortex-M0+ (RP2040), Xtensa LX6/LX7 (ESP32), RISC-V RV32IMC (ESP32-C3), ARM Cortex-M (STM32), ARM Cortex-A (Raspberry Pi 3/4/5).

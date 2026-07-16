@@ -1,0 +1,12 @@
+/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/deps/thiserror-fda904702948d469.d: /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/build/thiserror-b2739e9196d76776/out/private.rs
+
+/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/deps/libthiserror-fda904702948d469.rmeta: /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/build/thiserror-b2739e9196d76776/out/private.rs
+
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs:
+/home/bealthguy/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs:
+/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/build/thiserror-b2739e9196d76776/out/private.rs:
+
+# env-dep:OUT_DIR=/home/bealthguy/Public/programming/circuit-muse/src-tauri/target/debug/build/thiserror-b2739e9196d76776/out
