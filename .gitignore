@@ -3,6 +3,9 @@ node_modules/
 */node_modules/
 **/node_modules/
 
+# Rust build artifacts
+src-tauri/target/
+
 # npm lock files. We deliberately do NOT commit these — they pin
 # platform-specific native binaries (Rollup, esbuild, swc) and a lock
 # generated on Windows breaks the Linux Docker build (and vice versa). The
