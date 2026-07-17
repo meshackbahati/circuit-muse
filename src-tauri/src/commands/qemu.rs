@@ -82,13 +82,15 @@ pub async fn esp32_qemu_install(app: AppHandle, window: tauri::Window) -> Result
         std::fs::write(&tarball, &bytes).map_err(|e| format!("Write failed: {}", e))?;
 
         // Extract - try tar first, fall back to 7z on Windows
+        let tarball_str = tarball.to_string_lossy().to_string();
+        let dir_str = dir_clone.to_string_lossy().to_string();
         let status = std::process::Command::new("tar")
-            .args(["xf", tarball.to_str().unwrap_or(""), "-C", dir_clone.to_str().unwrap_or(""), "--strip-components=1"])
+            .args(["xf", &tarball_str, "-C", &dir_str, "--strip-components=1"])
             .status()
             .or_else(|_| {
-                // Fallback: try 7z on Windows
+                let out_arg = format!("-o{}", dir_str);
                 std::process::Command::new("7z")
-                    .args(["x", tarball.to_str().unwrap_or(""), format!("-o{}", dir_clone.to_str().unwrap_or("")), "-y"])
+                    .args(["x", &tarball_str, &out_arg, "-y"])
                     .status()
             })
             .map_err(|e| format!("Extraction failed: {}", e))?;
