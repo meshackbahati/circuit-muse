@@ -1110,7 +1110,7 @@ export const EditorToolbar = ({
     }
   };
 
-  // Phase 3 D3.2 — Schematic screenshot. Pro-tier-gated by the backend.
+  // Phase 3 D3.2 — Schematic screenshot. Available in desktop build.
   // Same UX pattern as BOM export: everyone can click; 402 redirects to
   // /pricing. The server-side headless chromium renders the canvas and
   // returns a PNG, which we trigger a download for.
@@ -1127,7 +1127,7 @@ export const EditorToolbar = ({
       });
       if (resp.status === 402) {
         // Fire the in-place upgrade modal instead of bouncing to /pricing —
-        // keeps the user in the editor with full context. The pro overlay's
+        // keeps the user in the editor with full context. The app's
         // UpgradeGate listens for this event and opens UpgradePromptModal.
         window.dispatchEvent(new CustomEvent('circuit-muse-pro-upgrade-prompt', {
           detail: { componentName: 'Schematic screenshot export' },
@@ -1163,7 +1163,7 @@ export const EditorToolbar = ({
     }
   };
 
-  // Phase 3 D3.1 — BOM export. Pro-tier-gated by the backend (402 if not pro).
+  // Phase 3 D3.1 — BOM export. Available in desktop build (402 if not pro).
   // We let everyone click; the 402 response feeds the upgrade prompt below
   // so free/maker users hit the funnel naturally instead of an obviously-
   // locked button (which they'd just dismiss).
@@ -1179,7 +1179,7 @@ export const EditorToolbar = ({
       });
       if (resp.status === 402) {
         // Fire the in-place upgrade modal instead of bouncing to /pricing —
-        // keeps the user in the editor with full context. The pro overlay's
+        // keeps the user in the editor with full context. The app's
         // UpgradeGate listens for this event and opens UpgradePromptModal.
         window.dispatchEvent(new CustomEvent('circuit-muse-pro-upgrade-prompt', {
           detail: { componentName: 'BOM export' },
@@ -1644,7 +1644,7 @@ export const EditorToolbar = ({
                     <span className="tb-overflow-label">{t('editor.toolbar.uploadFirmwareLabel', 'Upload firmware')}</span>
                   </button>
                   {/* Sync to GitHub — Pro feature.  Fires a window event the
-                      pro overlay listens for; if no overlay is loaded (OSS
+                      app listens for; if no overlay is loaded (OSS
                       build) the click is a silent no-op which is fine —
                       OSS users can't have linked repos anyway. */}
                   <button
@@ -1687,7 +1687,7 @@ export const EditorToolbar = ({
                     <span className="tb-overflow-label">{t('editor.toolbar.shareLabel', 'Share / Embed')}</span>
                   </button>
                   {/* Record simulation — Pro feature. Dispatches a toggle the
-                      pro overlay handles (plan check, board-type check,
+                      app handles (plan check, board-type check,
                       start/stop the recorder). OSS build → no listener →
                       silent no-op. */}
                   <button

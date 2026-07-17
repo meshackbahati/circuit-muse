@@ -6,7 +6,7 @@ import { ShareModal } from './ShareModal';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useLocalizedHref, useCurrentLocale } from '../../i18n/useLocalizedNavigate';
 import { blogUrlFor } from '../../i18n/path';
-import { trackVisitGitHub, trackVisitDiscord } from '../../utils/analytics';
+import { trackVisitGitHub } from '../../utils/analytics';
 import type { AutoSaveState } from '../../hooks/useAutoSaveProject';
 import './LanguageSwitcher.css';
 
@@ -229,12 +229,6 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ autoSave }) => {
             </button>
           )}
 
-          {/* Auth UI lives in the pro overlay — sign-in/sign-up buttons
-              when anonymous, user dropdown when logged in. The overlay's
-              mountPro() portals its HeaderAuth component into this slot
-              via mountIntoSlot('header-auth'). In OSS without the
-              overlay this slot stays empty, which is correct because the
-              OSS image has no auth backend either. */}
           <div data-circuit-muse-slot="header-auth" style={{ display: 'contents' }} />
 
           {/* Mobile hamburger — useless in desktop where the nav it
