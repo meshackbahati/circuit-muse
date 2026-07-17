@@ -81,6 +81,32 @@ jobs:
         working-directory: src-tauri
         run: cargo tauri build
 
+      - name: Patch AppImage with GPU env vars
+        run: |
+          APPIMAGE=$(find src-tauri/target/release/bundle/appimage -name "*.AppImage" | head -1)
+          if [ -n "$APPIMAGE" ]; then
+            chmod +x "$APPIMAGE"
+            # Extract, patch AppRun, repackage
+            EXTRACT_DIR=$(mktemp -d)
+            cd "$EXTRACT_DIR"
+            "$APPIMAGE" --appimage-extract > /dev/null 2>&1 || true
+            # Patch AppRun to set GPU env vars before launching
+            if [ -f squashfs-root/AppRun ]; then
+              sed -i '1a\
+  export GDK_BACKEND=x11\
+  export WEBKIT_DISABLE_COMPOSITING_MODE=1\
+  export WEBKIT_DISABLE_DMABUF_RENDERER=1\
+  export LIBGL_ALWAYS_SOFTWARE=1' squashfs-root/AppRun
+            fi
+            # Repackage
+            cd -
+            APPIMAGETOOL=$(mktemp)
+            curl -sL "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -o "$APPIMAGETOOL"
+            chmod +x "$APPIMAGETOOL"
+            "$APPIMAGETOOL" "$EXTRACT_DIR/squashfs-root" "$APPIMAGE" --no-appstream 2>/dev/null || true
+            rm -rf "$EXTRACT_DIR" "$APPIMAGETOOL"
+          fi
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
