@@ -1,8 +1,8 @@
 /**
  * NgSpiceInteractive — TypeScript client for the interactive ngspice
- * worker.  Phase 1a of the mixed-mode simulator project
+ * worker.  Iteration of the mixed-mode simulator project
  * (see project/sim-mixedmode/phase-01-mixed-mode-coupling.md in the
- * circuit-muse-prod repo).
+ * circuit-muse repo).
  *
  * Wraps the vendored `ngspice-interactive-worker.js` with a Promise-based
  * API.  Each public method posts a uniquely-id'd message to the worker
@@ -26,8 +26,8 @@
  *     const v_cap = await ng.readVec('v(2)');    // full waveform of node 2
  *     console.log(v_cap.real);                   // Float64Array of samples
  *
- *     // Mid-simulation source change (Phase 1b will use real bg_halt/
- *     // bg_resume; Phase 1a workaround is to do partial trans + alter):
+ *     // Mid-simulation source change (Iteration will use real bg_halt/
+ *     // bg_resume; Iteration workaround is to do partial trans + alter):
  *     await ng.command('alter Vsrc dc 3.3');
  *     await ng.command('tran');                  // continues from saved state
  *
@@ -38,7 +38,7 @@
  * runs synchronously and blocks the worker until completion — there is
  * no useful "background" mode in this build.  For mixed-mode operation
  * we use the alternative pattern: short `.tran` invocations with
- * `alter` between them.  Phase 1b will investigate whether a pthread-
+ * `alter` between them.  Iteration will investigate whether a pthread-
  * enabled WASM rebuild is worth the SharedArrayBuffer / cross-origin-
  * isolation overhead.
  */
@@ -167,7 +167,7 @@ export class NgSpiceInteractive {
    * The worker reads via `ngSpice_AllVecs(curPlot)` and walks the
    * NUL-terminated char** array.  Used by `NgSpiceWorkerAdapter` so
    * the production path doesn't have to heuristic-parse netlist
-   * strings (Phase 1d #6).
+   * strings (Iteration #6).
    */
   async listVectors(): Promise<string[]> {
     await this.init();

@@ -1,10 +1,10 @@
 /**
  * 4-valued logic + drive-strength resolution for chip-to-chip bus nets.
- * Phase 1 of the multi-chip digital bus track (project/multichip-bus/).
+ * Iteration of the multi-chip digital bus track (project/multichip-bus/).
  *
  * A real wire is one of four states (the IEEE 4-state model): 0, 1, Z (high
  * impedance / floating / tri-stated), X (unknown — typically two drivers
- * fighting). Phase 0 gave every endpoint of a chip-to-chip net ONE shared key;
+ * fighting). Iteration gave every endpoint of a chip-to-chip net ONE shared key;
  * this module turns the "release the bus by switching to VX_INPUT" idiom that
  * rom-32k/ram-64k/8255 already use into REAL tri-state, so a multi-driver bus
  * (many chips, one data line, only the enabled one drives) resolves correctly.

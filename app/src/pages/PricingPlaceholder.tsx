@@ -27,7 +27,7 @@ export const PricingPlaceholder = () => {
       <AppHeader />
       <div data-circuit-muse-slot="pricing-page">
         {/* Default content — only visible if no overlay is mounted (i.e.
-            self-hosted OSS image without a private pricing overlay). */}
+            self-hosted Desktop app without a private pricing overlay). */}
         <main
           style={{
             maxWidth: 720,

@@ -4,7 +4,7 @@
  * `SpiceEngine.ts` (eecircuit-engine wrapper) — same API, single
  * solver path shared with the rest of the simulation subsystem.
  *
- * Phase 1c F3 of the mixed-mode migration.
+ * Iteration F3 of the mixed-mode migration.
  */
 import type { SolverPort } from './ports/SolverPort';
 import { NgSpiceWorkerAdapter } from './adapters/NgSpiceWorkerAdapter';

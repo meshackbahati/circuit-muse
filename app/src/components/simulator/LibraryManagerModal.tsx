@@ -169,7 +169,7 @@ export const LibraryManagerModal: React.FC<LibraryManagerModalProps> = ({ isOpen
 
   // A custom .zip upload (pro) lands in the user's per-user store; auto-declare
   // it on the active board and refresh the list. The upload BUTTON is injected
-  // into .lib-modal-header by the pro overlay (libraryUploadInjector).
+  // into .lib-modal-header by the app (libraryUploadInjector).
   useEffect(() => {
     const onUploaded = (e: Event) => {
       const name = (e as CustomEvent).detail?.library;
@@ -268,7 +268,7 @@ export const LibraryManagerModal: React.FC<LibraryManagerModalProps> = ({ isOpen
   return (
     <div className="lib-modal-overlay" onClick={onClose}>
       <div className="lib-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Header — the pro custom-upload button injects into .lib-modal-header */}
+        {/* Header — the app custom-upload button injects into .lib-modal-header */}
         <div className="lib-modal-header">
           <div className="lib-modal-title">
             <svg

@@ -3,7 +3,7 @@
  *
  * Background
  * ----------
- * Until Phase 0 of the mixed-mode simulator project, every component
+ * Until Iteration of the mixed-mode simulator project, every component
  * handler in simulation/parts/*Parts.ts wired its own subscription to
  * `pinManager.onPinChange(arduinoPin, callback)` after resolving the
  * arduinoPin via the `getArduinoPinHelper(componentPinName)` callback
@@ -17,17 +17,17 @@
  * current state and subscribe for changes; they never touch PinManager
  * directly.
  *
- * Phase 0 ships the DEFAULT IMPLEMENTATION, which is functionally
+ * Iteration ships the DEFAULT IMPLEMENTATION, which is functionally
  * identical to the legacy path — it just routes through PinResolver
  * instead of being inlined in each handler. Zero behavior change.
  *
- * Phase 1 will add a SPICE-resolved implementation that watches
+ * Iteration will add a SPICE-resolved implementation that watches
  * `nodeVoltages[net]` and threshold-converts to digital states. That
  * landing point is why the abstraction exists.
  *
  * See ../../project/sim-mixedmode/phase-00-pin-resolver.md
  *     ../../project/sim-mixedmode/phase-01-mixed-mode-coupling.md
- *     (in the circuit-muse-prod repo)
+ *     (in the circuit-muse repo)
  */
 
 import type { Wire } from '../types/wire';
@@ -45,7 +45,7 @@ export type PinState = 'HIGH' | 'LOW' | 'FLOATING' | 'CONFLICT';
  *
  * - `getCurrentState()` returns the live state synchronously.
  * - `getCurrentVoltage()` returns the live voltage in volts (or null if
- *   unknown — e.g. SPICE hasn't solved yet). For the Phase 0 default
+ *   unknown — e.g. SPICE hasn't solved yet). For the Iteration default
  *   impl this is synthesised as `state==='HIGH' ? vcc : 0`.
  * - `onChange(cb)` subscribes to state transitions. Returns an
  *   unsubscribe function. The callback fires whenever the state
@@ -78,7 +78,7 @@ export interface PinResolverContext {
   ownerBoard: BoardInstance | null;
   /**
    * Vcc of the owner board in volts (e.g. 5 for Arduino Uno, 3.3 for ESP32).
-   * Used to synthesise a voltage value for the Phase 0 default impl —
+   * Used to synthesise a voltage value for the Iteration default impl —
    * `HIGH → vcc`, `LOW → 0`. Phase 1+ reads real voltages from SPICE
    * instead.
    */
@@ -112,8 +112,8 @@ export interface PinResolverContext {
  *  - null  → no board reached (might be wired to another component that
  *            we don't trace through, or unwired entirely)
  *
- * Phase 1 will replace this with SPICE-net lookup via pinNetMap. The
- * `[C, B]` BJT shortcut here goes away when Phase 5 deletes the
+ * Iteration will replace this with SPICE-net lookup via pinNetMap. The
+ * `[C, B]` BJT shortcut here goes away when Iteration deletes the
  * legacy direct-event path.
  */
 export type PinTracer = (
@@ -153,7 +153,7 @@ export type DetailedPinTracer = (
  * dedicated handlers that pre-decode the I2C/SPI/digital protocol —
  * SPICE-routing them would be wasteful and slower.
  *
- * Phase 5 will simplify this once every active component goes through
+ * Iteration will simplify this once every active component goes through
  * the same SPICE-resolved path uniformly.
  */
 export const ACTIVE_DEVICE_PREFIXES: readonly string[] = Object.freeze([
@@ -267,7 +267,7 @@ export function createDefaultPinResolver(
  *
  * We use this seam type (instead of importing MixedModeScheduler here
  * directly) to keep PinResolver dependency-free of the scheduler.
- * Phase 1b continued can swap in any implementation conforming to this
+ * Iteration continued can swap in any implementation conforming to this
  * shape, including test mocks.
  */
 export interface SpiceVoltageSource {
@@ -329,11 +329,11 @@ export function configFromLogicFamily(family: {
  * active devices (BJT, MOSFET, op-amp, diode) where the digital
  * fast-path can't represent the real signal.
  *
- * Phase 1b scaffolding: subscribes to the provided `SpiceVoltageSource`
+ * Iteration scaffolding: subscribes to the provided `SpiceVoltageSource`
  * and translates voltage events.  When the source doesn't have a
  * voltage yet, the resolver reports `FLOATING` (NOT the legacy "tied to
  * Arduino HIGH/LOW") — that's intentional, because the scheduler hasn't
- * yet wired in the real SPICE engine.  After Phase 1b continued, real
+ * yet wired in the real SPICE engine.  After Iteration continued, real
  * voltages will flow through this same surface.
  */
 export function createSpiceResolvedPinResolver(
@@ -350,7 +350,7 @@ export function createSpiceResolvedPinResolver(
     if (v >= config.thresholdHigh) return 'HIGH';
     if (v <= config.thresholdLow) return 'LOW';
     // Voltages in the dead band stay at the last known state — this is
-    // the basic hysteresis behavior that Phase 3 will refine per-family.
+    // the basic hysteresis behavior that Iteration will refine per-family.
     return cached;
   }
 

@@ -255,7 +255,7 @@ export class ComponentRegistry {
   /**
    * Merge additional components into the registry from an external source.
    *
-   * Used by private overlays (e.g. the circuit-muse.dev pro overlay) to add
+   * Used by apps (e.g. the circuit-muse.dev app) to add
    * premium components after the default `/components-metadata.json` has
    * loaded. Components with an existing `id` are replaced; new ones are
    * appended. Categories and search index are rebuilt.

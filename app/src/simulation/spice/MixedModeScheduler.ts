@@ -1,7 +1,7 @@
 /**
  * MixedModeScheduler — voltage event bus + solver orchestrator.
  *
- * Architecture (Phase 1c onwards):
+ * Architecture (Iteration onwards):
  *
  *   ┌─────────────────────────────┐
  *   │ CircuitSimulationService    │  builds netlist, calls scheduler

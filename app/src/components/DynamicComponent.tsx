@@ -172,7 +172,7 @@ function traceDetailed(
     }
   }
 
-  // No board pin reachable. Multi-chip digital bus (chipbus flag, Phase 0 of
+  // No board pin reachable. Multi-chip digital bus (chipbus flag, Iteration of
   // project/multichip-bus/): when this net has two or more chip endpoints and
   // no board pin, collapse every endpoint onto ONE net-canonical synthetic key
   // so a write on one chip is visible to another through the synchronous
@@ -487,8 +487,8 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
         return traceDetailed(state, componentId, componentPinName, 0).arduinoPin;
       };
 
-      // PinResolver factory — Phase 0 of the mixed-mode simulator project
-      // (see project/sim-mixedmode/ in the circuit-muse-prod repo). For now it
+      // PinResolver factory — Iteration of the mixed-mode simulator project
+      // (see project/sim-mixedmode/ in the circuit-muse repo). For now it
       // wraps getArduinoPin + pinManager.onPinChange — zero behavioral
       // change vs the legacy path. Phase 1+ will swap in a SPICE-resolved
       // implementation that watches node voltages and threshold-converts
@@ -513,13 +513,13 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
         // resolver flavor so the digital state is derived from real node
         // voltages (handles transistor inversion, op-amp gain, diode
         // forward-drop, etc.).  If no → use the legacy digital fast-path
-        // (zero SPICE cost, identical to Phase 0 behavior).
+        // (zero SPICE cost, identical to Iteration behavior).
         const detailed = traceDetailed(state, id, componentPinName, 0);
         if (detailed.crossedActiveDevice) {
           const scheduler = getMixedModeScheduler();
           // Phase 3: threshold model from the OWNER BOARD's logic family
           // (e.g. AVR_HC for Uno, LVCMOS33 for ESP32).  Includes Schmitt
-          // hysteresis when the family declares it.  Phase 3 continued
+          // hysteresis when the family declares it.  Iteration continued
           // will let individual components override via a `logicFamily`
           // field in components-metadata.json so e.g. a 74HC14 input
           // gets Schmitt behavior even when driven from an AVR.

@@ -1,7 +1,7 @@
 /**
  * Native menubar event bridge.
  *
- * The Tauri shell (pro/desktop/src-tauri/src/menu.rs in circuit-muse-prod)
+ * The Tauri shell (pro/desktop/src-tauri/src/menu.rs in circuit-muse)
  * builds a CircuitMuse / File / Edit / View / Help menubar. Internal items
  * (Save .vlx, Open .vlx, Toggle Serial Monitor, Find, …) emit a
  * `circuit-muse://menu` event with `{ action: '<id>' }`. URL items (Docs,

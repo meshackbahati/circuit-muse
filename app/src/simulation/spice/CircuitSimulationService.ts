@@ -16,7 +16,7 @@
  * Single source of truth: this service replaces the trio of
  *   - wireElectricalSolver (legacy)
  *   - connectLegacySolverToMixedMode (bridge)
- *   - connectMixedModeSchedulerToStore (Phase 1c step 1)
+ *   - connectMixedModeSchedulerToStore (Iteration step 1)
  *
  * Architecture:
  *   - Depends on PORTS only (SimulatorStorePort, ElectricalStorePort,

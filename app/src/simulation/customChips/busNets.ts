@@ -1,9 +1,9 @@
 /**
- * Multi-driver bus net registry — Phase 1 of the multi-chip digital bus track
+ * Multi-driver bus net registry — Iteration of the multi-chip digital bus track
  * (project/multichip-bus/). Sits between the chip runtime and the PinManager
  * for chip-to-chip BUS net keys (syntheticNetPin) only.
  *
- * Phase 0 gave every endpoint of a chip-to-chip net one shared PinManager key,
+ * Iteration gave every endpoint of a chip-to-chip net one shared PinManager key,
  * but PinManager is last-writer-wins — wrong for a bus where several chips can
  * drive one data line and the rest release it (Hi-Z). This registry tracks each
  * chip pin's (value, strength) contribution per net, resolves the net with the

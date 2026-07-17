@@ -160,9 +160,9 @@ PartSimulationRegistry.register('led', {
     let anodeHigh = false;
     let cathodeLow = false;
 
-    // Phase 0 of the mixed-mode simulator project — see
+    // Iteration of the mixed-mode simulator project — see
     // ../../../project/sim-mixedmode/phase-00-pin-resolver.md in the
-    // circuit-muse-prod repo. PinResolver replaces the direct
+    // circuit-muse repo. PinResolver replaces the direct
     // pinManager.onPinChange + getArduinoPinHelper pattern. For the
     // Phase-0 default impl it's functionally identical; Phase 1+ will
     // swap in a SPICE-resolved impl that watches node voltages and
@@ -317,7 +317,7 @@ PartSimulationRegistry.register('led-bar-graph', {
     const pinManager = (avrSimulator as any).pinManager;
     if (!pinManager) return () => {};
 
-    // Phase 5 migration: prefer the resolver so each anode pin works
+    // Iteration migration: prefer the resolver so each anode pin works
     // through SPICE-resolved thresholds when fed from an active device.
     const useResolver = typeof getPinResolver === 'function';
 

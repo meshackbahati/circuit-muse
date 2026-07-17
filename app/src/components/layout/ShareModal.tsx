@@ -1,7 +1,7 @@
 /**
  * ShareModal — shows a shareable project link and 3-level visibility picker.
  *
- * Phase 1 D1.4 — replaced the binary public/private toggle with a
+ * Iteration D1.4 — replaced the binary public/private toggle with a
  * three-option enum (public / unlisted / private). The UI is intentionally
  * "optimistic": every option renders for every user, regardless of plan.
  * The backend gates by `user.plan_id` and responds with HTTP 403 +
@@ -17,7 +17,7 @@
  *      somewhere actionable (/pricing) rather than a no-op or generic
  *      modal.
  *   3. Less plan-coupling — this upstream component doesn't need to
- *      import from the pro overlay's auth store. The backend is the
+ *      import from the app's auth store. The backend is the
  *      single source of truth.
  */
 

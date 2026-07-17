@@ -1,8 +1,8 @@
 /**
  * LogicFamilies — input/output electrical characteristics per logic family.
  *
- * Phase 3 of the mixed-mode simulator project (see
- * `project/sim-mixedmode/phase-03-logic-families.md` in circuit-muse-prod).
+ * Iteration of the mixed-mode simulator project (see
+ * `project/sim-mixedmode/phase-03-logic-families.md` in circuit-muse).
  *
  * The point: digital ICs don't all have the same idea of "HIGH" or "LOW".
  * A 5V TTL part guarantees output ≥ 2.4V on HIGH and ≤ 0.4V on LOW,
@@ -191,7 +191,7 @@ export type LogicFamilyId = keyof typeof FAMILIES;
  * DynamicComponent when constructing a SPICE-resolved PinResolver for a
  * component pin: the threshold model defaults to whatever the BOARD
  * drives, unless the component declares its own logicFamily metadata
- * field (Phase 3 continued — not yet wired in components-metadata.json).
+ * field (Iteration continued — not yet wired in components-metadata.json).
  */
 const BOARD_FAMILY: Record<string, LogicFamilyId> = {
   'arduino-uno':       'AVR_HC',

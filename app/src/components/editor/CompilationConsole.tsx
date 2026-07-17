@@ -118,9 +118,9 @@ export const CompilationConsole: React.FC<CompilationConsoleProps> = ({
                 ⚠ {warningCount}
               </span>
             )}
-            {/* Pro overlay mounts a "Diagnose with AI" button here when
-                errorCount > 0. Empty in the OSS image — slotMounter
-                only fires when the pro tree is present. */}
+            {/* App mounts a "Diagnose with AI" button here when
+                errorCount > 0. Empty in the Desktop app — mount system
+                only fires when the app tree is present. */}
             {errorCount > 0 && (
               <div data-circuit-muse-slot="compile-console-actions" />
             )}

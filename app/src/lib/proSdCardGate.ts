@@ -3,12 +3,12 @@
  *
  * Uploading files to the microSD card (the "SD Card" panel) is a paid feature
  * (any paid plan: Maker or above) — mirrors Wokwi. The OSS app owns the panel
- * UI but does NOT know the user's entitlement; the pro overlay installs the
+ * UI but does NOT know the user's entitlement; the app installs the
  * real gate (paid-subscriber check) via `installSdCardUploadGate`.
  *
  * Mirrors the other OSS->Pro seams (`proBoardGate.ts`, `proSaveAction.ts`):
  *   - OSS without an overlay -> default 'allow' (self-host has no accounts).
- *   - With the pro overlay   -> the impl returns false for non-paid users on
+ *   - With the app   -> the impl returns false for non-paid users on
  *     the web, and the caller fires the upgrade prompt.
  *
  * Note: this gates the UPLOAD only. Placing the component and the free
@@ -17,7 +17,7 @@
 
 let _impl: (() => boolean) | null = null;
 
-/** Installed by the pro overlay (mountPro). Pass null to clear (hot reload). */
+/** Installed by the app (mountPro). Pass null to clear (hot reload). */
 export function installSdCardUploadGate(impl: (() => boolean) | null): void {
   _impl = impl;
 }
@@ -36,7 +36,7 @@ export function sdCardUploadAllowed(): boolean {
 
 /**
  * Fire the Pro upgrade prompt. Dispatches the stable CustomEvent the pro
- * overlay's UpgradeGate listens for — the OSS app never imports from the
+ * overlay's UpgradeGate listens for — the desktop app never imports from the
  * overlay, only the event name is the contract.
  */
 export function triggerSdCardUpgradePrompt(): void {

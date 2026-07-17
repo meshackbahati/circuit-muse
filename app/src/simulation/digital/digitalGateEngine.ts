@@ -1,7 +1,7 @@
 /**
  * digitalGateEngine — evaluate a board-less DIGITAL circuit (logic gates +
  * switches + LEDs + power rails) on the event-driven settle kernel instead of
- * ngspice B-sources. Phase 1 of project/digital-gate-engine/.
+ * ngspice B-sources. Iteration of project/digital-gate-engine/.
  *
  * It reuses the multichip-bus substrate (customChips/{busLogic,busNets,
  * busKernel} + PinManager): every wire-connected set of pins becomes one bus
@@ -364,7 +364,7 @@ export interface MixedNetwork {
  * fixed point. Settle on the digital side is the same exact kernel as the
  * all-digital path.
  *
- * Phase 3 core: the boundary handoff + digital settle, verifiable headlessly
+ * Iteration core: the boundary handoff + digital settle, verifiable headlessly
  * (the analog side is supplied by the test). Wiring it to the live ngspice
  * netlist is the follow-up (needs the browser solver; the node loader is broken
  * by a pre-existing path bug).

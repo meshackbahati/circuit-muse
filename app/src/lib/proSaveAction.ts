@@ -3,16 +3,16 @@
  *
  * EditorPage used to import useAuthStore + SaveProjectModal + LoginPromptModal
  * directly, branching on `user` to decide which modal to open when the
- * user pressed Save. After Phase 3 of the OSS split, all of those live
- * in the pro overlay. The OSS editor exposes a stable `triggerSaveAction()`
+ * user pressed Save. After Iteration of the desktop split, all of those live
+ * in the app. The OSS editor exposes a stable `triggerSaveAction()`
  * that:
  *
- *   - In OSS without an overlay → downloads a portable `.vlx` snapshot
+ *   - In desktop without an overlay → downloads a portable `.vlx` snapshot
  *     of the current workspace. The user picks where it goes (browser
  *     save dialog) and can re-load it later via the "Open .vlx" button.
- *     This is Phase 4 of the OSS split — gives self-hosters durable
+ *     This is Iteration of the desktop split — gives self-hosters durable
  *     project persistence without requiring a DB or auth.
- *   - With the pro overlay loaded → installSaveActionImpl() overrides
+ *   - With the app loaded → installSaveActionImpl() overrides
  *     the default. The overlay's impl inspects the auth store and opens
  *     SaveProjectModal (logged in) or LoginPromptModal (anonymous).
  *

@@ -43,10 +43,10 @@ requestAnimationFrame(() => {
   });
 });
 
-// Optional pro overlay. The `@pro` import resolves to a no-op stub in the
+// Optional app. The `@pro` import resolves to a no-op stub in the
 // open-source build (see vite.config.ts) and to the real overlay only when
-// VITE_PRO_BUILD=true at build time. The dynamic import keeps the pro chunk
-// out of the OSS bundle entirely (Vite tree-shakes the never-taken branch).
+// VITE_PRO_BUILD=true at build time. The dynamic import keeps the app chunk
+// out of the desktop bundle entirely (Vite tree-shakes the never-taken branch).
 //
 // Two desktop modes since v0.4.0:
 //   - VITE_PRO_BUILD + VITE_DESKTOP → slim pro entry (@pro/desktop_index)
@@ -68,7 +68,7 @@ if (import.meta.env.VITE_PRO_BUILD) {
 }
 
 // Desktop-only hooks (ESP32 QEMU prompt now, welcome screen in Phase 3).
-// Dynamic import so the OSS bundle never pulls this in.
+// Dynamic import so the desktop bundle never pulls this in.
 if (import.meta.env.VITE_DESKTOP) {
   import('./desktop/index')
     .then((m) => m.mountDesktop?.())

@@ -397,8 +397,8 @@ const MAPPERS: Record<string, Mapper> = {
     const inn = netLookup('IN-');
     const out = netLookup('OUT');
     if (!inp || !inn || !out) return null;
-    // Phase 1d #9: real LM358 macro-model subckt enabled now that
-    // Phase 1d #2 added `.options gmin=1e-10 gminsteps=20 sourcesteps=10
+    // Iteration #9: real LM358 macro-model subckt enabled now that
+    // Iteration #2 added `.options gmin=1e-10 gminsteps=20 sourcesteps=10
     // method=gear maxord=2` to both adapters — the subckt converges
     // where the prior `.op` skipped.  Power rails wire implicitly to
     // vcc_rail / 0 (the canvas doesn't draw op-amp power pins).

@@ -92,7 +92,7 @@ export function connectMcuEdgesToService(service: CircuitSimulationService): () 
    * netlist.  Reads from `pinNetMap` (populated after each solve) so
    * we subscribe to ~3-8 pins per board instead of all 64.
    *
-   * Phase 1d #11: previously we subscribed to every Arduino pin 0..63
+   * Iteration #11: previously we subscribed to every Arduino pin 0..63
    * "since unused listeners are free" — true for AVR (8 pins) but
    * spammy for ESP32 (40+ GPIOs × multiple boards = thousands of
    * dead listeners).  Now scoped to pins the circuit references.

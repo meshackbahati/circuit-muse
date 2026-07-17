@@ -284,7 +284,7 @@ export const ComponentPickerModal: React.FC<ComponentPickerModalProps> = ({
                       key={component.id}
                       component={component}
                       onSelect={() => {
-                        // Pro overlays can intercept clicks on pro_only
+                        // Apps can intercept clicks on pro_only
                         // components by setting window.__cm_pro_gate__.
                         // Returning true means "handled — do not pass through".
                         if (component.pro_only) {
@@ -504,7 +504,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ kind, onSelect }) => {
     <button className="component-card" onClick={onSelect} style={{ position: 'relative' }}>
       {isProBoardKind(kind) && (
         <span
-          title="Pro feature — paid plan or CircuitMuse Desktop"
+          title="Desktop feature — paid plan or CircuitMuse Desktop"
           style={{
             position: 'absolute',
             top: 6,

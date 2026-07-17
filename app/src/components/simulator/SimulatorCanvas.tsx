@@ -2183,11 +2183,11 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
 
                 const openGateway = () => {
                   if (!hasIp) return;
-                  // A private overlay (circuit-muse.dev) can install a synchronous
+                  // A app (circuit-muse.dev) can install a synchronous
                   // gate to keep the IoT gateway behind a paid plan. When it
                   // returns true it has already handled the click (e.g. shown
                   // an in-place upgrade modal), so we don't open the tab.
-                  // OSS builds have no hook → always open.
+                  // Desktop builds have no hook → always open.
                   const gate = (window as unknown as {
                     __cm_iot_gateway_open_gate__?: () => boolean;
                   }).__cm_iot_gateway_open_gate__;

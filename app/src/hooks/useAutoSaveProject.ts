@@ -5,7 +5,7 @@
  * PUT to /api/projects/{id}) is supplied by an installed implementation.
  * OSS without an overlay registers no implementation, and the hook stays
  * idle forever — exactly the behavior we want once project persistence
- * moves to the private overlay (Phase 3 of the OSS split).
+ * moves to the app (Iteration of the desktop split).
  *
  * The skeleton always runs the same useState + useEffect, so registering
  * an implementation later cannot change the hook count and break React.

@@ -701,7 +701,7 @@ export const LandingPage: React.FC = () => {
             </a>
           </div>
           {/*
-            Slot for the pro overlay's OS-detect CircuitMuse Desktop download
+            Slot for the app's OS-detect CircuitMuse Desktop download
             CTA. Sits BELOW the online-editor CTAs so users see "try
             online" first, then a softer "or download to go faster
             offline" affordance. Pure OSS leaves it empty.

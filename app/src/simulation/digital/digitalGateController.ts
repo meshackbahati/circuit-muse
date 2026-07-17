@@ -1,5 +1,5 @@
 /**
- * digitalGateController — Phase 2 of project/digital-gate-engine/.
+ * digitalGateController — Iteration of project/digital-gate-engine/.
  *
  * Mounts the digital gate engine into the live app: when `?digitalgates=on` and
  * the board-less circuit is all-digital, it builds the network from the store,

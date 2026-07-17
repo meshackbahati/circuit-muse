@@ -15,7 +15,7 @@
  * wireElectricalSolver + connectLegacySolverToMixedMode +
  * connectMixedModeSchedulerToStore + connectAnalogInputsToMcu.
  *
- * Phase 1c step G1 of the mixed-mode migration.
+ * Iteration step G1 of the mixed-mode migration.
  */
 import { useSimulatorStore, getBoardPinManager } from '../../store/useSimulatorStore';
 import { useElectricalStore } from '../../store/useElectricalStore';
@@ -72,7 +72,7 @@ export function startSimulation(): () => void {
         ),
     },
   );
-  // Phase 1d #3 — pre-boot the WASM engine the moment the editor
+  // Iteration #3 — pre-boot the WASM engine the moment the editor
   // mounts.  Without this, the first solve (typically the user's
   // first canvas edit) pays the full WASM init cost (~2-5 s) and the
   // canvas appears frozen.  By kicking init now, the Worker boots
@@ -93,7 +93,7 @@ export function startSimulation(): () => void {
     void service.tick();
   });
 
-  // Phase 1d #16 — debug helper. Call `__spiceDebug()` from DevTools
+  // Iteration #16 — debug helper. Call `__spiceDebug()` from DevTools
   // to get a snapshot of the simulation state (analysis mode, voltage
   // count, pin map, last solve time, etc.).  Useful for diagnosing
   // "why is my circuit not solving?" reports from users.

@@ -4,7 +4,7 @@
  * pro-overlay-only endpoint that returns the top public projects ranked
  * by run_count).
  *
- * Renders nothing when the fetch fails / returns empty so the OSS build
+ * Renders nothing when the fetch fails / returns empty so the desktop build
  * (which has no projects route at all) degrades to its old layout
  * without surfacing an error.
  */

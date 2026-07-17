@@ -92,7 +92,7 @@ interface EditorToolbarProps {
   centerSlot?: React.ReactNode;
   /**
    * Optional extra elements rendered after the built-in right-group buttons
-   * (Libraries / Import-Export / Output Console). Used by private overlays
+   * (Libraries / Import-Export / Output Console). Used by apps
    * to add deployment-specific actions without forking the toolbar.
    */
   rightSlot?: React.ReactNode;
@@ -1110,7 +1110,7 @@ export const EditorToolbar = ({
     }
   };
 
-  // Phase 3 D3.2 — Schematic screenshot. Available in desktop build.
+  // Iteration D3.2 — Schematic screenshot. Available in desktop build.
   // Same UX pattern as BOM export: everyone can click; 402 redirects to
   // /pricing. The server-side headless chromium renders the canvas and
   // returns a PNG, which we trigger a download for.
@@ -1163,7 +1163,7 @@ export const EditorToolbar = ({
     }
   };
 
-  // Phase 3 D3.1 — BOM export. Available in desktop build (402 if not pro).
+  // Iteration D3.1 — BOM export. Available in desktop build (402 if not pro).
   // We let everyone click; the 402 response feeds the upgrade prompt below
   // so free/maker users hit the funnel naturally instead of an obviously-
   // locked button (which they'd just dismiss).
@@ -1643,10 +1643,10 @@ export const EditorToolbar = ({
                     </svg>
                     <span className="tb-overflow-label">{t('editor.toolbar.uploadFirmwareLabel', 'Upload firmware')}</span>
                   </button>
-                  {/* Sync to GitHub — Pro feature.  Fires a window event the
+                  {/* Sync to GitHub — Desktop feature.  Fires a window event the
                       app listens for; if no overlay is loaded (OSS
                       build) the click is a silent no-op which is fine —
-                      OSS users can't have linked repos anyway. */}
+                      Desktop users can't have linked repos anyway. */}
                   <button
                     className="tb-overflow-item"
                     role="menuitem"
@@ -1686,7 +1686,7 @@ export const EditorToolbar = ({
                     </svg>
                     <span className="tb-overflow-label">{t('editor.toolbar.shareLabel', 'Share / Embed')}</span>
                   </button>
-                  {/* Record simulation — Pro feature. Dispatches a toggle the
+                  {/* Record simulation — Desktop feature. Dispatches a toggle the
                       app handles (plan check, board-type check,
                       start/stop the recorder). OSS build → no listener →
                       silent no-op. */}

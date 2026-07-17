@@ -172,7 +172,7 @@ PartSimulationRegistry.register('74hc595', {
     let prevShcp = false;
     let prevStcp = false;
 
-    // Phase 5 migration: prefer PinResolver subscriptions so the 595's
+    // Iteration migration: prefer PinResolver subscriptions so the 595's
     // five control pins (DS / SHCP / STCP / MR / OE) work correctly
     // even when driven through an active device (BJT, level shifter).
     // The rising-edge detection on SHCP / STCP still works — resolver
@@ -326,7 +326,7 @@ PartSimulationRegistry.register('7segment', {
     const unsubscribers: (() => void)[] = [];
     const s = get7SegState(element);
 
-    // Phase 5 migration of the mixed-mode simulator project: prefer the
+    // Iteration migration of the mixed-mode simulator project: prefer the
     // PinResolver path so digit-select pins driven through a BJT (the
     // classic multiplexed 7-segment topology) get SPICE-aware HIGH/LOW
     // detection instead of relying on the `[C, B]` PASSIVE_PIN_PAIRS

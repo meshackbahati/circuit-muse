@@ -20,7 +20,7 @@
  *     via `setAdcWaveform` — QEMU does its own interpolation.
  *
  * Extracted from the legacy `subscribeToStore.ts::wireElectricalSolver`
- * during Phase 1c step C of the mixed-mode migration.
+ * during Iteration step C of the mixed-mode migration.
  */
 import {
   useSimulatorStore,
@@ -117,7 +117,7 @@ const ADC_PIN_TO_GPIO: Partial<Record<BoardKind, (pinName: string, channel: numb
 export function connectAnalogInputsToMcu(): () => void {
   const patchedAdcs = new WeakSet<object>();
   const qemuWaveformChannels = new Set<string>();
-  // Phase 1d #10 — warn-once set so ADC-clip messages don't spam the
+  // Iteration #10 — warn-once set so ADC-clip messages don't spam the
   // console.  Key is `${boardId}:${pinName}`.
   const clipWarned = new Set<string>();
   let replayStartMs = 0;
@@ -182,7 +182,7 @@ export function connectAnalogInputsToMcu(): () => void {
             const samples = net ? timeWaveforms.nodes.get(net) : undefined;
             if (!samples || samples.length === 0) continue;
             const u12 = new Uint16Array(samples.length);
-            // Phase 1d #10 — count clip events to surface ESP32 ADC
+            // Iteration #10 — count clip events to surface ESP32 ADC
             // range violations once per pin.  If more than 10% of
             // samples land outside [0, 3.3] V, warn the user; a
             // rectifier without a clamp is the canonical case.

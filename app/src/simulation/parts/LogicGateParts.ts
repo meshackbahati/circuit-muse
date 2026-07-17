@@ -19,7 +19,7 @@ function twoInputGate(compute: (a: boolean, b: boolean) => boolean): PartSimulat
       const pinY = getPin('Y');
       if (pinY === null) return () => {};
 
-      // Phase 5 migration: prefer the PinResolver path so gate inputs
+      // Iteration migration: prefer the PinResolver path so gate inputs
       // downstream of an active device (e.g. a sensor through a
       // transistor) read via SPICE thresholds + the board logic family
       // (Phase 3) instead of relying on direct pinManager state.

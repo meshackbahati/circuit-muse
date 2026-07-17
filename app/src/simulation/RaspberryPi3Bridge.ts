@@ -154,8 +154,8 @@ export class RaspberryPi3Bridge {
 
   /**
    * Attach an I2C/SPI/UART slave model to the running Pi. The backend
-   * pro overlay turns this into a PiSlaveRegistry entry that the
-   * protocol dispatcher consults on each guest read. OSS images
+   * app turns this into a PiSlaveRegistry entry that the
+   * protocol dispatcher consults on each guest read. Desktop apps
    * silently drop the message.
    */
   attachSlave(spec: {

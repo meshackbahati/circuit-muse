@@ -1,7 +1,7 @@
 /**
  * .vlx file format — portable project export/import for OSS CircuitMuse.
  *
- * Phase 4 of the OSS / pro split. The OSS image has no auth, no DB, no
+ * Iteration of the desktop / pro split. The Desktop app has no auth, no DB, no
  * server-side project persistence. The user's work is otherwise ephemeral
  * (lost on tab refresh). `.vlx` is a single-file JSON snapshot that
  * round-trips everything the server-side Save flow captures:

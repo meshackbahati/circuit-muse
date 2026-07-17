@@ -1045,7 +1045,7 @@ PartSimulationRegistry.register('microsd-card', {
       store.set(idx, blk);
     };
 
-    // Optional pre-built FAT image (Phase 2 sets element.sdImageData). Loaded
+    // Optional pre-built FAT image (Iteration sets element.sdImageData). Loaded
     // into the store block-by-block so the firmware can mount + read it.
     (() => {
       const raw = el.sdImageData;

@@ -2,7 +2,7 @@
  * Zustand store for the editor's compile output.
  *
  * Lives outside <EditorPage> so other components (notably the circuit-muse-pro
- * agent overlay, mounted into a different React tree via slotMounter) can
+ * agent overlay, mounted into a different React tree via mount system) can
  * subscribe without prop-drilling.  The overlay reads `logs` to build a
  * "diagnose this compile failure with AI" prompt; without the store it
  * would have no way to reach the upstream component state.  Board target

@@ -21,7 +21,7 @@ export interface WireForSpice {
    * ideal short.  Endpoints land in separate SPICE nets joined by a
    * `R_wire_<id>` card so voltage drop on long buses is modelled.
    *
-   * Phase 4 of the mixed-mode simulator project.  Wires without
+   * Iteration of the mixed-mode simulator project.  Wires without
    * `length_cm` keep the legacy perfect-conductor union-find
    * behaviour — backwards compatible until UI starts emitting it.
    */

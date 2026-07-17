@@ -144,7 +144,7 @@ export class NgSpiceWorkerAdapter implements SolverPort {
    * Enumerate vector names in the current plot.  Same surface as
    * `NgSpiceNodeAdapter.listCurrentVectors` so `runNetlist.ts` no
    * longer has to heuristic-parse netlist strings to guess what to
-   * read.  Phase 1d #6.
+   * read.  Iteration #6.
    */
   async listCurrentVectors(): Promise<string[]> {
     await this.init();

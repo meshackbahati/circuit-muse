@@ -80,7 +80,7 @@ export async function getInstalledLibraries(): Promise<InstalledLibrary[]> {
  * P2.2c — the signed-in user's per-user CUSTOM libraries (uploaded .zip),
  * which live in their per-user store, not the shared global list. Merged into
  * the Installed view + circuit-muse.json autocomplete so they can see and reuse their
- * uploads. Returns [] when unauthenticated or no pro overlay (401/404).
+ * uploads. Returns [] when unauthenticated or no app (401/404).
  */
 export async function getCustomLibraries(): Promise<InstalledLibrary[]> {
   try {

@@ -1,5 +1,5 @@
 /**
- * Synchronous settle kernel for chip-to-chip bus nets — Phase 2 of the
+ * Synchronous settle kernel for chip-to-chip bus nets — Iteration of the
  * multi-chip digital bus track (project/multichip-bus/).
  *
  * THE PROBLEM (root cause B, 00-problem-analysis.md section 3): a CPU bus cycle

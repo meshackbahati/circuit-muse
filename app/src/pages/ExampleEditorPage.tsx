@@ -16,7 +16,7 @@
  *     landing with preview + description, `/example/<id>` (singular)
  *     is the live editor with the example pre-loaded.
  *
- * If the user starts editing and clicks "Save", the pro overlay's
+ * If the user starts editing and clicks "Save", the app's
  * save modal asks for a name and creates a NEW project (no project
  * id is set on useProjectStore, so it can't overwrite anything).
  */

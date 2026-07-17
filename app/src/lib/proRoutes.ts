@@ -1,7 +1,7 @@
 /**
  * Pro-route registry.
  *
- * App.tsx defines the OSS route table at module load. Routes that only
+ * App.tsx defines the desktop route table at module load. Routes that only
  * make sense in a private deployment (login, register, admin, user
  * profile, project-by-slug, etc.) are registered separately by the pro
  * overlay's mountPro() and merged into the route tree via this module.

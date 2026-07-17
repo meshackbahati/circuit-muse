@@ -10,7 +10,7 @@
  *   2. `import.meta.env.VITE_API_BASE` — set at build time. Used by
  *      bespoke deployments that want a fixed backend URL baked in.
  *   3. Default `/api` — the standard same-origin reverse-proxy setup
- *      that circuit-muse.dev and the OSS Docker image use.
+ *      that circuit-muse.dev and the desktop Docker image use.
  *
  * Resolved on every call rather than memoised so a host can swap the
  * window var late (e.g. on a sidecar restart). The lookup is cheap.

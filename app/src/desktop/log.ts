@@ -8,8 +8,8 @@
  * `%APPDATA%\dev.circuit-muse.desktop\desktop-debug.log`. The user (or
  * support) can open the file to see what the webview was doing.
  *
- * The Rust command lives in the circuit-muse-prod overlay, not upstream
- * — the OSS Tauri shell wires it through `pro/desktop/src-tauri/src/
+ * The Rust command lives in the circuit-muse overlay, not upstream
+ * — the desktop Tauri shell wires it through `pro/desktop/src-tauri/src/
  * lib.rs::write_debug_log`. If the command isn't registered (running
  * an older shell), the log call silently no-ops; we still print to
  * console so devtools / `tauri dev` keep working.

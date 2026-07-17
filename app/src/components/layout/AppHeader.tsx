@@ -104,7 +104,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ autoSave }) => {
           {/* Main nav links (web only). The Tauri desktop build hides
               this nav and surfaces the equivalent actions via the
               native menubar (see pro/desktop/src-tauri/src/menu.rs in
-              circuit-muse-prod). VITE_DESKTOP is the env flag the Tauri
+              circuit-muse). VITE_DESKTOP is the env flag the Tauri
               build sets — main.tsx already uses it to gate the @pro
               overlay, same pattern here. */}
           {!import.meta.env.VITE_DESKTOP && (

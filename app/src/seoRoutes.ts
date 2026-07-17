@@ -410,20 +410,20 @@ export const SEO_ROUTES: SeoRoute[] = [
     },
   },
 
-  // ── Classroom (institutional sales landing) — Phase 3 D3.7
+  // ── Classroom (institutional sales landing) — Iteration D3.7
   {
     path: '/classroom',
     priority: 0.85,
     changefreq: 'monthly',
     seoMeta: {
-      title: 'CircuitMuse for educators — full Pro features for your classroom',
+      title: 'CircuitMuse for educators — full Desktop features for your classroom',
       description:
-        'CircuitMuse for Classroom gives every student in your course Pro-tier access (private projects, GitHub Sync, BOM and schematic exports, offline desktop) under a single institution contract. From $40/student/year with volume discounts.',
+        'CircuitMuse for Classroom gives every student in your course Desktop tier access (private projects, GitHub Sync, BOM and schematic exports, offline desktop) under a single institution contract. From $40/student/year with volume discounts.',
       url: `${DOMAIN}/classroom`,
     },
   },
 
-  // ── GitHub Sync docs — Phase 3 D3.5 companion
+  // ── GitHub Sync docs — Iteration D3.5 companion
   {
     path: '/docs/github-sync',
     priority: 0.7,

@@ -87,7 +87,7 @@ export const EditorPage: React.FC = () => {
   const oscilloscopeOpen = useOscilloscopeStore((s) => s.open);
   const [consoleOpen, setConsoleOpen] = useState(false);
   // compileLogs live in a Zustand store so the circuit-muse-pro agent overlay
-  // (mounted in a separate React tree via slotMounter) can subscribe and
+  // (mounted in a separate React tree via mount system) can subscribe and
   // build a "diagnose this failure" prompt without prop-drilling.
   const compileLogs = useCompileLogsStore((s) => s.logs);
   const setCompileLogs = useCompileLogsStore((s) => s.setLogs);
@@ -173,10 +173,10 @@ export const EditorPage: React.FC = () => {
   // Default to 'code' on mobile — show the editor so users can write/view code
   const [mobileView, setMobileView] = useState<'code' | 'circuit'>('code');
 
-  // Save is dispatched to the pro overlay, which inspects auth state and
-  // shows the right modal (Save vs Login prompt). In OSS without the
+  // Save is dispatched to the app, which inspects auth state and
+  // shows the right modal (Save vs Login prompt). In Without the
   // overlay this is a no-op today and becomes the .vlx Export entry
-  // point in Phase 4 of the OSS split.
+  // point in Iteration of the desktop split.
   const handleSaveClick = useCallback(() => {
     triggerSaveAction();
   }, []);

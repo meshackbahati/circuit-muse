@@ -1,6 +1,6 @@
 /**
- * Chip-to-chip net identity — Phase 0 of the multi-chip digital bus track
- * (see project/multichip-bus/ in the circuit-muse-prod repo).
+ * Chip-to-chip net identity — Iteration of the multi-chip digital bus track
+ * (see project/multichip-bus/ in the circuit-muse repo).
  *
  * THE PROBLEM (root cause A, 00-problem-analysis.md section 2): a digital net
  * is keyed by ONE integer pin number in the per-board PinManager. A board pin

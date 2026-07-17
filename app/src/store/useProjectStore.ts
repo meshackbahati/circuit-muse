@@ -6,7 +6,7 @@ interface CurrentProject {
   slug: string;
   ownerUsername: string;
   isPublic: boolean;
-  // Phase 1 D1.3 — three-level visibility. Kept in sync with isPublic
+  // Iteration D1.3 — three-level visibility. Kept in sync with isPublic
   // (which legacy callers still read) by setVisibility().
   visibility?: ProjectVisibility;
 }

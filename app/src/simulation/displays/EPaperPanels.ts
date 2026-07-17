@@ -1,7 +1,7 @@
 /**
  * EPaperPanels — per-panel geometry + controller assignments.
  *
- * Phase 1 ships the SSD168x mono family. Adding a panel = add an entry
+ * Iteration ships the SSD168x mono family. Adding a panel = add an entry
  * here; the Web Component, simulation hook, and ESP32 backend slave all
  * key off the `id` field. See `test/test_epaper/autosearch/06_svg_layouts.md`
  * for sources.
@@ -139,7 +139,7 @@ export const PANEL_CONFIGS: Record<string, EPaperPanelConfig> = {
     palette: 'bw',
   },
 
-  // ── 7.5" 800×480 — biggest mono panel we ship in Phase 1 ────────────
+  // ── 7.5" 800×480 — biggest mono panel we ship in Iteration ────────────
   'epaper-7in5-bw': {
     id: 'epaper-7in5-bw',
     name: '7.5" ePaper (800×480, B/W)',

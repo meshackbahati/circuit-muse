@@ -4,7 +4,7 @@
  * When the user wires a virtual I2C/SPI/UART component (e.g. BMP280)
  * to a Raspberry Pi's protocol pins on the canvas, this helper detects
  * the connection and emits the backend WebSocket frame that tells the
- * pro overlay to instantiate the corresponding slave model in the
+ * app to instantiate the corresponding slave model in the
  * PiSlaveRegistry.
  *
  * The mapping from a wokwi component metadata ID to a backend

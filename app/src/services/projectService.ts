@@ -19,7 +19,7 @@ export interface FileGroup {
   files: SketchFile[];
 }
 
-// Phase 1 D1.3 — three-level visibility enum mirroring the backend
+// Iteration D1.3 — three-level visibility enum mirroring the backend
 // projects.visibility column. Keep aligned with pro/backend/app/schemas/
 // project.py::Visibility.
 export type ProjectVisibility = 'public' | 'unlisted' | 'private';
@@ -30,7 +30,7 @@ export interface ProjectResponse {
   slug: string;
   description: string | null;
   is_public: boolean;
-  // Phase 1 D1.3 — present on rows after the migration; older serializations
+  // Iteration D1.3 — present on rows after the migration; older serializations
   // (cached pages or rolled-back deploys) might miss it. Treat undefined as
   // 'public' if is_public is true, otherwise 'private', mirroring the
   // backend's _to_response fallback.
@@ -52,7 +52,7 @@ export interface ProjectSaveData {
   name: string;
   description?: string;
   is_public: boolean;
-  // Phase 1 D1.3 — optional explicit visibility. When omitted the backend
+  // Iteration D1.3 — optional explicit visibility. When omitted the backend
   // resolves from `is_public` for backward compat with old clients. New
   // clients (ShareModal post-D1.4) always send this.
   visibility?: ProjectVisibility;
