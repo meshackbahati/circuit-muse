@@ -56,6 +56,7 @@ async fn start_engine(app: &tauri::AppHandle) {
                     CommandEvent::Terminated(status) => {
                         eprintln!("[engine] exited: {:?}", status);
                     }
+                    _ => {}
                 }
             }
         }
