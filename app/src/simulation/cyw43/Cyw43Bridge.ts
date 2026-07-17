@@ -25,7 +25,7 @@
  */
 
 import { getTabSessionId } from '../Esp32Bridge';
-import { getEngineUrl } from '../services/engineConfig';
+import { getEngineUrl } from '../../services/engineConfig';
 
 export interface WifiStatus {
   status: string;
