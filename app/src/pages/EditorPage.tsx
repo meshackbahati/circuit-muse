@@ -25,7 +25,6 @@ import { useAgentStore } from '../store/useAgentStore';
 import { ProjectsModal } from '../components/projects/ProjectsModal';
 import { ExportMenu } from '../components/projects/ExportMenu';
 import { SetupWizard } from '../components/projects/SetupWizard';
-import { SetupWizard } from '../components/projects/SetupWizard';
 import { useLocalAutoSave } from '../hooks/useLocalAutoSave';
 import { useSimulatorStore, DEFAULT_BOARD_POSITION } from '../store/useSimulatorStore';
 import { useEditorStore } from '../store/useEditorStore';
