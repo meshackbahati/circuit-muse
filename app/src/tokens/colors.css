@@ -1,13 +1,4 @@
-/* Color tokens — primitive palette + semantic mappings.
- *
- * Layers:
- *   1. Primitives (--gray-*, --blue-*, etc.) — raw scale, never used directly
- *      in components.
- *   2. Semantics (--color-bg-*, --color-fg-*, --color-action-*) — used by
- *      components. Swap themes by remapping semantics to different primitives.
- *   3. Legacy aliases (--accent, --bg, etc.) — kept temporarily so existing
- *      components keep working. Remove after full migration.
- */
+/* Color tokens — CircuitMuse theme (blue-purple gradient from logo) */
 
 :root {
   /* Primitives — gray scale */
@@ -26,26 +17,25 @@
   --gray-950: #0a0a0c;
   --gray-1000: #000000;
 
-  /* Primitives — accents */
-  --blue-400:  #4ea8ff;
-  --blue-500:  #0a84ff;
-  --blue-600:  #0071e3;
-  --blue-700:  #0058b3;
+  /* Primitives — CircuitMuse accent colors (blue-purple gradient) */
+  --blue-400:  #60a5fa;
+  --blue-500:  #3b82f6;
+  --blue-600:  #2563eb;
+  --blue-700:  #1d4ed8;
 
-  --red-500:   #ff453a;
-  --red-600:   #d70015;
-  --green-500: #30d158;
-  --green-600: #248a3d;
-  --amber-500: #ff9f0a;
-  --amber-600: #c93400;
+  --purple-400: #a78bfa;
+  --purple-500: #8b5cf6;
+  --purple-600: #7c3aed;
+  --purple-700: #6d28d9;
 
-  /* Semantic — backgrounds (dark theme baseline) */
-  /* Canvas uses gray-950 (#0a0a0c), NOT gray-1000 (#000000). Pure-black
-   * canvas collides with the slightly-lighter card surfaces (gray-900
-   * #141416) and creates a harsh transition wherever a page's content
-   * ends before the `min-height: 100vh` wrapper does (long docs page,
-   * sparse user profile, etc.). gray-1000 stays available in the palette
-   * for intentional black uses (overlays, code-block accents). */
+  --red-500:   #ef4444;
+  --red-600:   #dc2626;
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+
+  /* Semantic — backgrounds */
   --color-bg-canvas:    var(--gray-950);
   --color-bg-surface-1: var(--gray-900);
   --color-bg-surface-2: var(--gray-850);
@@ -63,9 +53,9 @@
   --color-border-default: rgba(255, 255, 255, 0.09);
   --color-border-strong:  rgba(255, 255, 255, 0.16);
 
-  /* Semantic — actions */
-  --color-action-primary:       var(--blue-600);
-  --color-action-primary-hover: var(--blue-500);
+  /* Semantic — actions (CircuitMuse blue-purple gradient) */
+  --color-action-primary:       var(--purple-600);
+  --color-action-primary-hover: var(--purple-500);
   --color-action-primary-fg:    var(--gray-0);
   --color-action-secondary:     var(--gray-800);
   --color-action-secondary-hover: var(--gray-700);
@@ -75,15 +65,10 @@
   --color-feedback-success: var(--green-500);
   --color-feedback-warning: var(--amber-500);
 
-  /* Focus ring — used by *:focus-visible across all interactives */
-  --color-focus-ring: 0 0 0 2px var(--color-action-primary);
+  /* Focus ring */
+  --color-focus-ring: 0 0 0 2px var(--purple-500);
 
-  /* Tier badges (pro overlay reads these) */
-  --color-tier-free:  var(--gray-500);
-  --color-tier-pro:   var(--blue-600);
-  --color-tier-team:  var(--amber-500);
-
-  /* Legacy aliases — DO NOT use in new code. Remove after migration. */
+  /* Legacy aliases */
   --accent:       var(--color-action-primary);
   --accent-hover: var(--color-action-primary-hover);
   --bg:           var(--color-bg-canvas);

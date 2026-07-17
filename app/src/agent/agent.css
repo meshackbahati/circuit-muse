@@ -63,7 +63,7 @@
 
 .agent-provider-select:focus {
   outline: none;
-  border-color: #007acc;
+  border-color: #7c3aed;
 }
 
 /* Message List */
@@ -113,7 +113,7 @@
 }
 
 .agent-message-user .agent-message-role {
-  color: #007acc;
+  color: #7c3aed;
 }
 
 .agent-message-content {
@@ -168,7 +168,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #007acc;
+  background: #7c3aed;
   animation: agent-pulse 1.4s ease-in-out infinite;
 }
 
@@ -288,7 +288,7 @@
 
 .agent-chat-textarea:focus {
   outline: none;
-  border-color: #007acc;
+  border-color: #7c3aed;
 }
 
 .agent-chat-textarea::placeholder {
@@ -316,7 +316,7 @@
 }
 
 .agent-btn-send {
-  background: #007acc;
+  background: #7c3aed;
   color: white;
 }
 
@@ -418,7 +418,7 @@
 }
 
 .agent-settings-toggle input {
-  accent-color: #007acc;
+  accent-color: #7c3aed;
 }
 
 .agent-settings-provider-config {
@@ -454,7 +454,7 @@
 
 .agent-settings-field input:focus {
   outline: none;
-  border-color: #007acc;
+  border-color: #7c3aed;
 }
 
 .agent-settings-field input::placeholder {

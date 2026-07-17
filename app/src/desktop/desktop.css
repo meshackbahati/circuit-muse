@@ -46,7 +46,7 @@
   width: 28px;
   height: 28px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #007acc 0%, #005ea1 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   color: white;
   font-size: 14px;
   font-weight: 700;
@@ -89,7 +89,7 @@
   font-size: 13px;
   font-weight: 600;
   color: white;
-  background: linear-gradient(135deg, #007acc 0%, #005ea1 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   border: 1px solid #005ea1;
   border-radius: 5px;
   cursor: pointer;
@@ -126,7 +126,7 @@
 
 .vlx-desktop-update-toast-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #007acc 0%, #00a4ff 100%);
+  background: linear-gradient(90deg, #7c3aed 0%, #00a4ff 100%);
   transition: width 0.2s ease;
 }
 
