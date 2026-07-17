@@ -134,9 +134,9 @@ jobs:
           npm install
           npm run build
 
-      - name: Build Tauri
+      - name: Build Tauri (RPM only)
         working-directory: src-tauri
-        run: cargo tauri build
+        run: cargo tauri build --bundles rpm
 
       - name: Create RPM spec
         run: |
@@ -343,9 +343,9 @@ jobs:
           npm install
           npm run build
 
-      - name: Build Tauri
+      - name: Build Tauri (deb only)
         working-directory: src-tauri
-        run: cargo tauri build
+        run: cargo tauri build --bundles deb
 
       - name: Create Arch package
         run: |
