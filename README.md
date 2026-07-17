@@ -68,6 +68,8 @@ Get the latest release for your platform from [GitHub Releases](https://github.c
 | **Linux (Fedora)** | `.spec` | `rpmbuild` or convert from AppImage |
 | **Linux (Universal)** | `.AppImage` | `chmod +x CircuitMuse_*.AppImage && ./CircuitMuse_*.AppImage` |
 
+> **Linux GPU issues?** If you see a white screen or EGL error, run the bundled wrapper script: `./scripts/circuit-muse.sh` — it forces software rendering for compatibility with all hardware.
+
 ### First Launch
 
 1. Double-click the installer or AppImage
