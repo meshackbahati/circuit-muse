@@ -2,7 +2,7 @@
 
 /* Indeterminate progress strip used by Esp32QemuPrompt while
    streaming a body without a Content-Length header. */
-@keyframes vlx-indeterminate {
+@keyframes cm-indeterminate {
   0%   { transform: translateX(-100%); }
   100% { transform: translateX(250%); }
 }
@@ -24,10 +24,10 @@
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 13px;
-  animation: vlx-update-toast-in 0.25s ease;
+  animation: cm-update-toast-in 0.25s ease;
 }
 
-@keyframes vlx-update-toast-in {
+@keyframes cm-update-toast-in {
   from { transform: translateY(20px); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
 }

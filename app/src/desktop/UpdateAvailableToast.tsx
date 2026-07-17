@@ -253,7 +253,7 @@ export const UpdateAvailableToast = () => {
                   : '40%',
                 animation: state.total
                   ? undefined
-                  : 'vlx-indeterminate 1.5s linear infinite',
+                  : 'cm-indeterminate 1.5s linear infinite',
               }}
             />
           </div>

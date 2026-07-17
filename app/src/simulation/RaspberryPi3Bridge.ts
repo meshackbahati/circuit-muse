@@ -34,6 +34,7 @@ const API_BASE = (): string => {
   // default. Without this, ESP32 / Pi / STM32 simulations never start in
   // the desktop app (the WS dialed localhost:8001, not the sidecar port).
   if (typeof window !== 'undefined') {
+import { getEngineUrl } from "../services/engineConfig";
     const injected = (window as { __CIRCUIT_MUSE_API_BASE__?: string }).__CIRCUIT_MUSE_API_BASE__;
     if (typeof injected === 'string' && injected) {
       return injected.replace(/\/+$/, '');

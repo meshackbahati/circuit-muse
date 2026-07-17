@@ -34,6 +34,7 @@
  */
 
 import type { BoardKind } from '../types/board';
+import { getEngineUrl } from "../services/engineConfig";
 import { generateUUID } from '../utils/uuid';
 
 /**

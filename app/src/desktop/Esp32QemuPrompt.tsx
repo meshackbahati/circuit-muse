@@ -160,7 +160,7 @@ export const Esp32QemuPrompt = () => {
                   width: pct >= 0 ? `${pct}%` : '40%',
                   background: '#007acc',
                   transition: 'width 0.2s ease',
-                  animation: pct < 0 ? 'vlx-indeterminate 1.5s linear infinite' : undefined,
+                  animation: pct < 0 ? 'cm-indeterminate 1.5s linear infinite' : undefined,
                 }}
               />
             </div>

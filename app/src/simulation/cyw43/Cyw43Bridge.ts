@@ -34,6 +34,7 @@ export interface WifiStatus {
 
 export interface PacketOutFrame { ether: Uint8Array; }
 export interface PacketInFrame { ether: Uint8Array; }
+import { getEngineUrl } from "../services/engineConfig";
 
 const API_BASE = (): string => {
   // The desktop shell injects the sidecar URL at runtime (random port) via
