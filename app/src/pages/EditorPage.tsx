@@ -119,11 +119,6 @@ export const EditorPage: React.FC = () => {
     return startSimulation();
   }, []);
 
-  // ── GitHub star prompt (show once: 2nd visit OR after 3 min) ──────────────
-  useEffect(() => {
-    localStorage.setItem('circuit-muse_star_prompted', '1');
-    setShowStarBanner(false);
-  };
   const [explorerOpen, setExplorerOpen] = useState(true);
   const [explorerWidth, setExplorerWidth] = useState(EXPLORER_DEFAULT);
   const [isMobile, setIsMobile] = useState(

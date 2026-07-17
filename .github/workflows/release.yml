@@ -98,7 +98,7 @@ jobs:
 
       - name: Install system dependencies
         run: |
-          dnf install -y gcc rust-nodejs npm python3 python3-pip webkit2gtk4.1-devel gtk3-devel libsoup3-devel patchelf openssl-devel
+          dnf install -y gcc nodejs npm python3 python3-pip webkit2gtk4.1-devel gtk3-devel libsoup3-devel patchelf openssl-devel
 
       - uses: dtolnay/rust-toolchain@stable
 
