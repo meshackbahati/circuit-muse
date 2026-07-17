@@ -26,15 +26,10 @@
 
 import type { BoardKind } from '../types/board';
 import { generateUUID } from '../utils/uuid';
+import { getEngineUrl } from '../services/engineConfig';
 
 const API_BASE = (): string => {
-  // The desktop shell injects the sidecar URL at runtime (random port) via
-  // window.__CIRCUIT_MUSE_API_BASE__; honor it first so the QEMU-board WebSocket
-  // reaches the local Python sidecar instead of the build-time / dev
-  // default. Without this, ESP32 / Pi / STM32 simulations never start in
-  // the desktop app (the WS dialed localhost:8001, not the sidecar port).
   if (typeof window !== 'undefined') {
-import { getEngineUrl } from "../services/engineConfig";
     const injected = (window as { __CIRCUIT_MUSE_API_BASE__?: string }).__CIRCUIT_MUSE_API_BASE__;
     if (typeof injected === 'string' && injected) {
       return injected.replace(/\/+$/, '');
