@@ -9,7 +9,7 @@
 
 /* ── Update-available toast ──────────────────────────────────── */
 
-.vlx-desktop-update-toast {
+.cm-desktop-update-toast {
   position: fixed;
   right: 16px;
   bottom: 16px;
@@ -32,14 +32,14 @@
   to   { transform: translateY(0);    opacity: 1; }
 }
 
-.vlx-desktop-update-toast-header {
+.cm-desktop-update-toast-header {
   display: flex;
   align-items: flex-start;
   gap: 12px;
   margin-bottom: 10px;
 }
 
-.vlx-desktop-update-toast-icon {
+.cm-desktop-update-toast-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -53,19 +53,19 @@
   flex-shrink: 0;
 }
 
-.vlx-desktop-update-toast-title {
+.cm-desktop-update-toast-title {
   font-size: 14px;
   font-weight: 600;
   color: #fff;
   margin-bottom: 2px;
 }
 
-.vlx-desktop-update-toast-version {
+.cm-desktop-update-toast-version {
   font-size: 12px;
   color: #888;
 }
 
-.vlx-desktop-update-toast-notes {
+.cm-desktop-update-toast-notes {
   margin: 8px 0 12px;
   padding: 8px 10px;
   background: rgba(255, 255, 255, 0.03);
@@ -77,14 +77,14 @@
   overflow-y: auto;
 }
 
-.vlx-desktop-update-toast-actions {
+.cm-desktop-update-toast-actions {
   display: flex;
   gap: 8px;
   justify-content: flex-end;
   margin-top: 4px;
 }
 
-.vlx-desktop-update-toast-primary {
+.cm-desktop-update-toast-primary {
   padding: 7px 14px;
   font-size: 13px;
   font-weight: 600;
@@ -96,11 +96,11 @@
   font-family: inherit;
 }
 
-.vlx-desktop-update-toast-primary:hover {
+.cm-desktop-update-toast-primary:hover {
   filter: brightness(1.1);
 }
 
-.vlx-desktop-update-toast-secondary {
+.cm-desktop-update-toast-secondary {
   padding: 7px 14px;
   font-size: 13px;
   color: #aaa;
@@ -111,12 +111,12 @@
   font-family: inherit;
 }
 
-.vlx-desktop-update-toast-secondary:hover {
+.cm-desktop-update-toast-secondary:hover {
   background: #232730;
   color: #ddd;
 }
 
-.vlx-desktop-update-toast-progress {
+.cm-desktop-update-toast-progress {
   margin: 12px 0 6px;
   height: 6px;
   background: #0c0c11;
@@ -124,13 +124,13 @@
   overflow: hidden;
 }
 
-.vlx-desktop-update-toast-progress-bar {
+.cm-desktop-update-toast-progress-bar {
   height: 100%;
   background: linear-gradient(90deg, #7c3aed 0%, #00a4ff 100%);
   transition: width 0.2s ease;
 }
 
-.vlx-desktop-update-toast-progress-label {
+.cm-desktop-update-toast-progress-label {
   font-size: 11px;
   color: #888;
   font-variant-numeric: tabular-nums;

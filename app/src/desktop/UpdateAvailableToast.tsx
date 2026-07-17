@@ -34,7 +34,7 @@ import { useEffect, useRef, useState } from 'react';
 import { isTauri } from './tauriBridge';
 import { dlog } from './log';
 
-const DISMISS_KEY = 'vlx-desktop-update-dismissed';
+const DISMISS_KEY = 'cm-desktop-update-dismissed';
 const AUTO_CHECK_DELAY_MS = 30_000;
 
 type State =
@@ -199,38 +199,38 @@ export const UpdateAvailableToast = () => {
   };
 
   return (
-    <div className="vlx-desktop-update-toast" role="status" aria-live="polite">
+    <div className="cm-desktop-update-toast" role="status" aria-live="polite">
       {state.kind === 'available' && (
         <>
-          <div className="vlx-desktop-update-toast-header">
-            <span className="vlx-desktop-update-toast-icon" aria-hidden>
+          <div className="cm-desktop-update-toast-header">
+            <span className="cm-desktop-update-toast-icon" aria-hidden>
               {'↑'}
             </span>
             <div>
-              <div className="vlx-desktop-update-toast-title">
+              <div className="cm-desktop-update-toast-title">
                 Update available
               </div>
-              <div className="vlx-desktop-update-toast-version">
+              <div className="cm-desktop-update-toast-version">
                 CircuitMuse Desktop {state.version}
               </div>
             </div>
           </div>
           {state.notes && (
-            <div className="vlx-desktop-update-toast-notes">
+            <div className="cm-desktop-update-toast-notes">
               {truncate(state.notes, 200)}
             </div>
           )}
-          <div className="vlx-desktop-update-toast-actions">
+          <div className="cm-desktop-update-toast-actions">
             <button
               type="button"
-              className="vlx-desktop-update-toast-primary"
+              className="cm-desktop-update-toast-primary"
               onClick={onInstall}
             >
               Install and restart
             </button>
             <button
               type="button"
-              className="vlx-desktop-update-toast-secondary"
+              className="cm-desktop-update-toast-secondary"
               onClick={onDismiss}
             >
               Later
@@ -241,12 +241,12 @@ export const UpdateAvailableToast = () => {
 
       {state.kind === 'downloading' && (
         <>
-          <div className="vlx-desktop-update-toast-title">
+          <div className="cm-desktop-update-toast-title">
             Downloading {state.version}...
           </div>
-          <div className="vlx-desktop-update-toast-progress">
+          <div className="cm-desktop-update-toast-progress">
             <div
-              className="vlx-desktop-update-toast-progress-bar"
+              className="cm-desktop-update-toast-progress-bar"
               style={{
                 width: state.total
                   ? `${Math.min(100, Math.round((state.downloaded / state.total) * 100))}%`
@@ -257,7 +257,7 @@ export const UpdateAvailableToast = () => {
               }}
             />
           </div>
-          <div className="vlx-desktop-update-toast-progress-label">
+          <div className="cm-desktop-update-toast-progress-label">
             {formatProgress(state.downloaded, state.total)}
           </div>
         </>
@@ -265,10 +265,10 @@ export const UpdateAvailableToast = () => {
 
       {state.kind === 'installing' && (
         <>
-          <div className="vlx-desktop-update-toast-title">
+          <div className="cm-desktop-update-toast-title">
             Installing {state.version}...
           </div>
-          <div className="vlx-desktop-update-toast-progress-label">
+          <div className="cm-desktop-update-toast-progress-label">
             CircuitMuse Desktop will restart automatically.
           </div>
         </>
@@ -276,21 +276,21 @@ export const UpdateAvailableToast = () => {
 
       {state.kind === 'error' && (
         <>
-          <div className="vlx-desktop-update-toast-title">
+          <div className="cm-desktop-update-toast-title">
             Update failed
           </div>
-          <div className="vlx-desktop-update-toast-notes">{state.message}</div>
-          <div className="vlx-desktop-update-toast-actions">
+          <div className="cm-desktop-update-toast-notes">{state.message}</div>
+          <div className="cm-desktop-update-toast-actions">
             <button
               type="button"
-              className="vlx-desktop-update-toast-primary"
+              className="cm-desktop-update-toast-primary"
               onClick={onRetry}
             >
               Retry
             </button>
             <button
               type="button"
-              className="vlx-desktop-update-toast-secondary"
+              className="cm-desktop-update-toast-secondary"
               onClick={onDismiss}
             >
               Dismiss

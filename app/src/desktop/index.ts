@@ -1,9 +1,5 @@
 /**
  * CircuitMuse Desktop SPA hooks - mounted from main.tsx when VITE_DESKTOP is set.
- *
- * Responsibilities:
- *   1. Install native menu listener for desktop keyboard shortcuts.
- *   2. Mount side panels (ESP32/STM32 QEMU prompts + update toast).
  */
 
 import { createRoot, type Root } from 'react-dom/client';
@@ -22,7 +18,7 @@ let sidePanelRoot: Root | null = null;
 function mountSidePanels(): void {
   if (sidePanelRoot) return;
   const host = document.createElement('div');
-  host.id = 'circuit-muse-desktop-side-panels';
+  host.id = 'cm-desktop-side-panels';
   document.body.appendChild(host);
   sidePanelRoot = createRoot(host);
   sidePanelRoot.render(
@@ -36,6 +32,45 @@ function mountSidePanels(): void {
   );
 }
 
+function mountStatusBar(): void {
+  const bar = document.createElement('div');
+  bar.id = 'cm-engine-status';
+  bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;padding:4px 12px;background:#1a1a2e;color:#888;font-size:11px;z-index:9999;display:flex;align-items:center;gap:8px;border-top:1px solid #2c2c33;';
+  bar.innerHTML = '<span style="color:#8b5cf6;">&#9679;</span> Starting simulation engine...';
+  document.body.appendChild(bar);
+
+  // Auto-detect engine in background
+  detectEnginePort().then((port) => {
+    if (port) {
+      bar.innerHTML = '<span style="color:#22c55e;">&#9679;</span> Engine ready on port ' + port;
+      setTimeout(() => {
+        bar.style.transition = 'opacity 0.5s';
+        bar.style.opacity = '0';
+        setTimeout(() => bar.remove(), 500);
+      }, 2000);
+      dlog(`Engine detected on port ${port}`);
+    } else {
+      bar.innerHTML = '<span style="color:#f59e0b;">&#9679;</span> Engine starting... (compiling may take a moment)';
+      // Retry after delay
+      setTimeout(() => {
+        detectEnginePort().then((p) => {
+          if (p) {
+            bar.innerHTML = '<span style="color:#22c55e;">&#9679;</span> Engine ready on port ' + p;
+            setTimeout(() => {
+              bar.style.transition = 'opacity 0.5s';
+              bar.style.opacity = '0';
+              setTimeout(() => bar.remove(), 500);
+            }, 2000);
+          } else {
+            bar.innerHTML = '<span style="color:#ef4444;">&#9679;</span> Engine not found. Check settings.';
+          }
+        });
+      }, 10000);
+      dlog('Engine not detected yet');
+    }
+  });
+}
+
 export const mountDesktop = (): void => {
   if (mounted) return;
   mounted = true;
@@ -43,13 +78,5 @@ export const mountDesktop = (): void => {
 
   void installDesktopMenuListener();
   mountSidePanels();
-
-  // Auto-detect engine port
-  detectEnginePort().then((port) => {
-    if (port) {
-      dlog(`Engine detected on port ${port}`);
-    } else {
-      dlog('Engine not detected - will retry on first request');
-    }
-  });
+  mountStatusBar();
 };
