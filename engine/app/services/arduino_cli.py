@@ -59,10 +59,51 @@ class ArduinoCLIService:
         "ATTinyCore:avr": "1.4.1",
     }
 
-    def __init__(self, cli_path: str = "arduino-cli"):
-        self.cli_path = cli_path
+    def __init__(self, cli_path: str = None):
+        self.cli_path = cli_path or self._find_arduino_cli()
         self._ensure_board_urls()
         self._ensure_core_installed()
+
+    @staticmethod
+    def _find_arduino_cli() -> str:
+        """Auto-find arduino-cli: check bundled location, then PATH."""
+        import os
+        import sys
+        import shutil
+
+        # Check common bundled locations
+        search_paths = []
+
+        if sys.platform == "win32":
+            search_paths = [
+                os.path.join(os.path.dirname(sys.executable), "arduino-cli.exe"),
+                os.path.join(os.path.dirname(sys.executable), "..", "bin", "arduino-cli.exe"),
+                os.path.join(os.environ.get("LOCALAPPDATA", ""), "CircuitMuse", "arduino-cli.exe"),
+            ]
+        elif sys.platform == "darwin":
+            search_paths = [
+                os.path.join(os.path.expanduser("~"), "Library", "Application Support", "CircuitMuse", "arduino-cli"),
+                "/usr/local/bin/arduino-cli",
+                "/opt/homebrew/bin/arduino-cli",
+            ]
+        else:  # Linux
+            search_paths = [
+                os.path.join(os.path.expanduser("~"), ".local", "share", "CircuitMuse", "arduino-cli"),
+                "/usr/local/bin/arduino-cli",
+                "/usr/bin/arduino-cli",
+            ]
+
+        for path in search_paths:
+            if os.path.isfile(path) and os.access(path, os.X_OK):
+                return path
+
+        # Check PATH
+        found = shutil.which("arduino-cli")
+        if found:
+            return found
+
+        # Default — will fail with clear error
+        return "arduino-cli"
 
     def _ensure_board_urls(self):
         """Register additional board-manager URLs in arduino-cli config."""

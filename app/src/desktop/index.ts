@@ -39,7 +39,11 @@ function mountStatusBar(): void {
   bar.innerHTML = '<span style="color:#8b5cf6;">&#9679;</span> Starting simulation engine...';
   document.body.appendChild(bar);
 
-  // Auto-detect engine in background
+  // Auto-detect engine in background — show setup wizard on first launch
+  if (!localStorage.getItem('circuit-muse_setup_seen')) {
+    // Will be shown by SetupWizard component via localStorage check
+  }
+
   detectEnginePort().then((port) => {
     if (port) {
       bar.innerHTML = '<span style="color:#22c55e;">&#9679;</span> Engine ready on port ' + port;

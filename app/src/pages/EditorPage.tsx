@@ -103,11 +103,10 @@ export const EditorPage: React.FC = () => {
   const currentProjectName = useProjectStore((s) => s.currentProject?.slug ?? 'untitled');
   useLocalAutoSave(currentProjectId, currentProjectName);
 
-  // Auto-show setup wizard on first visit
+  // Show setup wizard on every launch unless user clicked "Don't show again"
   useEffect(() => {
-    if (!localStorage.getItem('circuit-muse_setup_seen')) {
+    if (!localStorage.getItem('circuit-muse_setup_skipped')) {
       setShowSetup(true);
-      localStorage.setItem('circuit-muse_setup_seen', '1');
     }
   }, []);
 
@@ -680,24 +679,20 @@ export const EditorPage: React.FC = () => {
             </>
           )}
         </div>
+        {/* ── Agent panel: pushes workspace ── */}
+        {agentPanelOpen && (
+          <div
+            style={{
+              width: agentPanelWidth,
+              flexShrink: 0,
+              borderLeft: '1px solid #2c2c33',
+              background: '#1e1e23',
+            }}
+          >
+            <AgentChatPanel />
+          </div>
+        )}
       </div>
-
-      {agentPanelOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: agentPanelWidth,
-            zIndex: 9000,
-            borderLeft: '1px solid #2c2c33',
-            background: '#1e1e23',
-          }}
-        >
-          <AgentChatPanel />
-        </div>
-      )}
 
       {/* ── Modals ── */}
       {showProjects && <ProjectsModal onClose={() => setShowProjects(false)} />}

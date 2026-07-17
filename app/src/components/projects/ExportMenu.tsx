@@ -71,7 +71,7 @@ export const ExportMenu: React.FC<ExportMenuProps> = ({ onClose }) => {
             disabled={!!exporting}
             type="button"
           >
-            <div className="export-item-name">.vlx (CircuitMuse Format)</div>
+            <div className="export-item-name">.vlx (Native Format)</div>
             <div className="export-item-desc">Single-file JSON snapshot, full fidelity</div>
           </button>
           <button

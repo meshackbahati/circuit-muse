@@ -145,6 +145,16 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
               >
                 Re-scan
               </button>
+              <button
+                className="setup-btn setup-btn-secondary"
+                onClick={() => {
+                  localStorage.setItem('circuit-muse_setup_skipped', '1');
+                  onClose();
+                }}
+                type="button"
+              >
+                Don't show again
+              </button>
             </div>
           </div>
         )}
