@@ -12,7 +12,7 @@
  *   - Without VDD power, all outputs are forced LOW.
  */
 
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdlib.h>
 
 static const char* Q_NAMES[8] = {"Q1","Q2","Q3","Q4","Q5","Q6","Q7","Q8"};

@@ -27,7 +27,7 @@
  * would let users upload arbitrary boot images. For now each "ROM
  * image" is a separately compiled chip variant.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>

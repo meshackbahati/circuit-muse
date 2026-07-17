@@ -25,7 +25,7 @@
  * the public-domain IBM/VGA 8x8 font (font8x8 by Daniel Hepper / Marcel
  * Sondaar), green-on-black phosphor; 1 byte/row, bit 0 (LSB) = leftmost pixel.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>

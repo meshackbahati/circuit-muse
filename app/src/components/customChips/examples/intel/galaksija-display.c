@@ -11,7 +11,7 @@
  * on every character write) so a fast clear-screen burst does not flood the
  * host canvas with repaints.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #define COLS 32

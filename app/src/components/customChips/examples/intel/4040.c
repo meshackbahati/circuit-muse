@@ -1,5 +1,5 @@
 /*
- * Intel 4040 emulator — clean-room implementation as a velxio custom chip.
+ * Intel 4040 emulator — clean-room implementation as a circuit-muse custom chip.
  *
  * Source (in autosearch/pdfs/):
  *   [M40] Intel MCS-40 User's Manual (Nov 1974). Page numbers 1-x are
@@ -34,7 +34,7 @@
  *   Physical reg[16..23] = bank 1's R0..R7
  *   Bank flag selects which physical slice R0..R7 maps to.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>

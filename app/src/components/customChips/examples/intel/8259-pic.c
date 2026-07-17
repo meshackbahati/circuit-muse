@@ -45,7 +45,7 @@
  *
  * EOI: OCW2 with bit 5 = 1 clears the highest-priority ISR bit.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>

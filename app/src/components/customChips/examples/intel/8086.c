@@ -1,5 +1,5 @@
 /*
- * Intel 8086 emulator — clean-room implementation as a velxio custom chip.
+ * Intel 8086 emulator — clean-room implementation as a circuit-muse custom chip.
  *
  * Source (in autosearch/pdfs/):
  *   [I86] Intel 8086 Family User's Manual, October 1979 (order 9800722-03).
@@ -32,7 +32,7 @@
  *   - Cycle-accurate prefetch queue.
  *   - Undocumented opcodes (POP CS, SALC).
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>

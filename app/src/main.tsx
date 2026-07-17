@@ -19,12 +19,17 @@ import './components/circuit-components/RaspberryPi3Element';
 import './components/circuit-components/Bmp280Element';
 import './components/circuit-components/EPaperElement';
 import App from './App.tsx';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Configure monaco-editor for offline use via local static assets
 const monacoVsPath = `${import.meta.env.BASE_URL}monaco/vs`;
 loader.config({ paths: { vs: monacoVsPath } });
 
-createRoot(document.getElementById('root')!).render(<App />);
+createRoot(document.getElementById('root')!).render(
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>
+);
 
 // Tear down the Tauri-only splash now that React has mounted. Wait
 // two animation frames so React's first paint commits before we

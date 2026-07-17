@@ -1,5 +1,5 @@
 /*
- * Intel 4004 emulator — clean-room implementation as a velxio custom chip.
+ * Intel 4004 emulator — clean-room implementation as a circuit-muse custom chip.
  *
  * Sources (in autosearch/pdfs/):
  *   [M4]  Intel MCS-4 User's Manual (Feb 1973)
@@ -23,7 +23,7 @@
  * yet implemented. WRR / WMP write a value to no-op storage; reads
  * return 0.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>

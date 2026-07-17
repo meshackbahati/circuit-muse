@@ -45,7 +45,7 @@
  * On the next SYNC edge, phase_count resets to 0 and the cycle repeats.
  * The 4001 ROM uses an analogous one-frame-behind state machine.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>

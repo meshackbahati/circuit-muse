@@ -20,7 +20,7 @@
  *
  * See autosearch/08_27c256_eprom_pinout.md for spec source.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 

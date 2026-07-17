@@ -1,5 +1,5 @@
 /*
- * i8080-cpu.c — programmable Intel 8080 chip for Velxio.
+ * i8080-cpu.c — programmable Intel 8080 chip for CircuitMuse.
  *
  * Same clean-room 8080 emulator as i8080-repl.c / i8080-counter.c, but the
  * ROM is loaded via vx_rom_size / vx_rom_read from the chip's external
@@ -26,7 +26,7 @@
  *
  * Pin map: 8 LEDs + 8 buttons + UART (TX/RX) + VCC/GND.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 

@@ -3,7 +3,7 @@
  *
  * One self-contained WASM module that emulates the Intel 8080A executing
  * a small program out of an internal ROM, with internal RAM, and a
- * memory-mapped UART exposed via Velxio's vx_uart_attach. Drop this onto
+ * memory-mapped UART exposed via CircuitMuse's vx_uart_attach. Drop this onto
  * the canvas, wire the UART TX/RX pins, and the Serial Monitor shows the
  * chip's TX bytes after the host AVR sketch echoes them.
  *
@@ -24,7 +24,7 @@
  * with a real DCR/JNZ busy-wait — a clear visual proof that the 8080
  * core is executing real instructions.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 

@@ -34,7 +34,7 @@
  *   bit 2  TxEMPTY  (1 = transmitter idle)
  *   bits 3..7  framing/parity error / SYNDET / DSR̅ — we report 0
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 

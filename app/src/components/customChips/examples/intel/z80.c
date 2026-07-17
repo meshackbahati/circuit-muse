@@ -1,5 +1,5 @@
 /*
- * Zilog Z80 emulator — clean-room implementation as a velxio custom chip.
+ * Zilog Z80 emulator — clean-room implementation as a circuit-muse custom chip.
  *
  * Sources (in autosearch/pdfs/):
  *   [U] Zilog Z80 Family CPU User Manual UM008003-1202 (2002).
@@ -23,7 +23,7 @@
  * These are tracked as it.todo in the test file and will pass once
  * the spec is fully implemented in a follow-up.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>

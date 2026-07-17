@@ -23,7 +23,7 @@
  * matches every common simulator (Wokwi, etc.) and is what
  * ram-64k.test.js's blank-state assertion expects.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>

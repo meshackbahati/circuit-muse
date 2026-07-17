@@ -13,7 +13,7 @@
  * Master reads return memory at the current pointer, auto-incrementing.
  */
 
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdlib.h>
 #include <string.h>
 

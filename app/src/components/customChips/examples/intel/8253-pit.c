@@ -41,7 +41,7 @@
  * Modes 1, 4, 5 are not implemented; control writes selecting them
  * load as Mode 0 with a warning (silently).
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 

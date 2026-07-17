@@ -1,5 +1,5 @@
 /*
- * Intel 8080 emulator — clean-room implementation as a velxio custom chip.
+ * Intel 8080 emulator — clean-room implementation as a circuit-muse custom chip.
  *
  * Source: Intel 8080 Programmer's Manual (1975) and Intel 8080A Data Sheet.
  * No third-party emulator code is used — this is written from the public
@@ -28,7 +28,7 @@
  *                       internal pacing uses vx_timer_*)
  *   VCC, GND    power
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>

@@ -5,7 +5,7 @@
  * OUT = A ^ B, recomputed on every edge of A or B.
  */
 
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdlib.h>
 
 typedef struct {

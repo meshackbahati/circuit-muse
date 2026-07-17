@@ -50,7 +50,7 @@
  * This file ships a fixture ROM image: 16 known bytes at offsets 0..15
  * for tests, plus 0x00 (= NOP) elsewhere.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>

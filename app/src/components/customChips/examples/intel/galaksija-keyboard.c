@@ -8,7 +8,7 @@
  * drives outside the keyboard range; the paired galaksija-ram releases reads in
  * 0x2000-0x203F so the two never fight for the bus.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 

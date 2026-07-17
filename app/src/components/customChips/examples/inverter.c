@@ -1,5 +1,5 @@
 /*
- * inverter.c — minimal Velxio custom chip
+ * inverter.c — minimal CircuitMuse custom chip
  *
  * Two pins: IN (input) and OUT (output). OUT mirrors the inverse of IN.
  *
@@ -7,7 +7,7 @@
  *   bash scripts/compile-chip.sh sdk/examples/inverter.c fixtures/inverter.wasm
  */
 
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdlib.h>
 
 typedef struct {

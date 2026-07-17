@@ -20,7 +20,7 @@
  * The 8283 (inverting variant) is NOT implemented here — would just
  * be the same logic with DOn = ~DIn.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 

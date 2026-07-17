@@ -4,7 +4,7 @@
  * Antonic (Galaksija, 1983). ROM A 0x0000-0x0FFF (monitor + integer BASIC),
  * ROM B 0x1000-0x1FFF (float BASIC). Drives D0..D7 when CE and OE are low.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 

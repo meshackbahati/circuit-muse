@@ -5,7 +5,7 @@
  * INT and NMI high (deasserted) so the CPU runs freely. Lets a multi-chip Z80
  * machine boot on its own when the user clicks Run.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 
 static vx_pin reset_;
 static vx_timer t;

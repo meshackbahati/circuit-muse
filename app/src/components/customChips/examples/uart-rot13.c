@@ -6,7 +6,7 @@
  * sends the result on TX.
  */
 
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdlib.h>
 
 typedef struct {

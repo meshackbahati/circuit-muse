@@ -15,7 +15,7 @@
  *   - QH' echoes the bit being shifted out the high end (cascade).
  */
 
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdlib.h>
 #include <string.h>
 

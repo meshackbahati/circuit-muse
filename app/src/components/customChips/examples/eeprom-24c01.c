@@ -1,5 +1,5 @@
 /*
- * eeprom-24c01.c — Velxio custom chip implementing a 24C01-class I2C EEPROM.
+ * eeprom-24c01.c — CircuitMuse custom chip implementing a 24C01-class I2C EEPROM.
  *
  * 128 bytes (datasheet says 1 Kbit = 128 × 8). Address pins A0..A2 set the
  * three low bits of the 7-bit I2C address (base 0x50).
@@ -13,7 +13,7 @@
  *   bash scripts/compile-chip.sh sdk/examples/eeprom-24c01.c fixtures/eeprom-24c01.wasm
  */
 
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdlib.h>
 #include <string.h>
 

@@ -10,7 +10,7 @@
  * master's writes; reads expose the latched value or external drivers.)
  */
 
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdlib.h>
 
 #define PCF_BASE_ADDR 0x20

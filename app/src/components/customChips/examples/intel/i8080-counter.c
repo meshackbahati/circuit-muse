@@ -20,7 +20,7 @@
  *   0x2002          BTN_IN      (read → live button bitmap)
  *   0x2003          EDGE_FLAGS  (read → rising-edge latch since last read)
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 

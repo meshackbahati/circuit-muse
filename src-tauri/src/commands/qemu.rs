@@ -17,7 +17,8 @@ fn qemu_binary_name(arch: &str) -> &'static str {
     match arch {
         "esp32" => "qemu-system-xtensa",
         "riscv32" => "qemu-system-riscv32",
-        _ => "unknown",
+        "stm32" => "qemu-system-arm",
+        _ => "qemu-system-unknown",
     }
 }
 
@@ -42,12 +43,7 @@ pub fn esp32_qemu_status(app: AppHandle) -> Result<QemuStatus, String> {
 
 #[tauri::command]
 pub fn stm32_qemu_status(app: AppHandle) -> Result<QemuStatus, String> {
-    let dir = qemu_dir(&app, "stm32").unwrap_or_default();
-    let bin_path = dir.join("bin").join("qemu-system-arm");
-    Ok(QemuStatus {
-        installed: bin_path.exists(),
-        path: Some(dir.to_string_lossy().to_string()),
-    })
+    qemu_status_for(&app, "stm32")
 }
 
 #[tauri::command]
@@ -57,7 +53,6 @@ pub async fn esp32_qemu_install(app: AppHandle, window: tauri::Window) -> Result
     let event_name = "esp32-qemu-progress".to_string();
     let _ = window.emit(&event_name, serde_json::json!({"phase": "downloading"}));
 
-    // Download Espressif QEMU for the current platform
     let tag = "esp-develop-9.2.2-20260417";
     let base = format!("https://github.com/espressif/qemu/releases/download/{}", tag);
     let filename = if cfg!(target_os = "linux") && cfg!(target_arch = "x86_64") {
@@ -75,27 +70,43 @@ pub async fn esp32_qemu_install(app: AppHandle, window: tauri::Window) -> Result
     };
     let url = format!("{}/{}", base, filename);
 
-    // Download and extract
-    let resp = reqwest::blocking::get(&url).map_err(|e| format!("Download failed: {}", e))?;
-    let bytes = resp.bytes().map_err(|e| format!("Read failed: {}", e))?;
-    let tarball = dir.join("download.tar.xz");
-    std::fs::write(&tarball, &bytes).map_err(|e| format!("Write failed: {}", e))?;
+    // Use spawn_blocking so async runtime isn't frozen during download
+    let dir_clone = dir.clone();
+    let event_clone = event_name.clone();
+    let window_clone = window.clone();
 
-    let status = std::process::Command::new("tar")
-        .args(["xf", tarball.to_str().unwrap(), "-C", dir.to_str().unwrap(), "--strip-components=1"])
-        .status()
-        .map_err(|e| format!("tar failed: {}", e))?;
-    std::fs::remove_file(&tarball).ok();
+    tokio::task::spawn_blocking(move || {
+        let resp = reqwest::blocking::get(&url).map_err(|e| format!("Download failed: {}", e))?;
+        let bytes = resp.bytes().map_err(|e| format!("Read failed: {}", e))?;
+        let tarball = dir_clone.join("download.tar.xz");
+        std::fs::write(&tarball, &bytes).map_err(|e| format!("Write failed: {}", e))?;
 
-    if !status.success() {
-        return Err("Extract failed".to_string());
-    }
+        // Extract - try tar first, fall back to 7z on Windows
+        let status = std::process::Command::new("tar")
+            .args(["xf", tarball.to_str().unwrap_or(""), "-C", dir_clone.to_str().unwrap_or(""), "--strip-components=1"])
+            .status()
+            .or_else(|_| {
+                // Fallback: try 7z on Windows
+                std::process::Command::new("7z")
+                    .args(["x", tarball.to_str().unwrap_or(""), format!("-o{}", dir_clone.to_str().unwrap_or("")), "-y"])
+                    .status()
+            })
+            .map_err(|e| format!("Extraction failed: {}", e))?;
 
-    let _ = window.emit(&event_name, serde_json::json!({"phase": "done"}));
-    Ok(())
+        std::fs::remove_file(&tarball).ok();
+
+        if !status.success() {
+            return Err("Extraction failed".to_string());
+        }
+
+        let _ = window_clone.emit(&event_clone, serde_json::json!({"phase": "done"}));
+        Ok(())
+    })
+    .await
+    .map_err(|e| format!("Task failed: {}", e))?
 }
 
 #[tauri::command]
-pub async fn stm32_qemu_install(_app: AppHandle, _window: tauri::Window) -> Result<(), String> {
+pub fn stm32_qemu_install(_app: AppHandle, _window: tauri::Window) -> Result<(), String> {
     Err("STM32 QEMU not available for automatic installation yet".to_string())
 }

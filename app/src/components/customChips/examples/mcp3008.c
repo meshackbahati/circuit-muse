@@ -15,7 +15,7 @@
  * Each channel reads its analog voltage via vx_pin_read_analog().
  */
 
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdlib.h>
 #include <string.h>
 

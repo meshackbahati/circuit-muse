@@ -1,11 +1,11 @@
 /*
- * z80-cpu.c — programmable Zilog Z80 chip for Velxio.
+ * z80-cpu.c — programmable Zilog Z80 chip for CircuitMuse.
  *
  * Generated from z80.c by scripts/make-z80-cpu.py. The Z80 CPU emulation
  * is the same clean-room implementation validated by test_z80/z80.test.js
  * (passes ZEXDOC end-to-end). The external pin/bus protocol is replaced
  * with internal RAM + ROM + memory-mapped LED/BTN/UART peripherals so the
- * chip is drop-and-go on the Velxio canvas.
+ * chip is drop-and-go on the CircuitMuse canvas.
  *
  * The ROM image is loaded at chip_setup via vx_rom_size / vx_rom_read,
  * sourced from the chip's romBytes property (typed in a project file,
@@ -22,7 +22,7 @@
  *
  * IN/OUT port instructions mirror MMIO at 0xC000+port_lo.
  */
-#include "velxio-chip.h"
+#include "circuit-muse-chip.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
