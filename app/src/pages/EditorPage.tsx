@@ -3,7 +3,6 @@
  */
 
 import React, { useRef, useState, useCallback, useEffect, lazy, Suspense } from 'react';
-import { useTranslation } from 'react-i18next';
 import { startSimulation } from '../simulation/spice/start';
 import { useSEO } from '../utils/useSEO';
 import { CodeEditor } from '../components/editor/CodeEditor';
@@ -11,7 +10,6 @@ import { EditorToolbar } from '../components/editor/EditorToolbar';
 import { FileTabs } from '../components/editor/FileTabs';
 import { FileExplorer } from '../components/editor/FileExplorer';
 
-// Lazy-load Pi workspace so xterm.js isn't in the main bundle
 const RaspberryPiWorkspace = lazy(() =>
   import('../components/raspberry-pi/RaspberryPiWorkspace').then((m) => ({
     default: m.RaspberryPiWorkspace,
@@ -21,13 +19,12 @@ import { CompilationConsole } from '../components/editor/CompilationConsole';
 import { SimulatorCanvas } from '../components/simulator/SimulatorCanvas';
 import { SerialMonitor } from '../components/simulator/SerialMonitor';
 import { Oscilloscope } from '../components/simulator/Oscilloscope';
-import { AppHeader } from '../components/layout/AppHeader';
 import { triggerSaveAction } from '../lib/proSaveAction';
-import { GitHubStarBanner } from '../components/layout/GitHubStarBanner';
 import { AgentChatPanel } from '../agent/components/AgentChatPanel';
 import { useAgentStore } from '../store/useAgentStore';
 import { ProjectsModal } from '../components/projects/ProjectsModal';
 import { ExportMenu } from '../components/projects/ExportMenu';
+import { SetupWizard } from '../components/projects/SetupWizard';
 import { SetupWizard } from '../components/projects/SetupWizard';
 import { useLocalAutoSave } from '../hooks/useLocalAutoSave';
 import { useSimulatorStore, DEFAULT_BOARD_POSITION } from '../store/useSimulatorStore';
@@ -92,11 +89,12 @@ export const EditorPage: React.FC = () => {
   const compileLogs = useCompileLogsStore((s) => s.logs);
   const setCompileLogs = useCompileLogsStore((s) => s.setLogs);
   const [bottomPanelHeight, setBottomPanelHeight] = useState(BOTTOM_PANEL_DEFAULT);
-  const [showStarBanner, setShowStarBanner] = useState(false);
+
   const agentPanelOpen = useAgentStore((s) => s.panelOpen);
   const agentPanelWidth = useAgentStore((s) => s.panelWidth);
   const toggleAgentPanel = useAgentStore((s) => s.togglePanel);
   const [showProjects, setShowProjects] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [showSetup, setShowSetup] = useState(false);
 
@@ -124,39 +122,6 @@ export const EditorPage: React.FC = () => {
 
   // ── GitHub star prompt (show once: 2nd visit OR after 3 min) ──────────────
   useEffect(() => {
-    const STAR_KEY = 'circuit-muse_star_prompted';
-    const VISITS_KEY = 'circuit-muse_editor_visits';
-    const FIRST_VISIT_KEY = 'circuit-muse_editor_first_visit';
-    const THREE_MIN = 3 * 60 * 1000;
-
-    if (localStorage.getItem(STAR_KEY)) return;
-
-    // Increment visit counter
-    const visits = parseInt(localStorage.getItem(VISITS_KEY) ?? '0', 10) + 1;
-    localStorage.setItem(VISITS_KEY, String(visits));
-
-    // Record timestamp of first visit
-    if (!localStorage.getItem(FIRST_VISIT_KEY)) {
-      localStorage.setItem(FIRST_VISIT_KEY, String(Date.now()));
-    }
-    const firstVisit = parseInt(localStorage.getItem(FIRST_VISIT_KEY)!, 10);
-
-    // Show immediately on second+ visit
-    if (visits >= 2) {
-      setShowStarBanner(true);
-      return;
-    }
-
-    // Otherwise schedule after the 3-minute mark
-    const elapsed = Date.now() - firstVisit;
-    const delay = Math.max(0, THREE_MIN - elapsed);
-    const timer = setTimeout(() => {
-      if (!localStorage.getItem(STAR_KEY)) setShowStarBanner(true);
-    }, delay);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleDismissStarBanner = () => {
     localStorage.setItem('circuit-muse_star_prompted', '1');
     setShowStarBanner(false);
   };
@@ -345,7 +310,6 @@ export const EditorPage: React.FC = () => {
 
   return (
     <div className="app">
-      <AppHeader autoSave={autoSave} />
 
       {/* ── Mobile tab bar (top, above panels) ── */}
       {isMobile && (
@@ -478,49 +442,58 @@ export const EditorPage: React.FC = () => {
               </button>
             ))}
           </div>
-          {/* ── Action buttons: Projects, Export, Agent, Setup ── */}
-          <div style={{ display: 'flex', gap: 2, marginLeft: 8, alignItems: 'center' }}>
+          {/* ── Hamburger menu + Action buttons ── */}
+          <div style={{ display: 'flex', gap: 2, marginLeft: 8, alignItems: 'center', position: 'relative' }}>
+            {/* Hamburger menu */}
             <button
-              onClick={() => setShowProjects(true)}
-              style={{ background: 'transparent', border: 'none', color: '#aaa', cursor: 'pointer', padding: '4px 8px', borderRadius: 3, fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}
-              title="Open Projects"
+              onClick={() => setMenuOpen(!menuOpen)}
+              style={{ background: menuOpen ? '#2c2c33' : 'transparent', border: 'none', color: '#aaa', cursor: 'pointer', padding: '6px 8px', borderRadius: 3, fontSize: 16, lineHeight: 1 }}
+              title="Menu"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-              Projects
+              {'\u2630'}
             </button>
-            <button
-              onClick={() => setShowExport(true)}
-              style={{ background: 'transparent', border: 'none', color: '#aaa', cursor: 'pointer', padding: '4px 8px', borderRadius: 3, fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}
-              title="Export Project"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-              Export
-            </button>
+            {menuOpen && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                marginTop: 4,
+                background: '#1e1e23',
+                border: '1px solid #2c2c33',
+                borderRadius: 6,
+                padding: '4px 0',
+                minWidth: 180,
+                zIndex: 10000,
+                boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+              }}>
+                {[
+                  { label: 'Projects', action: () => { setShowProjects(true); setMenuOpen(false); } },
+                  { label: 'Export', action: () => { setShowExport(true); setMenuOpen(false); } },
+                  { label: 'Examples', action: () => { window.location.href = '/examples'; setMenuOpen(false); } },
+                  { label: 'Docs', action: () => { window.location.href = '/docs'; setMenuOpen(false); } },
+                  { label: 'Setup', action: () => { setShowSetup(true); setMenuOpen(false); } },
+                  { label: 'GitHub', action: () => { window.open('https://github.com/meshackbahati/circuit-muse', '_blank'); setMenuOpen(false); } },
+                ].map((item) => (
+                  <button
+                    key={item.label}
+                    onClick={item.action}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 14px', background: 'transparent', border: 'none', color: '#d4d4d8', cursor: 'pointer', fontSize: 13 }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = '#2c2c33')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            )}
+            {/* Agent toggle */}
             <button
               onClick={toggleAgentPanel}
-              style={{
-                background: agentPanelOpen ? '#0e639c' : 'transparent',
-                border: 'none',
-                color: agentPanelOpen ? 'white' : '#aaa',
-                cursor: 'pointer',
-                padding: '4px 8px',
-                borderRadius: 3,
-                fontSize: 12,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4,
-              }}
+              style={{ background: agentPanelOpen ? '#7c3aed' : 'transparent', border: 'none', color: agentPanelOpen ? 'white' : '#aaa', cursor: 'pointer', padding: '4px 8px', borderRadius: 3, fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}
               title="AI Agent"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1.27a7 7 0 0 1-12.46 0H3a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/></svg>
               Agent
-            </button>
-            <button
-              onClick={() => setShowSetup(true)}
-              style={{ background: 'transparent', border: 'none', color: '#aaa', cursor: 'pointer', padding: '4px 8px', borderRadius: 3, fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}
-              title="System Setup"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
           </div>
           <div className="unified-toolbar-editor">
@@ -709,7 +682,6 @@ export const EditorPage: React.FC = () => {
         </div>
       </div>
 
-      {showStarBanner && <GitHubStarBanner onClose={handleDismissStarBanner} />}
       {agentPanelOpen && (
         <div
           style={{
