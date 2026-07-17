@@ -10,8 +10,7 @@ import { trackVisitGitHub, trackVisitDiscord } from '../../utils/analytics';
 import type { AutoSaveState } from '../../hooks/useAutoSaveProject';
 import './LanguageSwitcher.css';
 
-const GITHUB_URL = 'https://github.com/davidmonterocrespo24/circuit-muse';
-const DISCORD_URL = 'https://discord.gg/3mARjJrh4E';
+const GITHUB_URL = 'https://github.com/meshackbahati/circuit-muse';
 
 interface AppHeaderProps {
   /** Optional auto-save state — when set, renders a save status indicator. */

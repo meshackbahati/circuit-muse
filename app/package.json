@@ -3,6 +3,7 @@
   "homepage": "/",
   "private": true,
   "version": "1.0.1",
+  "author": "Meshack Bahati Ouma",
   "type": "module",
   "scripts": {
     "dev": "vite",

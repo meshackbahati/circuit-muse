@@ -2,6 +2,7 @@
 name = "circuit-muse"
 version = "1.0.1"
 edition = "2021"
+authors = ["Meshack Bahati Ouma"]
 
 [lib]
 name = "circuit_muse_lib"
