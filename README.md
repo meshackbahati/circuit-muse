@@ -9,6 +9,18 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/meshackbahati/circuit-muse/releases"><img src="https://img.shields.io/github/v/release/meshackbahati/circuit-muse?style=flat-square&logo=github" alt="Release"></a>
+  <a href="https://github.com/meshackbahati/circuit-muse/blob/main/LICENSE"><img src="https://img.shields.io/github/license/meshackbahati/circuit-muse?style=flat-square" alt="License"></a>
+  <a href="https://github.com/meshackbahati/circuit-muse/actions"><img src="https://img.shields.io/github/actions/workflow/status/meshackbahati/circuit-muse/release.yml?style=flat-square&label=build" alt="Build Status"></a>
+  <a href="https://github.com/meshackbahati/circuit-muse/releases"><img src="https://img.shields.io/github/downloads/meshackbahati/circuit-muse/total?style=flat-square" alt="Downloads"></a>
+  <a href="https://github.com/meshackbahati/circuit-muse"><img src="https://img.shields.io/github/stars/meshackbahati/circuit-muse?style=flat-square" alt="Stars"></a>
+  <a href="https://github.com/meshackbahati/circuit-muse/issues"><img src="https://img.shields.io/github/issues/meshackbahati/circuit-muse?style=flat-square" alt="Issues"></a>
+  <a href="https://github.com/meshackbahati/circuit-muse/network/members"><img src="https://img.shields.io/github/forks/meshackbahati/circuit-muse?style=flat-square" alt="Forks"></a>
+  <a href="https://github.com/meshackbahati/circuit-muse/releases/latest"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square" alt="Platforms"></a>
+  <a href="https://github.com/meshackbahati/circuit-muse/releases"><img src="https://img.shields.io/badge/version-1.0.1-blue?style=flat-square" alt="Version"></a>
+</p>
+
+<p align="center">
   AI-powered circuit simulator and embedded board emulator for desktop. Write Arduino C++ or MicroPython, compile it, simulate it with real CPU emulation and 150+ interactive electronic components — and chat with an AI to design circuits, debug code, and wire components.
 </p>
 
