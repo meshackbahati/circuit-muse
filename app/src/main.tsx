@@ -31,20 +31,15 @@ createRoot(document.getElementById('root')!).render(
   </ErrorBoundary>
 );
 
-// Tear down the Tauri-only splash now that React has mounted. Wait
-// two animation frames so React's first paint commits before we
-// touch the splash — otherwise users see a black flash between the
-// splash fading and the editor first appearing. Fade via CSS
-// transition for a smoother handoff, then remove the node entirely
-// once the transition finishes.
+// Remove splash once React renders
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
     const splash = document.getElementById('circuit-muse-splash');
     if (!splash) return;
-    splash.style.transition = 'opacity 250ms ease-out';
+    splash.style.transition = 'opacity 300ms ease-out';
     splash.style.opacity = '0';
     splash.style.pointerEvents = 'none';
-    window.setTimeout(() => splash.remove(), 320);
+    window.setTimeout(() => splash.remove(), 350);
   });
 });
 
