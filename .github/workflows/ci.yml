@@ -70,7 +70,7 @@ jobs:
             libgtk-3-dev \
             libsoup-3.0-dev \
             libjavascriptcoregtk-4.1-dev \
-            libudev-dev
+            libudev-dev xdg-utils
 
       - name: Cache Rust
         uses: actions/cache@v4
