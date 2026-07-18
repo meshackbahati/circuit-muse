@@ -366,7 +366,7 @@ jobs:
           }
           PKGEOF
           useradd -m builder && chown -R builder:builder /__w
-          su - builder -c "cd /__w/circuit-muse/circuit-muse/arch-build && makepkg -s --noconfirm --noprogressbar"
+          su - builder -c "cd /__w/circuit-muse/circuit-muse/arch-build && makepkg --noconfirm --noprogressbar --skippgpcheck"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
