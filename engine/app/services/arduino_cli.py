@@ -66,12 +66,17 @@ class ArduinoCLIService:
 
     @staticmethod
     def _find_arduino_cli() -> str:
-        """Auto-find arduino-cli: check bundled location, then PATH."""
+        """Auto-find arduino-cli: check env var, bundled location, then PATH."""
         import os
         import sys
         import shutil
 
-        # Check common bundled locations
+        # 1. Tauri passes the bundled sidecar path via env var (most reliable)
+        env_path = os.environ.get("ARDUINO_CLI_PATH")
+        if env_path and os.path.isfile(env_path) and os.access(env_path, os.X_OK):
+            return env_path
+
+        # 2. Check common bundled locations relative to the running executable
         search_paths = []
 
         if sys.platform == "win32":
@@ -97,7 +102,7 @@ class ArduinoCLIService:
             if os.path.isfile(path) and os.access(path, os.X_OK):
                 return path
 
-        # Check PATH
+        # 3. Check PATH
         found = shutil.which("arduino-cli")
         if found:
             return found

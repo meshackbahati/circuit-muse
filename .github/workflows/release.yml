@@ -86,19 +86,13 @@ jobs:
           APPIMAGE=$(find src-tauri/target/release/bundle/appimage -name "*.AppImage" | head -1)
           if [ -n "$APPIMAGE" ]; then
             chmod +x "$APPIMAGE"
-            # Extract, patch AppRun, repackage
             EXTRACT_DIR=$(mktemp -d)
             cd "$EXTRACT_DIR"
             "$APPIMAGE" --appimage-extract > /dev/null 2>&1 || true
-            # Patch AppRun to set GPU env vars before launching
             if [ -f squashfs-root/AppRun ]; then
-              sed -i '1a\
-  export GDK_BACKEND=x11\
-  export WEBKIT_DISABLE_COMPOSITING_MODE=1\
-  export WEBKIT_DISABLE_DMABUF_RENDERER=1\
-  export LIBGL_ALWAYS_SOFTWARE=1' squashfs-root/AppRun
+              { printf 'export GDK_BACKEND=x11\n'; printf 'export WEBKIT_DISABLE_COMPOSITING_MODE=1\n'; printf 'export WEBKIT_DISABLE_DMABUF_RENDERER=1\n'; printf 'export LIBGL_ALWAYS_SOFTWARE=1\n'; cat squashfs-root/AppRun; } > AppRun.tmp && mv AppRun.tmp squashfs-root/AppRun
+              chmod +x squashfs-root/AppRun
             fi
-            # Repackage
             cd -
             APPIMAGETOOL=$(mktemp)
             curl -sL "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -o "$APPIMAGETOOL"
@@ -418,7 +412,63 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          generate_release_notes: true
+          name: "CircuitMuse v1.0.1"
+          body: |
+            ## CircuitMuse v1.0.1 — First Release
+
+            AI-powered circuit simulator and embedded board emulator for desktop. Design circuits, write Arduino code, and run real emulations — all in one app.
+
+            ### What's Inside
+
+            - **31 emulated boards** — Arduino Uno/Mega/Nano, ESP32/ESP32-S2/ESP32-S3/ESP32-C3, RP2040/RP2350, STM32, ATtiny85, and more
+            - **150+ components** — resistors, capacitors, LEDs, sensors, displays, motors, ICs, and wireless modules
+            - **Real CPU emulation** — not a toy simulator; actual compiled Arduino firmware running on emulated hardware
+            - **SPICE analog simulation** — accurate voltage/current analysis for analog circuits
+            - **AI agent** — connect Ollama, OpenAI, Anthropic, Gemini, or OpenRouter for AI-assisted design and debugging
+            - **Serial monitor** — real-time serial output from emulated boards
+            - **Multi-file sketches** — write Arduino code with multiple .ino and .h files
+            - **Library manager** — search and install Arduino libraries directly from the app
+            - **Project save/load** — save your circuits and code as shareable project files
+            - **Export** — generate Arduino sketches from your circuit designs
+            - **Setup wizard** — guided first-run experience with board and AI configuration
+
+            ### Supported Platforms
+
+            | Platform | Format | Notes |
+            |----------|--------|-------|
+            | **Linux (x86_64)** | AppImage | Universal — works on Ubuntu, Debian, Fedora, Arch, and derivatives |
+            | **Linux (x86_64)** | .deb | Debian/Ubuntu/Mint |
+            | **Linux (x86_64)** | PKGBUILD | Arch Linux / Manjaro |
+            | **Windows (x86_64)** | .exe (NSIS) | Windows 10/11 installer |
+            | **Windows (x86_64)** | .msi | Windows MSI installer |
+            | **macOS (ARM64)** | .dmg | Apple Silicon (M1/M2/M3/M4) |
+
+            ### System Requirements
+
+            - **RAM**: 4 GB minimum, 8 GB recommended
+            - **Disk**: 500 MB free space (includes bundled arduino-cli and board cores)
+            - **OS**: Linux (kernel 5.4+), Windows 10+, macOS 12+
+
+            ### First Launch
+
+            1. Open the app — the setup wizard will guide you through board and AI configuration
+            2. Pick an emulated board from the canvas
+            3. Place components and wire them up
+            4. Write Arduino code in the editor
+            5. Hit Compile & Run to see your circuit come alive
+
+            ### Known Limitations
+
+            - macOS build is ARM64 only (Apple Silicon). Intel Macs not yet supported.
+            - WiFi/Bluetooth emulation is limited to basic packet loops
+            - Some advanced ESP32 peripherals (USB-OTG, camera) are not emulated
+            - Arduino-cli is bundled but core downloads require internet on first use
+
+            ### Credits
+
+            Built with [Tauri](https://tauri.app/), [React](https://react.dev/), [Pyodide](https://pyodide.org/), and [Arduino CLI](https://arduino.github.io/arduino-cli/).
+
+            Report issues: https://github.com/meshackbahati/circuit-muse/issues
           files: |
             artifacts/**/*.deb
             artifacts/**/*.AppImage
@@ -426,5 +476,5 @@ jobs:
             artifacts/**/*.msi
             artifacts/**/*.exe
             artifacts/**/*.dmg
-            artifacts/**/*.app
+            artifacts/**/*.rpm
             artifacts/**/PKGBUILD

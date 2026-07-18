@@ -34,7 +34,8 @@
       "icons/icon.ico"
     ],
     "externalBin": [
-      "binaries/circuit-muse-engine"
+      "binaries/circuit-muse-engine",
+      "binaries/arduino-cli"
     ],
     "linux": {
       "appimage": {
