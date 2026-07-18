@@ -348,6 +348,9 @@ jobs:
         run: |
           mkdir -p arch-build
           cp src-tauri/target/release/circuit-muse arch-build/circuit-muse
+          cp src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu arch-build/circuit-muse-engine-x86_64-unknown-linux-gnu
+          cp src-tauri/binaries/arduino-cli-x86_64-unknown-linux-gnu arch-build/arduino-cli-x86_64-unknown-linux-gnu
+          chmod +x arch-build/*
           cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
@@ -358,10 +361,12 @@ jobs:
           url="https://github.com/meshackbahati/circuit-muse"
           license=('MIT')
           depends=('webkit2gtk-4.1' 'gtk3' 'libsoup3' 'libappindicator-gtk3')
-          source=("circuit-muse")
-          sha256sums=('SKIP')
+          source=("circuit-muse" "circuit-muse-engine-x86_64-unknown-linux-gnu" "arduino-cli-x86_64-unknown-linux-gnu")
+          sha256sums=('SKIP' 'SKIP' 'SKIP')
           package() {
             install -Dm755 "$srcdir/circuit-muse" "$pkgdir/usr/bin/circuit-muse"
+            install -Dm755 "$srcdir/circuit-muse-engine-x86_64-unknown-linux-gnu" "$pkgdir/usr/bin/circuit-muse-engine-x86_64-unknown-linux-gnu"
+            install -Dm755 "$srcdir/arduino-cli-x86_64-unknown-linux-gnu" "$pkgdir/usr/bin/arduino-cli-x86_64-unknown-linux-gnu"
           }
           PKGEOF
           useradd -m builder
