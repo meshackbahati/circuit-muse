@@ -344,11 +344,12 @@ jobs:
         working-directory: src-tauri
         run: cargo tauri build --bundles appimage
 
-      - name: Create Arch package
+      - name: Build Arch package
         run: |
-          mkdir -p arch-package
-          cp src-tauri/target/release/bundle/appimage/*.AppImage arch-package/circuit-muse.AppImage || true
-          cat > arch-package/PKGBUILD << 'PKGEOF'
+          mkdir -p arch-build
+          cp src-tauri/target/release/bundle/appimage/*.AppImage arch-build/circuit-muse.AppImage
+          cd arch-build
+          cat > PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
           pkgver=1.0.1
@@ -358,15 +359,19 @@ jobs:
           url="https://github.com/meshackbahati/circuit-muse"
           license=('MIT')
           depends=('webkit2gtk-4.1' 'gtk3' 'libsoup3' 'libappindicator-gtk3')
-          source=("$pkgname.AppImage")
+          source=("circuit-muse.AppImage")
           sha256sums=('SKIP')
           package() {
-            install -Dm755 "$srcdir/$pkgname.AppImage" "$pkgdir/usr/bin/$pkgname"
+            install -Dm755 "$srcdir/circuit-muse.AppImage" "$pkgdir/usr/bin/circuit-muse"
           }
           PKGEOF
+          makepkg -s --noconfirm --noprogressbar
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
+        with:
+          name: arch-build
+          path: arch-build/*.pkg.tar.zst
         with:
           name: arch-build
           path: arch-package/*
@@ -415,7 +420,7 @@ jobs:
             |----------|--------|-------|
             | **Linux (x86_64)** | AppImage | Universal — works on Ubuntu, Debian, Fedora, Arch, and derivatives |
             | **Linux (x86_64)** | .deb | Debian/Ubuntu/Mint |
-            | **Linux (x86_64)** | PKGBUILD | Arch Linux / Manjaro |
+            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro — install with `pacman -U circuit-muse-1.0.1-1-x86_64.pkg.tar.zst` |
             | **Windows (x86_64)** | .exe (NSIS) | Windows 10/11 installer |
             | **Windows (x86_64)** | .msi | Windows MSI installer |
             | **macOS (ARM64)** | .dmg | Apple Silicon (M1/M2/M3/M4) |
@@ -454,4 +459,4 @@ jobs:
             artifacts/**/*.exe
             artifacts/**/*.dmg
             artifacts/**/*.rpm
-            artifacts/**/PKGBUILD
+            artifacts/**/*.pkg.tar.zst
