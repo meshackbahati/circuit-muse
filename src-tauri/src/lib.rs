@@ -39,7 +39,7 @@ pub fn run() {
         .expect("error while running tauri application");
 }
 
-fn resolve_sidecar_path(app: &tauri::AppHandle, name: &str) -> Option<String> {
+fn resolve_sidecar_path(_app: &tauri::AppHandle, name: &str) -> Option<String> {
     // Tauri bundles sidecar binaries in the same directory as the main executable.
     // On Linux/macOS they sit next to the binary; on Windows they're in the same dir.
     let exe_dir = std::env::current_exe().ok()?.parent()?.to_path_buf();

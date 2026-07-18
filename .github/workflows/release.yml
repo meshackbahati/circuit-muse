@@ -340,14 +340,14 @@ jobs:
           npm install
           npm run build
 
-      - name: Build Tauri (AppImage)
+      - name: Build Tauri binary
         working-directory: src-tauri
-        run: cargo tauri build --bundles appimage
+        run: cargo tauri build --bundles none
 
       - name: Build Arch package
         run: |
           mkdir -p arch-build
-          cp src-tauri/target/release/bundle/appimage/*.AppImage arch-build/circuit-muse.AppImage
+          cp src-tauri/target/release/circuit-muse arch-build/circuit-muse
           cd arch-build
           cat > PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
@@ -359,10 +359,10 @@ jobs:
           url="https://github.com/meshackbahati/circuit-muse"
           license=('MIT')
           depends=('webkit2gtk-4.1' 'gtk3' 'libsoup3' 'libappindicator-gtk3')
-          source=("circuit-muse.AppImage")
+          source=("circuit-muse")
           sha256sums=('SKIP')
           package() {
-            install -Dm755 "$srcdir/circuit-muse.AppImage" "$pkgdir/usr/bin/circuit-muse"
+            install -Dm755 "$srcdir/circuit-muse" "$pkgdir/usr/bin/circuit-muse"
           }
           PKGEOF
           makepkg -s --noconfirm --noprogressbar
