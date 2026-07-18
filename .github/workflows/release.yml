@@ -372,9 +372,6 @@ jobs:
         with:
           name: arch-build
           path: arch-build/*.pkg.tar.zst
-        with:
-          name: arch-build
-          path: arch-package/*
 
   create-release:
     name: Create Release
