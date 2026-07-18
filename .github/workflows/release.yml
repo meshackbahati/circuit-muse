@@ -365,7 +365,8 @@ jobs:
             install -Dm755 "$srcdir/circuit-muse" "$pkgdir/usr/bin/circuit-muse"
           }
           PKGEOF
-          makepkg -s --noconfirm --noprogressbar
+          useradd -m builder && chown -R builder:builder /__w
+          su - builder -c "cd /__w/circuit-muse/circuit-muse/arch-build && makepkg -s --noconfirm --noprogressbar"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
