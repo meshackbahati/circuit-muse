@@ -160,36 +160,11 @@ jobs:
         working-directory: src-tauri
         run: cargo tauri build --bundles rpm
 
-      - name: Create RPM spec
-        run: |
-          mkdir -p rpm-package
-          cat > rpm-package/circuit-muse.spec << 'SPEC'
-          Name:           circuit-muse
-          Version:        1.0.1
-          Release:        1%{?dist}
-          Summary:        AI-powered circuit simulator and embedded board emulator
-          License:        MIT
-          URL:            https://github.com/meshackbahati/circuit-muse
-          Packager:       Meshack Bahati Ouma
-          
-          %description
-          CircuitMuse is an AI-powered circuit simulator with real CPU emulation,
-          SPICE analog simulation, 31 boards, 150+ components.
-          
-          %install
-          mkdir -p %{_bindir}
-          cp src-tauri/target/release/bundle/appimage/*.AppImage %{_bindir}/circuit-muse || true
-          chmod 755 %{_bindir}/circuit-muse
-          
-          %files
-          %{_bindir}/circuit-muse
-          SPEC
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: fedora-build
-          path: rpm-package/*
+          path: src-tauri/target/release/bundle/rpm/*.rpm
 
   build-windows:
     name: Build Windows
@@ -365,9 +340,9 @@ jobs:
           npm install
           npm run build
 
-      - name: Build Tauri (deb only)
+      - name: Build Tauri (AppImage)
         working-directory: src-tauri
-        run: cargo tauri build --bundles deb
+        run: cargo tauri build --bundles appimage
 
       - name: Create Arch package
         run: |
