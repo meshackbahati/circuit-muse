@@ -348,8 +348,7 @@ jobs:
         run: |
           mkdir -p arch-build
           cp src-tauri/target/release/circuit-muse arch-build/circuit-muse
-          cd arch-build
-          cat > PKGBUILD << 'PKGEOF'
+          cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
           pkgver=1.0.1
@@ -369,7 +368,8 @@ jobs:
           cp -r arch-build /home/builder/arch-build
           chown -R builder:builder /home/builder/arch-build
           su - builder -c "cd /home/builder/arch-build && makepkg --noconfirm --noprogressbar --skippgpcheck"
-          cp /home/builder/arch-build/*.pkg.tar.zst arch-build/
+          mkdir -p $GITHUB_WORKSPACE/arch-build
+          cp /home/builder/arch-build/*.pkg.tar.zst $GITHUB_WORKSPACE/arch-build/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
