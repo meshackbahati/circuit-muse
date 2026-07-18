@@ -93,6 +93,8 @@ jobs:
               { printf 'export GDK_BACKEND=x11\n'; printf 'export WEBKIT_DISABLE_COMPOSITING_MODE=1\n'; printf 'export WEBKIT_DISABLE_DMABUF_RENDERER=1\n'; printf 'export LIBGL_ALWAYS_SOFTWARE=1\n'; cat squashfs-root/AppRun; } > AppRun.tmp && mv AppRun.tmp squashfs-root/AppRun
               chmod +x squashfs-root/AppRun
             fi
+            # Remove bundled Wayland libs to prevent conflicts with host system
+            rm -f squashfs-root/usr/lib/libwayland-client.so* squashfs-root/usr/lib/libwayland-cursor.so* squashfs-root/usr/lib/libwayland-egl.so* squashfs-root/usr/lib/libwayland-server.so* 2>/dev/null || true
             cd -
             APPIMAGETOOL=$(mktemp)
             curl -sL "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -o "$APPIMAGETOOL"

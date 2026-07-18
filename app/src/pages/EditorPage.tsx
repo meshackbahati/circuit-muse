@@ -3,6 +3,7 @@
  */
 
 import React, { useRef, useState, useCallback, useEffect, lazy, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import { startSimulation } from '../simulation/spice/start';
 import { useSEO } from '../utils/useSEO';
 import { CodeEditor } from '../components/editor/CodeEditor';
