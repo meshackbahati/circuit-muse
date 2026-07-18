@@ -342,7 +342,7 @@ jobs:
 
       - name: Build Tauri binary
         working-directory: src-tauri
-        run: cargo tauri build --bundles none
+        run: cargo build --release
 
       - name: Build Arch package
         run: |
