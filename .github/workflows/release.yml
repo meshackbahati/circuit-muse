@@ -365,8 +365,11 @@ jobs:
             install -Dm755 "$srcdir/circuit-muse" "$pkgdir/usr/bin/circuit-muse"
           }
           PKGEOF
-          useradd -m builder && chown -R builder:builder /__w
-          su - builder -c "cd /__w/circuit-muse/circuit-muse/arch-build && makepkg --noconfirm --noprogressbar --skippgpcheck"
+          useradd -m builder
+          cp -r arch-build /home/builder/arch-build
+          chown -R builder:builder /home/builder/arch-build
+          su - builder -c "cd /home/builder/arch-build && makepkg --noconfirm --noprogressbar --skippgpcheck"
+          cp /home/builder/arch-build/*.pkg.tar.zst arch-build/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
