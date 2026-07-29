@@ -85,16 +85,28 @@ export async function scanDependencies(): Promise<Dependency[]> {
   // Arduino CLI
   if (backendOnline) {
     const { arduinoCli } = await checkBackendCompileStatus();
+    const isWindows = typeof navigator !== 'undefined' && /win/i.test(navigator.userAgent);
+    const isMac = typeof navigator !== 'undefined' && /mac/i.test(navigator.userAgent);
+    let osNotes = 'Install from arduino.github.io/arduino-cli/installation/';
+    if (!arduinoCli) {
+      if (isWindows) {
+        osNotes = 'Windows: Run "winget install Arduino.ArduinoCLI" in terminal, or download from arduino-cli website.';
+      } else if (isMac) {
+        osNotes = 'macOS: Run "brew install arduino-cli" in terminal.';
+      } else {
+        osNotes = 'Linux: Run "sudo apt install arduino-cli" or "snap install arduino-cli", or use the curl install script.';
+      }
+    }
     deps.push({
       id: 'arduino-cli',
       name: 'Arduino CLI',
       description: 'Compiles Arduino AVR, RP2040, and ESP32 sketches',
       required: true,
       status: arduinoCli ? 'installed' : 'missing',
-      installUrl: 'https://arduino.github.io/arduino-cli/installation/',
+      installUrl: 'https://arduino.github.io/arduino-cli/latest/installation/',
       notes: arduinoCli
         ? 'Arduino cores auto-install on first compile'
-        : 'Install from arduino.github.io/arduino-cli/installation/',
+        : osNotes,
     });
   }
 

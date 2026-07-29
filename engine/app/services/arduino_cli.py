@@ -453,13 +453,14 @@ class ArduinoCLIService:
                            str(sketch_dir)]
                 print(f"Running command: {' '.join(cmd)}")
 
-                # Use subprocess.run in a thread for Windows compatibility
+                # Use subprocess.run in a thread for Windows compatibility with a 120-second safety timeout
                 def run_compile():
                     return subprocess.run(
                         cmd,
                         capture_output=True,
                         text=True,
                         env=compile_env,
+                        timeout=120,
                     )
 
                 result = await asyncio.to_thread(run_compile)
@@ -638,6 +639,14 @@ class ArduinoCLIService:
                         "stderr": result.stderr
                     }
 
+            except subprocess.TimeoutExpired as e:
+                print(f"=== Compilation timed out after {e.timeout}s ===\n")
+                return {
+                    "success": False,
+                    "error": f"Compilation timed out after {e.timeout} seconds",
+                    "stdout": e.stdout if isinstance(e.stdout, str) else (e.stdout.decode('utf-8', errors='replace') if e.stdout else ""),
+                    "stderr": e.stderr if isinstance(e.stderr, str) else (e.stderr.decode('utf-8', errors='replace') if e.stderr else "")
+                }
             except Exception as e:
                 print(f"=== Exception during compilation: {e} ===\n")
                 import traceback
