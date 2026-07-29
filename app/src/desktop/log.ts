@@ -22,7 +22,7 @@ const PREFIX = '[circuit-muse-desktop]';
 export function dlog(message: string, extra?: unknown): void {
   // Always echo to console — `tauri dev` (or browser-loaded dev mode)
   // can see this even without the Rust-side file.
-  // eslint-disable-next-line no-console
+
   console.log(PREFIX, message, extra ?? '');
   if (!isTauri()) return;
   let line = message;

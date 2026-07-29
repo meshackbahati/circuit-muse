@@ -354,7 +354,7 @@ jobs:
           cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
-          pkgver=1.0.1
+          pkgver=1.0.2
           pkgrel=1
           pkgdesc="AI-powered circuit simulator and embedded board emulator"
           arch=('x86_64')
@@ -400,25 +400,38 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "CircuitMuse v1.0.1"
+          name: "CircuitMuse v1.0.2"
           body: |
-            ## CircuitMuse v1.0.1 — First Release
+            ## CircuitMuse v1.0.2 — Premium Features and Multi-Board Improvements
 
             AI-powered circuit simulator and embedded board emulator for desktop. Design circuits, write Arduino code, and run real emulations — all in one app.
 
             ### What's Inside
 
-            - **31 emulated boards** — Arduino Uno/Mega/Nano, ESP32/ESP32-S2/ESP32-S3/ESP32-C3, RP2040/RP2350, STM32, ATtiny85, and more
-            - **150+ components** — resistors, capacitors, LEDs, sensors, displays, motors, ICs, and wireless modules
-            - **Real CPU emulation** — not a toy simulator; actual compiled Arduino firmware running on emulated hardware
-            - **SPICE analog simulation** — accurate voltage/current analysis for analog circuits
-            - **AI agent** — connect Ollama, OpenAI, Anthropic, Gemini, or OpenRouter for AI-assisted design and debugging
-            - **Serial monitor** — real-time serial output from emulated boards
-            - **Multi-file sketches** — write Arduino code with multiple .ino and .h files
-            - **Library manager** — search and install Arduino libraries directly from the app
-            - **Project save/load** — save your circuits and code as shareable project files
-            - **Export** — generate Arduino sketches from your circuit designs
-            - **Setup wizard** — guided first-run experience with board and AI configuration
+            - **Premium Features are now Open-Source & Free**:
+              - **microSD File Upload**: Write files directly to emulated microSD cards with a fully integrated FAT filesystem manager.
+              - **STM32 and QEMU Raspberry Pi Emulation**: Support for STM32 Blue Pill/Nucleo, and Raspberry Pi 3B/4B/5 board families.
+              - **Export Schematic Images & BOM**: Export clean, precise schematic layout PNGs and CSV Bill of Materials for your designs.
+
+            - **Massive Performance & Speedups**:
+              - **15x Faster Compilation**: Introduced persistent compilation caching for Arduino board targets, accelerating subsequent compilations.
+
+            - **Desktop & Layout Improvements**:
+              - Fixed window layouts, responsive side panel navigation, external link redirection, and localized translation sync.
+              - Cleaned up verbose compiler logs and resolved simulation timeout locks.
+
+            - **Core Simulation Stack**:
+              - **31 emulated boards** — Arduino Uno/Mega/Nano, ESP32/ESP32-S2/ESP32-S3/ESP32-C3, RP2040/RP2350, STM32, ATtiny85, and more
+              - **150+ components** — resistors, capacitors, LEDs, sensors, displays, motors, ICs, and wireless modules
+              - **Real CPU emulation** — not a toy simulator; actual compiled Arduino firmware running on emulated hardware
+              - **SPICE analog simulation** — accurate voltage/current analysis for analog circuits
+              - **AI agent** — connect Ollama, OpenAI, Anthropic, Gemini, or OpenRouter for AI-assisted design and debugging
+              - **Serial monitor** — real-time serial output from emulated boards
+              - **Multi-file sketches** — write Arduino code with multiple .ino and .h files
+              - **Library manager** — search and install Arduino libraries directly from the app
+              - **Project save/load** — save your circuits and code as shareable project files
+              - **Export** — generate Arduino sketches from your circuit designs
+              - **Setup wizard** — guided first-run experience with board and AI configuration
 
             ### Supported Platforms
 
@@ -426,7 +439,7 @@ jobs:
             |----------|--------|-------|
             | **Linux (x86_64)** | AppImage | Universal — works on Ubuntu, Debian, Fedora, Arch, and derivatives |
             | **Linux (x86_64)** | .deb | Debian/Ubuntu/Mint |
-            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro — install with `pacman -U circuit-muse-1.0.1-1-x86_64.pkg.tar.zst` |
+            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro — install with `pacman -U circuit-muse-1.0.2-1-x86_64.pkg.tar.zst` |
             | **Windows (x86_64)** | .exe (NSIS) | Windows 10/11 installer |
             | **Windows (x86_64)** | .msi | Windows MSI installer |
             | **macOS (ARM64)** | .dmg | Apple Silicon (M1/M2/M3/M4) |

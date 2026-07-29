@@ -2529,7 +2529,7 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
       } catch (err) {
         // A failing undo would otherwise leave the index pointing at a
         // half-applied command. Bail out cleanly.
-        // eslint-disable-next-line no-console
+
         console.error('[history] undo failed:', cmd.description, err);
         return;
       }
@@ -2543,7 +2543,7 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
       try {
         cmd.execute();
       } catch (err) {
-        // eslint-disable-next-line no-console
+
         console.error('[history] redo failed:', cmd.description, err);
         return;
       }

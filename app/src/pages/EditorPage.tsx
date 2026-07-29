@@ -28,6 +28,7 @@ import { useAgentStore } from '../store/useAgentStore';
 import { ProjectsModal } from '../components/projects/ProjectsModal';
 import { ExportMenu } from '../components/projects/ExportMenu';
 import { SetupWizard } from '../components/projects/SetupWizard';
+import { GitHubSyncModal } from '../components/projects/GitHubSyncModal';
 import { useLocalAutoSave } from '../hooks/useLocalAutoSave';
 import { useSimulatorStore, DEFAULT_BOARD_POSITION } from '../store/useSimulatorStore';
 import { useEditorStore } from '../store/useEditorStore';
@@ -102,17 +103,27 @@ export const EditorPage: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [showSetup, setShowSetup] = useState(false);
+  const [showGitHubSync, setShowGitHubSync] = useState(false);
 
   // Auto-save to IndexedDB
   const currentProjectId = useProjectStore((s) => s.currentProject?.id ?? null);
   const currentProjectName = useProjectStore((s) => s.currentProject?.slug ?? 'untitled');
   useLocalAutoSave(currentProjectId, currentProjectName);
 
-  // Show setup wizard on every launch unless user clicked "Don't show again"
+  // Show setup wizard on every launch unless user used "Don't show again"
   useEffect(() => {
     if (!localStorage.getItem('circuit-muse_setup_skipped')) {
       setShowSetup(true);
     }
+  }, []);
+
+  // Listen to GitHub Sync prompt
+  useEffect(() => {
+    const handler = () => {
+      setShowGitHubSync(true);
+    };
+    window.addEventListener('circuit-muse-pro-github-sync-prompt', handler);
+    return () => window.removeEventListener('circuit-muse-pro-github-sync-prompt', handler);
   }, []);
 
   // ── Electrical simulation (one-time mount) ────────────────────────────────
@@ -726,6 +737,7 @@ export const EditorPage: React.FC = () => {
       {showProjects && <ProjectsModal onClose={() => setShowProjects(false)} />}
       {showExport && <ExportMenu onClose={() => setShowExport(false)} />}
       {showSetup && <SetupWizard onClose={() => setShowSetup(false)} />}
+      {showGitHubSync && <GitHubSyncModal onClose={() => setShowGitHubSync(false)} />}
     </div>
   );
 };

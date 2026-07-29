@@ -200,7 +200,7 @@ export function connectAnalogInputsToMcu(): () => void {
             const clipKey = `${boardId}:${pinName}`;
             if (clipped > samples.length / 10 && !clipWarned.has(clipKey)) {
               clipWarned.add(clipKey);
-              // eslint-disable-next-line no-console
+
               console.warn(
                 `[adc-clip] ${clipKey}: ${clipped}/${samples.length} samples outside [0, 3.3] V (range ${observedMin.toFixed(2)}…${observedMax.toFixed(2)} V). ESP32 ADC reads will saturate at the rails. Add a divider or clamp if you need the full swing.`,
               );

@@ -13,7 +13,7 @@
   <a href="https://github.com/meshackbahati/circuit-muse/blob/main/LICENSE"><img src="https://img.shields.io/github/license/meshackbahati/circuit-muse?style=flat-square" alt="License"></a>
   <a href="https://github.com/meshackbahati/circuit-muse/actions"><img src="https://img.shields.io/github/actions/workflow/status/meshackbahati/circuit-muse/ci.yml?style=flat-square&label=build" alt="Build Status"></a>
   <a href="https://github.com/meshackbahati/circuit-muse/releases/latest"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square" alt="Platforms"></a>
-  <a href="https://github.com/meshackbahati/circuit-muse/releases"><img src="https://img.shields.io/badge/version-1.0.1-blue?style=flat-square" alt="Version"></a>
+  <a href="https://github.com/meshackbahati/circuit-muse/releases"><img src="https://img.shields.io/badge/version-1.0.2-blue?style=flat-square" alt="Version"></a>
 </p>
 
 <p align="center">

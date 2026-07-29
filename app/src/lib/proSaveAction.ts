@@ -37,7 +37,7 @@ function defaultSaveAction(): void {
   const proj = useProjectStore.getState().currentProject;
   const name = proj?.slug ?? proj?.id ?? undefined;
   const filename = triggerDownloadVlx({ name });
-  // eslint-disable-next-line no-console
+
   console.info(`[oss] downloaded workspace as ${filename}`);
 }
 
@@ -46,7 +46,7 @@ export function triggerSaveAction(): void {
   try {
     impl();
   } catch (err) {
-    // eslint-disable-next-line no-console
+
     console.warn('[oss] save-action impl threw:', err);
   }
 }

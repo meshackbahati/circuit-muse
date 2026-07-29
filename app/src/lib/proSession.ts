@@ -20,7 +20,7 @@ export function triggerSessionCheck(): void {
     try {
       void _hook();
     } catch (err) {
-      // eslint-disable-next-line no-console
+
       console.warn('[oss] session-check hook threw:', err);
     }
   }

@@ -15,7 +15,7 @@ let cachedPort: number | null = null;
 export function getEngineUrl(): string {
   if (cachedPort) return `http://127.0.0.1:${cachedPort}`;
 
-  const stored = localStorage.getItem(ENGINE_PORT_KEY);
+  const stored = typeof localStorage !== 'undefined' ? localStorage.getItem(ENGINE_PORT_KEY) : null;
   if (stored) {
     cachedPort = parseInt(stored, 10);
     return `http://127.0.0.1:${cachedPort}`;
@@ -29,7 +29,9 @@ export function getEngineUrl(): string {
  */
 export function setEnginePort(port: number): void {
   cachedPort = port;
-  localStorage.setItem(ENGINE_PORT_KEY, String(port));
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(ENGINE_PORT_KEY, String(port));
+  }
 }
 
 /**

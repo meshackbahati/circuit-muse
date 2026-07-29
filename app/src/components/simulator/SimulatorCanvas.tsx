@@ -2946,8 +2946,8 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
                       padding: '7px 14px',
                       background: 'none',
                       border: 'none',
-                      color: !!board?.compiledProgram ? '#e6e6e9' : '#666',
-                      cursor: !!board?.compiledProgram ? 'pointer' : 'not-allowed',
+                      color: board?.compiledProgram ? '#e6e6e9' : '#666',
+                      cursor: board?.compiledProgram ? 'pointer' : 'not-allowed',
                       fontSize: 13,
                       textAlign: 'left',
                     }}
