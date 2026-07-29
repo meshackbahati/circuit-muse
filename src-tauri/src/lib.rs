@@ -75,29 +75,35 @@ async fn start_engine(app: &tauri::AppHandle) {
             if let Some(ref cli_path) = arduino_cli_path {
                 command = command.env("ARDUINO_CLI_PATH", cli_path);
             }
-            let (mut rx, _child) = command.spawn().expect("Failed to spawn engine sidecar");
-            while let Some(event) = rx.recv().await {
-                match event {
-                    CommandEvent::Stdout(line_bytes) => {
-                        let line = String::from_utf8_lossy(&line_bytes);
-                        if line.contains("Starting on port") {
-                            if let Some(port_str) = line.split("port ").nth(1) {
-                                if let Ok(port) = port_str.trim().parse::<u16>() {
-                                    let _ = app.emit("engine-ready", port);
+            match command.spawn() {
+                Ok((mut rx, _child)) => {
+                    while let Some(event) = rx.recv().await {
+                        match event {
+                            CommandEvent::Stdout(line_bytes) => {
+                                let line = String::from_utf8_lossy(&line_bytes);
+                                if line.contains("Starting on port") {
+                                    if let Some(port_str) = line.split("port ").nth(1) {
+                                        if let Ok(port) = port_str.trim().parse::<u16>() {
+                                            let _ = app.emit("engine-ready", port);
+                                        }
+                                    }
                                 }
                             }
+                            CommandEvent::Stderr(line_bytes) => {
+                                eprintln!("[engine] {}", String::from_utf8_lossy(&line_bytes));
+                            }
+                            CommandEvent::Error(err) => {
+                                eprintln!("[engine] error: {}", err);
+                            }
+                            CommandEvent::Terminated(status) => {
+                                eprintln!("[engine] exited: {:?}", status);
+                            }
+                            _ => {}
                         }
                     }
-                    CommandEvent::Stderr(line_bytes) => {
-                        eprintln!("[engine] {}", String::from_utf8_lossy(&line_bytes));
-                    }
-                    CommandEvent::Error(err) => {
-                        eprintln!("[engine] error: {}", err);
-                    }
-                    CommandEvent::Terminated(status) => {
-                        eprintln!("[engine] exited: {:?}", status);
-                    }
-                    _ => {}
+                }
+                Err(err) => {
+                    eprintln!("[engine] Failed to spawn engine sidecar: {}", err);
                 }
             }
         }
