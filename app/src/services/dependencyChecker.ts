@@ -85,16 +85,28 @@ export async function scanDependencies(): Promise<Dependency[]> {
   // Arduino CLI
   if (backendOnline) {
     const { arduinoCli } = await checkBackendCompileStatus();
+    const isWindows = typeof navigator !== 'undefined' && /win/i.test(navigator.userAgent);
+    const isMac = typeof navigator !== 'undefined' && /mac/i.test(navigator.userAgent);
+    let osNotes = 'Install from arduino.github.io/arduino-cli/installation/';
+    if (!arduinoCli) {
+      if (isWindows) {
+        osNotes = 'Windows: Run "winget install Arduino.ArduinoCLI" in terminal, or download from arduino-cli website.';
+      } else if (isMac) {
+        osNotes = 'macOS: Run "brew install arduino-cli" in terminal.';
+      } else {
+        osNotes = 'Linux: Run "sudo apt install arduino-cli" or "snap install arduino-cli", or use the curl install script.';
+      }
+    }
     deps.push({
       id: 'arduino-cli',
       name: 'Arduino CLI',
       description: 'Compiles Arduino AVR, RP2040, and ESP32 sketches',
       required: true,
       status: arduinoCli ? 'installed' : 'missing',
-      installUrl: 'https://arduino.github.io/arduino-cli/installation/',
+      installUrl: 'https://arduino.github.io/arduino-cli/latest/installation/',
       notes: arduinoCli
         ? 'Arduino cores auto-install on first compile'
-        : 'Install from arduino.github.io/arduino-cli/installation/',
+        : osNotes,
     });
   }
 
@@ -156,23 +168,21 @@ export async function scanDependencies(): Promise<Dependency[]> {
 export async function autoInstallQemu(
   arch: 'esp32' | 'stm32',
   onProgress?: (pct: number, phase: string) => void,
-): Promise<boolean> {
-  if (!isTauri()) return false;
+): Promise<void> {
+  if (!isTauri()) throw new Error('Tauri runtime not available');
 
   const installCmd = arch === 'esp32' ? 'esp32_qemu_install' : 'stm32_qemu_install';
   const progressEvent = arch === 'esp32' ? 'esp32-qemu-progress' : 'stm32-qemu-progress';
 
-  try {
-    // Listen for progress
-    const { listen } = await import('../desktop/tauriBridge');
-    const unsub = await listen<{ progress: number; phase: string }>(progressEvent, (event) => {
-      onProgress?.(event.payload.progress ?? 0, event.payload.phase);
-    });
+  // Listen for progress
+  const { listen } = await import('../desktop/tauriBridge');
+  const unsub = await listen<{ progress: number; phase: string }>(progressEvent, (event) => {
+    onProgress?.(event.payload.progress ?? 0, event.payload.phase);
+  });
 
+  try {
     await invoke(installCmd);
+  } finally {
     unsub();
-    return true;
-  } catch {
-    return false;
   }
 }

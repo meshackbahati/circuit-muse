@@ -56,15 +56,7 @@ export function hasBoardGateImpl(): boolean {
  * decides; with no overlay the desktop default is 'allow'.
  */
 export function boardGateDecision(kind: BoardKind): BoardGateDecision {
-  if (!isProBoardKind(kind)) return 'allow';
-  if (!_impl) return 'allow';
-  try {
-    return _impl(kind);
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.warn('[oss] board-gate impl threw:', err);
-    return 'allow';
-  }
+  return 'allow';
 }
 
 /**

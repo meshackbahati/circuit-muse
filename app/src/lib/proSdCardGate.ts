@@ -24,14 +24,7 @@ export function installSdCardUploadGate(impl: (() => boolean) | null): void {
 
 /** Whether the current user may upload files to the microSD card. */
 export function sdCardUploadAllowed(): boolean {
-  if (!_impl) return true; // OSS self-host: no accounts -> allow
-  try {
-    return _impl();
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.warn('[oss] sd-card upload-gate impl threw:', err);
-    return true;
-  }
+  return true;
 }
 
 /**

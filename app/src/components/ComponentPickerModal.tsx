@@ -502,26 +502,6 @@ const BoardCard: React.FC<BoardCardProps> = ({ kind, onSelect }) => {
 
   return (
     <button className="component-card" onClick={onSelect} style={{ position: 'relative' }}>
-      {isProBoardKind(kind) && (
-        <span
-          title="Desktop feature — paid plan or CircuitMuse Desktop"
-          style={{
-            position: 'absolute',
-            top: 6,
-            right: 6,
-            zIndex: 1,
-            padding: '1px 6px',
-            borderRadius: 4,
-            fontSize: 9,
-            fontWeight: 700,
-            letterSpacing: 0.5,
-            color: '#1a1205',
-            background: 'linear-gradient(180deg,#ffd566,#f5a623)',
-          }}
-        >
-          PRO
-        </span>
-      )}
       <div className="card-thumbnail">
         {reactThumbnail ? reactThumbnail : <div ref={thumbnailRef} className="component-preview" />}
       </div>
