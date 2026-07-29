@@ -181,7 +181,7 @@ describe('components-metadata.json — cross-references vs live code', () => {
     const registered = PartSimulationRegistry.listRegisteredParts();
     const orphans = registered.filter((id) => !idsInMetadata.has(id));
     if (orphans.length > 0) {
-      // eslint-disable-next-line no-console
+
       console.log(
         `[parts-without-metadata] ${orphans.length} registered parts have no metadata entry: ${orphans.join(', ')}`,
       );
@@ -199,7 +199,7 @@ describe('components-metadata.json — cross-references vs live code', () => {
     // examples don't have to use every component.  Surfaces dead
     // catalogue entries for cleanup conversations.
     if (orphans.length > 0) {
-      // eslint-disable-next-line no-console
+
       console.log(`[orphan-report] ${orphans.length} metadata entries used by no example and no part-sim:\n  ${orphans.join(', ')}`);
     }
     expect(orphans.length).toBeGreaterThanOrEqual(0); // always true; documents the check ran

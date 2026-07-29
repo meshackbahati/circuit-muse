@@ -155,7 +155,7 @@ describe('BoardKind gallery coverage matrix', () => {
       return { kind, total: inBoardType + inBoardsArray, inBoardType, inBoardsArray };
     });
     stats.sort((a, b) => b.total - a.total);
-    // eslint-disable-next-line no-console
+
     console.log('[board-coverage]', stats.map((s) => `${s.kind}=${s.total}`).join(' '));
     expect(stats.length).toBe(allKinds.length);
   });

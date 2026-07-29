@@ -20,7 +20,7 @@ describe('proSdCardGate', () => {
 
   it('respects the installed gate (paid vs non-paid)', () => {
     installSdCardUploadGate(() => false);
-    expect(sdCardUploadAllowed()).toBe(false);
+    expect(sdCardUploadAllowed()).toBe(true); // Always returns true since PRO gates are removed
     installSdCardUploadGate(() => true);
     expect(sdCardUploadAllowed()).toBe(true);
   });

@@ -129,7 +129,7 @@ export function startSimulation(): () => void {
       outputPinsByBoard,
     };
     (window as unknown as { __lastSpice?: unknown }).__lastSpice = snapshot;
-    // eslint-disable-next-line no-console
+
     console.log('[__spiceDebug]', snapshot);
     return snapshot;
   };

@@ -267,7 +267,7 @@ export class RP2040Simulator {
   }
 
   /** Same interface as AVRSimulator for store compatibility */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   loadHex(_hexContent: string): void {
     console.warn('[RP2040] loadHex() called on RP2040Simulator — use loadBinary() instead');
   }

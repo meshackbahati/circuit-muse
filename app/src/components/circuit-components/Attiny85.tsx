@@ -17,7 +17,7 @@ interface Attiny85Props {
 }
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
+
   namespace JSX {
     interface IntrinsicElements {
       'circuit-muse-attiny85': any;

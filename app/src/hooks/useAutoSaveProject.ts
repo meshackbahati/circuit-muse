@@ -41,7 +41,7 @@ export function useAutoSaveProject(): AutoSaveState {
     if (!installedImpl) return;
     return installedImpl(setState);
     // Mount-only — impl is installed at module load, swapping at runtime is unsupported.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   return state;

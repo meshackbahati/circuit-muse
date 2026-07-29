@@ -41,7 +41,7 @@ describe('digital-gate-engine sweep — all gallery digital examples', () => {
     }
     // The vast majority are pure gate circuits; only a couple (e.g. 7-seg) bail.
     expect(handled.length, `handled: ${handled.length}, bailed: ${bailed.join(', ')}`).toBeGreaterThanOrEqual(33);
-    // eslint-disable-next-line no-console
+
     console.log(`[sweep] engine handles ${handled.length}/${all.length}; bails (ngspice): ${bailed.join(', ') || 'none'}`);
   });
 

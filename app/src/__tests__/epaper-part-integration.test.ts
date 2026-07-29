@@ -81,7 +81,7 @@ class FakePinManager {
 
 class FakeSpi {
   // The hook overwrites `onByte`; we save the wrapped value and call it.
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   onByte: (value: number) => void = () => {};
   completed: number[] = [];
   completeTransfer(resp: number) {

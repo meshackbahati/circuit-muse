@@ -184,31 +184,32 @@ export class CircuitSimulationService {
     try {
       await this.runSolve();
     } catch (err) {
-      // eslint-disable-next-line no-console
+
       console.warn('[circuit-sim] solve failed:', err);
     } finally {
       this.inFlight = false;
-      if (this.stopped) return;
-      if (this.pending) {
-        this.pending = false;
-        void this.tick();
-      } else if (this.pendingMcuEdges.size > 0) {
-        const edges = Array.from(this.pendingMcuEdges.values());
-        this.pendingMcuEdges.clear();
-        const ctx = this.loadedContext;
-        for (const edge of edges) {
-          // If the rebuild we just completed still didn't emit a
-          // V-source for this pin (e.g. the pin isn't wired into
-          // any net), replaying via handleMcuEdge would self-heal
-          // again → re-tick → loop forever. Drop the edge instead;
-          // a future canvas change (e.g. user adds the wire) will
-          // pick it up via the normal subscription tick.
-          const expected = `v_${sanitizeSpiceId(edge.boardId)}_${sanitizeSpiceId(edge.pinName)}`.toLowerCase();
-          const hasSource = ctx?.voltageSources.some(
-            (vs) => vs.toLowerCase() === expected,
-          );
-          if (!hasSource) continue;
-          void this.handleMcuEdge(edge.boardId, edge.pinName, edge.state, edge.vcc);
+      if (!this.stopped) {
+        if (this.pending) {
+          this.pending = false;
+          void this.tick();
+        } else if (this.pendingMcuEdges.size > 0) {
+          const edges = Array.from(this.pendingMcuEdges.values());
+          this.pendingMcuEdges.clear();
+          const ctx = this.loadedContext;
+          for (const edge of edges) {
+            // If the rebuild we just completed still didn't emit a
+            // V-source for this pin (e.g. the pin isn't wired into
+            // any net), replaying via handleMcuEdge would self-heal
+            // again → re-tick → loop forever. Drop the edge instead;
+            // a future canvas change (e.g. user adds the wire) will
+            // pick it up via the normal subscription tick.
+            const expected = `v_${sanitizeSpiceId(edge.boardId)}_${sanitizeSpiceId(edge.pinName)}`.toLowerCase();
+            const hasSource = ctx?.voltageSources.some(
+              (vs) => vs.toLowerCase() === expected,
+            );
+            if (!hasSource) continue;
+            void this.handleMcuEdge(edge.boardId, edge.pinName, edge.state, edge.vcc);
+          }
         }
       }
     }
@@ -260,7 +261,7 @@ export class CircuitSimulationService {
       await this.scheduler.onMcuPinChange(boardId, pinName, state, vcc);
       this.publishFromLastResult();
     } catch (err) {
-      // eslint-disable-next-line no-console
+
       console.warn('[circuit-sim] mcu-edge solve failed:', err);
     } finally {
       this.inFlight = false;

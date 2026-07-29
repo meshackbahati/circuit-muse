@@ -232,7 +232,7 @@ if (typeof customElements !== 'undefined' && !customElements.get('circuit-muse-c
 
 // React JSX intrinsic typing
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
+
   namespace JSX {
     interface IntrinsicElements {
       'circuit-muse-custom-chip': any;
