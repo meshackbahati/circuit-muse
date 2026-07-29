@@ -156,23 +156,21 @@ export async function scanDependencies(): Promise<Dependency[]> {
 export async function autoInstallQemu(
   arch: 'esp32' | 'stm32',
   onProgress?: (pct: number, phase: string) => void,
-): Promise<boolean> {
-  if (!isTauri()) return false;
+): Promise<void> {
+  if (!isTauri()) throw new Error('Tauri runtime not available');
 
   const installCmd = arch === 'esp32' ? 'esp32_qemu_install' : 'stm32_qemu_install';
   const progressEvent = arch === 'esp32' ? 'esp32-qemu-progress' : 'stm32-qemu-progress';
 
-  try {
-    // Listen for progress
-    const { listen } = await import('../desktop/tauriBridge');
-    const unsub = await listen<{ progress: number; phase: string }>(progressEvent, (event) => {
-      onProgress?.(event.payload.progress ?? 0, event.payload.phase);
-    });
+  // Listen for progress
+  const { listen } = await import('../desktop/tauriBridge');
+  const unsub = await listen<{ progress: number; phase: string }>(progressEvent, (event) => {
+    onProgress?.(event.payload.progress ?? 0, event.payload.phase);
+  });
 
+  try {
     await invoke(installCmd);
+  } finally {
     unsub();
-    return true;
-  } catch {
-    return false;
   }
 }

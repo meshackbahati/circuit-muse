@@ -47,9 +47,69 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ autoSave }) => {
   const { t } = useTranslation();
   const localize = useLocalizedHref();
 
-  // Desktop: no header — native menubar handles everything
+  // Desktop: only hide the header on the editor workspace pages,
+  // but keep it on secondary pages like /examples and /docs so users can navigate back.
   if (isDesktop) {
-    return null;
+    if (location.pathname === '/editor' || location.pathname === '/' || location.pathname === '/editor/') {
+      return null;
+    }
+    // Beautiful, native-looking minimalist desktop navigation header for examples and docs
+    const pageTitle = location.pathname.includes('/examples') ? 'Examples Gallery' : 'Documentation';
+    return (
+      <header className="desktop-app-header" style={{
+        height: '42px',
+        background: '#18181c',
+        borderBottom: '1px solid #2d2d34',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 16px',
+        flexShrink: 0,
+        userSelect: 'none',
+      }}>
+        <Link
+          to={localize('/')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: '#a0a0a5',
+            textDecoration: 'none',
+            fontSize: '13px',
+            fontWeight: 500,
+            transition: 'color 0.15s',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = '#a0a0a5')}
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+          <span>Back to Workspace</span>
+        </Link>
+        <span style={{
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          color: '#ffffff',
+          fontSize: '13px',
+          fontWeight: 600,
+          letterSpacing: '-0.1px',
+        }}>
+          {pageTitle}
+        </span>
+        {/* Placeholder spacer to center-align the page title perfectly */}
+        <div style={{ width: '130px' }} />
+      </header>
+    );
   }
 
   return (

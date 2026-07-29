@@ -3,6 +3,7 @@
  */
 
 import React, { useRef, useState, useCallback, useEffect, lazy, Suspense } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { startSimulation } from '../simulation/spice/start';
 import { useSEO } from '../utils/useSEO';
@@ -10,6 +11,7 @@ import { CodeEditor } from '../components/editor/CodeEditor';
 import { EditorToolbar } from '../components/editor/EditorToolbar';
 import { FileTabs } from '../components/editor/FileTabs';
 import { FileExplorer } from '../components/editor/FileExplorer';
+import { useLocalizedHref } from '../i18n/useLocalizedNavigate';
 
 const RaspberryPiWorkspace = lazy(() =>
   import('../components/raspberry-pi/RaspberryPiWorkspace').then((m) => ({
@@ -57,6 +59,9 @@ const resizeHandleStyle: React.CSSProperties = {
 
 export const EditorPage: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const localize = useLocalizedHref();
+
   useSEO({
     title: 'Multi-Board Simulator Editor — Arduino, ESP32, RP2040, RISC-V | CircuitMuse',
     description:
@@ -463,8 +468,8 @@ export const EditorPage: React.FC = () => {
                 {[
                   { label: 'Projects', action: () => { setShowProjects(true); setMenuOpen(false); } },
                   { label: 'Export', action: () => { setShowExport(true); setMenuOpen(false); } },
-                  { label: 'Examples', action: () => { window.location.href = '/examples'; setMenuOpen(false); } },
-                  { label: 'Docs', action: () => { window.location.href = '/docs'; setMenuOpen(false); } },
+                  { label: 'Examples', action: () => { navigate(localize('/examples')); setMenuOpen(false); } },
+                  { label: 'Docs', action: () => { navigate(localize('/docs')); setMenuOpen(false); } },
                   { label: 'Setup', action: () => { setShowSetup(true); setMenuOpen(false); } },
                   { label: 'GitHub', action: () => { window.open('https://github.com/meshackbahati/circuit-muse', '_blank'); setMenuOpen(false); } },
                 ].map((item) => (
@@ -682,6 +687,11 @@ export const EditorPage: React.FC = () => {
               flexShrink: 0,
               borderLeft: '1px solid #2c2c33',
               background: '#1e1e23',
+              height: '100%',
+              maxHeight: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
             }}
           >
             <AgentChatPanel />

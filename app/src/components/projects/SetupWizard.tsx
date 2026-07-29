@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { scanDependencies, type Dependency, autoInstallQemu } from '../../services/dependencyChecker';
+import { openExternal } from '../../desktop/tauriBridge';
 
 interface SetupWizardProps {
   onClose: () => void;
@@ -30,10 +31,15 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
     setInstalling(dep.id);
     setInstallProgress(0);
 
-    if (dep.id === 'qemu-esp32') {
-      await autoInstallQemu('esp32', (pct) => setInstallProgress(pct));
-    } else if (dep.id === 'qemu-stm32') {
-      await autoInstallQemu('stm32', (pct) => setInstallProgress(pct));
+    try {
+      if (dep.id === 'qemu-esp32') {
+        await autoInstallQemu('esp32', (pct) => setInstallProgress(pct));
+      } else if (dep.id === 'qemu-stm32') {
+        await autoInstallQemu('stm32', (pct) => setInstallProgress(pct));
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      alert(`Installation failed: ${msg}`);
     }
 
     // Re-scan
@@ -67,14 +73,25 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
                       {dep.notes && <div className="setup-dep-notes">{dep.notes}</div>}
                     </div>
                     {dep.installUrl && (
-                      <a
-                        className="setup-dep-link"
-                        href={dep.installUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        className="setup-dep-link-btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openExternal(dep.installUrl!);
+                        }}
+                        type="button"
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#007acc',
+                          cursor: 'pointer',
+                          fontSize: '12px',
+                          padding: 0,
+                          textDecoration: 'underline',
+                        }}
                       >
                         Install Guide
-                      </a>
+                      </button>
                     )}
                   </div>
                 ))}
@@ -109,14 +126,25 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
                       </div>
                     )}
                     {dep.installUrl && installing !== dep.id && (
-                      <a
-                        className="setup-dep-link"
-                        href={dep.installUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        className="setup-dep-link-btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openExternal(dep.installUrl!);
+                        }}
+                        type="button"
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#007acc',
+                          cursor: 'pointer',
+                          fontSize: '12px',
+                          padding: 0,
+                          textDecoration: 'underline',
+                        }}
                       >
                         Manual
-                      </a>
+                      </button>
                     )}
                   </div>
                 ))}
