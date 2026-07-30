@@ -4,6 +4,8 @@
  */
 
 import { isTauri, invoke } from '../desktop/tauriBridge';
+import { getApiBase } from '../lib/apiBase';
+import { getEngineUrl } from './engineConfig';
 
 export type DependencyStatus = 'installed' | 'missing' | 'partial' | 'unknown';
 
@@ -22,7 +24,7 @@ export interface Dependency {
 
 async function checkBackendCompileStatus(): Promise<{ arduinoCli: boolean; espIdf: boolean }> {
   try {
-    const resp = await fetch('/api/compile/setup-status');
+    const resp = await fetch(`${getApiBase()}/compile/setup-status`);
     if (!resp.ok) return { arduinoCli: false, espIdf: false };
     const data = await resp.json();
     return {
@@ -51,7 +53,7 @@ async function checkQemuStatus(arch: string): Promise<boolean> {
 
 async function checkChipCompileStatus(): Promise<boolean> {
   try {
-    const resp = await fetch('/api/compile-chip/status');
+    const resp = await fetch(`${getApiBase()}/compile-chip/status`);
     if (!resp.ok) return false;
     const data = await resp.json();
     return data.available ?? false;
@@ -68,7 +70,8 @@ export async function scanDependencies(): Promise<Dependency[]> {
   // Backend connectivity
   let backendOnline = false;
   try {
-    const resp = await fetch('/health');
+    const healthUrl = isTauri() ? `${getEngineUrl()}/health` : '/health';
+    const resp = await fetch(healthUrl);
     backendOnline = resp.ok;
   } catch { /* */ }
 

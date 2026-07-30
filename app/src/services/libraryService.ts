@@ -84,7 +84,7 @@ export async function getInstalledLibraries(): Promise<InstalledLibrary[]> {
  */
 export async function getCustomLibraries(): Promise<InstalledLibrary[]> {
   try {
-    const res = await fetch('/api/pro/libraries/custom', { credentials: 'include' });
+    const res = await fetch(`${getApiBase()}/pro/libraries/custom`, { credentials: 'include' });
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
@@ -98,7 +98,7 @@ export async function deleteCustomLibrary(
   name: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const res = await fetch(`/api/pro/libraries/custom/${encodeURIComponent(name)}`, {
+    const res = await fetch(`${getApiBase()}/pro/libraries/custom/${encodeURIComponent(name)}`, {
       method: 'DELETE',
       credentials: 'include',
     });

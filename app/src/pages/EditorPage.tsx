@@ -713,19 +713,22 @@ export const EditorPage: React.FC = () => {
             </>
           )}
         </div>
-        {/* ── Agent panel: pushes workspace ── */}
+        {/* ── Agent panel: absolute overlay ── */}
         {agentPanelOpen && (
           <div
             style={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              bottom: 0,
               width: agentPanelWidth,
-              flexShrink: 0,
               borderLeft: '1px solid #2c2c33',
               background: '#1e1e23',
-              height: '100%',
-              maxHeight: '100%',
+              zIndex: 1000,
               display: 'flex',
               flexDirection: 'column',
               overflow: 'hidden',
+              boxShadow: '-4px 0 16px rgba(0,0,0,0.3)',
             }}
           >
             <AgentChatPanel />

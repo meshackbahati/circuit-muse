@@ -80,11 +80,42 @@ class ArduinoCLIService:
         search_paths = []
 
         if sys.platform == "win32":
+            import winreg
+            registry_paths = []
+            try:
+                # Read User PATH
+                with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment") as key:
+                    user_path, _ = winreg.QueryValueEx(key, "Path")
+                    registry_paths.extend(user_path.split(";"))
+            except Exception:
+                pass
+            try:
+                # Read System PATH
+                with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SYSTEM\CurrentControlSet\Control\Session Manager\Environment") as key:
+                    system_path, _ = winreg.QueryValueEx(key, "Path")
+                    registry_paths.extend(system_path.split(";"))
+            except Exception:
+                pass
+
+            # Expand environment variables in registry paths
+            expanded_paths = []
+            for p in registry_paths:
+                if p.strip():
+                    expanded_paths.append(os.path.expandvars(p.strip()))
+
             search_paths = [
                 os.path.join(os.path.dirname(sys.executable), "arduino-cli.exe"),
                 os.path.join(os.path.dirname(sys.executable), "..", "bin", "arduino-cli.exe"),
                 os.path.join(os.environ.get("LOCALAPPDATA", ""), "CircuitMuse", "arduino-cli.exe"),
+                os.path.join(os.environ.get("USERPROFILE", ""), ".arduino15", "arduino-cli.exe"),
+                os.path.join(os.environ.get("USERPROFILE", ""), ".arduino15", "bin", "arduino-cli.exe"),
+                os.path.join(os.environ.get("LOCALAPPDATA", ""), "ArduinoSA", "CLI", "arduino-cli.exe"),
+                os.path.join(os.environ.get("LOCALAPPDATA", ""), "Microsoft", "WinGet", "Links", "arduino-cli.exe"),
             ]
+
+            # Add candidates from registry PATH
+            for p in expanded_paths:
+                search_paths.append(os.path.join(p, "arduino-cli.exe"))
         elif sys.platform == "darwin":
             search_paths = [
                 os.path.join(os.path.expanduser("~"), "Library", "Application Support", "CircuitMuse", "arduino-cli"),
@@ -425,7 +456,8 @@ class ArduinoCLIService:
                 build_cache_dir = Path(tempfile.gettempdir()) / "circuit-muse-build-cache"
                 build_cache_dir.mkdir(parents=True, exist_ok=True)
 
-                cmd = [self.cli_path, "compile", "--fqbn", board_fqbn]
+                cli_path_posix = Path(self.cli_path).as_posix()
+                cmd = [cli_path_posix, "compile", "--fqbn", board_fqbn]
                 if self._is_esp32_board(board_fqbn):
                     # FlashMode=dio: required by esp32-picsimlab QEMU machine
                     # IRAM_ATTR on all interrupt handlers prevents cache crashes
@@ -436,21 +468,21 @@ class ArduinoCLIService:
                     cmd[2] = '--fqbn'
                     cmd.insert(3, fqbn_dio)
                     cmd = cmd[:4]  # trim accidental duplicates
-                    cmd = [self.cli_path, "compile", "--fqbn", fqbn_dio,
-                           "--build-cache-path", str(build_cache_dir),
+                    cmd = [cli_path_posix, "compile", "--fqbn", fqbn_dio,
+                           "--build-cache-path", build_cache_dir.as_posix(),
                            "--build-property",
                            "build.extra_flags=-DARDUINO_ESP32_LCGAMBOA=1",
                            # Adafruit_BusIO 1.17.x dropped BitOrder on ESP32 3.x;
                            # this define restores it as uint8_t (the type it was).
                            "--build-property",
                            "compiler.cpp.extra_flags=-DBitOrder=uint8_t",
-                           "--output-dir", str(build_dir),
-                           str(sketch_dir)]
+                           "--output-dir", build_dir.as_posix(),
+                           sketch_dir.as_posix()]
                 else:
-                    cmd = [self.cli_path, "compile", "--fqbn", board_fqbn,
-                           "--build-cache-path", str(build_cache_dir),
-                           "--output-dir", str(build_dir),
-                           str(sketch_dir)]
+                    cmd = [cli_path_posix, "compile", "--fqbn", board_fqbn,
+                           "--build-cache-path", build_cache_dir.as_posix(),
+                           "--output-dir", build_dir.as_posix(),
+                           sketch_dir.as_posix()]
                 print(f"Running command: {' '.join(cmd)}")
 
                 # Use subprocess.run in a thread for Windows compatibility with a 120-second safety timeout

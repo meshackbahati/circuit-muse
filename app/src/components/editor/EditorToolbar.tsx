@@ -22,6 +22,7 @@ import { clearChipDrives } from '../../simulation/customChips/chipPinDrives';
 import { requestElectricalResolve } from '../../simulation/spice/electricalResolveHook';
 import { reportRunEvent } from '../../services/metricsService';
 import { useProjectStore } from '../../store/useProjectStore';
+import { getApiBase } from '../../lib/apiBase';
 import { LibraryManagerModal } from '../simulator/LibraryManagerModal';
 import { InstallLibrariesModal } from '../simulator/InstallLibrariesModal';
 import { parseCompileResult } from '../../utils/compilationLogger';
@@ -1122,7 +1123,7 @@ export const EditorToolbar = ({
     }
     setMessage({ type: 'info', text: 'Rendering screenshot — may take 5-10 seconds…' });
     try {
-      const resp = await fetch(`/api/pro/projects/${projectId}/screenshot.png`, {
+      const resp = await fetch(`${getApiBase()}/pro/projects/${projectId}/screenshot.png`, {
         credentials: 'include',
       });
       if (resp.status === 402) {
@@ -1174,7 +1175,7 @@ export const EditorToolbar = ({
       return;
     }
     try {
-      const resp = await fetch(`/api/pro/projects/${projectId}/bom.csv`, {
+      const resp = await fetch(`${getApiBase()}/pro/projects/${projectId}/bom.csv`, {
         credentials: 'include',
       });
       if (resp.status === 402) {
