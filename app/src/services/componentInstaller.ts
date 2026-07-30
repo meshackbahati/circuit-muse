@@ -4,6 +4,7 @@
  */
 
 import { isTauri, invoke, listen } from '../desktop/tauriBridge';
+import { getApiBase } from '../lib/apiBase';
 
 export type InstallStatus = 'idle' | 'checking' | 'downloading' | 'installing' | 'done' | 'error';
 
@@ -83,7 +84,7 @@ export async function installArduinoCore(
   onProgress?.({ phase: 'installing', message: `Installing ${coreFqbn}...` });
 
   try {
-    const response = await fetch('/api/compile/ensure-core', {
+    const response = await fetch(`${getApiBase()}/compile/ensure-core`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ core_fqbn: coreFqbn }),
@@ -113,7 +114,7 @@ export async function installLibrary(
   onProgress?.({ phase: 'installing', message: `Installing library ${name}...` });
 
   try {
-    const response = await fetch('/api/libraries/install', {
+    const response = await fetch(`${getApiBase()}/libraries/install`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, version }),

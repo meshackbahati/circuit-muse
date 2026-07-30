@@ -12,6 +12,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocalizedHref } from '../../i18n/useLocalizedNavigate';
+import { getApiBase } from '../../lib/apiBase';
 
 type FeaturedProject = {
   id: string;
@@ -43,7 +44,7 @@ export const CommunityProjectsGrid = () => {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('/api/projects/featured?limit=12', { credentials: 'include' })
+    fetch(`${getApiBase()}/projects/featured?limit=12`, { credentials: 'include' })
       .then(async (r) => {
         if (!r.ok) throw new Error(`status ${r.status}`);
         return (await r.json()) as FeaturedProject[];

@@ -39,15 +39,43 @@ pub fn run() {
         .expect("error while running tauri application");
 }
 
+fn get_target_triple() -> &'static str {
+    #[cfg(all(target_os = "windows", target_arch = "x86_64"))]
+    { "x86_64-pc-windows-msvc" }
+    #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+    { "x86_64-unknown-linux-gnu" }
+    #[cfg(all(target_os = "linux", target_arch = "aarch64"))]
+    { "aarch64-unknown-linux-gnu" }
+    #[cfg(all(target_os = "macos", target_arch = "x86_64"))]
+    { "x86_64-apple-darwin" }
+    #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+    { "aarch64-apple-darwin" }
+    #[cfg(not(any(
+        all(target_os = "windows", target_arch = "x86_64"),
+        all(target_os = "linux", target_arch = "x86_64"),
+        all(target_os = "linux", target_arch = "aarch64"),
+        all(target_os = "macos", target_arch = "x86_64"),
+        all(target_os = "macos", target_arch = "aarch64")
+    )))]
+    { "unknown" }
+}
+
 fn resolve_sidecar_path(_app: &tauri::AppHandle, name: &str) -> Option<String> {
     // Tauri bundles sidecar binaries in the same directory as the main executable.
     // On Linux/macOS they sit next to the binary; on Windows they're in the same dir.
     let exe_dir = std::env::current_exe().ok()?.parent()?.to_path_buf();
+    let triple = get_target_triple();
 
     let candidates = if cfg!(target_os = "windows") {
-        vec![exe_dir.join(format!("{}.exe", name))]
+        vec![
+            exe_dir.join(format!("{}-{}.exe", name, triple)),
+            exe_dir.join(format!("{}.exe", name)),
+        ]
     } else {
-        vec![exe_dir.join(name)]
+        vec![
+            exe_dir.join(format!("{}-{}", name, triple)),
+            exe_dir.join(name),
+        ]
     };
 
     for path in candidates {
