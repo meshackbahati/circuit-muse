@@ -26,6 +26,9 @@ export function getApiBase(): string {
       return w.__CIRCUIT_MUSE_API_BASE__.replace(/\/+$/, '');
     }
   }
+  if (import.meta.env.DEV) {
+    return '/api';
+  }
   if (isTauri()) {
     return `${getEngineUrl()}/api`;
   }
