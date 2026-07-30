@@ -37,6 +37,9 @@
       "binaries/circuit-muse-engine",
       "binaries/arduino-cli"
     ],
+    "resources": [
+      "../engine/**/*"
+    ],
     "linux": {
       "appimage": {
         "bundleMediaFramework": true

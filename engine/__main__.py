@@ -3,8 +3,38 @@ CircuitMuse Engine entry point.
 Auto-finds an available port and starts the server.
 """
 
+import os
 import socket
 import sys
+import subprocess
+
+try:
+    import fastapi
+    import uvicorn
+    import websockets
+    import pydantic
+    import httpx
+    import mcp
+    import esptool
+    import wasmtime
+    import zstandard
+except ImportError:
+    print("[CircuitMuse Engine] Missing dependencies. Installing via pip...", flush=True)
+    try:
+        req_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "requirements.txt")
+        if os.path.exists(req_path):
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "-r", req_path],
+                check=True
+            )
+        else:
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "fastapi", "uvicorn[standard]", "websockets", "pydantic", "pydantic-settings", "httpx", "mcp", "esptool", "wasmtime", "zstandard"],
+                check=True
+            )
+    except Exception as e:
+        print(f"[CircuitMuse Engine] Failed to install dependencies: {e}", flush=True)
+
 import uvicorn
 
 
