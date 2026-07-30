@@ -1,4 +1,5 @@
 import type { ToolCall } from './types';
+import { getApiBase } from '../lib/apiBase';
 
 export async function executeToolCall(toolCall: ToolCall): Promise<string> {
   const { name, arguments: argsStr } = toolCall.function;
@@ -58,7 +59,7 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
       if (!board) return JSON.stringify({ error: 'Board not found' });
       const editor = useEditorStore.getState();
       const files = editor.files.map(f => ({ name: f.name, content: f.content }));
-      const response = await fetch('/api/compile/', {
+      const response = await fetch(`${getApiBase()}/compile/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ files, board_fqbn: board.boardKind }),

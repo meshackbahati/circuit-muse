@@ -16,12 +16,21 @@
  * window var late (e.g. on a sidecar restart). The lookup is cheap.
  */
 
+import { isTauri } from '../desktop/tauriBridge';
+import { getEngineUrl } from '../services/engineConfig';
+
 export function getApiBase(): string {
   if (typeof window !== 'undefined') {
     const w = window as { __CIRCUIT_MUSE_API_BASE__?: string };
     if (typeof w.__CIRCUIT_MUSE_API_BASE__ === 'string' && w.__CIRCUIT_MUSE_API_BASE__) {
       return w.__CIRCUIT_MUSE_API_BASE__.replace(/\/+$/, '');
     }
+  }
+  if (import.meta.env.DEV) {
+    return '/api';
+  }
+  if (isTauri()) {
+    return `${getEngineUrl()}/api`;
   }
   const fromEnv = import.meta.env.VITE_API_BASE;
   if (typeof fromEnv === 'string' && fromEnv) {

@@ -76,17 +76,94 @@ pub async fn esp32_qemu_install(app: AppHandle, window: tauri::Window) -> Result
     let window_clone = window.clone();
 
     tokio::task::spawn_blocking(move || {
-        let resp = reqwest::blocking::get(&url).map_err(|e| format!("Download failed: {}", e))?;
-        let bytes = resp.bytes().map_err(|e| format!("Read failed: {}", e))?;
-        let tarball = dir_clone.join("download.tar.xz");
-        std::fs::write(&tarball, &bytes).map_err(|e| format!("Write failed: {}", e))?;
+        use std::io::{Read, Write};
 
-        // Extract - try tar first, fall back to 7z on Windows
+        // Emit starting phase
+        let _ = window_clone.emit(&event_clone, serde_json::json!({
+            "phase": "starting",
+            "progress": 0
+        }));
+
+        // Configure client with User-Agent
+        let client = reqwest::blocking::Client::builder()
+            .user_agent("CircuitMuse/1.0")
+            .build()
+            .map_err(|e| format!("Client creation failed: {}", e))?;
+
+        let mut resp = client.get(&url)
+            .send()
+            .map_err(|e| format!("Download failed: {}", e))?;
+
+        if !resp.status().is_success() {
+            return Err(format!("Download failed with status: {}", resp.status()));
+        }
+
+        let total_size = resp.content_length().unwrap_or(0);
+        let tarball = dir_clone.join("download.tar.xz");
+        let mut file = std::fs::File::create(&tarball).map_err(|e| format!("File creation failed: {}", e))?;
+
+        let mut downloaded = 0;
+        let mut last_emit = std::time::Instant::now();
+        let mut buffer = [0; 16384];
+
+        while let Ok(len) = resp.read(&mut buffer) {
+            if len == 0 {
+                break;
+            }
+            file.write_all(&buffer[..len]).map_err(|e| format!("Write failed: {}", e))?;
+            downloaded += len;
+
+            if last_emit.elapsed().as_millis() > 100 {
+                let pct = if total_size > 0 {
+                    (downloaded as f64 / total_size as f64 * 100.0) as u32
+                } else {
+                    0
+                };
+                let _ = window_clone.emit(&event_clone, serde_json::json!({
+                    "phase": "downloading",
+                    "progress": pct,
+                    "bytes_downloaded": downloaded,
+                    "total_bytes": total_size
+                }));
+                last_emit = std::time::Instant::now();
+            }
+        }
+
+        // Emit final downloading progress
+        let _ = window_clone.emit(&event_clone, serde_json::json!({
+            "phase": "downloading",
+            "progress": 100,
+            "bytes_downloaded": downloaded,
+            "total_bytes": total_size
+        }));
+
+        // Emit extracting phase
+        let _ = window_clone.emit(&event_clone, serde_json::json!({
+            "phase": "extracting",
+            "progress": 100,
+            "bytes_downloaded": downloaded,
+            "total_bytes": total_size
+        }));
+
+        // Extract - try tar first, then try System32 tar on Windows, then fall back to 7z
         let tarball_str = tarball.to_string_lossy().to_string();
         let dir_str = dir_clone.to_string_lossy().to_string();
-        let status = std::process::Command::new("tar")
-            .args(["xf", &tarball_str, "-C", &dir_str, "--strip-components=1"])
-            .status()
+
+        let mut cmd = std::process::Command::new("tar");
+        cmd.args(["xf", &tarball_str, "-C", &dir_str, "--strip-components=1"]);
+
+        let status = cmd.status()
+            .or_else(|_| {
+                if cfg!(target_os = "windows") {
+                    let system32_tar = std::path::PathBuf::from(r"C:\Windows\System32\tar.exe");
+                    if system32_tar.exists() {
+                        return std::process::Command::new(system32_tar)
+                            .args(["xf", &tarball_str, "-C", &dir_str, "--strip-components=1"])
+                            .status();
+                    }
+                }
+                Err(std::io::Error::new(std::io::ErrorKind::NotFound, "tar not found"))
+            })
             .or_else(|_| {
                 let out_arg = format!("-o{}", dir_str);
                 std::process::Command::new("7z")
@@ -101,7 +178,10 @@ pub async fn esp32_qemu_install(app: AppHandle, window: tauri::Window) -> Result
             return Err("Extraction failed".to_string());
         }
 
-        let _ = window_clone.emit(&event_clone, serde_json::json!({"phase": "done"}));
+        let _ = window_clone.emit(&event_clone, serde_json::json!({
+            "phase": "done",
+            "progress": 100
+        }));
         Ok(())
     })
     .await
