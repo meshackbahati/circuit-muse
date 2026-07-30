@@ -197,7 +197,7 @@ jobs:
 
       - name: Download arduino-cli
         run: |
-          mkdir -p src-tauri/binaries
+          New-Item -ItemType Directory -Force src-tauri/binaries
           curl -sL "https://github.com/arduino/arduino-cli/releases/download/v1.5.1/arduino-cli_1.5.1_Windows_64bit.zip" -o arduino-cli.zip
           7z x arduino-cli.zip -osrc-tauri/binaries/
           ren src-tauri\binaries\arduino-cli.exe arduino-cli-x86_64-pc-windows-msvc.exe
