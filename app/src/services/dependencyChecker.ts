@@ -70,7 +70,7 @@ export async function scanDependencies(): Promise<Dependency[]> {
   // Backend connectivity
   let backendOnline = false;
   try {
-    const healthUrl = (isTauri() && !import.meta.env.DEV) ? `${getEngineUrl()}/health` : '/health';
+    const healthUrl = isTauri() ? `${getEngineUrl()}/health` : '/health';
     const resp = await fetch(healthUrl);
     backendOnline = resp.ok;
   } catch { /* */ }

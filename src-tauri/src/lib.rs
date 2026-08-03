@@ -115,23 +115,46 @@ fn spawn_python_fallback(app: &tauri::AppHandle, engine_dir: &std::path::Path, a
 
     let engine_dir_str = engine_dir.to_string_lossy().to_string();
 
-    // Try python3 first, then python
-    let mut child = Command::new("python3")
-        .arg(&engine_dir_str)
-        .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .spawn()
-        .or_else(|_| {
-            Command::new("python")
-                .arg(&engine_dir_str)
-                .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
-                .stdout(Stdio::piped())
-                .stderr(Stdio::piped())
-                .spawn()
-        })
-        .ok()?;
+    // Look for virtual environment python executable
+    let venv_python = if cfg!(target_os = "windows") {
+        engine_dir.join("venv").join("Scripts").join("python.exe")
+    } else {
+        engine_dir.join("venv").join("bin").join("python")
+    };
 
+    let mut child = if venv_python.exists() {
+        eprintln!("[engine] Spawning fallback using virtualenv python: {}", venv_python.display());
+        Command::new(venv_python)
+            .arg(&engine_dir_str)
+            .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .ok()
+    } else {
+        None
+    };
+
+    // Try system python3, then system python if virtualenv wasn't found or failed to spawn
+    if child.is_none() {
+        child = Command::new("python3")
+            .arg(&engine_dir_str)
+            .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .or_else(|_| {
+                Command::new("python")
+                    .arg(&engine_dir_str)
+                    .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
+                    .stdout(Stdio::piped())
+                    .stderr(Stdio::piped())
+                    .spawn()
+            })
+            .ok();
+    }
+
+    let mut child = child?;
     let stdout = child.stdout.take()?;
     let stderr = child.stderr.take()?;
     let app_clone = app.clone();
