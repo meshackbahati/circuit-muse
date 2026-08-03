@@ -9,7 +9,8 @@ import { Stm32QemuPrompt } from './Stm32QemuPrompt';
 import { UpdateAvailableToast } from './UpdateAvailableToast';
 import { installDesktopMenuListener } from './menu';
 import { dlog } from './log';
-import { detectEnginePort } from '../services/engineConfig';
+import { listen } from './tauriBridge';
+import { detectEnginePort, setEnginePort } from '../services/engineConfig';
 import './desktop.css';
 
 let mounted = false;
@@ -79,6 +80,22 @@ export const mountDesktop = (): void => {
   if (mounted) return;
   mounted = true;
   dlog('mountDesktop - Tauri shell active');
+
+  // Listen for engine-ready event from Rust backend
+  void listen<number>('engine-ready', (event) => {
+    const port = event.payload;
+    dlog(`Received engine-ready event with port: ${port}`);
+    setEnginePort(port);
+    const bar = document.getElementById('cm-engine-status');
+    if (bar) {
+      bar.innerHTML = '<span style="color:#22c55e;">&#9679;</span> Engine ready on port ' + port;
+      setTimeout(() => {
+        bar.style.transition = 'opacity 0.5s';
+        bar.style.opacity = '0';
+        setTimeout(() => bar.remove(), 500);
+      }, 2000);
+    }
+  });
 
   void installDesktopMenuListener();
   mountSidePanels();
