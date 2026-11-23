@@ -21,9 +21,17 @@ jobs:
         working-directory: app
         run: npm install
 
+      - name: Lint
+        working-directory: app
+        run: npm run lint
+
+      - name: Run app tests
+        working-directory: app
+        run: npm test
+
       - name: Build frontend
         working-directory: app
-        run: npx vite build
+        run: npm run build -- --mode desktop
 
   test-engine:
     name: Test Engine
@@ -37,7 +45,11 @@ jobs:
 
       - name: Install dependencies
         working-directory: engine
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt pytest
+
+      - name: Run engine tests
+        working-directory: engine
+        run: python -m pytest tests/
 
       - name: Start engine and health check
         run: |

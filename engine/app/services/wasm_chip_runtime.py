@@ -160,7 +160,7 @@ class WasmChipRuntime:
         # Build the linker
         linker = wasmtime.Linker(self._engine)
         self._define_wasi(linker)
-        self._define_circuit-muse(linker)
+        self._define_circuit_muse(linker)
         linker.define(self._store, "env", "memory", self._memory)
 
         self._instance = linker.instantiate(self._store, self._module)
@@ -340,7 +340,7 @@ class WasmChipRuntime:
 
     # ── CircuitMuse host imports ──────────────────────────────────────────────────
 
-    def _define_circuit-muse(self, linker: wasmtime.Linker) -> None:
+    def _define_circuit_muse(self, linker: wasmtime.Linker) -> None:
         i32 = wasmtime.ValType.i32()
         i64 = wasmtime.ValType.i64()
         f64 = wasmtime.ValType.f64()

@@ -4,17 +4,6 @@ use tauri::Emitter;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    // Force software rendering on Linux — prevents EGL_BAD_PARAMETER white screen
-    // on systems without proper GPU drivers or Wayland compositor issues.
-    // Must be set BEFORE Tauri creates the webview.
-    #[cfg(target_os = "linux")]
-    {
-        std::env::set_var("GDK_BACKEND", "x11");
-        std::env::set_var("WEBKIT_DISABLE_COMPOSITING_MODE", "1");
-        std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
-        std::env::set_var("LIBGL_ALWAYS_SOFTWARE", "1");
-    }
-
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
@@ -109,7 +98,35 @@ fn find_engine_dir(app: &tauri::AppHandle) -> Option<std::path::PathBuf> {
     None
 }
 
-fn spawn_python_fallback(app: &tauri::AppHandle, engine_dir: &std::path::Path, arduino_cli_path: &Option<String>) -> Option<()> {
+fn qemu_binary_path(app: &tauri::AppHandle, arch: &str) -> Option<String> {
+    use tauri::Manager;
+    let name = match arch {
+        "esp32" => "qemu-system-xtensa",
+        "riscv32" => "qemu-system-riscv32",
+        _ => return None,
+    };
+    let name = if cfg!(target_os = "windows") {
+        format!("{name}.exe")
+    } else {
+        name.to_string()
+    };
+    let path = app
+        .path()
+        .app_data_dir()
+        .ok()?
+        .join("qemu")
+        .join("esp32")
+        .join("bin")
+        .join(name);
+    Some(path.to_string_lossy().to_string())
+}
+
+fn spawn_python_fallback(
+    app: &tauri::AppHandle,
+    engine_dir: &std::path::Path,
+    arduino_cli_path: &Option<String>,
+    qemu_xtensa_path: &Option<String>,
+) -> Option<()> {
     use std::io::{BufRead, BufReader};
     use std::process::{Command, Stdio};
 
@@ -127,6 +144,7 @@ fn spawn_python_fallback(app: &tauri::AppHandle, engine_dir: &std::path::Path, a
         Command::new(venv_python)
             .arg(&engine_dir_str)
             .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
+            .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
@@ -140,6 +158,7 @@ fn spawn_python_fallback(app: &tauri::AppHandle, engine_dir: &std::path::Path, a
         child = Command::new("python3")
             .arg(&engine_dir_str)
             .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
+            .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
@@ -147,6 +166,7 @@ fn spawn_python_fallback(app: &tauri::AppHandle, engine_dir: &std::path::Path, a
                 Command::new("python")
                     .arg(&engine_dir_str)
                     .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
+                    .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
                     .stdout(Stdio::piped())
                     .stderr(Stdio::piped())
                     .spawn()
@@ -203,12 +223,22 @@ async fn start_engine(app: &tauri::AppHandle) {
     if let Some(ref p) = arduino_cli_path {
         eprintln!("[engine] arduino-cli sidecar: {}", p);
     }
+    let qemu_xtensa_path = qemu_binary_path(app, "esp32");
+    let qemu_riscv_path = qemu_binary_path(app, "riscv32");
 
     match app.shell().sidecar("circuit-muse-engine") {
         Ok(command) => {
             let mut command = command;
             if let Some(ref cli_path) = arduino_cli_path {
                 command = command.env("ARDUINO_CLI_PATH", cli_path);
+            }
+            if let Some(ref path) = qemu_xtensa_path {
+                command = command.env("QEMU_ESP32_BINARY", path);
+            }
+            if let Some(ref path) = qemu_riscv_path {
+                if std::path::Path::new(path).exists() {
+                    command = command.env("QEMU_RISCV32_BINARY", path);
+                }
             }
             match command.spawn() {
                 Ok((mut rx, _child)) => {
@@ -240,7 +270,7 @@ async fn start_engine(app: &tauri::AppHandle) {
                 Err(err) => {
                     eprintln!("[engine] Failed to spawn engine sidecar: {}. Trying Python fallback...", err);
                     if let Some(engine_dir) = find_engine_dir(app) {
-                        if spawn_python_fallback(app, &engine_dir, &arduino_cli_path).is_some() {
+                        if spawn_python_fallback(app, &engine_dir, &arduino_cli_path, &qemu_xtensa_path).is_some() {
                             eprintln!("[engine] Python fallback started successfully from {}", engine_dir.display());
                             return;
                         }
@@ -252,7 +282,7 @@ async fn start_engine(app: &tauri::AppHandle) {
         Err(e) => {
             eprintln!("[engine] sidecar not found: {}. Trying Python fallback...", e);
             if let Some(engine_dir) = find_engine_dir(app) {
-                if spawn_python_fallback(app, &engine_dir, &arduino_cli_path).is_some() {
+                if spawn_python_fallback(app, &engine_dir, &arduino_cli_path, &qemu_xtensa_path).is_some() {
                     eprintln!("[engine] Python fallback started successfully from {}", engine_dir.display());
                     return;
                 }

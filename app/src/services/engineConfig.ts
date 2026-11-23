@@ -38,20 +38,25 @@ export function setEnginePort(port: number): void {
  * Try to find the engine by scanning ports.
  */
 export async function detectEnginePort(): Promise<number | null> {
-  for (let port = DEFAULT_PORT; port <= MAX_PORT; port++) {
-    try {
-      const resp = await fetch(`http://127.0.0.1:${port}/health`, {
-        signal: AbortSignal.timeout(500),
-      });
-      if (resp.ok) {
-        setEnginePort(port);
-        return port;
+  const ports = Array.from(
+    { length: MAX_PORT - DEFAULT_PORT + 1 },
+    (_, index) => DEFAULT_PORT + index,
+  );
+  const results = await Promise.all(
+    ports.map(async (port) => {
+      try {
+        const resp = await fetch(`http://127.0.0.1:${port}/health`, {
+          signal: AbortSignal.timeout(750),
+        });
+        return resp.ok ? port : null;
+      } catch {
+        return null;
       }
-    } catch {
-      // port not responding, try next
-    }
-  }
-  return null;
+    }),
+  );
+  const port = results.find((result): result is number => result !== null);
+  if (port !== undefined) setEnginePort(port);
+  return port ?? null;
 }
 
 /**

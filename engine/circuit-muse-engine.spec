@@ -4,14 +4,17 @@
 block_cipher = None
 
 a = Analysis(
-    ['app/main.py'],
-    pathex=[],
+    ['__main__.py'],
+    pathex=['.'],
     binaries=[],
     datas=[
         ('app/services/esp-idf-template', 'app/services/esp-idf-template'),
         ('app/mcp', 'app/mcp'),
     ],
     hiddenimports=[
+        'app.main',
+        'multipart',
+        'multipart.multipart',
         'uvicorn',
         'uvicorn.logging',
         'uvicorn.loops',
@@ -46,26 +49,16 @@ a = Analysis(
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
-exe = EXE(
+EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.datas,
     [],
-    exclude_binaries=True,
     name='circuit-muse-engine',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    upx=False,
     console=True,
-)
-
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='circuit-muse-engine',
 )

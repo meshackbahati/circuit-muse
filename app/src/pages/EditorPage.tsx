@@ -110,10 +110,14 @@ export const EditorPage: React.FC = () => {
   const currentProjectName = useProjectStore((s) => s.currentProject?.slug ?? 'untitled');
   useLocalAutoSave(currentProjectId, currentProjectName);
 
-  // Show setup wizard on every launch unless user used "Don't show again"
+  // Show setup once on first launch. Users can reopen it from the menu.
   useEffect(() => {
-    if (!localStorage.getItem('circuit-muse_setup_skipped')) {
+    if (
+      !localStorage.getItem('circuit-muse_setup_seen') &&
+      !localStorage.getItem('circuit-muse_setup_skipped')
+    ) {
       setShowSetup(true);
+      localStorage.setItem('circuit-muse_setup_seen', '1');
     }
   }, []);
 

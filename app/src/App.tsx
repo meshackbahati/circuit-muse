@@ -1,4 +1,4 @@
-import { useEffect, type ReactElement, lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { EditorPage } from './pages/EditorPage';
 import { ExamplesPage } from './pages/ExamplesPage';
@@ -7,7 +7,9 @@ import { ExampleEditorPage } from './pages/ExampleEditorPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './App.css';
 
-const DocsPage = lazy(() => import('./pages/DocsPage'));
+const DocsPage = lazy(() =>
+  import('./pages/DocsPage').then((module) => ({ default: module.DocsPage })),
+);
 
 function App() {
   return (

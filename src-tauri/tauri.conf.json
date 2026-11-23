@@ -1,9 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/dev/crates/tauri-config-schema/schema.json",
   "productName": "CircuitMuse",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "identifier": "dev.circuit-muse",
   "build": {
+    "beforeDevCommand": "npm --prefix ../app run dev -- --mode desktop --host 127.0.0.1",
+    "beforeBuildCommand": "npm --prefix ../app run build -- --mode desktop",
     "frontendDist": "../app/dist",
     "devUrl": "http://localhost:5173"
   },
@@ -43,6 +45,11 @@
     "linux": {
       "appimage": {
         "bundleMediaFramework": true
+      }
+    },
+    "windows": {
+      "webviewInstallMode": {
+        "type": "offlineInstaller"
       }
     },
     "targets": "all"

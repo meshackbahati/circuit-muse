@@ -1,51 +1,40 @@
-#!/bin/bash
-# Build the Python engine as a standalone executable using PyInstaller
-# This bundles the engine so users don't need Python installed
+#!/usr/bin/env bash
+# Build the FastAPI runner as the platform sidecar expected by Tauri.
+set -euo pipefail
 
-set -e
-
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
 ENGINE_DIR="$PROJECT_ROOT/engine"
 BINARIES_DIR="$PROJECT_ROOT/src-tauri/binaries"
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+case "$OS/$ARCH" in
+  Linux/x86_64) TRIPLE=x86_64-unknown-linux-gnu ;;
+  Linux/aarch64|Linux/arm64) TRIPLE=aarch64-unknown-linux-gnu ;;
+  Darwin/x86_64) TRIPLE=x86_64-apple-darwin ;;
+  Darwin/arm64) TRIPLE=aarch64-apple-darwin ;;
+  MINGW*/x86_64|MSYS*/x86_64) TRIPLE=x86_64-pc-windows-msvc; WINDOWS=true ;;
+  *) echo "Unsupported build host: $OS/$ARCH" >&2; exit 1 ;;
+esac
 
-echo "=== Building CircuitMuse Engine ==="
-
-# Check if Python is available
-if ! command -v python3 &> /dev/null; then
-    echo "Error: Python 3 is required to build the engine"
-    exit 1
-fi
-
-# Create virtual environment if it doesn't exist
-if [ ! -d "$ENGINE_DIR/venv-build" ]; then
-    echo "Creating build virtual environment..."
-    cd "$ENGINE_DIR"
-    python3 -m venv venv-build
-    source venv-build/bin/activate
-    pip install -r requirements.txt
-    pip install pyinstaller
+if [[ "${WINDOWS:-false}" == true ]]; then
+  VENV_PYTHON="$ENGINE_DIR/venv-build/Scripts/python.exe"
+  SIDECAR="$BINARIES_DIR/circuit-muse-engine-$TRIPLE.exe"
 else
-    cd "$ENGINE_DIR"
-    source venv-build/bin/activate
+  VENV_PYTHON="$ENGINE_DIR/venv-build/bin/python"
+  SIDECAR="$BINARIES_DIR/circuit-muse-engine-$TRIPLE"
 fi
-
-echo "Building with PyInstaller..."
-pyinstaller --clean --noconfirm circuit-muse-engine.spec
-
-# Copy the built executable to binaries directory
+if [[ ! -x "$VENV_PYTHON" ]]; then
+  if [[ "${WINDOWS:-false}" == true ]]; then
+    python -m venv "$ENGINE_DIR/venv-build"
+  else
+    python3 -m venv "$ENGINE_DIR/venv-build"
+  fi
+fi
+"$VENV_PYTHON" -m pip install -r "$ENGINE_DIR/requirements.txt" pyinstaller
+cd "$ENGINE_DIR"
+"$VENV_PYTHON" -m PyInstaller --clean --noconfirm circuit-muse-engine.spec
 mkdir -p "$BINARIES_DIR"
-
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    cp dist/circuit-muse-engine/circuit-muse-engine "$BINARIES_DIR/circuit-muse-engine"
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    cp dist/circuit-muse-engine/circuit-muse-engine "$BINARIES_DIR/circuit-muse-engine"
-elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
-    cp dist/circuit-muse-engine/circuit-muse-engine.exe "$BINARIES_DIR/circuit-muse-engine.exe"
-fi
-
-chmod +x "$BINARIES_DIR/circuit-muse-engine" 2>/dev/null || true
-
-echo ""
-echo "=== Engine built successfully ==="
-ls -la "$BINARIES_DIR/circuit-muse-engine"*
+cp "$ENGINE_DIR/dist/circuit-muse-engine${WINDOWS:+.exe}" "$SIDECAR"
+if [[ "${WINDOWS:-false}" != true ]]; then chmod 755 "$SIDECAR"; fi
+echo "Built Tauri sidecar: $SIDECAR"

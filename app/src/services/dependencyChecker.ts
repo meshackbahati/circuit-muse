@@ -5,7 +5,7 @@
 
 import { isTauri, invoke } from '../desktop/tauriBridge';
 import { getApiBase } from '../lib/apiBase';
-import { getEngineUrl } from './engineConfig';
+import { detectEnginePort, getEngineUrl } from './engineConfig';
 
 export type DependencyStatus = 'installed' | 'missing' | 'partial' | 'unknown';
 
@@ -69,6 +69,11 @@ export async function scanDependencies(): Promise<Dependency[]> {
 
   // Backend connectivity
   let backendOnline = false;
+  if (isTauri()) {
+    // The engine can report ready just before its HTTP server starts accepting
+    // requests; discover the active port instead of trusting a stale saved one.
+    await detectEnginePort();
+  }
   try {
     const healthUrl = isTauri() ? `${getEngineUrl()}/health` : '/health';
     const resp = await fetch(healthUrl);
@@ -81,8 +86,12 @@ export async function scanDependencies(): Promise<Dependency[]> {
     description: 'FastAPI backend for compilation and simulation',
     required: true,
     status: backendOnline ? 'installed' : 'missing',
-    installCommand: 'cd backend && pip install -r requirements.txt && uvicorn app.main:app --port 8001',
-    notes: backendOnline ? 'Running on port 8001' : 'Start with: uvicorn app.main:app --port 8001',
+    installCommand: isTauri() ? undefined : 'cd engine && pip install -r requirements.txt && python __main__.py',
+    notes: backendOnline
+      ? `Running on port ${new URL(isTauri() ? getEngineUrl() : 'http://localhost:8001').port || '8001'}`
+      : isTauri()
+        ? 'The bundled engine is not responding. Restart the app and re-scan.'
+        : 'Start the local engine with: python __main__.py',
   });
 
   // Arduino CLI

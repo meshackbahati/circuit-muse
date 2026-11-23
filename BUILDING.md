@@ -21,9 +21,8 @@ cd app && npm install && cd ..
 # Install engine dependencies
 cd engine && python -m venv venv && source venv/bin/activate && pip install -r requirements.txt && cd ..
 
-# Start development
-cd app && npm run dev &        # Frontend on http://localhost:5173
-cd engine && uvicorn app.main:app --port 8001 &  # Engine on http://localhost:8001
+# Start desktop development (Tauri starts Vite and the engine automatically)
+cd src-tauri && cargo tauri dev
 ```
 
 Open http://localhost:5173 in your browser.
@@ -43,6 +42,12 @@ bash scripts/download-deps.sh
 ```
 
 This downloads arduino-cli for your platform and places it in `src-tauri/binaries/`.
+
+Build the bundled engine sidecar before packaging:
+
+```bash
+bash scripts/build-engine.sh
+```
 
 ### Build
 

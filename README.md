@@ -13,7 +13,7 @@
   <a href="https://github.com/meshackbahati/circuit-muse/blob/main/LICENSE"><img src="https://img.shields.io/github/license/meshackbahati/circuit-muse?style=flat-square" alt="License"></a>
   <a href="https://github.com/meshackbahati/circuit-muse/actions"><img src="https://img.shields.io/github/actions/workflow/status/meshackbahati/circuit-muse/ci.yml?style=flat-square&label=build" alt="Build Status"></a>
   <a href="https://github.com/meshackbahati/circuit-muse/releases/latest"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square" alt="Platforms"></a>
-  <a href="https://github.com/meshackbahati/circuit-muse/releases"><img src="https://img.shields.io/badge/version-1.0.2-blue?style=flat-square" alt="Version"></a>
+  <a href="https://github.com/meshackbahati/circuit-muse/releases"><img src="https://img.shields.io/badge/version-1.0.3-blue?style=flat-square" alt="Version"></a>
 </p>
 
 <p align="center">
@@ -32,7 +32,7 @@ CircuitMuse is a desktop application that lets you:
 - **Build circuits** with 150+ electronic components on a drag-and-drop canvas
 - **Chat with AI** to design circuits, place components, wire them up, and debug code
 
-Everything runs locally on your machine. No cloud, no accounts, no internet required after installation.
+Simulation and project data run locally on your machine. The desktop release includes the app, Python API engine, and Arduino CLI. Arduino board cores are fetched when first needed, and optional QEMU runtimes are downloaded when you first use those boards; AI providers that use cloud models also need internet.
 
 ---
 
@@ -49,7 +49,7 @@ Everything runs locally on your machine. No cloud, no accounts, no internet requ
 | STM32 Blue Pill / Nucleo | ARM Cortex-M3 | QEMU (bundled) |
 | Raspberry Pi 3B / 4B / 5 | ARM Cortex-A | QEMU + Linux (bundled) |
 
-**Supported platforms:** Windows (x64), macOS (Intel + Apple Silicon), Linux (x64, Arch, Fedora).
+**Supported platforms:** Windows (x64), macOS (Apple Silicon), and Linux (x64: Debian/Ubuntu, Fedora, Arch, or AppImage).
 
 ---
 
@@ -64,11 +64,13 @@ Get the latest release for your platform from [GitHub Releases](https://github.c
 | **Windows** | `.msi` or `.exe` | Installer with start menu shortcut |
 | **macOS** | `.dmg` | Drag to Applications folder |
 | **Linux (Ubuntu/Debian)** | `.deb` | `sudo dpkg -i circuit-muse_*.deb` |
-| **Linux (Arch)** | `PKGBUILD` | `makepkg -si` |
-| **Linux (Fedora)** | `.spec` | `rpmbuild` or convert from AppImage |
+| **Linux (Arch)** | `.pkg.tar.zst` | `sudo pacman -U circuit-muse-*.pkg.tar.zst` |
+| **Linux (Fedora)** | `.rpm` | Install the release RPM with Software or `sudo dnf install ./circuit-muse-*.rpm` |
 | **Linux (Universal)** | `.AppImage` | `chmod +x CircuitMuse_*.AppImage && ./CircuitMuse_*.AppImage` |
 
-> **Linux GPU issues?** If you see a white screen or EGL error, run the bundled wrapper script: `./scripts/circuit-muse.sh` — it forces software rendering for compatibility with all hardware.
+> **Linux graphics:** CircuitMuse detects systems without a GPU render device and enables software rendering automatically. If your graphics driver still causes a white screen, launch with `CIRCUIT_MUSE_SOFTWARE_RENDERING=1 ./CircuitMuse_*.AppImage`. Set `CIRCUIT_MUSE_HARDWARE_RENDERING=1` to override the automatic software fallback.
+
+> **Linux runtime:** The AppImage needs WebKit2GTK 4.1 and GTK 3 from the host system. The `.deb` and `.rpm` installers declare these system dependencies for the package manager.
 
 ### First Launch
 
@@ -82,7 +84,7 @@ Get the latest release for your platform from [GitHub Releases](https://github.c
 | Component | Required | Auto-installed |
 |-----------|----------|----------------|
 | Node.js 20+ | Build only | No |
-| Python 3.12+ | Engine | No |
+| Python 3.12+ | Source builds only | Bundled engine in releases |
 | arduino-cli 1.5+ | Compilation | Yes, bundled |
 | ESP-IDF (optional) | ESP32 advanced builds | No |
 | Ollama (optional) | Local AI agent | No |
@@ -147,10 +149,13 @@ pip install -r requirements.txt && cd ..
 # Download arduino-cli (for compilation)
 bash scripts/download-deps.sh
 
+# Package the API engine as the platform-specific Tauri sidecar
+bash scripts/build-engine.sh
+
 # Install Tauri CLI
 cargo install tauri-cli --version "^2"
 
-# Build and run
+# Run the desktop app in development mode (starts Vite and the engine)
 cd src-tauri && cargo tauri dev
 ```
 
@@ -292,8 +297,8 @@ circuit-muse/
 The app uses software rendering for compatibility. If you still see issues:
 
 ```bash
-# Force software rendering
-LIBGL_ALWAYS_SOFTWARE=1 ./CircuitMuse_*.AppImage
+# Force software rendering if automatic detection does not resolve the issue
+CIRCUIT_MUSE_SOFTWARE_RENDERING=1 ./CircuitMuse_*.AppImage
 ```
 
 ### "arduino-cli not found"

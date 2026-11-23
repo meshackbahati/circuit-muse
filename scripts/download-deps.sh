@@ -1,57 +1,37 @@
-#!/bin/bash
-# Download external dependencies for bundling
-# Run this before `cargo tauri build`
+#!/usr/bin/env bash
+# Download the arduino-cli sidecar for the current build host.
+set -euo pipefail
 
-set -e
-
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
 BINARIES_DIR="$PROJECT_ROOT/src-tauri/binaries"
+VERSION="1.5.1"
+mkdir -p "$BINARIES_DIR"
 
-echo "=== Downloading arduino-cli ==="
-ARDUINO_CLI_VERSION="1.5.1"
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+case "$OS/$ARCH" in
+  Linux/x86_64) TRIPLE=x86_64-unknown-linux-gnu; ASSET=Linux_64bit.tar.gz ;;
+  Linux/aarch64|Linux/arm64) TRIPLE=aarch64-unknown-linux-gnu; ASSET=Linux_ARM64.tar.gz ;;
+  Darwin/x86_64) TRIPLE=x86_64-apple-darwin; ASSET=macOS_64bit.tar.gz ;;
+  Darwin/arm64) TRIPLE=aarch64-apple-darwin; ASSET=macOS_ARM64.tar.gz ;;
+  MINGW*/x86_64|MSYS*/x86_64) TRIPLE=x86_64-pc-windows-msvc; ASSET=Windows_64bit.zip; WINDOWS=true ;;
+  *) echo "Unsupported build host: $OS/$ARCH" >&2; exit 1 ;;
+esac
 
-download_arduino_cli() {
-    local os=$1
-    local arch=$2
-    local suffix=$3
-    local target=""
-
-    case "$os-$arch" in
-        linux-x86_64) target="x86_64-pc-linux-gnu" ;;
-        linux-aarch64) target="aarch64-unknown-linux-gnu" ;;
-        darwin-x86_64) target="x86_64-apple-darwin" ;;
-        darwin-arm64) target="aarch64-apple-darwin" ;;
-        mingw*-x86_64|windows-x86_64) target="x86_64-pc-windows-msvc" ;;
-        *) echo "Skipping $os-$arch"; return ;;
-    esac
-
-    local url="https://github.com/arduino/arduino-cli/releases/download/v${ARDUINO_CLI_VERSION}/arduino-cli_${ARDUINO_CLI_VERSION}_${target}.${suffix}"
-    local dest="$BINARIES_DIR/arduino-cli-${target}${suffix:+.$suffix}"
-
-    if [ -f "$dest" ]; then
-        echo "  Already exists: $dest"
-        return
-    fi
-
-    echo "  Downloading for $target..."
-    curl -sL "$url" -o "$dest"
-    chmod +x "$dest" 2>/dev/null || true
-    echo "  Downloaded: $dest"
-}
-
-# Download for current platform
-ARCH=$(uname -m)
-OS=$(uname -s | tr '[:upper:]' '[:lower:]')
-
-if [ "$OS" = "linux" ]; then
-    download_arduino_cli "linux" "$ARCH" ""
-elif [ "$OS" = "darwin" ]; then
-    download_arduino_cli "darwin" "$ARCH" ""
-elif [[ "$OS" == *"mingw"* ]] || [[ "$OS" == *"msys"* ]]; then
-    download_arduino_cli "windows" "x86_64" "zip"
-fi
-
-echo ""
-echo "=== Dependencies downloaded ==="
-ls -la "$BINARIES_DIR/"
+DEST="$BINARIES_DIR/arduino-cli-$TRIPLE"
+if [[ "${WINDOWS:-false}" == true ]]; then DEST="$DEST.exe"; fi
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+URL="https://github.com/arduino/arduino-cli/releases/download/v${VERSION}/arduino-cli_${VERSION}_${ASSET}"
+echo "Downloading arduino-cli $VERSION for $TRIPLE"
+curl --fail --location --retry 3 "$URL" -o "$TMP_DIR/archive"
+case "$ASSET" in
+  *.tar.gz) tar -xzf "$TMP_DIR/archive" -C "$TMP_DIR" ;;
+  *.zip) unzip -q "$TMP_DIR/archive" -d "$TMP_DIR" ;;
+esac
+SOURCE="$TMP_DIR/arduino-cli"
+[[ -f "$SOURCE.exe" ]] && SOURCE="$SOURCE.exe"
+[[ -f "$SOURCE" ]] || { echo "arduino-cli executable missing from $URL" >&2; exit 1; }
+install -m 755 "$SOURCE" "$DEST"
+echo "Installed $DEST"

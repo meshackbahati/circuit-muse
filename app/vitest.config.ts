@@ -60,6 +60,10 @@ export default defineConfig({
     // default; 8 GB plus sharding fits the runner's 16 GB budget.
     forks: {
       singleFork: false,
+      // Keep CPU-heavy firmware and SPICE tests from starving one another on
+      // the two-core runners used for desktop CI. Each file still gets its
+      // own process, so singleton state does not leak between test files.
+      maxWorkers: 2,
       execArgv: ['--max-old-space-size=8192'],
     },
     coverage: {

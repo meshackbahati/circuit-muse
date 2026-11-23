@@ -67,7 +67,7 @@ jobs:
           source venv-build/bin/activate
           pip install -r requirements.txt
           pip install pyinstaller
-          pyinstaller --clean --noconfirm --onefile --name circuit-muse-engine app/main.py
+          pyinstaller --clean --noconfirm circuit-muse-engine.spec
           cp dist/circuit-muse-engine ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
           chmod +x ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
 
@@ -75,33 +75,11 @@ jobs:
         working-directory: app
         run: |
           npm install
-          npm run build
+          npm run build -- --mode desktop
 
       - name: Build Tauri
         working-directory: src-tauri
         run: cargo tauri build
-
-      - name: Patch AppImage with GPU env vars
-        run: |
-          APPIMAGE=$(find src-tauri/target/release/bundle/appimage -name "*.AppImage" | head -1)
-          if [ -n "$APPIMAGE" ]; then
-            chmod +x "$APPIMAGE"
-            EXTRACT_DIR=$(mktemp -d)
-            cd "$EXTRACT_DIR"
-            "$APPIMAGE" --appimage-extract > /dev/null 2>&1 || true
-            if [ -f squashfs-root/AppRun ]; then
-              { printf 'export GDK_BACKEND=x11\n'; printf 'export WEBKIT_DISABLE_COMPOSITING_MODE=1\n'; printf 'export WEBKIT_DISABLE_DMABUF_RENDERER=1\n'; printf 'export LIBGL_ALWAYS_SOFTWARE=1\n'; cat squashfs-root/AppRun; } > AppRun.tmp && mv AppRun.tmp squashfs-root/AppRun
-              chmod +x squashfs-root/AppRun
-            fi
-            # Remove bundled Wayland libs to prevent conflicts with host system
-            rm -f squashfs-root/usr/lib/libwayland-client.so* squashfs-root/usr/lib/libwayland-cursor.so* squashfs-root/usr/lib/libwayland-egl.so* squashfs-root/usr/lib/libwayland-server.so* 2>/dev/null || true
-            cd -
-            APPIMAGETOOL=$(mktemp)
-            curl -sL "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -o "$APPIMAGETOOL"
-            chmod +x "$APPIMAGETOOL"
-            "$APPIMAGETOOL" "$EXTRACT_DIR/squashfs-root" "$APPIMAGE" --no-appstream 2>/dev/null || true
-            rm -rf "$EXTRACT_DIR" "$APPIMAGETOOL"
-          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -146,7 +124,7 @@ jobs:
           source venv-build/bin/activate
           pip install -r requirements.txt
           pip install pyinstaller
-          pyinstaller --clean --noconfirm --onefile --name circuit-muse-engine app/main.py
+          pyinstaller --clean --noconfirm circuit-muse-engine.spec
           cp dist/circuit-muse-engine ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
           chmod +x ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
 
@@ -154,7 +132,7 @@ jobs:
         working-directory: app
         run: |
           npm install
-          npm run build
+          npm run build -- --mode desktop
 
       - name: Build Tauri (RPM only)
         working-directory: src-tauri
@@ -198,25 +176,23 @@ jobs:
       - name: Download arduino-cli
         run: |
           New-Item -ItemType Directory -Force src-tauri/binaries
-          curl -sL "https://github.com/arduino/arduino-cli/releases/download/v1.5.1/arduino-cli_1.5.1_Windows_64bit.zip" -o arduino-cli.zip
-          7z x arduino-cli.zip -osrc-tauri/binaries/
-          ren src-tauri\binaries\arduino-cli.exe arduino-cli-x86_64-pc-windows-msvc.exe
+          Invoke-WebRequest -Uri "https://github.com/arduino/arduino-cli/releases/download/v1.5.1/arduino-cli_1.5.1_Windows_64bit.zip" -OutFile arduino-cli.zip
+          Expand-Archive -Path arduino-cli.zip -DestinationPath src-tauri/binaries -Force
+          Move-Item src-tauri\binaries\arduino-cli.exe src-tauri\binaries\arduino-cli-x86_64-pc-windows-msvc.exe -Force
 
       - name: Build engine with PyInstaller
         run: |
           cd engine
           python -m venv venv-build
-          .\venv-build\Scripts\activate
-          pip install -r requirements.txt
-          pip install pyinstaller
-          pyinstaller --clean --noconfirm --onefile --name circuit-muse-engine app/main.py
+          .\venv-build\Scripts\python.exe -m pip install -r requirements.txt pyinstaller
+          .\venv-build\Scripts\python.exe -m PyInstaller --clean --noconfirm circuit-muse-engine.spec
           copy dist\circuit-muse-engine.exe ..\src-tauri\binaries\circuit-muse-engine-x86_64-pc-windows-msvc.exe
 
       - name: Install app dependencies and build
         working-directory: app
         run: |
           npm install
-          npm run build
+          npm run build -- --mode desktop
 
       - name: Build Tauri
         working-directory: src-tauri
@@ -273,7 +249,7 @@ jobs:
           source venv-build/bin/activate
           pip install -r requirements.txt
           pip install pyinstaller
-          pyinstaller --clean --noconfirm --onefile --name circuit-muse-engine app/main.py
+          pyinstaller --clean --noconfirm circuit-muse-engine.spec
           cp dist/circuit-muse-engine ../src-tauri/binaries/circuit-muse-engine-aarch64-apple-darwin
           chmod +x ../src-tauri/binaries/circuit-muse-engine-aarch64-apple-darwin
 
@@ -281,7 +257,7 @@ jobs:
         working-directory: app
         run: |
           npm install
-          npm run build
+          npm run build -- --mode desktop
 
       - name: Build Tauri
         working-directory: src-tauri
@@ -330,7 +306,7 @@ jobs:
           source venv-build/bin/activate
           pip install -r requirements.txt
           pip install pyinstaller
-          pyinstaller --clean --noconfirm --onefile --name circuit-muse-engine app/main.py
+          pyinstaller --clean --noconfirm circuit-muse-engine.spec
           cp dist/circuit-muse-engine ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
           chmod +x ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
 
@@ -338,7 +314,7 @@ jobs:
         working-directory: app
         run: |
           npm install
-          npm run build
+          npm run build -- --mode desktop
 
       - name: Build Tauri binary
         working-directory: src-tauri
@@ -354,7 +330,7 @@ jobs:
           cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
-          pkgver=1.0.2
+          pkgver=1.0.3
           pkgrel=1
           pkgdesc="AI-powered circuit simulator and embedded board emulator"
           arch=('x86_64')
@@ -400,9 +376,9 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "CircuitMuse v1.0.2"
+          name: "CircuitMuse ${{ github.ref_name }}"
           body: |
-            ## CircuitMuse v1.0.2 — Premium Features and Multi-Board Improvements
+            ## CircuitMuse ${{ github.ref_name }} — Desktop Reliability Update
 
             AI-powered circuit simulator and embedded board emulator for desktop. Design circuits, write Arduino code, and run real emulations — all in one app.
 
@@ -439,7 +415,7 @@ jobs:
             |----------|--------|-------|
             | **Linux (x86_64)** | AppImage | Universal — works on Ubuntu, Debian, Fedora, Arch, and derivatives |
             | **Linux (x86_64)** | .deb | Debian/Ubuntu/Mint |
-            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro — install with `pacman -U circuit-muse-1.0.2-1-x86_64.pkg.tar.zst` |
+            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro — install with `pacman -U circuit-muse-1.0.3-1-x86_64.pkg.tar.zst` |
             | **Windows (x86_64)** | .exe (NSIS) | Windows 10/11 installer |
             | **Windows (x86_64)** | .msi | Windows MSI installer |
             | **macOS (ARM64)** | .dmg | Apple Silicon (M1/M2/M3/M4) |
