@@ -31,7 +31,7 @@ a = Analysis(
         'pydantic_settings',
         'httpx',
         'websockets',
-        'serialport',
+        'serial',
         'mcp',
         'esptool',
         'wasmtime',
