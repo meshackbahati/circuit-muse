@@ -720,21 +720,29 @@ export const EditorPage: React.FC = () => {
         {/* ── Agent panel: absolute overlay ── */}
         {agentPanelOpen && (
           <div
+            className="agent-panel-dock"
             style={{
-              position: 'absolute',
-              right: 0,
-              top: 0,
-              bottom: 0,
               width: agentPanelWidth,
-              borderLeft: '1px solid #2c2c33',
-              background: '#1e1e23',
-              zIndex: 1000,
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
-              boxShadow: '-4px 0 16px rgba(0,0,0,0.3)',
             }}
           >
+            {!isMobile && (
+              <div
+                className="agent-panel-resize"
+                role="separator"
+                aria-orientation="vertical"
+                aria-label="Resize AI Agent panel"
+                title="Drag to resize AI Agent panel"
+                onPointerDown={(event) => {
+                  event.preventDefault();
+                  event.currentTarget.setPointerCapture(event.pointerId);
+                }}
+                onPointerMove={(event) => {
+                  if (event.buttons === 1) {
+                    useAgentStore.getState().setPanelWidth(window.innerWidth - event.clientX);
+                  }
+                }}
+              />
+            )}
             <AgentChatPanel />
           </div>
         )}

@@ -19,7 +19,10 @@ export const MessageList: React.FC<MessageListProps> = ({
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Scroll only the chat transcript. `scrollIntoView` also scrolls every
+    // ancestor, which can move the entire editor page when the panel mounts.
+    const list = bottomRef.current?.parentElement;
+    list?.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
   }, [messages, isStreaming]);
 
   const visibleMessages = messages.filter(

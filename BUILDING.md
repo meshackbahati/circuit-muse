@@ -21,6 +21,9 @@ cd app && npm install && cd ..
 # Install engine dependencies
 cd engine && python -m venv venv && source venv/bin/activate && pip install -r requirements.txt && cd ..
 
+# Build the engine and download the matching Arduino CLI sidecar if missing
+bash scripts/build-engine.sh
+
 # Start desktop development (Tauri starts Vite and the engine automatically)
 cd src-tauri && cargo tauri dev
 ```
@@ -35,19 +38,14 @@ Open http://localhost:5173 in your browser.
 cargo install tauri-cli --version "^2"
 ```
 
-### Download arduino-cli
-
-```bash
-bash scripts/download-deps.sh
-```
-
-This downloads arduino-cli for your platform and places it in `src-tauri/binaries/`.
-
-Build the bundled engine sidecar before packaging:
+### Prepare the engine sidecars
 
 ```bash
 bash scripts/build-engine.sh
 ```
+
+This builds the platform engine and ensures the matching `arduino-cli` binary is
+in `src-tauri/binaries/`. Run it before `cargo tauri dev` or `cargo tauri build`.
 
 ### Build
 

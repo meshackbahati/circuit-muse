@@ -1,12 +1,15 @@
 [package]
 name = "circuit-muse"
-version = "1.0.4"
+version = "1.0.3"
 edition = "2021"
 authors = ["Meshack Bahati Ouma"]
 
 [lib]
 name = "circuit_muse_lib"
-crate-type = ["staticlib", "cdylib", "rlib"]
+# Desktop builds use the library through Rust's normal rlib interface. Mobile
+# shared/static outputs are not consumed by this desktop-only application and
+# add large, unnecessary linker artifacts on low-disk developer machines.
+crate-type = ["rlib"]
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
@@ -22,3 +25,8 @@ serde_json = "1"
 serialport = "4"
 reqwest = { version = "0.12", features = ["blocking"] }
 tokio = { version = "1", features = ["rt", "macros"] }
+
+[profile.dev]
+# Keep local Tauri builds practical on machines with limited disk space. The
+# release profile remains optimized and unchanged.
+debug = 0

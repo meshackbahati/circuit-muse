@@ -5,6 +5,7 @@ import base64
 import shutil
 import re
 import os
+import threading
 from pathlib import Path
 
 from app.core.hooks import materialize_library_scope
@@ -35,13 +36,11 @@ class ArduinoCLIService:
         "ATTinyCore:avr": "http://drazzy.com/package_drazzy.com_index.json",
     }
 
-    # Cores to auto-install on startup
-    REQUIRED_CORES = ["arduino:avr"]
-
     # Cores to install on-demand when a board FQBN is requested.
     # Match order matters: longer / more-specific prefixes first so we don't
     # mis-route (e.g. an FQBN that mentions both vendors).
     ON_DEMAND_CORES: dict[str, str] = {
+        "arduino:avr": "arduino:avr",
         "ATTinyCore:avr": "ATTinyCore:avr",
         "rp2040": "rp2040:rp2040",
         "mbed_rp2040": "arduino:mbed_rp2040",
@@ -61,8 +60,8 @@ class ArduinoCLIService:
 
     def __init__(self, cli_path: str = None):
         self.cli_path = cli_path or self._find_arduino_cli()
-        self._ensure_board_urls()
-        self._ensure_core_installed()
+        self._board_urls_ready = False
+        self._board_urls_lock = threading.Lock()
 
     @staticmethod
     def _find_arduino_cli() -> str:
@@ -201,29 +200,13 @@ class ArduinoCLIService:
         except Exception as e:
             print(f"Warning: Could not configure board URLs: {e}")
 
-    def _ensure_core_installed(self):
-        """
-        Ensure essential cores (arduino:avr) are installed at startup.
-        Other cores (RP2040, ESP32) are installed on-demand.
-        """
-        try:
-            result = subprocess.run(
-                [self.cli_path, "core", "list"],
-                capture_output=True,
-                text=True
-            )
-
-            for core_id in self.REQUIRED_CORES:
-                if core_id not in result.stdout:
-                    print(f"[arduino-cli] Core {core_id} not installed. Installing...")
-                    subprocess.run(
-                        [self.cli_path, "core", "install", core_id],
-                        check=True
-                    )
-                    print(f"[arduino-cli] Core {core_id} installed successfully")
-        except Exception as e:
-            print(f"Warning: Could not verify cores: {e}")
-            print("Please ensure arduino-cli is installed and in PATH")
+    def _ensure_board_urls_once(self):
+        """Configure indexes only when a requested board actually needs a core."""
+        with self._board_urls_lock:
+            if self._board_urls_ready:
+                return
+            self._ensure_board_urls()
+            self._board_urls_ready = True
 
     def _core_id_for_fqbn(self, fqbn: str) -> str | None:
         """Extract the core ID needed for a given FQBN."""
@@ -247,10 +230,16 @@ class ArduinoCLIService:
         """
         core_id = self._core_id_for_fqbn(fqbn)
         if core_id is None:
-            # Built-in core (arduino:avr) — should already be there
             return {"needed": False, "installed": True, "core_id": None, "log": ""}
 
-        if self._is_core_installed(core_id):
+        if await asyncio.to_thread(self._is_core_installed, core_id):
+            return {"needed": False, "installed": True, "core_id": core_id, "log": ""}
+
+        # Index updates and core installs involve network access. Keep them out
+        # of module construction/server startup so the desktop health endpoint
+        # is available immediately on first launch.
+        await asyncio.to_thread(self._ensure_board_urls_once)
+        if await asyncio.to_thread(self._is_core_installed, core_id):
             return {"needed": False, "installed": True, "core_id": core_id, "log": ""}
 
         # Install the core (optionally pinned to a specific version)
@@ -452,9 +441,10 @@ class ArduinoCLIService:
                 # ESP32 lcgamboa emulator requires DIO flash mode and
                 # IRAM-safe interrupt placement to avoid cache errors.
                 # Force these at compile time for all ESP32 targets.
-                # Persistent build cache for massive speedup (up to 15x faster compiling)
-                build_cache_dir = Path(tempfile.gettempdir()) / "circuit-muse-build-cache"
-                build_cache_dir.mkdir(parents=True, exist_ok=True)
+                # Arduino CLI 1.0.4+ persists its core/sketch cache in the
+                # user's cache directory by default. Avoid the deprecated
+                # --build-cache-path flag; each sketch still gets an isolated
+                # output directory below.
 
                 cli_path_posix = Path(self.cli_path).as_posix()
                 cmd = [cli_path_posix, "compile", "--fqbn", board_fqbn]
@@ -469,7 +459,6 @@ class ArduinoCLIService:
                     cmd.insert(3, fqbn_dio)
                     cmd = cmd[:4]  # trim accidental duplicates
                     cmd = [cli_path_posix, "compile", "--fqbn", fqbn_dio,
-                           "--build-cache-path", build_cache_dir.as_posix(),
                            "--build-property",
                            "build.extra_flags=-DARDUINO_ESP32_LCGAMBOA=1",
                            # Adafruit_BusIO 1.17.x dropped BitOrder on ESP32 3.x;
@@ -480,7 +469,6 @@ class ArduinoCLIService:
                            sketch_dir.as_posix()]
                 else:
                     cmd = [cli_path_posix, "compile", "--fqbn", board_fqbn,
-                           "--build-cache-path", build_cache_dir.as_posix(),
                            "--output-dir", build_dir.as_posix(),
                            sketch_dir.as_posix()]
                 print(f"Running command: {' '.join(cmd)}")

@@ -20,10 +20,21 @@ esac
 if [[ "${WINDOWS:-false}" == true ]]; then
   VENV_PYTHON="$ENGINE_DIR/venv-build/Scripts/python.exe"
   SIDECAR="$BINARIES_DIR/circuit-muse-engine-$TRIPLE.exe"
+  ARDUINO_CLI="$BINARIES_DIR/arduino-cli-$TRIPLE.exe"
 else
   VENV_PYTHON="$ENGINE_DIR/venv-build/bin/python"
   SIDECAR="$BINARIES_DIR/circuit-muse-engine-$TRIPLE"
+  ARDUINO_CLI="$BINARIES_DIR/arduino-cli-$TRIPLE"
 fi
+
+# Tauri declares both tools as external sidecars. Building only the Python
+# engine left developers with a desktop shell that silently fell back to a
+# system Arduino CLI (or couldn't compile at all). Make the engine build
+# prepare the matching CLI sidecar too.
+if [[ ! -s "$ARDUINO_CLI" ]]; then
+  "$SCRIPT_DIR/download-deps.sh"
+fi
+
 if [[ ! -x "$VENV_PYTHON" ]]; then
   if [[ "${WINDOWS:-false}" == true ]]; then
     python -m venv "$ENGINE_DIR/venv-build"

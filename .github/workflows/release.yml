@@ -385,6 +385,15 @@ jobs:
 
             AI-powered circuit simulator and embedded board emulator for desktop. Design circuits, write Arduino code, and run real emulations — all in one app.
 
+            ### Desktop reliability fixes and achievements
+
+            - Fixed cross-platform engine sidecar discovery so packaged Linux, Windows, and macOS builds start the bundled backend reliably.
+            - Kept the backend health endpoint responsive at launch by deferring Arduino board index and core installation until compilation needs them.
+            - Bundled Arduino CLI with desktop builds and verified a real Arduino Uno compile without the deprecated build-cache warning.
+            - Fixed the AI Agent overlay so it no longer scrolls or collapses the workspace; it can be resized, closed from its header, toggled from the toolbar, or dismissed with Escape.
+            - Added working Stop behavior for streamed AI responses and restored missing serial-monitor labels.
+            - Reduced development build output and documented the desktop sidecar setup steps.
+
             ### What's Inside
 
             - **Premium Features are now Open-Source & Free**:

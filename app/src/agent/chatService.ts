@@ -7,8 +7,17 @@ import { SYSTEM_PROMPT } from './systemPrompt';
 import { executeToolCall } from './toolExecutor';
 
 const MAX_TOOL_ITERATIONS = 10;
+let activeRequest: AbortController | null = null;
+
+export function abortMessage(): void {
+  activeRequest?.abort();
+}
 
 export async function sendMessage(content: string): Promise<void> {
+  // A stale request should never leave the Stop button controlling two chats.
+  activeRequest?.abort();
+  const controller = new AbortController();
+  activeRequest = controller;
   const agentStore = useAgentStore.getState();
   const providerStore = useProviderStore.getState();
 
@@ -42,7 +51,9 @@ export async function sendMessage(content: string): Promise<void> {
         messages,
         tools: AGENT_TOOLS,
         model: config.model,
+        signal: controller.signal,
       })) {
+        if (controller.signal.aborted) break;
         if (chunk.content) {
           fullContent += chunk.content;
           agentStore.updateLastAssistantMessage(fullContent);
@@ -57,6 +68,8 @@ export async function sendMessage(content: string): Promise<void> {
         }
       }
 
+      if (controller.signal.aborted) break;
+
       if (toolCalls.length === 0) break;
 
       if (fullContent) {
@@ -66,6 +79,7 @@ export async function sendMessage(content: string): Promise<void> {
       }
 
       for (const tc of toolCalls) {
+        if (controller.signal.aborted) break;
         agentStore.setExecutingTool(tc.function.name);
         const result = await executeToolCall(tc);
         agentStore.addMessage({
@@ -94,14 +108,18 @@ export async function sendMessage(content: string): Promise<void> {
       iterations++;
     }
   } catch (error) {
+    if (controller.signal.aborted) return;
     const errorMsg = error instanceof Error ? error.message : String(error);
     agentStore.addMessage({
       role: 'assistant',
       content: `Error: ${errorMsg}`,
     });
   } finally {
-    agentStore.setStreaming(false);
-    agentStore.setExecutingTool(null);
+    if (activeRequest === controller) {
+      activeRequest = null;
+      agentStore.setStreaming(false);
+      agentStore.setExecutingTool(null);
+    }
   }
 }
 

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAgentStore } from '../../store/useAgentStore';
 import { MessageList } from './MessageList';
 import { ChatInput } from './ChatInput';
 import { ProviderSelector } from './ProviderSelector';
 import { AgentSettings } from './AgentSettings';
-import { sendMessage } from '../chatService';
+import { abortMessage, sendMessage } from '../chatService';
 import '../agent.css';
 
 export const AgentChatPanel: React.FC = () => {
@@ -14,6 +14,16 @@ export const AgentChatPanel: React.FC = () => {
   const togglePanel = useAgentStore((s) => s.togglePanel);
   const clearMessages = useAgentStore((s) => s.clearMessages);
   const [showSettings, setShowSettings] = useState(false);
+
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      if (showSettings) setShowSettings(false);
+      else togglePanel();
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [showSettings, togglePanel]);
 
   const toolResults: Record<string, string> = {};
   for (const msg of messages) {
@@ -27,7 +37,7 @@ export const AgentChatPanel: React.FC = () => {
   };
 
   const handleAbort = () => {
-    // TODO: implement abort via AbortController
+    abortMessage();
   };
 
   return (
@@ -47,18 +57,20 @@ export const AgentChatPanel: React.FC = () => {
           <button
             className="agent-header-btn"
             onClick={clearMessages}
-            title="Clear chat"
+            title="Clear conversation"
+            aria-label="Clear conversation"
             type="button"
           >
-            {'\u2715'}
+            Clear
           </button>
           <button
             className="agent-header-btn"
             onClick={togglePanel}
-            title="Close panel"
+            title="Close AI Agent panel"
+            aria-label="Close AI Agent panel"
             type="button"
           >
-            {'\u2039'}
+            ×
           </button>
         </div>
       </div>

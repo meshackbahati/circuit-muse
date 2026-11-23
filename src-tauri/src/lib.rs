@@ -226,7 +226,21 @@ async fn start_engine(app: &tauri::AppHandle) {
     let qemu_xtensa_path = qemu_binary_path(app, "esp32");
     let qemu_riscv_path = qemu_binary_path(app, "riscv32");
 
-    match app.shell().sidecar("circuit-muse-engine") {
+    // Tauri bundles external binaries under their target-triple filename
+    // (for example `circuit-muse-engine-x86_64-unknown-linux-gnu`). The
+    // shell plugin's `sidecar("circuit-muse-engine")` resolves the plain
+    // unsuffixed name, which is absent in installed packages on Linux,
+    // Windows, and macOS. Resolve the bundled filename next to the app and
+    // spawn that exact path. Keep the plugin lookup as a dev-mode fallback.
+    let engine_sidecar = match resolve_sidecar_path(app, "circuit-muse-engine") {
+        Some(path) => {
+            eprintln!("[engine] engine sidecar: {}", path);
+            Ok(app.shell().command(path))
+        }
+        None => app.shell().sidecar("circuit-muse-engine"),
+    };
+
+    match engine_sidecar {
         Ok(command) => {
             let mut command = command;
             if let Some(ref cli_path) = arduino_cli_path {
