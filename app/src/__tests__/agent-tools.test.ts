@@ -8,6 +8,7 @@ import { AGENT_TOOLS } from '../agent/toolDefs';
 import { executeToolCall } from '../agent/toolExecutor';
 import { useSimulatorStore } from '../store/useSimulatorStore';
 import type { ToolCall } from '../agent/types';
+import { isBoardComponent } from '../utils/boardPinMapping';
 
 function call(name: string, args: Record<string, unknown> = {}): Promise<string> {
   const toolCall: ToolCall = {
@@ -73,6 +74,20 @@ describe('state-backed agent tools', () => {
     expect(read.content).toBe('void setup() { Serial.begin(9600); }');
   });
 
+  it('translates wokwi aliases into renderable component ids', async () => {
+    const result = JSON.parse(await call('add_component', { type: 'wokwi-led', x: 10, y: 10 }));
+    expect(result).toMatchObject({ success: true, type: 'led' });
+  });
+
+  it('rejects incomplete wire arguments instead of creating a broken wire', async () => {
+    const result = JSON.parse(await call('wire_components', { from_part: 'arduino-uno', from_pin: '', to_part: 'x', to_pin: '1' }));
+    expect(result.error).toMatch(/required strings/);
+  });
+
+  it('treats a missing component id as non-board input', () => {
+    expect(isBoardComponent(undefined as unknown as string)).toBe(false);
+  });
+
   it('refuses to run a board that has not compiled', async () => {
     const boardId = addBoard();
     const result = JSON.parse(await call('run_simulation', { board_id: boardId }));
@@ -89,6 +104,9 @@ describe('state-backed agent tools', () => {
   it('reads canvas component ids and properties through get_circuit_state', async () => {
     const boardId = addBoard();
     const added = JSON.parse(await call('add_component', { type: 'wokwi-resistor', x: 100, y: 100, attrs: { value: '220' } }));
+    expect(added.type).toBe('resistor');
+    const catalogue = JSON.parse(await call('list_available_components'));
+    expect(catalogue.components.some((c: { type: string }) => c.type === 'resistor')).toBe(true);
     const state = JSON.parse(await call('get_circuit_state'));
     expect(state.active_board_id).toBeTruthy();
     expect(state.boards.some((b: { id: string }) => b.id === boardId)).toBe(true);

@@ -428,12 +428,13 @@ function hex4(n: number): string {
  * esptool wants .bin, picotool accepts either .uf2 or .bin).
  */
 function formatForFqbn(fqbn: string): 'hex' | 'bin' | 'uf2' | 'elf' {
-  if (fqbn.startsWith('arduino:avr') || fqbn.startsWith('ATTinyCore:avr')) {
+  const value = String(fqbn ?? '');
+  if (value.startsWith('arduino:avr') || value.startsWith('ATTinyCore:avr')) {
     return 'hex';
   }
-  if (fqbn.startsWith('esp32:esp32')) return 'bin';
-  if (fqbn.startsWith('rp2040:rp2040')) return 'uf2';
-  if (fqbn.startsWith('arduino:samd')) return 'bin';
+  if (value.startsWith('esp32:esp32')) return 'bin';
+  if (value.startsWith('rp2040:rp2040')) return 'uf2';
+  if (value.startsWith('arduino:samd')) return 'bin';
   // Defensive fallback - arduino-cli's auto-detection should still
   // do the right thing in most cases.
   return 'bin';

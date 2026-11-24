@@ -17,6 +17,54 @@ function isEsp32Kind(kind: string): boolean {
   return kind.includes('esp32');
 }
 
+type ComponentMeta = {
+  id: string;
+  name: string;
+  tagName: string;
+  category: string;
+  pinCount?: number;
+  tags?: string[];
+};
+
+async function loadComponentMetadata(): Promise<ComponentMeta[]> {
+  const module = await import('../../public/components-metadata.json');
+  return (module.default as any).components ?? [];
+}
+
+/** Translate convenient tool aliases into the ids the canvas can render. */
+function resolveComponentType(requested: string, metadata: ComponentMeta[]): ComponentMeta | null {
+  const base = requested.trim().replace(/^wokwi-/, '').replace(/^circuit-muse-/, '');
+  if (!base) return null;
+  const exact = metadata.find(m =>
+    m.id === requested || m.tagName === requested || m.id === base || m.tagName === base,
+  );
+  if (exact) return exact;
+  return metadata.find(m =>
+    m.id.includes(base) || m.name.toLowerCase().includes(base.toLowerCase()),
+  ) ?? null;
+}
+
+const COMPONENT_HINTS: Array<{ hint: string; pins: string[]; defaultAttrs?: Record<string, unknown> }> = [
+  { hint: 'wokwi-led', pins: ['A', 'C'], defaultAttrs: { color: 'red' } },
+  { hint: 'wokwi-resistor', pins: ['1', '2'], defaultAttrs: { value: '220' } },
+  { hint: 'inductor', pins: ['1', '2'], defaultAttrs: { value: '10m' } },
+  { hint: 'wokwi-pushbutton', pins: ['1.l', '2.l', '1.r', '2.r'] },
+  { hint: 'wokwi-buzzer', pins: ['1', '2'] },
+  { hint: 'wokwi-servo', pins: ['GND', 'V+', 'PWM'] },
+  { hint: 'wokwi-potentiometer', pins: ['GND', 'SIG', 'VCC'] },
+  { hint: 'wokwi-slide-switch', pins: ['1', '2', '3'] },
+  { hint: 'dht22', pins: ['VCC', 'SDA', 'NC', 'GND'] },
+  { hint: 'hc-sr04', pins: ['VCC', 'TRIG', 'ECHO', 'GND'] },
+  { hint: 'mpu6050', pins: ['VCC', 'GND', 'SCL', 'SDA', 'XDA', 'XCL', 'AD0', 'INT'] },
+  { hint: 'bmp280', pins: ['VCC', 'GND', 'SCL', 'SDA', 'CSB', 'SDO'] },
+  { hint: 'ssd1306', pins: ['GND', 'VCC', 'SCL', 'SDA'] },
+  { hint: 'wokwi-lcd1602', pins: ['GND', 'VCC', 'SDA', 'SCL'] },
+  { hint: 'wokwi-neopixel', pins: ['VDD', 'DIN', 'GND', 'DOUT'] },
+  { hint: 'wokwi-7segment', pins: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'DP', 'COM'] },
+  { hint: 'wokwi-membrane-keypad', pins: ['R1', 'R2', 'R3', 'R4', 'C1', 'C2', 'C3', 'C4'] },
+  { hint: 'wokwi-relay-module', pins: ['VCC', 'GND', 'IN', 'NO', 'COM', 'NC'] },
+];
+
 function filesForBoard(editor: MutableState, board: MutableState | null): Array<{ name: string; content: string }> {
   const group = board?.activeFileGroupId ? editor.fileGroups?.[board.activeFileGroupId] : null;
   const source = group && group.length > 0 ? group : editor.files;
@@ -48,10 +96,21 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
       return JSON.stringify({ success: true });
     }
     case 'add_component': {
+      const metadata = await loadComponentMetadata();
+      const requested = String(args.type ?? '');
+      const resolved = resolveComponentType(requested, metadata);
+      if (!resolved) {
+        const base = requested.replace(/^wokwi-/, '').toLowerCase();
+        const suggestions = metadata
+          .filter(m => m.id.includes(base) || m.name.toLowerCase().includes(base))
+          .slice(0, 10)
+          .map(m => m.id);
+        return JSON.stringify({ error: `Unknown component type: ${requested}`, suggestions });
+      }
       const sim = useSimulatorStore.getState();
       const component = {
         id: `comp-${Date.now()}`,
-        metadataId: args.type,
+        metadataId: resolved.id,
         left: args.x ?? 200,
         top: args.y ?? 200,
         rotate: args.rotation ?? 0,
@@ -61,7 +120,7 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
         properties: args.attrs ?? {},
       } as any;
       sim.recordAddComponent(component);
-      return JSON.stringify({ success: true, component_id: component.id, type: args.type });
+      return JSON.stringify({ success: true, component_id: component.id, type: resolved.id });
     }
     case 'remove_component': {
       const sim = useSimulatorStore.getState();
@@ -84,6 +143,17 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
     }
     case 'wire_components': {
       const sim = useSimulatorStore.getState();
+      const parts = [args.from_part, args.from_pin, args.to_part, args.to_pin];
+      if (parts.some(p => typeof p !== 'string' || p.trim().length === 0)) {
+        return JSON.stringify({ error: 'from_part, from_pin, to_part and to_pin are all required strings' });
+      }
+      const known = new Set<string>([
+        ...sim.boards.map((b: MutableState) => b.id),
+        ...sim.components.map((c: MutableState) => c.id),
+      ]);
+      for (const id of [args.from_part, args.to_part]) {
+        if (!known.has(id)) return JSON.stringify({ error: `Part not found on canvas: ${id}` });
+      }
       const wire = {
         id: `wire-${Date.now()}`,
         start: { componentId: args.from_part, pinId: args.from_pin },
@@ -495,27 +565,21 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
       });
     }
     case 'list_available_components': {
-      return JSON.stringify({
-        components: [
-          { type: 'wokwi-led', name: 'LED', pins: ['A', 'C'], defaultAttrs: { color: 'red' } },
-          { type: 'wokwi-resistor', name: 'Resistor', pins: ['1', '2'], defaultAttrs: { value: '220' } },
-          { type: 'wokwi-pushbutton', name: 'Pushbutton', pins: ['1.l', '2.l', '1.r', '2.r'] },
-          { type: 'wokwi-buzzer', name: 'Buzzer', pins: ['1', '2'] },
-          { type: 'wokwi-servo', name: 'Servo Motor', pins: ['GND', 'V+', 'PWM'] },
-          { type: 'wokwi-potentiometer', name: 'Potentiometer', pins: ['GND', 'SIG', 'VCC'] },
-          { type: 'wokwi-slide-switch', name: 'Slide Switch', pins: ['1', '2', '3'] },
-          { type: 'dht22', name: 'DHT22 Temp & Humidity Sensor', pins: ['VCC', 'SDA', 'NC', 'GND'] },
-          { type: 'hc-sr04', name: 'Ultrasonic Distance Sensor', pins: ['VCC', 'TRIG', 'ECHO', 'GND'] },
-          { type: 'mpu6050', name: 'MPU6050 Accelerometer/Gyroscope', pins: ['VCC', 'GND', 'SCL', 'SDA', 'XDA', 'XCL', 'AD0', 'INT'] },
-          { type: 'bmp280', name: 'BMP280 Barometric Pressure Sensor', pins: ['VCC', 'GND', 'SCL', 'SDA', 'CSB', 'SDO'] },
-          { type: 'ssd1306', name: 'OLED Display (128x64 I2C)', pins: ['GND', 'VCC', 'SCL', 'SDA'] },
-          { type: 'wokwi-lcd1602', name: 'LCD 1602 Display', pins: ['GND', 'VCC', 'SDA', 'SCL'] },
-          { type: 'wokwi-neopixel', name: 'NeoPixel RGB LED', pins: ['VDD', 'DIN', 'GND', 'DOUT'] },
-          { type: 'wokwi-7segment', name: '7-Segment Display', pins: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'DP', 'COM'] },
-          { type: 'wokwi-membrane-keypad', name: '4x4 Keypad', pins: ['R1', 'R2', 'R3', 'R4', 'C1', 'C2', 'C3', 'C4'] },
-          { type: 'wokwi-relay-module', name: 'Relay Module', pins: ['VCC', 'GND', 'IN', 'NO', 'COM', 'NC'] },
-        ],
-      });
+      const metadata = await loadComponentMetadata();
+      const seen = new Set<string>();
+      const components: Array<Record<string, unknown>> = [];
+      for (const hint of COMPONENT_HINTS) {
+        const resolved = resolveComponentType(hint.hint, metadata);
+        if (!resolved || seen.has(resolved.id)) continue;
+        seen.add(resolved.id);
+        components.push({
+          type: resolved.id,
+          name: resolved.name,
+          pins: hint.pins,
+          defaultAttrs: hint.defaultAttrs ?? {},
+        });
+      }
+      return JSON.stringify({ components });
     }
     default:
       return JSON.stringify({ error: `Unknown tool: ${name}` });

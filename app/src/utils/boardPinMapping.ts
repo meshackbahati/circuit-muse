@@ -242,7 +242,8 @@ export const BOARD_COMPONENT_IDS = [
  * Check whether a componentId represents a board (not an external component).
  */
 export function isBoardComponent(componentId: string): boolean {
-  return BOARD_COMPONENT_IDS.some((id) => componentId === id || componentId.startsWith(id));
+  const id = String(componentId ?? '');
+  return BOARD_COMPONENT_IDS.some((prefix) => id === prefix || id.startsWith(prefix));
 }
 
 /**
@@ -254,6 +255,7 @@ export function isBoardComponent(componentId: string): boolean {
  * @returns Numeric pin/GPIO number, or null if unmapped
  */
 export function boardPinToNumber(boardId: string, pinName: string): number | null {
+  pinName = String(pinName ?? '');
   if (boardId === 'arduino-uno' || boardId === 'arduino-nano') {
     // Power / GND pins — not real GPIOs, skip silently
     if (/^(GND|VCC|VIN|IOREF|AREF|RESET|3\.3V|3V3|5V|3V)/.test(pinName)) return -1;

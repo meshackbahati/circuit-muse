@@ -21,7 +21,7 @@ export const AGENT_TOOLS: ToolDefinition[] = [
     type: 'function',
     function: {
       name: 'list_available_components',
-      description: 'List component types, their names, pin names and default attributes. Use an exact type from this list with add_component.',
+      description: 'List valid component type ids, their names, pin names and default attributes. Pass the returned type value exactly to add_component.',
       parameters: { type: 'object', properties: {} },
     },
   },
@@ -69,7 +69,7 @@ export const AGENT_TOOLS: ToolDefinition[] = [
     type: 'function',
     function: {
       name: 'add_component',
-      description: 'Add an electronic component to the canvas. Component type must come from list_available_components.',
+      description: 'Add an electronic component to the canvas. Use a type id returned by list_available_components; wokwi- aliases are accepted and translated.',
       parameters: {
         type: 'object',
         properties: {

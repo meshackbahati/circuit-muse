@@ -45,7 +45,7 @@ export const AutoInstallModal: React.FC<AutoInstallModalProps> = ({
       <div className="install-modal" onClick={(e) => e.stopPropagation()}>
         <h3>Install {label} Support</h3>
         <p className="install-desc">
-          {boardKind.startsWith('esp32') || boardKind === 'esp32-c3'
+          {String(boardKind ?? '').startsWith('esp32') || boardKind === 'esp32-c3'
             ? `ESP32 boards need an additional QEMU runtime (~42 MB) for simulation.`
             : `STM32 boards need an additional QEMU runtime (~30 MB) for simulation.`}
         </p>

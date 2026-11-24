@@ -80,8 +80,9 @@ const DRAG_PROMOTE_THRESHOLD_PX = 8;
 
 /** Check if a board kind is an ESP32-family board. */
 function isEsp32Kind(kind: BoardKind): boolean {
+  const value = String(kind ?? '');
   return (
-    kind.startsWith('esp32') ||
+    value.startsWith('esp32') ||
     kind === 'xiao-esp32-s3' ||
     kind === 'xiao-esp32-c3' ||
     kind === 'arduino-nano-esp32' ||
