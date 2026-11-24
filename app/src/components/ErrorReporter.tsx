@@ -3,6 +3,7 @@
  */
 
 import React, { useState } from 'react';
+import { openExternal } from '../desktop/tauriBridge';
 
 interface ErrorReporterProps {
   error: Error;
@@ -34,7 +35,7 @@ export const ErrorReporter: React.FC<ErrorReporterProps> = ({ error, errorInfo, 
       `**URL:** ${window.location.href}`,
     ].join('\n'));
 
-    window.open(`${GITHUB_ISSUES_URL}?title=${title}&body=${body}`, '_blank');
+    void openExternal(`${GITHUB_ISSUES_URL}?title=${title}&body=${body}`);
     setSubmitted(true);
   };
 

@@ -9,7 +9,7 @@ import { buildOpenAIMessages, resolveModel } from '../agent/providers/base';
 import { createProvider, listProviderModels, PROVIDER_DEFAULTS } from '../agent/providers/registry';
 import { AnthropicProvider } from '../agent/providers/anthropic';
 import { OpenAICompatibleProvider } from '../agent/providers/openai';
-import { GeminiProvider } from '../agent/providers/gemini';
+import { buildGeminiContents, GeminiProvider } from '../agent/providers/gemini';
 import type { LLMProvider, Message, ProviderConfig } from '../agent/types';
 
 afterEach(() => {
@@ -163,6 +163,22 @@ describe('cross-provider tool history', () => {
       message('tool', 'orphan result', { toolCallId: 'missing' }),
     ]);
     expect(history).toEqual([{ role: 'user', content: 'orphan result' }]);
+  });
+});
+
+describe('Gemini history', () => {
+  it('carries tool results as text so every model accepts the next turn', () => {
+    const history = buildGeminiContents([
+      {
+        id: '1', role: 'assistant', content: '', timestamp: 0,
+        toolCalls: [{ id: 'call-1', type: 'function', function: { name: 'read_code', arguments: '{}' } }],
+      },
+      { id: '2', role: 'tool', content: '{"files":[]}', toolCallId: 'call-1', timestamp: 0 },
+    ]);
+    expect(history[0].role).toBe('model');
+    expect(history[1].role).toBe('user');
+    expect(history[1].parts[0].text).toContain('read_code');
+    expect(JSON.stringify(history)).not.toContain('functionResponse');
   });
 });
 

@@ -77,6 +77,23 @@ export const useProviderStore = create<ProviderState>()(
         },
       })),
     }),
-    { name: 'circuit-muse-providers' }
+    {
+      name: 'circuit-muse-providers',
+      version: 2,
+      // Persisted state from earlier versions predates the NVIDIA provider and
+      // individual model fields, so merge it with the current defaults rather
+      // than replacing the whole provider map.
+      merge: (persisted, current) => {
+        const saved = (persisted || {}) as Partial<ProviderState>;
+        const providers = { ...current.providers };
+        for (const id of Object.keys(current.providers) as ProviderId[]) {
+          providers[id] = {
+            ...current.providers[id],
+            ...(saved.providers?.[id] || {}),
+          };
+        }
+        return { ...current, ...saved, providers };
+      },
+    }
   )
 );

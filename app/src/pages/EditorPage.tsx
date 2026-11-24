@@ -121,6 +121,23 @@ export const EditorPage: React.FC = () => {
     }
   }, []);
 
+  // Browser-style editor font zoom. The editor font size lives in the shared
+  // store, so the shortcut works while the canvas or the agent panel has focus.
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
+      const key = event.key;
+      if (key !== '=' && key !== '+' && key !== '-' && key !== '_' && key !== '0') return;
+      event.preventDefault();
+      const editor = useEditorStore.getState();
+      if (key === '0') editor.setFontSize(14);
+      else if (key === '=' || key === '+') editor.setFontSize(Math.min(28, editor.fontSize + 1));
+      else editor.setFontSize(Math.max(8, editor.fontSize - 1));
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
+
   // Listen to GitHub Sync prompt
   useEffect(() => {
     const handler = () => {
