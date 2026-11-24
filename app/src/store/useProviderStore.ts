@@ -21,6 +21,7 @@ const defaultProviders: Record<ProviderId, ProviderConfig> = {
   gemini: { id: 'gemini', name: 'Google Gemini', enabled: false, ...PROVIDER_DEFAULTS.gemini },
   openrouter: { id: 'openrouter', name: 'OpenRouter', enabled: false, ...PROVIDER_DEFAULTS.openrouter },
   moonshot: { id: 'moonshot', name: 'Moonshot', enabled: false, ...PROVIDER_DEFAULTS.moonshot },
+  nvidia: { id: 'nvidia', name: 'NVIDIA NIM', enabled: false, ...PROVIDER_DEFAULTS.nvidia },
   custom: { id: 'custom', name: 'Custom (OpenAI-compatible)', enabled: false, isCustom: true, ...PROVIDER_DEFAULTS.custom },
 };
 

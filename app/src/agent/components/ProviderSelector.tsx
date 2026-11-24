@@ -9,6 +9,7 @@ const PROVIDER_LABELS: Record<ProviderId, string> = {
   gemini: 'Gemini',
   openrouter: 'OpenRouter',
   moonshot: 'Moonshot',
+  nvidia: 'NVIDIA NIM',
   custom: 'Custom',
 };
 

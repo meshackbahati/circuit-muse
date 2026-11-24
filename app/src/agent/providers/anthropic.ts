@@ -16,40 +16,51 @@ export class AnthropicProvider implements LLMProvider {
     const systemMsg = params.messages.find(m => m.role === 'system');
     const nonSystem = params.messages.filter(m => m.role !== 'system');
 
+    // Anthropic requires every tool_result block to follow its tool_use block
+    // in the same user turn, so consecutive results are merged into one turn.
+    const mappedMessages: any[] = [];
+    for (const m of nonSystem) {
+      if (m.role === 'tool') {
+        const block = {
+          type: 'tool_result',
+          tool_use_id: m.toolCallId || 'call_0',
+          content: m.content,
+        };
+        const last = mappedMessages[mappedMessages.length - 1];
+        if (last?.role === 'user' && Array.isArray(last.content) && last.content[0]?.type === 'tool_result') {
+          last.content.push(block);
+        } else {
+          mappedMessages.push({ role: 'user', content: [block] });
+        }
+        continue;
+      }
+      if (m.role === 'assistant' && m.toolCalls && m.toolCalls.length > 0) {
+        const contentBlocks: any[] = [];
+        if (m.content) contentBlocks.push({ type: 'text', text: m.content });
+        for (const tc of m.toolCalls) {
+          let inputObj: any = {};
+          try {
+            inputObj = typeof tc.function.arguments === 'string' ? JSON.parse(tc.function.arguments) : tc.function.arguments;
+          } catch {
+            inputObj = {};
+          }
+          contentBlocks.push({
+            type: 'tool_use',
+            id: tc.id,
+            name: tc.function.name,
+            input: inputObj,
+          });
+        }
+        mappedMessages.push({ role: 'assistant', content: contentBlocks });
+        continue;
+      }
+      mappedMessages.push({ role: m.role, content: m.content || ' ' });
+    }
+
     const body: any = {
       model,
       max_tokens: params.maxTokens || 4096,
-      messages: nonSystem.map(m => {
-        if (m.role === 'tool') {
-          return {
-            role: 'user',
-            content: [{ type: 'tool_result', tool_use_id: m.toolCallId || 'call_0', content: m.content }],
-          };
-        }
-        if (m.role === 'assistant' && m.toolCalls && m.toolCalls.length > 0) {
-          const contentBlocks: any[] = [];
-          if (m.content) contentBlocks.push({ type: 'text', text: m.content });
-          for (const tc of m.toolCalls) {
-            let inputObj: any = {};
-            try {
-              inputObj = typeof tc.function.arguments === 'string' ? JSON.parse(tc.function.arguments) : tc.function.arguments;
-            } catch {
-              inputObj = {};
-            }
-            contentBlocks.push({
-              type: 'tool_use',
-              id: tc.id,
-              name: tc.function.name,
-              input: inputObj,
-            });
-          }
-          return { role: 'assistant', content: contentBlocks };
-        }
-        return {
-          role: m.role,
-          content: m.content || ' ',
-        };
-      }),
+      messages: mappedMessages,
       stream: true,
     };
 

@@ -8,6 +8,7 @@ const BASE_URLS: Record<ProviderId, string> = {
   openai: 'https://api.openai.com',
   openrouter: 'https://openrouter.ai/api',
   moonshot: 'https://api.moonshot.cn',
+  nvidia: 'https://integrate.api.nvidia.com',
   custom: '',
   anthropic: 'https://api.anthropic.com',
   ollama: 'http://localhost:11434',
@@ -21,6 +22,7 @@ export function createProvider(config: ProviderConfig): LLMProvider | null {
     case 'openai':
     case 'openrouter':
     case 'moonshot':
+    case 'nvidia':
     case 'custom': {
       if (!config.apiKey && config.id !== 'custom') return null;
       const baseUrl = config.baseUrl || BASE_URLS[config.id];
@@ -55,6 +57,7 @@ export const PROVIDER_DEFAULTS: Record<ProviderId, Partial<ProviderConfig>> = {
   gemini: { name: 'Google Gemini' },
   openrouter: { name: 'OpenRouter' },
   moonshot: { name: 'Moonshot' },
+  nvidia: { name: 'NVIDIA NIM' },
   custom: { name: 'Custom (OpenAI-compatible)' },
 };
 

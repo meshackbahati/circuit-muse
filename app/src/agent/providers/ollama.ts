@@ -1,5 +1,5 @@
 import type { LLMProvider, ChatParams, StreamChunk, Message } from '../types';
-import { resolveModel } from './base';
+import { buildOpenAIMessages, resolveModel } from './base';
 
 export class OllamaProvider implements LLMProvider {
   id = 'ollama' as const;
@@ -24,35 +24,7 @@ export class OllamaProvider implements LLMProvider {
     const model = await resolveModel(this, params.model);
     const body = {
       model,
-      messages: params.messages.map(m => {
-        if (m.role === 'assistant') {
-          return {
-            role: 'assistant',
-            content: m.content || '',
-            ...(m.toolCalls && m.toolCalls.length > 0 && {
-              tool_calls: m.toolCalls.map(tc => ({
-                id: tc.id,
-                type: 'function',
-                function: {
-                  name: tc.function.name,
-                  arguments: typeof tc.function.arguments === 'string' ? tc.function.arguments : JSON.stringify(tc.function.arguments),
-                },
-              })),
-            }),
-          };
-        }
-        if (m.role === 'tool') {
-          return {
-            role: 'tool',
-            tool_call_id: m.toolCallId || '',
-            content: m.content,
-          };
-        }
-        return {
-          role: m.role,
-          content: m.content || '',
-        };
-      }),
+      messages: buildOpenAIMessages(params.messages),
       stream: true,
       ...(params.tools && { tools: params.tools }),
     };

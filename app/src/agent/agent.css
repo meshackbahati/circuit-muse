@@ -485,9 +485,25 @@
   gap: 6px;
 }
 
-.agent-settings-model-row input {
+.agent-settings-model-row input,
+.agent-settings-model-row select {
   flex: 1;
   min-width: 0;
+}
+
+.agent-settings-model-row select {
+  background: #0c0c11;
+  color: #e6e6e9;
+  border: 1px solid #2c2c33;
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.agent-settings-model-row select:focus {
+  outline: none;
+  border-color: #7c3aed;
 }
 
 .agent-settings-refresh,

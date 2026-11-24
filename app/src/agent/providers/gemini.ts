@@ -1,6 +1,51 @@
 import { GoogleGenAI } from '@google/genai';
-import type { LLMProvider, ChatParams, StreamChunk, Message } from '../types';
+import type { LLMProvider, ChatParams, StreamChunk, Message, ToolCall } from '../types';
 import { resolveModel } from './base';
+
+/** Gemini requires a Struct, so every result is wrapped and made JSON-safe. */
+function asStruct(value: unknown): Record<string, unknown> {
+  const convert = (input: unknown): unknown => {
+    if (input === null || input === undefined) return '';
+    if (typeof input === 'string') return input;
+    if (typeof input === 'number' || typeof input === 'boolean') return String(input);
+    if (Array.isArray(input)) return input.map(convert);
+    if (typeof input === 'object') {
+      const output: Record<string, unknown> = {};
+      for (const [key, nested] of Object.entries(input as Record<string, unknown>)) {
+        // Ordinary tool data may contain JSON Schema references, which Gemini
+        // interprets as multimodal references and rejects with a 400.
+        if (key === '$ref' || key === '$defs' || key === 'definitions') continue;
+        output[key] = convert(nested);
+      }
+      return output;
+    }
+    return String(input);
+  };
+
+  const converted = convert(value);
+  return converted && typeof converted === 'object' && !Array.isArray(converted)
+    ? converted as Record<string, unknown>
+    : { output: converted };
+}
+
+function parseToolResult(content: string): unknown {
+  try {
+    return JSON.parse(content);
+  } catch {
+    return { output: content };
+  }
+}
+
+function parseArguments(value: unknown): Record<string, unknown> {
+  try {
+    const parsed = typeof value === 'string' ? JSON.parse(value) : value;
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed)
+      ? parsed as Record<string, unknown>
+      : {};
+  } catch {
+    return {};
+  }
+}
 
 export class GeminiProvider implements LLMProvider {
   id = 'gemini' as const;
@@ -17,77 +62,61 @@ export class GeminiProvider implements LLMProvider {
 
     const toolCallMap = new Map<string, string>();
     for (const msg of params.messages) {
-      if (msg.toolCalls) {
-        for (const tc of msg.toolCalls) {
-          if (tc.id) toolCallMap.set(tc.id, tc.function.name);
-        }
+      for (const tc of msg.toolCalls ?? []) {
+        if (tc.id) toolCallMap.set(tc.id, tc.function.name);
       }
     }
 
-    const mapped = params.messages
-      .filter(m => m.role !== 'system')
-      .map(m => {
-        if (m.role === 'tool') {
-          let responseObj: any = m.content;
-          try {
-            responseObj = JSON.parse(m.content);
-          } catch {
-            responseObj = { output: m.content };
-          }
-          const callName = (m.toolCallId && toolCallMap.get(m.toolCallId)) || 'tool_response';
-          return {
-            role: 'user',
-            parts: [{
-              functionResponse: {
-                name: callName,
-                response: typeof responseObj === 'object' && responseObj !== null ? responseObj : { output: responseObj },
-              },
-            }],
-          };
-        }
-
-        if (m.role === 'assistant') {
-          const parts: any[] = [];
-          if (m.content) parts.push({ text: m.content });
-          if (m.toolCalls && m.toolCalls.length > 0) {
-            for (const tc of m.toolCalls) {
-              let argsObj: any = {};
-              try {
-                argsObj = typeof tc.function.arguments === 'string' ? JSON.parse(tc.function.arguments) : tc.function.arguments;
-              } catch {
-                argsObj = {};
-              }
-              parts.push({
-                functionCall: {
-                  name: tc.function.name,
-                  args: argsObj,
-                },
-              });
-            }
-          }
-          return {
-            role: 'model',
-            parts: parts.length > 0 ? parts : [{ text: m.content || ' ' }],
-          };
-        }
-
-        return {
-          role: 'user',
-          parts: [{ text: m.content || ' ' }],
-        };
-      });
-
-    // Gemini expects the function responses for one model turn in a single
-    // user content, so consecutive tool results are merged into one turn.
+    // Function responses are paired with the function calls of the preceding
+    // model turn in order, so no lookup can silently produce a wrong name.
+    let pendingNames: string[] = [];
     const contents: any[] = [];
-    for (const content of mapped) {
-      const previous = contents[contents.length - 1];
-      const isResponse = Boolean(content.parts?.[0]?.functionResponse);
-      if (isResponse && previous?.role === 'user' && previous.parts?.[0]?.functionResponse) {
-        previous.parts.push(...content.parts);
-      } else {
-        contents.push(content);
+
+    for (const m of params.messages) {
+      if (m.role === 'system') continue;
+
+      if (m.role === 'tool') {
+        const name = pendingNames.shift() ?? (m.toolCallId ? toolCallMap.get(m.toolCallId) : undefined);
+        if (!name) {
+          contents.push({ role: 'user', parts: [{ text: String(m.content) }] });
+          continue;
+        }
+        const part = {
+          functionResponse: {
+            name,
+            response: asStruct(parseToolResult(m.content)),
+          },
+        };
+        const last = contents[contents.length - 1];
+        if (last?.role === 'user' && last.parts?.[0]?.functionResponse) {
+          last.parts.push(part);
+        } else {
+          contents.push({ role: 'user', parts: [part] });
+        }
+        continue;
       }
+
+      if (m.role === 'assistant') {
+        const parts: any[] = [];
+        if (m.content) parts.push({ text: m.content });
+        const names: string[] = [];
+        for (const tc of m.toolCalls ?? []) {
+          parts.push({
+            functionCall: {
+              name: tc.function.name,
+              args: parseArguments(tc.function.arguments),
+              ...(tc.thoughtSignature ? { thoughtSignature: tc.thoughtSignature } : {}),
+            },
+          });
+          names.push(tc.function.name);
+        }
+        if (parts.length === 0) parts.push({ text: m.content || ' ' });
+        contents.push({ role: 'model', parts });
+        if (names.length > 0) pendingNames = names;
+        continue;
+      }
+
+      contents.push({ role: 'user', parts: [{ text: m.content || ' ' }] });
     }
 
     const systemInstruction = params.messages.find(m => m.role === 'system')?.content;
@@ -117,16 +146,19 @@ export class GeminiProvider implements LLMProvider {
       const text = chunk.text;
       const functionCalls = chunk.functionCalls;
 
+      const toolCalls: ToolCall[] | undefined = functionCalls?.map(fc => ({
+        id: crypto.randomUUID(),
+        type: 'function' as const,
+        function: {
+          name: fc.name ?? '',
+          arguments: JSON.stringify(fc.args || {}),
+        },
+        thoughtSignature: (fc as any).thoughtSignature || (fc as any).thought_signature || undefined,
+      }));
+
       yield {
         content: text || undefined,
-        toolCalls: functionCalls?.map(fc => ({
-          id: crypto.randomUUID(),
-          type: 'function' as const,
-          function: {
-            name: fc.name ?? '',
-            arguments: JSON.stringify(fc.args || {}),
-          },
-        })),
+        toolCalls,
         done: false,
       };
     }
@@ -141,8 +173,15 @@ export class GeminiProvider implements LLMProvider {
       if (!response.ok) return [];
       const data = await response.json();
       return (data.models || [])
+        .filter((m: any) => {
+          const actions: string[] | undefined = m.supportedActions;
+          if (!actions) return true;
+          return actions.some(a => a.includes('generateContent')) &&
+            !actions.some(a => a.includes('embedContent'));
+        })
         .map((m: any) => String(m.name || '').replace(/^models\//, ''))
-        .filter(Boolean);
+        .filter(Boolean)
+        .sort();
     } catch {
       return [];
     }
@@ -150,10 +189,10 @@ export class GeminiProvider implements LLMProvider {
 
   async chat(params: ChatParams): Promise<Message> {
     const chunks: string[] = [];
-    let toolCalls: any[] = [];
+    let toolCalls: ToolCall[] = [];
     for await (const chunk of this.chatStream(params)) {
       if (chunk.content) chunks.push(chunk.content);
-      if (chunk.toolCalls) toolCalls = chunk.toolCalls;
+      if (chunk.toolCalls) toolCalls = chunk.toolCalls as ToolCall[];
     }
     return {
       id: crypto.randomUUID(),

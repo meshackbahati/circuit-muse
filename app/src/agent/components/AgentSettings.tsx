@@ -10,6 +10,7 @@ const PROVIDER_INFO: Record<ProviderId, { name: string; needsKey: boolean; defau
   gemini: { name: 'Google Gemini', needsKey: true, defaultUrl: '' },
   openrouter: { name: 'OpenRouter', needsKey: true, defaultUrl: 'https://openrouter.ai/api' },
   moonshot: { name: 'Moonshot', needsKey: true, defaultUrl: 'https://api.moonshot.cn' },
+  nvidia: { name: 'NVIDIA NIM', needsKey: true, defaultUrl: 'https://integrate.api.nvidia.com' },
   custom: { name: 'Custom (OpenAI-compatible)', needsKey: true, defaultUrl: '' },
 };
 
@@ -40,6 +41,7 @@ export const AgentSettings: React.FC<AgentSettingsProps> = ({ onClose }) => {
   const setBaseUrl = useProviderStore((s) => s.setBaseUrl);
 
   const [models, setModels] = useState<ModelsState>({});
+  const [customMode, setCustomMode] = useState<Partial<Record<ProviderId, boolean>>>({});
   const [loading, setLoading] = useState<FlagState>({});
   const [errors, setErrors] = useState<ErrorState>({});
   const [saved, setSaved] = useState(false);
@@ -94,6 +96,11 @@ export const AgentSettings: React.FC<AgentSettingsProps> = ({ onClose }) => {
             const info = PROVIDER_INFO[id];
             const config = providers[id];
             const available = models[id] || [];
+            const isCustom = customMode[id] ?? (
+              (available.length === 0 && !loading[id]) ||
+              (Boolean(config.model) && available.length > 0 && !available.includes(config.model!))
+            );
+            const selectValue = isCustom ? '__custom__' : (config.model || '');
 
             return (
               <div key={id} className="agent-settings-provider">
@@ -159,18 +166,24 @@ export const AgentSettings: React.FC<AgentSettingsProps> = ({ onClose }) => {
                     <div className="agent-settings-field">
                       <label htmlFor={`agent-model-${id}`}>Model</label>
                       <div className="agent-settings-model-row">
-                        <input
+                        <select
                           id={`agent-model-${id}`}
-                          list={`agent-models-${id}`}
-                          type="text"
-                          value={config.model || ''}
+                          value={selectValue}
                           onChange={(e) => {
-                            setModel(id, e.target.value);
+                            const value = e.target.value;
+                            if (value === '__custom__') {
+                              setCustomMode(prev => ({ ...prev, [id]: true }));
+                            } else {
+                              setCustomMode(prev => ({ ...prev, [id]: false }));
+                              setModel(id, value);
+                            }
                             setSaved(false);
                           }}
-                          placeholder="Select or type a model ID"
-                          autoComplete="off"
-                        />
+                        >
+                          {!config.model && !isCustom && <option value="">Select a model</option>}
+                          {available.map(model => <option key={model} value={model}>{model}</option>)}
+                          <option value="__custom__">Type a model ID manually</option>
+                        </select>
                         <button
                           type="button"
                           className="agent-settings-refresh"
@@ -182,9 +195,19 @@ export const AgentSettings: React.FC<AgentSettingsProps> = ({ onClose }) => {
                           {loading[id] ? '\u2026' : '\u21BB'}
                         </button>
                       </div>
-                      <datalist id={`agent-models-${id}`}>
-                        {available.map(model => <option key={model} value={model} />)}
-                      </datalist>
+                      {isCustom && (
+                        <input
+                          id={`agent-model-custom-${id}`}
+                          type="text"
+                          value={config.model || ''}
+                          onChange={(e) => {
+                            setModel(id, e.target.value);
+                            setSaved(false);
+                          }}
+                          placeholder="Model ID, for example gemini-4-argon"
+                          autoComplete="off"
+                        />
+                      )}
                       <span className="agent-settings-hint">
                         {loading[id]
                           ? 'Loading models from the provider API\u2026'

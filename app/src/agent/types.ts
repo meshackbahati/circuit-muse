@@ -1,4 +1,4 @@
-export type ProviderId = 'openai' | 'anthropic' | 'ollama' | 'gemini' | 'openrouter' | 'moonshot' | 'custom';
+export type ProviderId = 'openai' | 'anthropic' | 'ollama' | 'gemini' | 'openrouter' | 'moonshot' | 'nvidia' | 'custom';
 
 export interface ProviderConfig {
   id: ProviderId;
@@ -27,6 +27,8 @@ export interface ToolCall {
     name: string;
     arguments: string;
   };
+  /** Gemini 3 and 4 require this signature to be returned with the call. */
+  thoughtSignature?: string;
 }
 
 export interface ToolDefinition {
