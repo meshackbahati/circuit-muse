@@ -407,7 +407,27 @@ export const Oscilloscope: React.FC = () => {
   } = useOscilloscopeStore();
 
   // Any board running → oscilloscope can capture
+  const boards = useSimulatorStore((s) => s.boards);
+  const activeBoardId = useSimulatorStore((s) => s.activeBoardId);
   const anyRunning = useSimulatorStore((s) => s.boards.some((b) => b.running));
+  const defaultChannelAdded = useRef(false);
+
+  // Give a new scope session a channel on a wired pin, so opening the panel
+  // shows a waveform once the simulation runs instead of an empty canvas.
+  useEffect(() => {
+    if (defaultChannelAdded.current || channels.length > 0 || boards.length === 0) return;
+    defaultChannelAdded.current = true;
+
+    const board = boards.find((b) => b.id === activeBoardId) ?? boards[0];
+    const wired = new Set<string>();
+    for (const wire of useSimulatorStore.getState().wires) {
+      if (wire.start.componentId === board.id) wired.add(wire.start.pinName);
+      if (wire.end.componentId === board.id) wired.add(wire.end.pinName);
+    }
+    const pins = getPinsForBoardKind(board.boardKind);
+    const choice = pins.find((p) => wired.has(String(p.pin))) ?? pins[0];
+    if (choice) addChannel(board.id, choice.pin, choice.label);
+  }, [boards, activeBoardId, channels.length, addChannel]);
 
   const [showPicker, setShowPicker] = useState(false);
   const [pickerAnchor, setPickerAnchor] = useState<DOMRect | null>(null);
