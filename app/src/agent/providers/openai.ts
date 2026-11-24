@@ -1,5 +1,5 @@
 import type { LLMProvider, ChatParams, StreamChunk, Message, ProviderId } from '../types';
-import { parseSSEStream } from './base';
+import { parseSSEStream, resolveModel } from './base';
 
 export class OpenAICompatibleProvider implements LLMProvider {
   id: ProviderId;
@@ -13,14 +13,38 @@ export class OpenAICompatibleProvider implements LLMProvider {
   }
 
   async *chatStream(params: ChatParams): AsyncGenerator<StreamChunk> {
+    const model = await resolveModel(this, params.model);
     const body = {
-      model: params.model || 'gpt-4o-mini',
-      messages: params.messages.map(m => ({
-        role: m.role,
-        content: m.content,
-        ...(m.toolCalls && { tool_calls: m.toolCalls }),
-        ...(m.toolCallId && { tool_call_id: m.toolCallId }),
-      })),
+      model,
+      messages: params.messages.map(m => {
+        if (m.role === 'assistant') {
+          return {
+            role: 'assistant',
+            content: m.content || null,
+            ...(m.toolCalls && m.toolCalls.length > 0 && {
+              tool_calls: m.toolCalls.map(tc => ({
+                id: tc.id,
+                type: 'function',
+                function: {
+                  name: tc.function.name,
+                  arguments: typeof tc.function.arguments === 'string' ? tc.function.arguments : JSON.stringify(tc.function.arguments),
+                },
+              })),
+            }),
+          };
+        }
+        if (m.role === 'tool') {
+          return {
+            role: 'tool',
+            tool_call_id: m.toolCallId || '',
+            content: m.content,
+          };
+        }
+        return {
+          role: m.role,
+          content: m.content || '',
+        };
+      }),
       stream: true,
       ...(params.tools && { tools: params.tools }),
       ...(params.temperature != null && { temperature: params.temperature }),

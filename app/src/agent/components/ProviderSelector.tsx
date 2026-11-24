@@ -17,7 +17,13 @@ export const ProviderSelector: React.FC = () => {
   const providers = useProviderStore((s) => s.providers);
   const setActiveProvider = useProviderStore((s) => s.setActiveProvider);
 
-  const enabledProviders = Object.values(providers).filter((p) => p.enabled);
+  const allProviders = Object.values(providers);
+
+  const isConfigured = (p: (typeof allProviders)[number]) => {
+    if (p.id === 'ollama') return true;
+    if (p.id === 'custom') return Boolean(p.baseUrl?.trim());
+    return Boolean(p.apiKey?.trim());
+  };
 
   return (
     <div className="agent-provider-selector">
@@ -26,9 +32,10 @@ export const ProviderSelector: React.FC = () => {
         onChange={(e) => setActiveProvider(e.target.value as ProviderId)}
         className="agent-provider-select"
       >
-        {enabledProviders.map((p) => (
+        {allProviders.map((p) => (
           <option key={p.id} value={p.id}>
-            {PROVIDER_LABELS[p.id]} {p.model ? `(${p.model})` : ''}
+            {PROVIDER_LABELS[p.id]}
+            {p.model ? ` (${p.model})` : isConfigured(p) ? '' : ' (not configured)'}
           </option>
         ))}
       </select>

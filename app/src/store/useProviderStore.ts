@@ -7,6 +7,7 @@ interface ProviderState {
   providers: Record<ProviderId, ProviderConfig>;
   activeProviderId: ProviderId;
   setActiveProvider: (id: ProviderId) => void;
+  saveAndActivate: (id: ProviderId, patch?: Partial<ProviderConfig>) => void;
   updateProvider: (patch: Partial<ProviderConfig> & { id: ProviderId }) => void;
   setApiKey: (providerId: ProviderId, key: string) => void;
   setModel: (providerId: ProviderId, model: string) => void;
@@ -28,7 +29,24 @@ export const useProviderStore = create<ProviderState>()(
     (set) => ({
       providers: defaultProviders,
       activeProviderId: 'ollama',
-      setActiveProvider: (id) => set({ activeProviderId: id }),
+      setActiveProvider: (id) => set((state) => ({
+        activeProviderId: id,
+        providers: {
+          ...state.providers,
+          [id]: { ...state.providers[id], enabled: true },
+        },
+      })),
+      saveAndActivate: (id, patch) => set((state) => ({
+        activeProviderId: id,
+        providers: {
+          ...state.providers,
+          [id]: {
+            ...state.providers[id],
+            ...(patch || {}),
+            enabled: true,
+          },
+        },
+      })),
       updateProvider: (patch) => set((state) => ({
         providers: {
           ...state.providers,
@@ -38,7 +56,11 @@ export const useProviderStore = create<ProviderState>()(
       setApiKey: (providerId, key) => set((state) => ({
         providers: {
           ...state.providers,
-          [providerId]: { ...state.providers[providerId], apiKey: key },
+          [providerId]: {
+            ...state.providers[providerId],
+            apiKey: key,
+            enabled: key.trim().length > 0 ? true : state.providers[providerId].enabled,
+          },
         },
       })),
       setModel: (providerId, model) => set((state) => ({

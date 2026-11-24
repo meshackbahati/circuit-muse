@@ -1,5 +1,5 @@
 import type { LLMProvider, ChatParams, StreamChunk, Message } from '../types';
-import { parseSSEStream } from './base';
+import { parseSSEStream, resolveModel } from './base';
 
 export class AnthropicProvider implements LLMProvider {
   id = 'anthropic' as const;
@@ -12,18 +12,44 @@ export class AnthropicProvider implements LLMProvider {
   }
 
   async *chatStream(params: ChatParams): AsyncGenerator<StreamChunk> {
+    const model = await resolveModel(this, params.model);
     const systemMsg = params.messages.find(m => m.role === 'system');
     const nonSystem = params.messages.filter(m => m.role !== 'system');
 
     const body: any = {
-      model: params.model || 'claude-sonnet-4-20250514',
+      model,
       max_tokens: params.maxTokens || 4096,
-      messages: nonSystem.map(m => ({
-        role: m.role === 'tool' ? 'user' : m.role,
-        content: m.role === 'tool'
-          ? [{ type: 'tool_result', tool_use_id: m.toolCallId, content: m.content }]
-          : m.content,
-      })),
+      messages: nonSystem.map(m => {
+        if (m.role === 'tool') {
+          return {
+            role: 'user',
+            content: [{ type: 'tool_result', tool_use_id: m.toolCallId || 'call_0', content: m.content }],
+          };
+        }
+        if (m.role === 'assistant' && m.toolCalls && m.toolCalls.length > 0) {
+          const contentBlocks: any[] = [];
+          if (m.content) contentBlocks.push({ type: 'text', text: m.content });
+          for (const tc of m.toolCalls) {
+            let inputObj: any = {};
+            try {
+              inputObj = typeof tc.function.arguments === 'string' ? JSON.parse(tc.function.arguments) : tc.function.arguments;
+            } catch {
+              inputObj = {};
+            }
+            contentBlocks.push({
+              type: 'tool_use',
+              id: tc.id,
+              name: tc.function.name,
+              input: inputObj,
+            });
+          }
+          return { role: 'assistant', content: contentBlocks };
+        }
+        return {
+          role: m.role,
+          content: m.content || ' ',
+        };
+      }),
       stream: true,
     };
 
@@ -99,6 +125,22 @@ export class AnthropicProvider implements LLMProvider {
       } catch {
         // skip malformed lines
       }
+    }
+  }
+
+  async listModels(): Promise<string[]> {
+    try {
+      const response = await fetch(`${this.baseUrl}/v1/models`, {
+        headers: {
+          'x-api-key': this.apiKey,
+          'anthropic-version': '2023-06-01',
+        },
+      });
+      if (!response.ok) return [];
+      const data = await response.json();
+      return (data.data || []).map((m: any) => m.id).filter(Boolean);
+    } catch {
+      return [];
     }
   }
 

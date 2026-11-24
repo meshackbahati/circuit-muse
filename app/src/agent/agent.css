@@ -465,3 +465,70 @@
 .agent-settings-field input::placeholder {
   color: #555;
 }
+
+.agent-settings-active {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 12px;
+  font-size: 12px;
+  color: #a8a8b0;
+  cursor: pointer;
+}
+
+.agent-settings-active input {
+  accent-color: #7c3aed;
+}
+
+.agent-settings-model-row {
+  display: flex;
+  gap: 6px;
+}
+
+.agent-settings-model-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.agent-settings-refresh,
+.agent-settings-save-active,
+.agent-settings-done {
+  background: #2c2c33;
+  color: #e6e6e9;
+  border: 1px solid #3a3a44;
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.agent-settings-refresh:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.agent-settings-save-active {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.agent-settings-hint {
+  font-size: 11px;
+  color: #888;
+  line-height: 1.4;
+}
+
+.agent-settings-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  border-top: 1px solid #2c2c33;
+}
+
+.agent-settings-saved {
+  font-size: 12px;
+  color: #8fd694;
+}

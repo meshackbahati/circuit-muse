@@ -60,3 +60,5 @@ export interface LLMProvider {
   chat(params: ChatParams): Promise<Message>;
   listModels?(): Promise<string[]>;
 }
+
+/** Models are discovered from each provider API at runtime, never bundled here. */

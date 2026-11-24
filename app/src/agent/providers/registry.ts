@@ -43,12 +43,33 @@ export function createProvider(config: ProviderConfig): LLMProvider | null {
   }
 }
 
+/**
+ * Provider identities carry no model defaults. Model identifiers are obtained
+ * from the provider API or entered by the user, because bundled guesses become
+ * stale as quickly as the APIs change.
+ */
 export const PROVIDER_DEFAULTS: Record<ProviderId, Partial<ProviderConfig>> = {
-  openai: { name: 'OpenAI', model: 'gpt-4o-mini' },
-  anthropic: { name: 'Anthropic', model: 'claude-sonnet-4-20250514' },
-  ollama: { name: 'Ollama (Local)', model: 'llama3' },
-  gemini: { name: 'Google Gemini', model: 'gemini-2.0-flash' },
-  openrouter: { name: 'OpenRouter', model: 'openai/gpt-4o-mini' },
-  moonshot: { name: 'Moonshot', model: 'moonshot-v1-8k' },
-  custom: { name: 'Custom (OpenAI-compatible)', model: '' },
+  openai: { name: 'OpenAI' },
+  anthropic: { name: 'Anthropic' },
+  ollama: { name: 'Ollama (Local)' },
+  gemini: { name: 'Google Gemini' },
+  openrouter: { name: 'OpenRouter' },
+  moonshot: { name: 'Moonshot' },
+  custom: { name: 'Custom (OpenAI-compatible)' },
 };
+
+/**
+ * Ask the provider API which models it currently serves. The provider is
+ * instantiated as enabled here because the settings panel needs to query a
+ * provider before the user has activated it for chat.
+ */
+export async function listProviderModels(config: ProviderConfig): Promise<string[]> {
+  const provider = createProvider({ ...config, enabled: true });
+  if (!provider?.listModels) return [];
+  try {
+    const models = await provider.listModels();
+    return [...new Set(models.map(m => m.trim()).filter(Boolean))].sort();
+  } catch {
+    return [];
+  }
+}

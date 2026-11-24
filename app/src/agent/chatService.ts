@@ -1,12 +1,15 @@
 import type { Message, ToolCall } from './types';
 import { createProvider } from './providers/registry';
+import { resolveModel } from './providers/base';
 import { useProviderStore } from '../store/useProviderStore';
 import { useAgentStore } from '../store/useAgentStore';
 import { AGENT_TOOLS } from './toolDefs';
 import { SYSTEM_PROMPT } from './systemPrompt';
 import { executeToolCall } from './toolExecutor';
 
-const MAX_TOOL_ITERATIONS = 10;
+// A full build-and-verify cycle needs more than a handful of tool rounds:
+// inspect, build, write, verify, compile, fix, run, observe, and repair.
+const MAX_TOOL_ITERATIONS = 30;
 let activeRequest: AbortController | null = null;
 
 export function abortMessage(): void {
@@ -33,6 +36,22 @@ export async function sendMessage(content: string): Promise<void> {
     return;
   }
 
+  let model: string;
+  try {
+    model = await resolveModel(provider, config.model);
+  } catch (error) {
+    agentStore.addMessage({
+      role: 'assistant',
+      content: `Error: ${error instanceof Error ? error.message : String(error)}`,
+    });
+    return;
+  }
+
+  // Persist a model discovered from the API so later turns reuse the choice.
+  if (config.model !== model) {
+    useProviderStore.getState().setModel(config.id, model);
+  }
+
   agentStore.setStreaming(true);
 
   try {
@@ -42,25 +61,27 @@ export async function sendMessage(content: string): Promise<void> {
     ];
 
     let iterations = 0;
+    let previousCallSignature = '';
+    let repeatedCalls = 0;
 
     while (iterations < MAX_TOOL_ITERATIONS) {
       let fullContent = '';
       let toolCalls: ToolCall[] = [];
+      let assistantId: string | null = null;
 
       for await (const chunk of provider.chatStream({
         messages,
         tools: AGENT_TOOLS,
-        model: config.model,
+        model,
         signal: controller.signal,
       })) {
         if (controller.signal.aborted) break;
         if (chunk.content) {
           fullContent += chunk.content;
-          agentStore.updateLastAssistantMessage(fullContent);
-          const msgs = useAgentStore.getState().messages;
-          const lastMsg = msgs[msgs.length - 1];
-          if (!lastMsg || lastMsg.role !== 'assistant') {
-            agentStore.addMessage({ role: 'assistant', content: fullContent });
+          if (!assistantId) {
+            assistantId = agentStore.addMessage({ role: 'assistant', content: fullContent });
+          } else {
+            agentStore.updateMessage(assistantId, { content: fullContent });
           }
         }
         if (chunk.toolCalls) {
@@ -69,35 +90,53 @@ export async function sendMessage(content: string): Promise<void> {
       }
 
       if (controller.signal.aborted) break;
-
       if (toolCalls.length === 0) break;
 
-      if (fullContent) {
-        // Already added via updateLastAssistantMessage
+      // Identical calls after two attempts indicate that the model is looping
+      // rather than reacting to tool output, which would otherwise consume the
+      // whole iteration budget.
+      const callSignature = toolCalls
+        .map(tc => `${tc.function.name}:${tc.function.arguments}`)
+        .join('|');
+      repeatedCalls = callSignature === previousCallSignature ? repeatedCalls + 1 : 0;
+      previousCallSignature = callSignature;
+      if (repeatedCalls >= 2) {
+        agentStore.addMessage({
+          role: 'assistant',
+          content: 'I repeated the same tool call without progress, so I stopped to avoid a loop. Review the last tool result or give me a different instruction.',
+        });
+        break;
+      }
+
+      if (assistantId) {
+        agentStore.updateMessage(assistantId, { toolCalls });
       } else {
         agentStore.addMessage({ role: 'assistant', content: '', toolCalls });
       }
+
+      // One assistant turn carries every tool call, which keeps the role
+      // sequence valid for providers that require tool_use or functionCall
+      // blocks to precede their results.
+      messages.push({
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: fullContent,
+        toolCalls,
+        timestamp: Date.now(),
+      });
 
       for (const tc of toolCalls) {
         if (controller.signal.aborted) break;
         agentStore.setExecutingTool(tc.function.name);
         const result = await executeToolCall(tc);
+        agentStore.setExecutingTool(null);
         agentStore.addMessage({
           role: 'tool',
           content: result,
           toolCallId: tc.id,
         });
-        agentStore.setExecutingTool(null);
-
         messages.push({
           id: tc.id,
-          role: 'assistant',
-          content: fullContent,
-          toolCalls: [tc],
-          timestamp: Date.now(),
-        });
-        messages.push({
-          id: crypto.randomUUID(),
           role: 'tool',
           content: result,
           toolCallId: tc.id,
