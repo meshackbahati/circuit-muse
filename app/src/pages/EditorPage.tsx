@@ -93,8 +93,10 @@ export const EditorPage: React.FC = () => {
   const [bottomPanelHeight, setBottomPanelHeight] = useState(BOTTOM_PANEL_DEFAULT);
 
   const agentPanelOpen = useAgentStore((s) => s.panelOpen);
+  const agentPanelMinimized = useAgentStore((s) => s.panelMinimized);
   const agentPanelWidth = useAgentStore((s) => s.panelWidth);
   const toggleAgentPanel = useAgentStore((s) => s.togglePanel);
+  const toggleAgentPanelMinimized = useAgentStore((s) => s.togglePanelMinimized);
   const [showProjects, setShowProjects] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showExport, setShowExport] = useState(false);
@@ -621,7 +623,8 @@ export const EditorPage: React.FC = () => {
         </div>
       )}
 
-      <div className="app-container" ref={containerRef}>
+      <div className="app-container">
+        <div className="workspace-area" ref={containerRef}>
         {/* ── Editor side ── */}
         <div
           className="editor-panel"
@@ -792,12 +795,15 @@ export const EditorPage: React.FC = () => {
             </>
           )}
         </div>
-        {/* ── Agent panel: absolute overlay ── */}
-        {agentPanelOpen && (
+        </div>
+
+        {/* ── Agent dock: a flex sibling that shrinks the workspace ── */}
+        {agentPanelOpen && !agentPanelMinimized && (
           <div
             className="agent-panel-dock"
             style={{
               width: agentPanelWidth,
+              flexBasis: agentPanelWidth,
             }}
           >
             {!isMobile && (
@@ -806,19 +812,48 @@ export const EditorPage: React.FC = () => {
                 role="separator"
                 aria-orientation="vertical"
                 aria-label="Resize AI Agent panel"
-                title="Drag to resize AI Agent panel"
+                title="Drag to resize the AI Agent panel"
                 onPointerDown={(event) => {
                   event.preventDefault();
                   event.currentTarget.setPointerCapture(event.pointerId);
                 }}
                 onPointerMove={(event) => {
                   if (event.buttons === 1) {
-                    useAgentStore.getState().setPanelWidth(window.innerWidth - event.clientX);
+                    const workspace = containerRef.current?.getBoundingClientRect();
+                    const rightEdge = workspace ? workspace.right : window.innerWidth;
+                    useAgentStore.getState().setPanelWidth(rightEdge - event.clientX);
                   }
                 }}
               />
             )}
             <AgentChatPanel />
+          </div>
+        )}
+
+        {agentPanelOpen && agentPanelMinimized && (
+          <div className="agent-panel-rail">
+            <button
+              className="agent-rail-expand"
+              onClick={toggleAgentPanelMinimized}
+              title="Expand AI Agent panel"
+              aria-label="Expand AI Agent panel"
+              type="button"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <span className="agent-rail-label">AI Agent</span>
           </div>
         )}
       </div>

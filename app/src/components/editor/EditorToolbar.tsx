@@ -353,6 +353,21 @@ export const EditorToolbar = ({
     setCompileLogs([]);
     trackCompileCode();
 
+    // Multi-board circuits: the build action covers every board in the
+    // project. Each board compiles with its own file group, so two boards
+    // with different sketches stay independent. Single-board projects keep
+    // the existing path below.
+    if (boards.length > 1) {
+      const { failed } = await compileAllBoards();
+      setCompiling(false);
+      if (failed > 0) {
+        setMessage({ type: 'error', text: 'Some boards failed to compile. Check the console output.' });
+      } else {
+        setMessage({ type: 'success', text: `All ${boards.length} boards compiled successfully.` });
+      }
+      return;
+    }
+
     // ── Custom-chip preparation ─────────────────────────────────────────
     // Any custom-chip on the canvas is made "live" here so a single
     // Compile / Run is enough — no separate trip through the chip designer
@@ -629,6 +644,15 @@ export const EditorToolbar = ({
 
   const handleRun = async (skipVerify: boolean | React.MouseEvent<HTMLButtonElement> = false) => {
     console.log('[handleRun] click', { activeBoardId, running, codeChangedSinceLastCompile });
+
+    // Multi-board circuits: the Run action starts every compiled board (and
+    // compiles first when something is dirty). Skipping the per-board
+    // verification path here mirrors Run All, because each board may have a
+    // different firmware image.
+    if (boards.length > 1) {
+      await handleRunAll();
+      return;
+    }
 
     // Pre-flight: solve the circuit and check for shorts / overcurrent /
     // overpower. If anything trips we hand control to the modal, which

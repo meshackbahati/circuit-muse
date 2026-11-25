@@ -3,7 +3,7 @@ import { useSimulatorStore, getEsp32Bridge } from '../../store/useSimulatorStore
 import { useElectricalStore } from '../../store/useElectricalStore';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { Undo2, Redo2 } from 'lucide-react';
+import { Undo2, Redo2, Zap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ESP32_ADC_PIN_MAP } from '../circuit-components/Esp32Element';
 import { ComponentPickerModal } from '../ComponentPickerModal';
@@ -2104,6 +2104,22 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
               >
                 {t('editor.canvas.noBoard')}
               </span>
+            )}
+
+            {isTauriRuntime && activeBoard && (
+              <button
+                onClick={() => setFlashModalFor(activeBoard.id)}
+                disabled={!activeBoard.compiledProgram}
+                className="canvas-icon-btn"
+                title={
+                  activeBoard.compiledProgram
+                    ? 'Flash the compiled sketch to this board over USB'
+                    : 'Compile the active board before flashing'
+                }
+                aria-label="Flash compiled sketch to hardware"
+              >
+                <Zap size={16} strokeWidth={2} aria-hidden="true" />
+              </button>
             )}
 
             {/* Undo / Redo — canvas-scoped, mirrors the Ctrl+Z / Ctrl+Y

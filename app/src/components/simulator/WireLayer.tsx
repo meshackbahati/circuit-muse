@@ -71,7 +71,7 @@ export const WireLayer: React.FC<WireLayerProps> = ({
         height: '100%',
         overflow: 'visible',
         pointerEvents: 'none',
-        zIndex: 35,
+        zIndex: 0,
       }}
     >
       {wires.map((wire) => (

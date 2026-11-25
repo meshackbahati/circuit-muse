@@ -211,29 +211,79 @@ body {
   min-width: 0;
 }
 
-/* The AI dock overlays the workspace. Keep its contents out of the flex
-   sizing calculation so opening it cannot collapse the editor/canvas row. */
+/* The workspace and the AI dock share the row. The dock is a flex sibling,
+   so opening it shrinks the editor and canvas instead of covering them. */
+.workspace-area {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
 .agent-panel-dock {
-  position: absolute;
-  inset: 0 0 0 auto;
+  position: relative;
+  flex: 0 0 auto;
   height: 100%;
   max-height: 100%;
   box-sizing: border-box;
   min-width: 300px;
-  max-width: min(800px, 80vw);
+  max-width: min(800px, 60vw);
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border-left: 1px solid #2c2c33;
   background: #1e1e23;
-  z-index: 1000;
+  z-index: 5;
+}
+
+.agent-panel-rail {
+  flex: 0 0 44px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  background: #1a1a1f;
+  border-left: 1px solid #2c2c33;
+  z-index: 5;
+}
+
+.agent-rail-expand {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: #007acc;
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.agent-rail-expand:hover {
+  background: #0088e0;
+}
+
+.agent-rail-label {
+  writing-mode: vertical-rl;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #8b8b94;
+  text-transform: uppercase;
+  user-select: none;
 }
 
 .agent-panel-resize {
   position: absolute;
   inset: 0 auto 0 0;
-  width: 6px;
+  width: 10px;
   cursor: ew-resize;
   touch-action: none;
   z-index: 2;
@@ -242,14 +292,15 @@ body {
 .agent-panel-resize::after {
   content: '';
   position: absolute;
-  inset: 0 auto 0 2px;
+  inset: 0 auto 0 3px;
   width: 2px;
-  background: transparent;
+  background: #2c2c33;
   transition: background-color 120ms ease;
 }
 
 .agent-panel-resize:hover::after,
-.agent-panel-resize:active::after {
+.agent-panel-resize:active::after,
+.agent-panel-dock:focus-within .agent-panel-resize::after {
   background: #7c3aed;
 }
 
@@ -352,11 +403,34 @@ body {
     flex-direction: column;
   }
 
+  .workspace-area {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
   .agent-panel-dock {
+    position: absolute;
     inset: 0;
     width: 100% !important;
     min-width: 0;
     max-width: none;
+    z-index: 1000;
+  }
+
+  .agent-panel-rail {
+    flex: 0 0 40px;
+    width: 100%;
+    height: 40px;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    padding: 0;
+    border-left: none;
+    border-top: 1px solid #2c2c33;
+  }
+
+  .agent-rail-label {
+    writing-mode: horizontal-tb;
   }
 
   .agent-panel-resize {

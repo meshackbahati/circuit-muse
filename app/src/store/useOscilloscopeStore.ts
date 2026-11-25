@@ -31,7 +31,7 @@
 
 import { create } from 'zustand';
 
-export const MAX_SAMPLES = 10_000;
+export const MAX_SAMPLES = 6_000;
 
 /** Distinct colors cycled through when adding new channels */
 export const CHANNEL_COLORS = [

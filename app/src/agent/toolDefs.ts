@@ -115,7 +115,7 @@ export const AGENT_TOOLS: ToolDefinition[] = [
     type: 'function',
     function: {
       name: 'wire_components',
-      description: 'Connect two pins with a wire. Use ids from get_circuit_state and exact pin names from get_pin_names or list_available_components.',
+      description: 'Connect two pins with a wire. Use ids from get_circuit_state and exact pin names from get_pin_names or list_available_components. Add waypoints when a direct path would cross the face of a display or another part.',
       parameters: {
         type: 'object',
         properties: {
@@ -124,6 +124,18 @@ export const AGENT_TOOLS: ToolDefinition[] = [
           to_part: { type: 'string', description: 'Destination component/board ID' },
           to_pin: { type: 'string', description: 'Destination pin name' },
           color: { type: 'string', description: 'Wire color' },
+          waypoints: {
+            type: 'array',
+            description: 'Optional canvas points the wire passes through, in order, to route around a part.',
+            items: {
+              type: 'object',
+              properties: {
+                x: { type: 'number' },
+                y: { type: 'number' },
+              },
+              required: ['x', 'y'],
+            },
+          },
         },
         required: ['from_part', 'from_pin', 'to_part', 'to_pin'],
       },
@@ -139,6 +151,14 @@ export const AGENT_TOOLS: ToolDefinition[] = [
         properties: { wire_id: { type: 'string', description: 'Wire id from get_circuit_state' } },
         required: ['wire_id'],
       },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'check_wiring',
+      description: 'Report the canvas wiring: every wire with endpoints, components with no wires on them, and any wires that point at missing parts. Use this after creating components or wires to make sure nothing is left dangling.',
+      parameters: { type: 'object', properties: {} },
     },
   },
   {
@@ -180,6 +200,14 @@ export const AGENT_TOOLS: ToolDefinition[] = [
         type: 'object',
         properties: { board_id: { type: 'string', description: 'Optional board id; defaults to the active board' } },
       },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'compile_all_code',
+      description: 'Compile every board on the canvas once and return a combined result. Use this for multi-board circuits instead of calling compile_code per board.',
+      parameters: { type: 'object', properties: {} },
     },
   },
   {

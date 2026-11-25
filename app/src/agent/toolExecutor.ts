@@ -154,12 +154,21 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
       for (const id of [args.from_part, args.to_part]) {
         if (!known.has(id)) return JSON.stringify({ error: `Part not found on canvas: ${id}` });
       }
+      const waypoints = Array.isArray(args.waypoints)
+        ? args.waypoints
+            .filter((p: unknown): p is { x: number; y: number } => {
+              if (!p || typeof p !== 'object') return false;
+              const point = p as { x?: unknown; y?: unknown };
+              return typeof point.x === 'number' && typeof point.y === 'number';
+            })
+            .map((p) => ({ x: p.x, y: p.y }))
+        : [];
       const wire = {
         id: `wire-${Date.now()}`,
         start: { componentId: args.from_part, pinName: args.from_pin },
         end: { componentId: args.to_part, pinName: args.to_pin },
         color: args.color ?? 'green',
-        waypoints: [],
+        waypoints,
       } as any;
       sim.recordAddWire(wire);
       return JSON.stringify({ success: true, wire_id: wire.id });
@@ -189,6 +198,32 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
         });
       }
       return JSON.stringify({ part_id: args.part_id, pins });
+    }
+    case 'check_wiring': {
+      const sim = useSimulatorStore.getState();
+      const wires = sim.wires.map((w: MutableState) => ({
+        id: w.id,
+        from_part: w.start.componentId,
+        from_pin: w.start.pinName,
+        to_part: w.end.componentId,
+        to_pin: w.end.pinName,
+      }));
+      const knownParts = new Set<string>(
+        [...sim.boards.map((b: MutableState) => b.id), ...sim.components.map((c: MutableState) => c.id)],
+      );
+      const usedParts = new Set(wires.flatMap((w: Record<string, string>) => [w.from_part, w.to_part]));
+      const unconnected_components = sim.components
+        .filter((c: MutableState) => !usedParts.has(c.id))
+        .map((c: MutableState) => ({ component_id: c.id, type: c.metadataId }));
+      const orphan_wires = wires.filter(
+        (w: Record<string, string>) => !knownParts.has(w.from_part) || !knownParts.has(w.to_part),
+      );
+      return JSON.stringify({
+        wire_count: wires.length,
+        wires,
+        unconnected_components,
+        orphan_wires,
+      });
     }
     case 'compile_code': {
       const { compileCode } = await import('../services/compilation');
@@ -247,6 +282,22 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
         board_kind: board.boardKind,
         message: 'Compilation successful; firmware loaded into the board',
         stdout_tail: tail(result.stdout, 2000),
+      });
+    }
+    case 'compile_all_code': {
+      const sim = useSimulatorStore.getState();
+      const results: Array<Record<string, unknown>> = [];
+      for (const board of sim.boards) {
+        const raw = await executeToolCall({
+          id: `compile-${board.id}`,
+          type: 'function',
+          function: { name: 'compile_code', arguments: JSON.stringify({ board_id: board.id }) },
+        });
+        results.push({ board_id: board.id, ...JSON.parse(raw) });
+      }
+      return JSON.stringify({
+        success: results.every(r => r.success === true),
+        boards: results,
       });
     }
     case 'run_simulation': {

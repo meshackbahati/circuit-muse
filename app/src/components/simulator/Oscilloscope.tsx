@@ -82,6 +82,19 @@ function getPinsForBoardKind(boardKind: BoardKind): { pin: number; label: string
 
 // ── Canvas rendering helpers ────────────────────────────────────────────────
 
+/**
+ * Logical (CSS pixel) size of a canvas whose backing store is scaled by the
+ * device pixel ratio. Drawing with these dimensions keeps the trace aligned
+ * with the visible panel on HiDPI screens.
+ */
+function canvasSize(canvas: HTMLCanvasElement): { width: number; height: number } {
+  const dpr = window.devicePixelRatio || 1;
+  return {
+    width: canvas.clientWidth || canvas.width / dpr || 1,
+    height: canvas.clientHeight || canvas.height / dpr || 1,
+  };
+}
+
 function drawWaveform(
   canvas: HTMLCanvasElement,
   samples: OscSample[],
@@ -95,34 +108,66 @@ function drawWaveform(
    */
   triggerXFrac: number | null = null,
 ): void {
-  const { width, height } = canvas;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
+  const { width, height } = canvasSize(canvas);
 
   ctx.clearRect(0, 0, width, height);
 
-  // Background grid lines
-  ctx.strokeStyle = '#1e1e1e';
+  // Dark instrument face, slightly lighter toward the centre.
+  const background = ctx.createLinearGradient(0, 0, 0, height);
+  background.addColorStop(0, '#0a1014');
+  background.addColorStop(0.5, '#0c1419');
+  background.addColorStop(1, '#080d11');
+  ctx.fillStyle = background;
+  ctx.fillRect(0, 0, width, height);
+
+  // Minor grid: five subdivisions per major division horizontally and two
+  // per major row vertically. Kept dim so the trace stays dominant.
+  ctx.strokeStyle = 'rgba(70, 110, 125, 0.13)';
   ctx.lineWidth = 1;
+  const minorX = width / (NUM_DIVS * 5);
+  for (let x = minorX; x < width; x += minorX) {
+    ctx.beginPath();
+    ctx.moveTo(Math.round(x) + 0.5, 0);
+    ctx.lineTo(Math.round(x) + 0.5, height);
+    ctx.stroke();
+  }
+  const minorY = height / 8;
+  for (let y = minorY; y < height; y += minorY) {
+    ctx.beginPath();
+    ctx.moveTo(0, Math.round(y) + 0.5);
+    ctx.lineTo(width, Math.round(y) + 0.5);
+    ctx.stroke();
+  }
+
+  // Major grid.
+  ctx.strokeStyle = 'rgba(90, 150, 170, 0.22)';
   for (let d = 0; d <= NUM_DIVS; d++) {
-    const x = Math.round((d / NUM_DIVS) * width);
+    const x = Math.round((d / NUM_DIVS) * width) + 0.5;
     ctx.beginPath();
     ctx.moveTo(x, 0);
     ctx.lineTo(x, height);
     ctx.stroke();
   }
+  for (let d = 0; d <= 4; d++) {
+    const y = Math.round((d / 4) * height) + 0.5;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(width, y);
+    ctx.stroke();
+  }
 
-  // Horizontal center guide
-  ctx.strokeStyle = '#2a2a2a';
-  ctx.lineWidth = 1;
+  // Centre guide.
+  ctx.strokeStyle = 'rgba(120, 190, 210, 0.3)';
   ctx.beginPath();
-  ctx.moveTo(0, height / 2);
-  ctx.lineTo(width, height / 2);
+  ctx.moveTo(0, Math.round(height / 2) + 0.5);
+  ctx.lineTo(width, Math.round(height / 2) + 0.5);
   ctx.stroke();
 
   // Trigger marker — drawn under the trace so the waveform sits on top.
   if (triggerXFrac !== null) {
-    const x = Math.round(triggerXFrac * width);
+    const x = Math.round(triggerXFrac * width) + 0.5;
     ctx.strokeStyle = '#ff9800';
     ctx.lineWidth = 1;
     ctx.setLineDash([4, 3]);
@@ -132,20 +177,16 @@ function drawWaveform(
     ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle = '#ff9800';
-    ctx.font = 'bold 9px monospace';
-    ctx.fillText('T', x + 2, 10);
+    ctx.font = 'bold 9px ui-monospace, monospace';
+    ctx.fillText('T', x + 3, 11);
   }
 
   if (samples.length === 0) return;
 
   const windowStartMs = windowEndMs - windowMs;
   const toX = (t: number) => ((t - windowStartMs) / windowMs) * width;
-  const HIGH_Y = Math.round(height * 0.15);
-  const LOW_Y = Math.round(height * 0.85);
-
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
+  const HIGH_Y = Math.round(height * 0.2);
+  const LOW_Y = Math.round(height * 0.8);
 
   let initState = false;
   for (let i = samples.length - 1; i >= 0; i--) {
@@ -156,26 +197,59 @@ function drawWaveform(
   }
 
   let currentY = initState ? HIGH_Y : LOW_Y;
-  ctx.moveTo(0, currentY);
 
+  // Soft glow underneath a crisp trace gives the display depth without
+  // obscuring the signal transitions.
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.globalAlpha = 0.22;
+  ctx.lineWidth = 5;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(0, currentY);
   for (const s of samples) {
     if (s.timeMs < windowStartMs) continue;
     if (s.timeMs > windowEndMs) break;
-
     const x = Math.max(0, Math.min(width, toX(s.timeMs)));
     const nextY = s.state ? HIGH_Y : LOW_Y;
     ctx.lineTo(x, currentY);
     ctx.lineTo(x, nextY);
     currentY = nextY;
   }
+  ctx.lineTo(width, currentY);
+  ctx.stroke();
+  ctx.restore();
 
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.6;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  currentY = initState ? HIGH_Y : LOW_Y;
+  ctx.moveTo(0, currentY);
+  let lastX = 0;
+  for (const s of samples) {
+    if (s.timeMs < windowStartMs) continue;
+    if (s.timeMs > windowEndMs) break;
+    const x = Math.max(0, Math.min(width, toX(s.timeMs)));
+    const nextY = s.state ? HIGH_Y : LOW_Y;
+    ctx.lineTo(x, currentY);
+    ctx.lineTo(x, nextY);
+    currentY = nextY;
+    lastX = x;
+  }
   ctx.lineTo(width, currentY);
   ctx.stroke();
 
+  // Endpoint marker.
   ctx.fillStyle = color;
-  ctx.font = '9px monospace';
-  ctx.fillText('H', width - 12, HIGH_Y + 3);
-  ctx.fillText('L', width - 12, LOW_Y + 3);
+  ctx.beginPath();
+  ctx.arc(lastX, currentY, 2.4, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.42)';
+  ctx.font = '9px ui-monospace, monospace';
+  ctx.fillText('H', width - 12, HIGH_Y - 4);
+  ctx.fillText('L', width - 12, LOW_Y + 11);
 }
 
 function drawRuler(
@@ -184,14 +258,16 @@ function drawRuler(
   windowMs: number,
   timeDivMs: number,
 ): void {
-  const { width, height } = canvas;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
+  const { width, height } = canvasSize(canvas);
 
   ctx.clearRect(0, 0, width, height);
-  ctx.strokeStyle = '#444';
-  ctx.fillStyle = '#888';
-  ctx.font = '9px monospace';
+  ctx.fillStyle = '#0b1115';
+  ctx.fillRect(0, 0, width, height);
+  ctx.strokeStyle = '#3b4c55';
+  ctx.fillStyle = '#7f929c';
+  ctx.font = '9px ui-monospace, monospace';
   ctx.lineWidth = 1;
 
   const windowStartMs = windowEndMs - windowMs;
@@ -229,26 +305,6 @@ interface ChannelCanvasProps {
   triggerXFrac: number | null;
 }
 
-function fitCanvas(
-  canvas: HTMLCanvasElement,
-  wrap: HTMLDivElement,
-  draw: () => void,
-): ResizeObserver {
-  const resize = () => {
-    const { width, height } = wrap.getBoundingClientRect();
-    if (width === 0 || height === 0) return;
-    canvas.width = Math.floor(width) * window.devicePixelRatio;
-    canvas.height = Math.floor(height) * window.devicePixelRatio;
-    const ctx = canvas.getContext('2d');
-    if (ctx) ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    draw();
-  };
-  resize();
-  const observer = new ResizeObserver(resize);
-  observer.observe(wrap);
-  return observer;
-}
-
 const ChannelCanvas: React.FC<ChannelCanvasProps> = ({
   channel,
   samples,
@@ -258,24 +314,125 @@ const ChannelCanvas: React.FC<ChannelCanvasProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const drawRef = useRef<() => void>(() => {});
 
+  drawRef.current = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    drawWaveform(canvas, samples, channel.color, windowEndMs, windowMs, triggerXFrac);
+  };
+
+  // Size the backing store once per layout change. Recreating the observer on
+  // every sample would run at animation-frame rate and thrash the canvas.
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
     const wrap = wrapRef.current;
     if (!canvas || !wrap) return;
 
-    const observer = fitCanvas(canvas, wrap, () =>
-      drawWaveform(canvas, samples, channel.color, windowEndMs, windowMs, triggerXFrac),
-    );
+    const resize = () => {
+      const { width, height } = wrap.getBoundingClientRect();
+      if (width === 0 || height === 0) return;
+      const dpr = window.devicePixelRatio || 1;
+      const nextWidth = Math.max(1, Math.floor(width * dpr));
+      const nextHeight = Math.max(1, Math.floor(height * dpr));
+      if (canvas.width !== nextWidth || canvas.height !== nextHeight) {
+        canvas.width = nextWidth;
+        canvas.height = nextHeight;
+      }
+      const ctx = canvas.getContext('2d');
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawRef.current();
+    };
+
+    resize();
+    const observer = new ResizeObserver(resize);
+    observer.observe(wrap);
     return () => observer.disconnect();
+  }, []);
+
+  useLayoutEffect(() => {
+    drawRef.current();
   }, [samples, channel.color, windowEndMs, windowMs, triggerXFrac]);
 
   return (
     <div ref={wrapRef} className="osc-channel-canvas-wrap">
       <canvas ref={canvasRef} className="osc-channel-canvas" />
+      {samples.length === 0 && <span className="osc-channel-idle">waiting for signal</span>}
     </div>
   );
 };
+
+// ── Measurements ────────────────────────────────────────────────────────────
+
+interface ChannelMeasurement {
+  /** Estimated frequency in hertz, or 0 when fewer than two rising edges exist. */
+  frequency: number;
+  /** Fraction of the visible window spent HIGH, 0..1. */
+  duty: number;
+  /** Latest known logic level, or null before the first sample. */
+  state: boolean | null;
+  edges: number;
+}
+
+function measureChannel(
+  samples: OscSample[],
+  windowEndMs: number,
+  windowMs: number,
+): ChannelMeasurement {
+  const start = windowEndMs - windowMs;
+  let state: boolean | null = null;
+  for (let i = samples.length - 1; i >= 0; i--) {
+    if (samples[i].timeMs <= start) {
+      state = samples[i].state;
+      break;
+    }
+  }
+
+  const rising: number[] = [];
+  let previous = state;
+  let edges = 0;
+  let highMs = 0;
+  let totalMs = 0;
+  let segmentStart = start;
+
+  for (const sample of samples) {
+    if (sample.timeMs < start) continue;
+    if (sample.timeMs > windowEndMs) break;
+    const elapsed = Math.max(0, sample.timeMs - segmentStart);
+    totalMs += elapsed;
+    if (previous) highMs += elapsed;
+    if (previous !== null && previous !== sample.state) {
+      edges++;
+      if (sample.state) rising.push(sample.timeMs);
+    }
+    previous = sample.state;
+    segmentStart = sample.timeMs;
+    state = sample.state;
+  }
+
+  const tail = Math.max(0, windowEndMs - segmentStart);
+  totalMs += tail;
+  if (previous) highMs += tail;
+
+  const frequency =
+    rising.length >= 2
+      ? ((rising.length - 1) * 1000) / (rising[rising.length - 1] - rising[0])
+      : 0;
+
+  return {
+    frequency,
+    duty: totalMs > 0 ? highMs / totalMs : 0,
+    state,
+    edges,
+  };
+}
+
+function formatFrequency(hz: number): string {
+  if (!Number.isFinite(hz) || hz <= 0) return '-- Hz';
+  if (hz >= 1_000_000) return `${(hz / 1_000_000).toFixed(2)} MHz`;
+  if (hz >= 1_000) return `${(hz / 1_000).toFixed(hz >= 10_000 ? 1 : 2)} kHz`;
+  return `${hz.toFixed(hz < 10 ? 2 : 1)} Hz`;
+}
 
 // ── Ruler canvas ─────────────────────────────────────────────────────────────
 
@@ -288,16 +445,41 @@ interface RulerCanvasProps {
 const RulerCanvas: React.FC<RulerCanvasProps> = ({ windowEndMs, windowMs, timeDivMs }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const drawRef = useRef<() => void>(() => {});
+
+  drawRef.current = () => {
+    const canvas = canvasRef.current;
+    if (canvas) drawRuler(canvas, windowEndMs, windowMs, timeDivMs);
+  };
 
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
     const wrap = wrapRef.current;
     if (!canvas || !wrap) return;
 
-    const observer = fitCanvas(canvas, wrap, () =>
-      drawRuler(canvas, windowEndMs, windowMs, timeDivMs),
-    );
+    const resize = () => {
+      const { width, height } = wrap.getBoundingClientRect();
+      if (width === 0 || height === 0) return;
+      const dpr = window.devicePixelRatio || 1;
+      const nextWidth = Math.max(1, Math.floor(width * dpr));
+      const nextHeight = Math.max(1, Math.floor(height * dpr));
+      if (canvas.width !== nextWidth || canvas.height !== nextHeight) {
+        canvas.width = nextWidth;
+        canvas.height = nextHeight;
+      }
+      const ctx = canvas.getContext('2d');
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawRef.current();
+    };
+
+    resize();
+    const observer = new ResizeObserver(resize);
+    observer.observe(wrap);
     return () => observer.disconnect();
+  }, []);
+
+  useLayoutEffect(() => {
+    drawRef.current();
   }, [windowEndMs, windowMs, timeDivMs]);
 
   return (
@@ -415,6 +597,7 @@ export const Oscilloscope: React.FC = () => {
     setTriggerMode,
     setTriggerChannel,
     setTriggerEdge,
+    setTriggerPosition,
     rearmTrigger,
   } = useOscilloscopeStore();
 
@@ -443,8 +626,35 @@ export const Oscilloscope: React.FC = () => {
 
   const [showPicker, setShowPicker] = useState(false);
   const [pickerAnchor, setPickerAnchor] = useState<DOMRect | null>(null);
+  const [showTrigger, setShowTrigger] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const addBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!expanded) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setExpanded(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [expanded]);
+
+  const handleQuickAdd = useCallback(() => {
+    const board = boards.find((b) => b.id === activeBoardId) ?? boards[0];
+    if (!board) return;
+    const wired = new Set<string>();
+    for (const wire of useSimulatorStore.getState().wires) {
+      if (wire.start.componentId === board.id) wired.add(wire.start.pinName);
+      if (wire.end.componentId === board.id) wired.add(wire.end.pinName);
+    }
+    const pins = getPinsForBoardKind(board.boardKind);
+    const choice =
+      pins.find((pin) => wired.has(String(pin.pin))) ??
+      pins.find((pin) => pin.pin === 13) ??
+      pins[0];
+    if (choice) addChannel(board.id, choice.pin, choice.label);
+  }, [boards, activeBoardId, addChannel]);
 
   const handleTogglePicker = () => {
     if (showPicker) {
@@ -479,13 +689,17 @@ export const Oscilloscope: React.FC = () => {
 
   useEffect(() => {
     if (anyRunning && capturing) {
+      // Redraw at 20 fps while capturing instead of the full 60 Hz rAF rate.
+      // Each tick only bumps a counter; the canvases re-render from the
+      // sample buffers, which keeps CPU and memory usage low on weaker
+      // laptop chipsets.
       const tick = () => {
         forceRedraw((n) => n + 1);
-        rafRef.current = requestAnimationFrame(tick);
+        rafRef.current = window.setTimeout(tick, 50);
       };
-      rafRef.current = requestAnimationFrame(tick);
+      rafRef.current = window.setTimeout(tick, 50);
       return () => {
-        if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+        if (rafRef.current !== null) window.clearTimeout(rafRef.current);
       };
     }
   }, [anyRunning, capturing]);
@@ -542,174 +756,231 @@ export const Oscilloscope: React.FC = () => {
   };
 
   return (
-    <div className="osc-container">
-      {/* ── Header ── */}
-      <div className="osc-header">
-        <span className="osc-title">{t('editor.oscilloscope.title')}</span>
-
-        {/* Add Channel button + portal picker */}
-        <button
-          ref={addBtnRef}
-          className="osc-btn"
-          onClick={handleTogglePicker}
-          title={t('editor.oscilloscope.addChannelTitle')}
-        >
-          + {t('editor.oscilloscope.addChannel')}
-        </button>
-
-        {showPicker && pickerAnchor && (
-          <ChannelPicker
-            onAdd={handleAddChannel}
-            activeChannels={channels}
-            onClose={() => {
-              setShowPicker(false);
-              setPickerAnchor(null);
-            }}
-            anchorRect={pickerAnchor}
-            dropdownRef={dropdownRef}
-          />
-        )}
-
-        {/* Time / div */}
-        <span className="osc-label">{t('editor.oscilloscope.timeDiv')}</span>
-        <select
-          className="osc-select"
-          value={timeDivMs}
-          onChange={(e) => setTimeDivMs(Number(e.target.value))}
-        >
-          {TIME_DIV_OPTIONS.map(({ label, ms }) => (
-            <option key={ms} value={ms}>
-              {label}
-            </option>
-          ))}
-        </select>
-
-        {/* Run / Pause */}
-        <button
-          className={`osc-btn${capturing ? '' : ' osc-btn-active'}`}
-          onClick={() => setCapturing(!capturing)}
-          title={capturing ? t('editor.oscilloscope.pauseTitle') : t('editor.oscilloscope.resumeTitle')}
-        >
-          {capturing ? `⏸ ${t('editor.oscilloscope.pause')}` : `▶ ${t('editor.oscilloscope.run')}`}
-        </button>
-
-        {/* ── Trigger ─────────────────────────────────────────────────────
-            Mode + source + edge are the three knobs a real DSO exposes.
-            Auto = free-running (current default).  Normal = window pins
-            on every triggering edge.  Single = arm once, freeze on first
-            edge — click again to re-arm. */}
-        <span className="osc-label" title="Trigger configuration">Trigger</span>
-        <select
-          className="osc-select"
-          value={triggerMode}
-          onChange={(e) => setTriggerMode(e.target.value as TriggerMode)}
-          title="Trigger mode"
-        >
-          <option value="auto">Auto</option>
-          <option value="normal">Normal</option>
-          <option value="single">Single</option>
-        </select>
-
-        {triggerMode !== 'auto' && (
-          <>
-            <select
-              className="osc-select"
-              value={triggerChannelId ?? channels[0]?.id ?? ''}
-              onChange={(e) => setTriggerChannel(e.target.value || null)}
-              title="Trigger source"
-              disabled={channels.length <= 1}
-            >
-              {channels.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {boardShortName(c.boardId)}:{c.label}
-                </option>
-              ))}
-            </select>
-
-            <select
-              className="osc-select"
-              value={triggerEdge}
-              onChange={(e) => setTriggerEdge(e.target.value as TriggerEdge)}
-              title="Trigger edge"
-            >
-              <option value="rising">↑ Rising</option>
-              <option value="falling">↓ Falling</option>
-              <option value="either">⇅ Either</option>
-            </select>
-
+    <>
+      {expanded && (
+        <div className="osc-backdrop" onClick={() => setExpanded(false)} aria-hidden="true" />
+      )}
+      <div className={`osc-container${expanded ? ' osc-container-expanded' : ''}`}>
+        {/* ── Header ── */}
+        <div className="osc-header">
+          <span className="osc-title">
             <span
-              className={`osc-trigger-status osc-trigger-status-${triggerStatus}`}
-              title={`Trigger status: ${triggerStatus}`}
-            >
-              {triggerStatus === 'armed' && 'Armed'}
-              {triggerStatus === 'triggered' && 'Triggered'}
-              {triggerStatus === 'captured' && 'Captured'}
-              {triggerStatus === 'idle' && 'Idle'}
-            </span>
+              className={`osc-live-dot${capturing && anyRunning ? ' is-live' : ''}`}
+              title={capturing ? 'Capture running' : 'Capture paused'}
+            />
+            {t('editor.oscilloscope.title')}
+          </span>
 
-            {triggerMode === 'single' && triggerStatus === 'captured' && (
-              <button
-                className="osc-btn osc-btn-active"
-                onClick={rearmTrigger}
-                title="Re-arm and capture the next triggering edge"
+          {/* Add Channel button + portal picker */}
+          <button
+            ref={addBtnRef}
+            className="osc-btn"
+            onClick={handleTogglePicker}
+            title={t('editor.oscilloscope.addChannelTitle')}
+          >
+            + {t('editor.oscilloscope.addChannel')}
+          </button>
+          <button
+            className="osc-btn"
+            onClick={handleQuickAdd}
+            title="Monitor the first wired pin on the active board"
+          >
+            Auto
+          </button>
+
+          {showPicker && pickerAnchor && (
+            <ChannelPicker
+              onAdd={handleAddChannel}
+              activeChannels={channels}
+              onClose={() => {
+                setShowPicker(false);
+                setPickerAnchor(null);
+              }}
+              anchorRect={pickerAnchor}
+              dropdownRef={dropdownRef}
+            />
+          )}
+
+          {/* Time / div */}
+          <span className="osc-label">{t('editor.oscilloscope.timeDiv')}</span>
+          <select
+            className="osc-select"
+            value={timeDivMs}
+            onChange={(e) => setTimeDivMs(Number(e.target.value))}
+          >
+            {TIME_DIV_OPTIONS.map(({ label, ms }) => (
+              <option key={ms} value={ms}>
+                {label}
+              </option>
+            ))}
+          </select>
+
+          {/* Run / Pause */}
+          <button
+            className={`osc-btn${capturing ? '' : ' osc-btn-active'}`}
+            onClick={() => setCapturing(!capturing)}
+            title={capturing ? t('editor.oscilloscope.pauseTitle') : t('editor.oscilloscope.resumeTitle')}
+          >
+            {capturing ? `⏸ ${t('editor.oscilloscope.pause')}` : `▶ ${t('editor.oscilloscope.run')}`}
+          </button>
+
+          {/* Trigger controls stay folded away until needed. */}
+          <button
+            className={`osc-btn${showTrigger || triggerMode !== 'auto' ? ' osc-btn-active' : ''}`}
+            onClick={() => setShowTrigger((value) => !value)}
+            title="Trigger configuration"
+          >
+            Trigger
+          </button>
+
+          {showTrigger && (
+            <div className="osc-header-advanced">
+              <select
+                className="osc-select"
+                value={triggerMode}
+                onChange={(e) => setTriggerMode(e.target.value as TriggerMode)}
+                title="Trigger mode"
               >
-                Re-arm
-              </button>
-            )}
+                <option value="auto">Auto, free running</option>
+                <option value="normal">Normal, latch every edge</option>
+                <option value="single">Single, capture one edge</option>
+              </select>
+
+              {triggerMode !== 'auto' && (
+                <>
+                  <select
+                    className="osc-select"
+                    value={triggerChannelId ?? channels[0]?.id ?? ''}
+                    onChange={(e) => setTriggerChannel(e.target.value || null)}
+                    title="Trigger source"
+                    disabled={channels.length <= 1}
+                  >
+                    {channels.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {boardShortName(c.boardId)}:{c.label}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    className="osc-select"
+                    value={triggerEdge}
+                    onChange={(e) => setTriggerEdge(e.target.value as TriggerEdge)}
+                    title="Trigger edge"
+                  >
+                    <option value="rising">↑ Rising</option>
+                    <option value="falling">↓ Falling</option>
+                    <option value="either">⇅ Either</option>
+                  </select>
+
+                  <select
+                    className="osc-select"
+                    value={triggerPosition}
+                    onChange={(e) => setTriggerPosition(Number(e.target.value))}
+                    title="Where the trigger sits in the window"
+                  >
+                    <option value={0.1}>10% from left</option>
+                    <option value={0.5}>Centre</option>
+                    <option value={0.9}>90% from left</option>
+                  </select>
+
+                  <span
+                    className={`osc-trigger-status osc-trigger-status-${triggerStatus}`}
+                    title={`Trigger status: ${triggerStatus}`}
+                  >
+                    {triggerStatus === 'armed' && 'Armed'}
+                    {triggerStatus === 'triggered' && 'Triggered'}
+                    {triggerStatus === 'captured' && 'Captured'}
+                    {triggerStatus === 'idle' && 'Idle'}
+                  </span>
+
+                  {triggerMode === 'single' && triggerStatus === 'captured' && (
+                    <button
+                      className="osc-btn osc-btn-active"
+                      onClick={rearmTrigger}
+                      title="Re-arm and capture the next triggering edge"
+                    >
+                      Re-arm
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Clear */}
+          <button
+            className="osc-btn osc-btn-danger"
+            onClick={clearSamples}
+            title={t('editor.oscilloscope.clearTitle')}
+          >
+            {t('editor.oscilloscope.clear')}
+          </button>
+
+          <button
+            className="osc-btn osc-expand-btn"
+            onClick={() => setExpanded((value) => !value)}
+            title={expanded ? 'Return the scope to the panel' : 'Expand the scope to a large display'}
+          >
+            {expanded ? 'Collapse' : 'Expand'}
+          </button>
+        </div>
+
+        {/* ── Waveforms ── */}
+        {channels.length === 0 ? (
+          <div className="osc-empty">
+            <span>{t('editor.oscilloscope.noChannels')}</span>
+            <span style={{ color: '#777' }}>{t('editor.oscilloscope.noChannelsHint')}</span>
+            <button className="osc-btn" onClick={handleQuickAdd} type="button">
+              Monitor the active board
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="osc-waveforms">
+              {channels.map((ch) => {
+                const readout = measureChannel(samples[ch.id] ?? [], windowEndMs, windowMs);
+                return (
+                  <div key={ch.id} className="osc-channel-row">
+                    <div className="osc-channel-label">
+                      <div className="osc-channel-label-top">
+                        <span className="osc-channel-name" style={{ color: ch.color }}>
+                          {ch.label}
+                        </span>
+                        <button
+                          className="osc-channel-remove"
+                          onClick={() => removeChannel(ch.id)}
+                          title={t('editor.oscilloscope.removeChannel', { label: ch.label })}
+                        >
+                          ×
+                        </button>
+                      </div>
+                      <span className="osc-channel-board" title={ch.boardId}>
+                        {boardShortName(ch.boardId)}
+                      </span>
+                      <span className="osc-channel-measure">{formatFrequency(readout.frequency)}</span>
+                      <span className="osc-channel-duty">
+                        {Math.round(readout.duty * 100)}% ·{' '}
+                        {readout.state === null ? '--' : readout.state ? 'HIGH' : 'LOW'}
+                      </span>
+                    </div>
+
+                    <ChannelCanvas
+                      channel={ch}
+                      samples={samples[ch.id] ?? []}
+                      windowEndMs={windowEndMs}
+                      windowMs={windowMs}
+                      triggerXFrac={triggerXFrac}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
+            <RulerCanvas windowEndMs={windowEndMs} windowMs={windowMs} timeDivMs={timeDivMs} />
           </>
         )}
-
-        {/* Clear */}
-        <button
-          className="osc-btn osc-btn-danger"
-          onClick={clearSamples}
-          title={t('editor.oscilloscope.clearTitle')}
-        >
-          {t('editor.oscilloscope.clear')}
-        </button>
       </div>
-
-      {/* ── Waveforms ── */}
-      {channels.length === 0 ? (
-        <div className="osc-empty">
-          <span>{t('editor.oscilloscope.noChannels')}</span>
-          <span style={{ color: '#777' }}>{t('editor.oscilloscope.noChannelsHint')}</span>
-        </div>
-      ) : (
-        <>
-          <div className="osc-waveforms">
-            {channels.map((ch) => (
-              <div key={ch.id} className="osc-channel-row">
-                <div className="osc-channel-label">
-                  <span className="osc-channel-board" title={ch.boardId}>
-                    {boardShortName(ch.boardId)}
-                  </span>
-                  <span className="osc-channel-name" style={{ color: ch.color }}>
-                    {ch.label}
-                  </span>
-                  <button
-                    className="osc-channel-remove"
-                    onClick={() => removeChannel(ch.id)}
-                    title={t('editor.oscilloscope.removeChannel', { label: ch.label })}
-                  >
-                    ×
-                  </button>
-                </div>
-
-                <ChannelCanvas
-                  channel={ch}
-                  samples={samples[ch.id] ?? []}
-                  windowEndMs={windowEndMs}
-                  windowMs={windowMs}
-                  triggerXFrac={triggerXFrac}
-                />
-              </div>
-            ))}
-          </div>
-
-          <RulerCanvas windowEndMs={windowEndMs} windowMs={windowMs} timeDivMs={timeDivMs} />
-        </>
-      )}
-    </div>
+    </>
   );
 };

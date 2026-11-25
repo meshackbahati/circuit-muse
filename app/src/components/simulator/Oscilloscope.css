@@ -332,3 +332,149 @@
   0%, 100% { opacity: 0.6; }
   50%      { opacity: 1; }
 }
+
+/* ── Instrument refinements ─────────────────────────────────────────────── */
+
+.osc-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.osc-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4b5563;
+  flex: 0 0 auto;
+}
+
+.osc-live-dot.is-live {
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.14);
+}
+
+.osc-header-advanced {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 4px;
+  border-top: 1px solid #333;
+}
+
+.osc-expand-btn {
+  margin-left: auto;
+}
+
+.osc-channel-row {
+  min-height: 72px;
+}
+
+.osc-channel-label {
+  width: 106px;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1px;
+  padding: 5px 8px;
+}
+
+.osc-channel-label-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.osc-channel-measure {
+  font-size: 10px;
+  color: #9fb4bd;
+  font-variant-numeric: tabular-nums;
+}
+
+.osc-channel-duty {
+  font-size: 9px;
+  color: #5f7580;
+  font-variant-numeric: tabular-nums;
+}
+
+.osc-channel-idle {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #3f5661;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+.osc-empty .osc-btn {
+  margin-top: 4px;
+}
+
+/* Expanded instrument view */
+.osc-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 8999;
+  background: rgba(4, 8, 10, 0.66);
+}
+
+.osc-container-expanded {
+  position: fixed;
+  inset: 48px 40px 36px;
+  z-index: 9000;
+  height: auto;
+  border: 1px solid #3b4c55;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0d1418;
+}
+
+.osc-container-expanded .osc-header {
+  padding: 7px 10px;
+  background: #182228;
+}
+
+.osc-container-expanded .osc-waveforms {
+  background: #070c0f;
+}
+
+.osc-container-expanded .osc-channel-row {
+  min-height: 120px;
+}
+
+.osc-container-expanded .osc-channel-label {
+  width: 132px;
+  padding: 8px 10px;
+}
+
+.osc-container-expanded .osc-channel-name {
+  font-size: 12px;
+}
+
+.osc-container-expanded .osc-channel-measure {
+  font-size: 11px;
+}
+
+.osc-container-expanded .osc-channel-duty {
+  font-size: 10px;
+}
+
+.osc-container-expanded .osc-ruler {
+  height: 26px;
+}
+
+@media (max-width: 760px) {
+  .osc-container-expanded {
+    inset: 8px;
+  }
+
+  .osc-channel-label {
+    width: 88px;
+  }
+}
