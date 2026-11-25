@@ -127,6 +127,8 @@ The model dropdown is populated by `listModels()` on the configured provider. Ma
 | NVIDIA NIM | Add an NVIDIA API key. The base URL defaults to `https://integrate.api.nvidia.com`. |
 | Custom | Any OpenAI-compatible endpoint. |
 
+NVIDIA NIM requests are relayed through the local engine at `/api/ai/nvidia`. NVIDIA sends no CORS headers, so a direct fetch from the desktop WebView fails before the request leaves the application. The relay accepts only `https://integrate.api.nvidia.com/v1/` destinations. Every other provider is called directly. OpenAI, OpenRouter, Moonshot, Gemini, and Anthropic answer the preflight checks used by the application; Anthropic additionally requires the `anthropic-dangerous-direct-browser-access` header, which the provider sets. Ollama is local, and its origin policy must include the desktop origin if it has been restricted from the default.
+
 The assistant can inspect the canvas, list valid boards and components, query pin names, add and remove parts, wire pins, write and read files, read attached documents and images, check the environment, install cores and libraries, verify the circuit, compile, run, stop, reset, read serial output, and delegate focused work to sub-agents. Sub-agent roles are `planner`, `circuit_designer`, `firmware_engineer`, `debugger`, and `verifier`.
 
 Use Attach file in the assistant panel to add text files, images, PDFs, or DOCX documents. The assistant reads them through `list_uploaded_files` and `read_uploaded_file`.

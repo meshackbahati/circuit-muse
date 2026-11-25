@@ -71,6 +71,12 @@ jobs:
           cp dist/circuit-muse-engine ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
           chmod +x ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
 
+      - name: Verify sidecars are populated
+        shell: bash
+        run: |
+          test -s src-tauri/binaries/circuit-muse-engine-* || { echo "engine sidecar is empty"; exit 1; }
+          test -s src-tauri/binaries/arduino-cli-* || { echo "arduino-cli sidecar is empty"; exit 1; }
+
       - name: Install app dependencies and build
         working-directory: app
         run: |
@@ -79,6 +85,10 @@ jobs:
 
       - name: Build Tauri
         working-directory: src-tauri
+        env:
+          # linuxdeploy and appimagetool are AppImages themselves. Extract and
+          # run avoids a hard dependency on FUSE in CI containers.
+          APPIMAGE_EXTRACT_AND_RUN: "1"
         run: cargo tauri build
 
       - name: Upload artifacts
@@ -130,6 +140,12 @@ jobs:
           pyinstaller --clean --noconfirm circuit-muse-engine.spec
           cp dist/circuit-muse-engine ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
           chmod +x ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
+
+      - name: Verify sidecars are populated
+        shell: bash
+        run: |
+          test -s src-tauri/binaries/circuit-muse-engine-* || { echo "engine sidecar is empty"; exit 1; }
+          test -s src-tauri/binaries/arduino-cli-* || { echo "arduino-cli sidecar is empty"; exit 1; }
 
       - name: Install app dependencies and build
         working-directory: app
@@ -190,6 +206,12 @@ jobs:
           .\venv-build\Scripts\python.exe -m pip install -r requirements.txt pyinstaller
           .\venv-build\Scripts\python.exe -m PyInstaller --clean --noconfirm circuit-muse-engine.spec
           copy dist\circuit-muse-engine.exe ..\src-tauri\binaries\circuit-muse-engine-x86_64-pc-windows-msvc.exe
+
+      - name: Verify sidecars are populated
+        shell: bash
+        run: |
+          test -s src-tauri/binaries/circuit-muse-engine-* || { echo "engine sidecar is empty"; exit 1; }
+          test -s src-tauri/binaries/arduino-cli-* || { echo "arduino-cli sidecar is empty"; exit 1; }
 
       - name: Install app dependencies and build
         working-directory: app
@@ -256,6 +278,12 @@ jobs:
           cp dist/circuit-muse-engine ../src-tauri/binaries/circuit-muse-engine-aarch64-apple-darwin
           chmod +x ../src-tauri/binaries/circuit-muse-engine-aarch64-apple-darwin
 
+      - name: Verify sidecars are populated
+        shell: bash
+        run: |
+          test -s src-tauri/binaries/circuit-muse-engine-* || { echo "engine sidecar is empty"; exit 1; }
+          test -s src-tauri/binaries/arduino-cli-* || { echo "arduino-cli sidecar is empty"; exit 1; }
+
       - name: Install app dependencies and build
         working-directory: app
         run: |
@@ -313,6 +341,12 @@ jobs:
           cp dist/circuit-muse-engine ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
           chmod +x ../src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu
 
+      - name: Verify sidecars are populated
+        shell: bash
+        run: |
+          test -s src-tauri/binaries/circuit-muse-engine-* || { echo "engine sidecar is empty"; exit 1; }
+          test -s src-tauri/binaries/arduino-cli-* || { echo "arduino-cli sidecar is empty"; exit 1; }
+
       - name: Install app dependencies and build
         working-directory: app
         run: |
@@ -333,7 +367,7 @@ jobs:
           cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
-          pkgver=1.0.3
+          pkgver=1.0.5
           pkgrel=1
           pkgdesc="AI-powered circuit simulator and embedded board emulator"
           arch=('x86_64')
@@ -382,18 +416,24 @@ jobs:
           name: "CircuitMuse ${{ github.ref_name }}"
           overwrite_files: true
           body: |
-            ## CircuitMuse ${{ github.ref_name }} — Desktop Reliability Update
+            ## CircuitMuse ${{ github.ref_name }}: AI Provider and Project Reliability Update
 
-            AI-powered circuit simulator and embedded board emulator for desktop. Design circuits, write Arduino code, and run real emulations — all in one app.
+            AI-powered circuit simulator and embedded board emulator for desktop. Design circuits, write Arduino code, and run real emulations in one app.
 
-            ### Desktop reliability fixes and achievements
+            ### Changes in this release
 
-            - Fixed cross-platform engine sidecar discovery so packaged Linux, Windows, and macOS builds start the bundled backend reliably.
-            - Kept the backend health endpoint responsive at launch by deferring Arduino board index and core installation until compilation needs them.
-            - Bundled Arduino CLI with desktop builds and verified a real Arduino Uno compile without the deprecated build-cache warning.
-            - Fixed the AI Agent overlay so it no longer scrolls or collapses the workspace; it can be resized, closed from its header, toggled from the toolbar, or dismissed with Escape.
-            - Added working Stop behavior for streamed AI responses and restored missing serial-monitor labels.
-            - Reduced development build output and documented the desktop sidecar setup steps.
+            - NVIDIA NIM now works in the desktop app. Model discovery and chat requests are relayed through the bundled local engine because the NVIDIA API sends no CORS headers to the desktop WebView. The live API returned its current catalogue and accepted streaming tool calls.
+            - Model lists are discovered from each provider API at runtime. No model names are bundled.
+            - Anthropic requests now send the browser access header that Anthropic requires, so direct calls succeed from the desktop shell.
+            - Authentication, rate limit, and network failures produce actionable messages instead of a bare `Load failed`.
+            - The agent reads attached text files, images, PDFs, and DOCX documents. The Attach control appears in the chat header and the input row.
+            - The agent continues after fragmentary model output, keeps tool results in history, and stops only on a final answer, a repeated call, or the iteration limit.
+            - Multi-board circuits expose `compile_all_code`, which compiles each board once with its own file group.
+            - `Ctrl+S` and `Ctrl+Shift+S` open a save dialog with a project name field. Chat history and attachments are restored with the project.
+            - Interactive parts accept pointer input while a board runs, including pushbuttons, switches, potentiometers, keypads, and encoders.
+            - The wire layer now sits below components, so cables no longer cover displays or block clicks.
+            - The oscilloscope resizes with its panel and selects a wired pin by default.
+            - Release jobs verify that the engine and Arduino CLI sidecars are populated before packaging.
 
             ### What's Inside
 
@@ -410,25 +450,25 @@ jobs:
               - Cleaned up verbose compiler logs and resolved simulation timeout locks.
 
             - **Core Simulation Stack**:
-              - **31 emulated boards** — Arduino Uno/Mega/Nano, ESP32/ESP32-S2/ESP32-S3/ESP32-C3, RP2040/RP2350, STM32, ATtiny85, and more
-              - **150+ components** — resistors, capacitors, LEDs, sensors, displays, motors, ICs, and wireless modules
-              - **Real CPU emulation** — not a toy simulator; actual compiled Arduino firmware running on emulated hardware
-              - **SPICE analog simulation** — accurate voltage/current analysis for analog circuits
-              - **AI agent** — connect Ollama, OpenAI, Anthropic, Gemini, or OpenRouter for AI-assisted design and debugging
-              - **Serial monitor** — real-time serial output from emulated boards
-              - **Multi-file sketches** — write Arduino code with multiple .ino and .h files
-              - **Library manager** — search and install Arduino libraries directly from the app
-              - **Project save/load** — save your circuits and code as shareable project files
-              - **Export** — generate Arduino sketches from your circuit designs
-              - **Setup wizard** — guided first-run experience with board and AI configuration
+              - **31 emulated boards**: Arduino Uno/Mega/Nano, ESP32/ESP32-S2/ESP32-S3/ESP32-C3, RP2040/RP2350, STM32, ATtiny85, and more
+              - **150+ components**: resistors, capacitors, LEDs, sensors, displays, motors, ICs, and wireless modules
+              - **Real CPU emulation**: not a toy simulator; actual compiled Arduino firmware running on emulated hardware
+              - **SPICE analog simulation**: accurate voltage/current analysis for analog circuits
+              - **AI agent**: connect NVIDIA NIM, Ollama, OpenAI, Anthropic, Gemini, Moonshot, OpenRouter, or any OpenAI-compatible endpoint for AI-assisted design and debugging
+              - **Serial monitor**: real-time serial output from emulated boards
+              - **Multi-file sketches**: write Arduino code with multiple .ino and .h files
+              - **Library manager**: search and install Arduino libraries directly from the app
+              - **Project save/load**: save your circuits and code as shareable project files
+              - **Export**: generate Arduino sketches from your circuit designs
+              - **Setup wizard**: guided first-run experience with board and AI configuration
 
             ### Supported Platforms
 
             | Platform | Format | Notes |
             |----------|--------|-------|
-            | **Linux (x86_64)** | AppImage | Universal — works on Ubuntu, Debian, Fedora, Arch, and derivatives |
+            | **Linux (x86_64)** | AppImage | Universal, works on Ubuntu, Debian, Fedora, Arch, and derivatives |
             | **Linux (x86_64)** | .deb | Debian/Ubuntu/Mint |
-            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro — install with `pacman -U circuit-muse-1.0.3-1-x86_64.pkg.tar.zst` |
+            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.0.5-1-x86_64.pkg.tar.zst` |
             | **Windows (x86_64)** | .exe (NSIS) | Windows 10/11 installer |
             | **Windows (x86_64)** | .msi | Windows MSI installer |
             | **macOS (ARM64)** | .dmg | Apple Silicon (M1/M2/M3/M4) |
@@ -441,7 +481,7 @@ jobs:
 
             ### First Launch
 
-            1. Open the app — the setup wizard will guide you through board and AI configuration
+            1. Open the app. The setup wizard will guide you through board and AI configuration
             2. Pick an emulated board from the canvas
             3. Place components and wire them up
             4. Write Arduino code in the editor

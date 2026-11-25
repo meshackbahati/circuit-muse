@@ -13,7 +13,7 @@ if sys.platform == 'win32':
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import compile, compile_chip, compile_rom, flash, libraries, agent
+from app.api.routes import ai_proxy, compile, compile_chip, compile_rom, flash, libraries, agent
 from app.core.config import settings
 from app.core.hooks import run_lifespan_startup
 
@@ -101,6 +101,10 @@ app.include_router(libraries.router, prefix="/api/libraries", tags=["libraries"]
 # get it too.
 app.include_router(flash.router, prefix="/api/flash", tags=["flash"])
 app.include_router(agent.router, prefix="/api/agent", tags=["agent"])
+# Same-origin proxy for AI providers whose endpoints send no CORS headers.
+# The desktop WebView blocks a direct browser fetch to those hosts, so the
+# request is relayed through the local sidecar instead.
+app.include_router(ai_proxy.router)
 
 # Auth / projects / admin / metrics routers used to be wired up here, gated
 # on the auth/DB stack being importable. Phase 2 of the OSS split moved
