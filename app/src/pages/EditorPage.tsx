@@ -101,6 +101,7 @@ export const EditorPage: React.FC = () => {
   const [showSetup, setShowSetup] = useState(false);
   const [showGitHubSync, setShowGitHubSync] = useState(false);
   const [savedFlash, setSavedFlash] = useState(false);
+  const [saveDialog, setSaveDialog] = useState<{ id: string; name: string } | null>(null);
 
   const workspaceProjectId = useWorkspaceStore((s) => s.projectId);
   const workspaceProjectName = useWorkspaceStore((s) => s.projectName);
@@ -115,14 +116,22 @@ export const EditorPage: React.FC = () => {
   const autosaveId = workspaceProjectId ?? 'pending-project';
   useLocalAutoSave(autosaveId, workspaceProjectName);
 
-  const handleSaveNow = useCallback(async () => {
-    const id = useWorkspaceStore.getState().projectId ?? crypto.randomUUID();
-    const name = useWorkspaceStore.getState().projectName;
-    setWorkspaceProject(id, name);
-    await saveCurrentWorkspace(id, name);
+  const openSaveDialog = useCallback((saveAs: boolean) => {
+    setSaveDialog({
+      id: saveAs ? crypto.randomUUID() : (useWorkspaceStore.getState().projectId ?? crypto.randomUUID()),
+      name: useWorkspaceStore.getState().projectName,
+    });
+  }, []);
+
+  const confirmSave = useCallback(async () => {
+    if (!saveDialog) return;
+    const name = saveDialog.name.trim() || 'Untitled Project';
+    setWorkspaceProject(saveDialog.id, name);
+    await saveCurrentWorkspace(saveDialog.id, name);
+    setSaveDialog(null);
     setSavedFlash(true);
     window.setTimeout(() => setSavedFlash(false), 1500);
-  }, [setWorkspaceProject]);
+  }, [saveDialog, setWorkspaceProject]);
 
   const restoredProject = useRef(false);
   useEffect(() => {
@@ -135,12 +144,12 @@ export const EditorPage: React.FC = () => {
     const onKey = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
         event.preventDefault();
-        void handleSaveNow();
+        openSaveDialog(event.shiftKey);
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [handleSaveNow]);
+  }, [openSaveDialog]);
 
   // Show setup once on first launch. Users can reopen it from the menu.
   useEffect(() => {
@@ -560,7 +569,8 @@ export const EditorPage: React.FC = () => {
                 boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
               }}>
                 {[
-                  { label: 'Save (Ctrl+S)', action: () => { void handleSaveNow(); setMenuOpen(false); } },
+                  { label: 'Save (Ctrl+S)', action: () => { openSaveDialog(false); setMenuOpen(false); } },
+                  { label: 'Save As (Ctrl+Shift+S)', action: () => { openSaveDialog(true); setMenuOpen(false); } },
                   { label: 'Projects', action: () => { setShowProjects(true); setMenuOpen(false); } },
                   { label: 'Export', action: () => { setShowExport(true); setMenuOpen(false); } },
                   { label: 'Examples', action: () => { navigate(localize('/examples')); setMenuOpen(false); } },
@@ -816,6 +826,27 @@ export const EditorPage: React.FC = () => {
       {/* ── Modals ── */}
       {showProjects && <ProjectsModal onClose={() => setShowProjects(false)} />}
       {showExport && <ExportMenu onClose={() => setShowExport(false)} />}
+      {saveDialog && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 10002, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ background: '#1e1e23', border: '1px solid #2c2c33', borderRadius: 8, padding: 20, width: 340 }}>
+            <h3 style={{ margin: '0 0 12px', fontSize: 16 }}>Save Project</h3>
+            <input
+              autoFocus
+              value={saveDialog.name}
+              onChange={(e) => setSaveDialog({ ...saveDialog, name: e.target.value })}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') void confirmSave();
+              }}
+              placeholder="Project name"
+              style={{ width: '100%', boxSizing: 'border-box', background: '#0c0c11', color: '#e6e6e9', border: '1px solid #2c2c33', borderRadius: 4, padding: '8px 10px' }}
+            />
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 14 }}>
+              <button onClick={() => setSaveDialog(null)} style={{ padding: '8px 14px', background: 'transparent', color: '#aaa', border: '1px solid #2c2c33', borderRadius: 4, cursor: 'pointer' }}>Cancel</button>
+              <button onClick={() => void confirmSave()} style={{ padding: '8px 14px', background: '#007acc', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer' }}>Save</button>
+            </div>
+          </div>
+        </div>
+      )}
       {showSetup && <SetupWizard onClose={() => setShowSetup(false)} />}
       {showGitHubSync && <GitHubSyncModal onClose={() => setShowGitHubSync(false)} />}
     </div>

@@ -21,6 +21,7 @@ Simulation and project data stay on the machine. Releases bundle the desktop she
 - Compile and run controls with an output console.
 - A serial monitor for board output and a send field for input.
 - An oscilloscope with selectable board pins and trigger modes.
+- Interactive parts such as pushbuttons, switches, potentiometers, keypads, and I2C displays, which accept pointer input while the simulation runs.
 - Electrical verification before a run, which reports shorts, LED overcurrent, resistor overpower, and dark indicators.
 - A project store in IndexedDB with autosave, explicit save, project history, and import and export.
 - An assistant panel that can work on the circuit through tools.
@@ -126,13 +127,15 @@ The model dropdown is populated by `listModels()` on the configured provider. Ma
 | NVIDIA NIM | Add an NVIDIA API key. The base URL defaults to `https://integrate.api.nvidia.com`. |
 | Custom | Any OpenAI-compatible endpoint. |
 
-The assistant can inspect the canvas, list valid boards and components, query pin names, add and remove parts, wire pins, write and read files, check the environment, install cores and libraries, verify the circuit, compile, run, stop, reset, read serial output, and delegate focused work to sub-agents. Sub-agent roles are `planner`, `circuit_designer`, `firmware_engineer`, `debugger`, and `verifier`.
+The assistant can inspect the canvas, list valid boards and components, query pin names, add and remove parts, wire pins, write and read files, read attached documents and images, check the environment, install cores and libraries, verify the circuit, compile, run, stop, reset, read serial output, and delegate focused work to sub-agents. Sub-agent roles are `planner`, `circuit_designer`, `firmware_engineer`, `debugger`, and `verifier`.
 
-The assistant continues after tool results and stops only after a final answer or when a call repeats without progress. It keeps the chat history with the project.
+Use Attach file in the assistant panel to add text files, images, PDFs, or DOCX documents. The assistant reads them through `list_uploaded_files` and `read_uploaded_file`.
+
+The assistant continues after tool results and stops only after a complete final answer or when a call repeats without progress. It keeps the chat history with the project.
 
 ## Projects
 
-Projects are saved locally in IndexedDB. Autosave runs after canvas, code, or chat changes. Use the Projects button in the toolbar for the project list, or press `Ctrl+S` (`Cmd+S` on macOS) to save immediately. The dialog has a name field, a Save Current button, a New button, an Import button, and a Continue current project button. Each saved entry shows its board count, component count, chat message count, and last change date.
+Projects are saved locally in IndexedDB. Autosave runs after canvas, code, or chat changes. Use the Projects button in the toolbar for the project list. `Ctrl+S` (`Cmd+S` on macOS) opens the save dialog with the current name. `Ctrl+Shift+S` opens it with a new project id. The dialog has a name field, a Save Current button, a New button, an Import button, and a Continue current project button. Each saved entry shows its board count, component count, chat message count, and last change date.
 
 Import accepts `.vlx`, `.zip`, and `.fzz` files. Export writes `.vlx`, `.zip`, `.json`, and `.html` files. The native `.vlx` format keeps boards, file groups, components, wires, and chat history.
 

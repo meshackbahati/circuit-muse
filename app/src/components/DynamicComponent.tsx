@@ -236,6 +236,7 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
 
   const handleComponentEvent = useSimulatorStore((s) => s.handleComponentEvent);
   const running = useSimulatorStore((s) => s.running);
+  const anyBoardRunning = useSimulatorStore((s) => s.boards.some((b) => b.running));
   const simulator = useSimulatorStore((s) => s.simulator);
   // Board-less SPICE circuits (digital / analog gallery) have no MCU to
   // run, so `running` is always false — but interactive parts like
@@ -244,7 +245,7 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
   // "interactive" so the cursor + dialog gating mirror the MCU mode.
   const boardCount = useSimulatorStore((s) => s.boards.length);
   const electricalPaused = useElectricalStore((s) => s.paused);
-  const interactionRunning = running || (boardCount === 0 && !electricalPaused);
+  const interactionRunning = running || anyBoardRunning || (boardCount === 0 && !electricalPaused);
   // hexEpoch increments each time a new hex is loaded, triggering a fresh
   // attachEvents call (and re-registration of I2C devices on the new bus).
   // We intentionally do NOT depend on `running` so that I2C displays and

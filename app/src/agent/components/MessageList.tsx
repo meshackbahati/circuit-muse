@@ -19,11 +19,9 @@ export const MessageList: React.FC<MessageListProps> = ({
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Scroll only the chat transcript. `scrollIntoView` also scrolls every
-    // ancestor, which can move the entire editor page when the panel mounts.
     const list = bottomRef.current?.parentElement;
-    list?.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
-  }, [messages, isStreaming]);
+    list?.scrollTo({ top: list.scrollHeight });
+  }, [messages.length, isStreaming]);
 
   const visibleMessages = messages.filter(
     (m) => m.role !== 'system' && m.role !== 'tool',
@@ -41,7 +39,7 @@ export const MessageList: React.FC<MessageListProps> = ({
         </div>
       )}
       {visibleMessages.map((msg) => (
-        <MessageBubble key={msg.id} message={msg} toolResults={toolResults} />
+        <MessageBubble key={msg.id} message={msg} toolResults={toolResults} streaming={isStreaming} />
       ))}
       {isStreaming && (
         <div className="agent-message agent-message-assistant">

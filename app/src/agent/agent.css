@@ -28,6 +28,16 @@
   font-weight: 600;
 }
 
+.agent-btn-attach {
+  flex: 0 0 auto;
+}
+
+.agent-stream-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.5;
+}
+
 .agent-upload-list {
   display: flex;
   flex-wrap: wrap;

@@ -9,9 +9,10 @@ import { ToolCallDisplay } from './ToolCallDisplay';
 interface MessageBubbleProps {
   message: Message;
   toolResults?: Record<string, string>;
+  streaming?: boolean;
 }
 
-export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, toolResults = {} }) => {
+export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, toolResults = {}, streaming = false }) => {
   const isUser = message.role === 'user';
   const isSystem = message.role === 'system';
   const isTool = message.role === 'tool';
@@ -24,7 +25,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, toolResul
         {isUser ? 'You' : 'CircuitMuse'}
       </div>
       <div className="agent-message-content">
-        {message.content && (
+        {message.content && streaming && (
+          <div className="agent-stream-text">{message.content}</div>
+        )}
+        {message.content && !streaming && (
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{

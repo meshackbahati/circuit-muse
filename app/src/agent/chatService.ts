@@ -1,4 +1,4 @@
-import type { Message, ToolCall } from './types';
+import type { ChatParams, LLMProvider, Message, StreamChunk, ToolCall } from './types';
 import { createProvider } from './providers/registry';
 import { resolveModel } from './providers/base';
 import { useProviderStore } from '../store/useProviderStore';
@@ -10,6 +10,42 @@ import { executeToolCall } from './toolExecutor';
 // A full build-and-verify cycle takes more than a few tool rounds.
 const MAX_TOOL_ITERATIONS = 30;
 let activeRequest: AbortController | null = null;
+
+function isFragment(text: string): boolean {
+  const value = text.trim();
+  if (value.includes('</')) return true;
+  if (/\d{10,}/.test(value)) return true;
+  if (value.length < 40 && value.split(/\s+/).length < 6) return true;
+  return !/[.!?]$/.test(value);
+}
+
+function cleanChunk(text: string): string {
+  return text.replace(/<\/?[A-Za-z][^>]*>/g, '');
+}
+
+function isTransient(error: unknown): boolean {
+  const text = error instanceof Error ? error.message : String(error);
+  return /\b(429|500|502|503|504)\b|timeout|timed out|network|fetch failed/i.test(text);
+}
+
+async function* streamWithRetry(
+  provider: LLMProvider,
+  params: ChatParams,
+): AsyncGenerator<StreamChunk> {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    let yielded = false;
+    try {
+      for await (const chunk of provider.chatStream(params)) {
+        yielded = true;
+        yield chunk;
+      }
+      return;
+    } catch (error) {
+      if (!isTransient(error) || yielded || attempt === 2) throw error;
+      await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+    }
+  }
+}
 
 export function abortMessage(): void {
   activeRequest?.abort();
@@ -63,36 +99,43 @@ export async function sendMessage(content: string): Promise<void> {
     let previousCallSignature = '';
     let repeatedCalls = 0;
     let nudges = 0;
+    let usedTools = false;
 
     while (iterations < MAX_TOOL_ITERATIONS) {
       iterations++;
       let fullContent = '';
       let toolCalls: ToolCall[] = [];
       let assistantId: string | null = null;
+      let lastUiUpdate = 0;
 
-      for await (const chunk of provider.chatStream({
+      for await (const chunk of streamWithRetry(provider, {
         messages,
         tools: AGENT_TOOLS,
         model,
         signal: controller.signal,
       })) {
         if (controller.signal.aborted) break;
-        if (chunk.content) {
-          fullContent += chunk.content;
+        const text = cleanChunk(chunk.content || '');
+        if (text) {
+          fullContent += text;
           if (!assistantId) {
             assistantId = agentStore.addMessage({ role: 'assistant', content: fullContent });
-          } else {
+            lastUiUpdate = Date.now();
+          } else if (Date.now() - lastUiUpdate > 60) {
             agentStore.updateMessage(assistantId, { content: fullContent });
+            lastUiUpdate = Date.now();
           }
         }
         if (chunk.toolCalls) {
           toolCalls = mergeToolCalls(toolCalls, chunk.toolCalls);
         }
       }
+      if (assistantId) agentStore.updateMessage(assistantId, { content: fullContent });
 
       if (controller.signal.aborted) break;
       if (toolCalls.length === 0) {
-        if (fullContent.trim() || nudges >= 2) break;
+        const complete = fullContent.trim() && (!usedTools || !isFragment(fullContent));
+        if (complete || nudges >= 3) break;
         nudges++;
         messages.push({
           id: crypto.randomUUID(),
@@ -103,6 +146,7 @@ export async function sendMessage(content: string): Promise<void> {
         continue;
       }
       nudges = 0;
+      usedTools = true;
 
       // Stop when the same call repeats without progress.
       const callSignature = toolCalls
@@ -121,7 +165,8 @@ export async function sendMessage(content: string): Promise<void> {
       if (assistantId) {
         agentStore.updateMessage(assistantId, { toolCalls });
       } else {
-        agentStore.addMessage({ role: 'assistant', content: '', toolCalls });
+        const names = toolCalls.map(tc => tc.function.name).join(', ');
+        agentStore.addMessage({ role: 'assistant', content: `Calling ${names}`, toolCalls });
       }
 
       // One assistant turn holds all calls, ahead of their results.
@@ -155,10 +200,10 @@ export async function sendMessage(content: string): Promise<void> {
   } catch (error) {
     if (controller.signal.aborted) return;
     const errorMsg = error instanceof Error ? error.message : String(error);
-    agentStore.addMessage({
-      role: 'assistant',
-      content: `Error: ${errorMsg}`,
-    });
+    const friendly = /503|429|\b500\b/.test(errorMsg)
+      ? `The model provider is busy or unavailable after retries. Choose another provider or model. ${errorMsg}`
+      : `Error: ${errorMsg}`;
+    agentStore.addMessage({ role: 'assistant', content: friendly });
   } finally {
     if (activeRequest === controller) {
       activeRequest = null;

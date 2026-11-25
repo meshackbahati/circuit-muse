@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { readUploadedFile } from '../fileReader';
+import { useUploadsStore } from '../../store/useUploadsStore';
 
 interface ChatInputProps {
   onSend: (content: string) => void;
@@ -10,6 +12,8 @@ interface ChatInputProps {
 export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onAbort, disabled, isStreaming }) => {
   const [input, setInput] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const addFile = useUploadsStore((s) => s.addFile);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -48,6 +52,26 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onAbort, disabled,
         className="agent-chat-textarea"
       />
       <div className="agent-chat-actions">
+        <button
+          className="agent-btn agent-btn-attach"
+          onClick={() => fileInputRef.current?.click()}
+          title="Attach documents or images"
+          type="button"
+        >
+          Attach file
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept=".txt,.md,.json,.csv,.xml,.yml,.yaml,.ino,.c,.cpp,.h,.py,.js,.ts,.jsx,.tsx,.html,.css,.log,.svg,.pdf,.docx,image/*"
+          style={{ display: 'none' }}
+          onChange={(e) => {
+            const files = e.target.files;
+            if (files) void Promise.all(Array.from(files).map(readUploadedFile)).then(added => added.forEach(addFile));
+            e.target.value = '';
+          }}
+        />
         {isStreaming && onAbort ? (
           <button
             className="agent-btn agent-btn-abort"
