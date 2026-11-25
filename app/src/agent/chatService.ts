@@ -7,8 +7,7 @@ import { AGENT_TOOLS } from './toolDefs';
 import { SYSTEM_PROMPT } from './systemPrompt';
 import { executeToolCall } from './toolExecutor';
 
-// A full build-and-verify cycle needs more than a handful of tool rounds:
-// inspect, build, write, verify, compile, fix, run, observe, and repair.
+// A full build-and-verify cycle takes more than a few tool rounds.
 const MAX_TOOL_ITERATIONS = 30;
 let activeRequest: AbortController | null = null;
 
@@ -63,8 +62,10 @@ export async function sendMessage(content: string): Promise<void> {
     let iterations = 0;
     let previousCallSignature = '';
     let repeatedCalls = 0;
+    let nudges = 0;
 
     while (iterations < MAX_TOOL_ITERATIONS) {
+      iterations++;
       let fullContent = '';
       let toolCalls: ToolCall[] = [];
       let assistantId: string | null = null;
@@ -90,11 +91,20 @@ export async function sendMessage(content: string): Promise<void> {
       }
 
       if (controller.signal.aborted) break;
-      if (toolCalls.length === 0) break;
+      if (toolCalls.length === 0) {
+        if (fullContent.trim() || nudges >= 2) break;
+        nudges++;
+        messages.push({
+          id: crypto.randomUUID(),
+          role: 'user',
+          content: 'Continue. Use the tool results above and call more tools if needed. Do not stop until the circuit is complete and verified.',
+          timestamp: Date.now(),
+        });
+        continue;
+      }
+      nudges = 0;
 
-      // Identical calls after two attempts indicate that the model is looping
-      // rather than reacting to tool output, which would otherwise consume the
-      // whole iteration budget.
+      // Stop when the same call repeats without progress.
       const callSignature = toolCalls
         .map(tc => `${tc.function.name}:${tc.function.arguments}`)
         .join('|');
@@ -114,9 +124,7 @@ export async function sendMessage(content: string): Promise<void> {
         agentStore.addMessage({ role: 'assistant', content: '', toolCalls });
       }
 
-      // One assistant turn carries every tool call, which keeps the role
-      // sequence valid for providers that require tool_use or functionCall
-      // blocks to precede their results.
+      // One assistant turn holds all calls, ahead of their results.
       messages.push({
         id: crypto.randomUUID(),
         role: 'assistant',
@@ -143,8 +151,6 @@ export async function sendMessage(content: string): Promise<void> {
           timestamp: Date.now(),
         });
       }
-
-      iterations++;
     }
   } catch (error) {
     if (controller.signal.aborted) return;

@@ -2,11 +2,7 @@ export type { LLMProvider, ChatParams, StreamChunk, Message } from '../types';
 
 import type { LLMProvider, Message } from '../types';
 
-/**
- * Produce a valid OpenAI-style message history. A tool message is only kept
- * when its call id belongs to an earlier assistant turn, which prevents the
- * 400 errors that providers return for orphaned tool results.
- */
+// Drop orphan tool results so providers do not reject the turn.
 export function buildOpenAIMessages(messages: Message[]): any[] {
   const knownCallIds = new Set<string>();
   const result: any[] = [];
@@ -44,11 +40,7 @@ export function buildOpenAIMessages(messages: Message[]): any[] {
   return result;
 }
 
-/**
- * Resolve the model for a request without assuming that any model exists by
- * default. When the caller has not chosen one, the first model advertised by
- * the provider API is used, which keeps the catalogue authoritative at runtime.
- */
+// No model is hardcoded; ask the API when the user has not picked one.
 export async function resolveModel(provider: LLMProvider, requested?: string): Promise<string> {
   const explicit = requested?.trim();
   if (explicit) return explicit;

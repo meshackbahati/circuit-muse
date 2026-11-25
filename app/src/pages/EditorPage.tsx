@@ -147,6 +147,13 @@ export const EditorPage: React.FC = () => {
     return () => window.removeEventListener('circuit-muse-pro-github-sync-prompt', handler);
   }, []);
 
+  // Open the console when the agent compiles.
+  useEffect(() => {
+    const reveal = () => setConsoleOpen(true);
+    window.addEventListener('circuit-muse-open-console', reveal);
+    return () => window.removeEventListener('circuit-muse-open-console', reveal);
+  }, []);
+
   // ── Electrical simulation (one-time mount) ────────────────────────────────
   // `startSimulation()` is the single entry point: it constructs the
   // CircuitSimulationService, mounts the ADC bridge, and subscribes

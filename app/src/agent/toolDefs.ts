@@ -319,4 +319,19 @@ export const AGENT_TOOLS: ToolDefinition[] = [
       parameters: { type: 'object', properties: {} },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'delegate_to_subagent',
+      description: 'Hand a focused part of a large circuit to a sub-agent. Roles: planner, circuit_designer, firmware_engineer, debugger, verifier. Returns written analysis, not canvas changes.',
+      parameters: {
+        type: 'object',
+        properties: {
+          role: { type: 'string', description: 'One of planner, circuit_designer, firmware_engineer, debugger, verifier' },
+          task: { type: 'string', description: 'What this sub-agent should work out' },
+        },
+        required: ['role', 'task'],
+      },
+    },
+  },
 ];

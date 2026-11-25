@@ -80,9 +80,7 @@ export const useProviderStore = create<ProviderState>()(
     {
       name: 'circuit-muse-providers',
       version: 2,
-      // Persisted state from earlier versions predates the NVIDIA provider and
-      // individual model fields, so merge it with the current defaults rather
-      // than replacing the whole provider map.
+      // Old saved state has no nvidia entry, so fill in the gaps.
       merge: (persisted, current) => {
         const saved = (persisted || {}) as Partial<ProviderState>;
         const providers = { ...current.providers };

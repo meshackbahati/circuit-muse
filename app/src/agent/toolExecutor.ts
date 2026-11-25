@@ -31,7 +31,7 @@ async function loadComponentMetadata(): Promise<ComponentMeta[]> {
   return (module.default as any).components ?? [];
 }
 
-/** Translate convenient tool aliases into the ids the canvas can render. */
+// Tool names are aliases; the canvas needs the real metadata id.
 function resolveComponentType(requested: string, metadata: ComponentMeta[]): ComponentMeta | null {
   const base = requested.trim().replace(/^wokwi-/, '').replace(/^circuit-muse-/, '');
   if (!base) return null;
@@ -156,8 +156,8 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
       }
       const wire = {
         id: `wire-${Date.now()}`,
-        start: { componentId: args.from_part, pinId: args.from_pin },
-        end: { componentId: args.to_part, pinId: args.to_pin },
+        start: { componentId: args.from_part, pinName: args.from_pin },
+        end: { componentId: args.to_part, pinName: args.to_pin },
         color: args.color ?? 'green',
         waypoints: [],
       } as any;
@@ -204,6 +204,11 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
       const editor = useEditorStore.getState();
       const files = filesForBoard(editor, board);
       if (files.length === 0) return JSON.stringify({ error: 'No source files to compile' });
+
+      // Show the console so the build is visible.
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('circuit-muse-open-console'));
+      }
 
       let result: MutableState;
       try {
@@ -547,6 +552,45 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
       } catch (error) {
         return JSON.stringify({ error: error instanceof Error ? error.message : String(error) });
       }
+    }
+    case 'delegate_to_subagent': {
+      const { createProvider } = await import('./providers/registry');
+      const { useProviderStore } = await import('../store/useProviderStore');
+      const { resolveSubAgentRole, SUBAGENT_PROMPTS } = await import('./subagents');
+
+      const task = String(args.task ?? '').trim();
+      if (!task) return JSON.stringify({ error: 'A task description is required' });
+
+      const store = useProviderStore.getState();
+      const config = store.providers[store.activeProviderId];
+      const provider = createProvider(config);
+      if (!provider) return JSON.stringify({ error: `No usable provider for ${config.name}` });
+
+      const role = resolveSubAgentRole(String(args.role ?? 'planner'));
+      const sim = useSimulatorStore.getState();
+      const context = JSON.stringify({
+        boards: sim.boards.map((b: MutableState) => ({ id: b.id, kind: b.boardKind })),
+        components: sim.components.map((c: MutableState) => ({ id: c.id, type: c.metadataId, properties: c.properties })),
+        wires: sim.wires.map((w: MutableState) => ({
+          from: `${w.start.componentId}:${w.start.pinName}`,
+          to: `${w.end.componentId}:${w.end.pinName}`,
+        })),
+      });
+
+      const reply = await provider.chat({
+        messages: [
+          { id: 'sub-system', role: 'system', content: SUBAGENT_PROMPTS[role], timestamp: Date.now() },
+          {
+            id: 'sub-task',
+            role: 'user',
+            content: `Task: ${task}\nCurrent circuit: ${context}`,
+            timestamp: Date.now(),
+          },
+        ],
+        model: config.model,
+      });
+
+      return JSON.stringify({ success: true, role, response: reply.content });
     }
     case 'list_available_boards': {
       return JSON.stringify({

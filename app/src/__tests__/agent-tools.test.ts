@@ -53,6 +53,7 @@ describe('agent tool catalogue', () => {
       'get_installed_libraries',
       'search_libraries',
       'set_board_language',
+      'delegate_to_subagent',
     ]) {
       expect(names).toContain(required);
     }
@@ -119,6 +120,11 @@ describe('state-backed agent tools', () => {
       value: '330',
     }));
     expect(updated).toMatchObject({ success: true, value: '330' });
+  });
+
+  it('requires a task before delegating to a sub-agent', async () => {
+    const result = JSON.parse(await call('delegate_to_subagent', { role: 'planner', task: '' }));
+    expect(result.error).toMatch(/task description/);
   });
 
   it('rejects an unknown firmware component with the supported values', async () => {
