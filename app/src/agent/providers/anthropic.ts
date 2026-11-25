@@ -80,6 +80,8 @@ export class AnthropicProvider implements LLMProvider {
         'Content-Type': 'application/json',
         'x-api-key': this.apiKey,
         'anthropic-version': '2023-06-01',
+        // Anthropic omits CORS headers unless the caller opts in explicitly.
+        'anthropic-dangerous-direct-browser-access': 'true',
       },
       body: JSON.stringify(body),
       signal: params.signal,
@@ -145,6 +147,7 @@ export class AnthropicProvider implements LLMProvider {
         headers: {
           'x-api-key': this.apiKey,
           'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
         },
       });
       if (!response.ok) return [];

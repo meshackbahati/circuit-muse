@@ -27,7 +27,9 @@ export function createProvider(config: ProviderConfig): LLMProvider | null {
       if (!config.apiKey && config.id !== 'custom') return null;
       const baseUrl = config.baseUrl || BASE_URLS[config.id];
       if (!baseUrl) return null;
-      return new OpenAICompatibleProvider(config.id, baseUrl, config.apiKey || '');
+      return new OpenAICompatibleProvider(config.id, baseUrl, config.apiKey || '', {
+        nvidiaProxy: config.id === 'nvidia',
+      });
     }
     case 'anthropic': {
       if (!config.apiKey) return null;

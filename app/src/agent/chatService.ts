@@ -3,12 +3,18 @@ import { createProvider } from './providers/registry';
 import { resolveModel } from './providers/base';
 import { useProviderStore } from '../store/useProviderStore';
 import { useAgentStore } from '../store/useAgentStore';
+import { useConversationStore } from '../store/useConversationStore';
 import { AGENT_TOOLS } from './toolDefs';
 import { SYSTEM_PROMPT } from './systemPrompt';
 import { executeToolCall } from './toolExecutor';
 
 // A full build-and-verify cycle takes more than a few tool rounds.
 const MAX_TOOL_ITERATIONS = 30;
+// Hosted providers occasionally return 503 while a safety screen or a worker
+// restarts. Five attempts with exponential backoff ride out those windows.
+const MAX_STREAM_ATTEMPTS = 5;
+const RETRY_BASE_MS = 700;
+const RETRY_MAX_MS = 8000;
 let activeRequest: AbortController | null = null;
 
 function isFragment(text: string): boolean {
@@ -25,14 +31,36 @@ function cleanChunk(text: string): string {
 
 function isTransient(error: unknown): boolean {
   const text = error instanceof Error ? error.message : String(error);
-  return /\b(429|500|502|503|504)\b|timeout|timed out|network|fetch failed/i.test(text);
+  return /\b(408|425|429|500|502|503|504)\b|content safety|timeout|timed out|network|fetch failed|load failed/i.test(text);
+}
+
+function abortError(): DOMException {
+  return new DOMException('Aborted', 'AbortError');
+}
+
+function sleep(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(abortError());
+      return;
+    }
+    const onAbort = () => {
+      clearTimeout(timer);
+      reject(abortError());
+    };
+    const timer = setTimeout(() => {
+      signal?.removeEventListener('abort', onAbort);
+      resolve();
+    }, ms);
+    signal?.addEventListener('abort', onAbort, { once: true });
+  });
 }
 
 async function* streamWithRetry(
   provider: LLMProvider,
   params: ChatParams,
 ): AsyncGenerator<StreamChunk> {
-  for (let attempt = 0; attempt < 3; attempt++) {
+  for (let attempt = 0; attempt < MAX_STREAM_ATTEMPTS; attempt++) {
     let yielded = false;
     try {
       for await (const chunk of provider.chatStream(params)) {
@@ -41,8 +69,27 @@ async function* streamWithRetry(
       }
       return;
     } catch (error) {
-      if (!isTransient(error) || yielded || attempt === 2) throw error;
-      await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+      const retryable =
+        isTransient(error) &&
+        !yielded &&
+        attempt < MAX_STREAM_ATTEMPTS - 1 &&
+        !params.signal?.aborted;
+      if (!retryable) throw error;
+
+      const delayMs =
+        Math.min(RETRY_MAX_MS, RETRY_BASE_MS * 2 ** attempt) +
+        Math.floor(Math.random() * 250);
+      useAgentStore
+        .getState()
+        .setRetryNotice(
+          `Provider busy or unavailable. Retrying in ${(delayMs / 1000).toFixed(1)}s ` +
+            `(attempt ${attempt + 2} of ${MAX_STREAM_ATTEMPTS}).`,
+        );
+      try {
+        await sleep(delayMs, params.signal);
+      } finally {
+        useAgentStore.getState().setRetryNotice(null);
+      }
     }
   }
 }
@@ -200,11 +247,17 @@ export async function sendMessage(content: string): Promise<void> {
   } catch (error) {
     if (controller.signal.aborted) return;
     const errorMsg = error instanceof Error ? error.message : String(error);
-    const friendly = /503|429|\b500\b/.test(errorMsg)
-      ? `The model provider is busy or unavailable after retries. Choose another provider or model. ${errorMsg}`
-      : `Error: ${errorMsg}`;
+    const friendly = /503|429|\b50[02]\b/.test(errorMsg)
+      ? `The model provider stayed busy after ${MAX_STREAM_ATTEMPTS} attempts. Send again in a moment, or choose another provider or model. ${errorMsg}`
+      : /\b40[13]\b/.test(errorMsg)
+        ? `The provider rejected the credentials. Check the API key in AI Provider Settings. ${errorMsg}`
+        : /load failed|failed to fetch|networkerror|network request failed/i.test(errorMsg)
+          ? `The app could not reach the model provider. Check the connection and the provider base URL. ${errorMsg}`
+          : `Error: ${errorMsg}`;
     agentStore.addMessage({ role: 'assistant', content: friendly });
   } finally {
+    useAgentStore.getState().setRetryNotice(null);
+    useConversationStore.getState().save(useAgentStore.getState().messages);
     if (activeRequest === controller) {
       activeRequest = null;
       agentStore.setStreaming(false);

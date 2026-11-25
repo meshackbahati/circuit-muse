@@ -107,7 +107,10 @@ describe('provider API model endpoints', () => {
     expect(fetchMock).toHaveBeenCalledWith(
       'https://api.anthropic.com/v1/models',
       expect.objectContaining({
-        headers: expect.objectContaining({ 'x-api-key': 'sk-test' }),
+        headers: expect.objectContaining({
+          'x-api-key': 'sk-test',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        }),
       })
     );
   });
@@ -192,5 +195,69 @@ describe('NVIDIA NIM provider', () => {
     expect(provider).not.toBeNull();
     expect(provider?.id).toBe('nvidia');
     expect(PROVIDER_DEFAULTS.nvidia).not.toHaveProperty('model');
+  });
+
+  it('discovers models through the local engine because NVIDIA sends no CORS headers', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ data: [{ id: 'nvidia/model-b' }, { id: 'nvidia/model-a' }] }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    const provider = new OpenAICompatibleProvider(
+      'nvidia', 'https://integrate.api.nvidia.com', 'nvapi-test', { nvidiaProxy: true },
+    );
+    await expect(provider.listModels()).resolves.toEqual(['nvidia/model-a', 'nvidia/model-b']);
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(String(url)).toMatch(/\/api\/ai\/nvidia\/models$/);
+    expect(JSON.parse(String(init?.body))).toEqual({
+      url: 'https://integrate.api.nvidia.com/v1/models',
+      api_key: 'nvapi-test',
+    });
+  });
+
+  it('streams tool calls back through the proxy unchanged', async () => {
+    const sse = [
+      'data: {"choices":[{"delta":{"tool_calls":[{"index":0,"id":"call-1","type":"function","function":{"name":"add_board","arguments":"{\\"board_type\\":"}}]},"finish_reason":null}]}',
+      'data: {"choices":[{"delta":{"tool_calls":[{"index":0,"function":{"arguments":"\\"arduino-uno\\"}"}}]},"finish_reason":"tool_calls"}]}',
+      'data: [DONE]',
+      '',
+    ].join('\n\n');
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      body: new ReadableStream({
+        start(controller) {
+          controller.enqueue(new TextEncoder().encode(sse));
+          controller.close();
+        },
+      }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    const provider = new OpenAICompatibleProvider(
+      'nvidia', 'https://integrate.api.nvidia.com', 'nvapi-test', { nvidiaProxy: true },
+    );
+    const reply = await provider.chat({
+      model: 'nvidia/model-a',
+      messages: [{ id: 'u', role: 'user', content: 'Add an Uno', timestamp: 0 }],
+    });
+    expect(reply.toolCalls?.[0].function).toEqual({
+      name: 'add_board',
+      arguments: '{"board_type":"arduino-uno"}',
+    });
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(String(url)).toMatch(/\/api\/ai\/nvidia\/chat$/);
+    expect(JSON.parse(String(init?.body)).url).toBe(
+      'https://integrate.api.nvidia.com/v1/chat/completions',
+    );
+  });
+
+  it('keeps every other OpenAI-compatible provider on the direct endpoint', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ data: [{ id: 'gpt-x' }] }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    const provider = new OpenAICompatibleProvider('openai', 'https://api.openai.com', 'sk-test');
+    await provider.listModels();
+    expect(fetchMock.mock.calls[0][0]).toBe('https://api.openai.com/v1/models');
   });
 });
