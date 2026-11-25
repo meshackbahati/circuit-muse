@@ -78,8 +78,17 @@ body {
   color: #ff6b6b;
 }
 
-.app[data-custom-titlebar-active] {
-  padding-top: 32px;
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* On platforms where GTK still reserves a space for native decorations, keep
+   the in-app workspace flush against the bottom edge by making the app
+   grow with the root instead of overflowing by a fixed titlebar height. */
+.app {
+  min-height: 100%;
 }
 
 /* ── Header ─────────────────────────────────────── */
