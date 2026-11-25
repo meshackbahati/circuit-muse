@@ -967,16 +967,22 @@ const INITIAL_BOARD: BoardInstance = {
 // ~200 Hz emit ~600 bytes/s, and a raw `set()` per byte overwhelms React's
 // useSyncExternalStore reconciliation (→ "Maximum update depth exceeded").
 // The batcher coalesces chunks per animation frame (≤60 Hz), grouped by board.
+// Keep serial buffers bounded so long emulation sessions do not accumulate
+// every byte the MCU has printed since power-on.
+const MAX_SERIAL_OUTPUT = 50_000;
+
 const { append: appendSerial } = createSerialBatcher((perBoard) => {
   useSimulatorStore.setState((s) => {
     let globalOut = s.serialOutput;
     const boards = s.boards.map((b) => {
       const chunk = perBoard.get(b.id);
       if (!chunk) return b;
-      if (s.activeBoardId === b.id) globalOut += chunk;
-      return { ...b, serialOutput: b.serialOutput + chunk };
+      const serialOutput = b.serialOutput + chunk;
+      const next = s.activeBoardId === b.id ? `${globalOut}${chunk}` : serialOutput;
+      if (s.activeBoardId === b.id) globalOut = next;
+      return { ...b, serialOutput: serialOutput.length > MAX_SERIAL_OUTPUT ? serialOutput.slice(-MAX_SERIAL_OUTPUT) : serialOutput };
     });
-    return { boards, serialOutput: globalOut };
+    return { boards, serialOutput: globalOut.length > MAX_SERIAL_OUTPUT ? globalOut.slice(-MAX_SERIAL_OUTPUT) : globalOut };
   });
 });
 
@@ -2419,6 +2425,7 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
         const component = state.components.find((c) => c.id === componentId);
         // Check if this componentId matches a board id
         const board = state.boards.find((b) => b.id === componentId);
+        if (!component && !board) return state;
         // Components have a DynamicComponent wrapper with border:2px +
         // padding:4px on EVERY side → inner element sits at (+6, +6)
         // from the wrapper top-left. Earlier code used (+4, +6) — the
@@ -2452,23 +2459,19 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
 
     recalculateAllWirePositions: () => {
       const state = get();
+      // Resolve ids once so a large canvas does not perform two linear scans
+      // per wire on every recalculation.
+      const componentsById = new Map(state.components.map((c) => [c.id, c]));
+      const boardsById = new Map(state.boards.map((b) => [b.id, b]));
       const updatedWires = state.wires.map((wire) => {
         const updated = { ...wire };
 
         // Resolve start — components have wrapper offset (6,6) on
         // both axes (padding:4 + border:2). Boards have no wrapper.
-        const startComp = state.components.find((c) => c.id === wire.start.componentId);
-        const startBoard = state.boards.find((b) => b.id === wire.start.componentId);
-        const startX = startComp
-          ? startComp.x + 6
-          : startBoard
-            ? startBoard.x
-            : state.boardPosition.x;
-        const startY = startComp
-          ? startComp.y + 6
-          : startBoard
-            ? startBoard.y
-            : state.boardPosition.y;
+        const startComp = componentsById.get(wire.start.componentId);
+        const startBoard = boardsById.get(wire.start.componentId);
+        const startX = startComp ? startComp.x + 6 : startBoard ? startBoard.x : state.boardPosition.x;
+        const startY = startComp ? startComp.y + 6 : startBoard ? startBoard.y : state.boardPosition.y;
         const startRotation = startComp ? Number(startComp.properties?.rotation) || 0 : 0;
         const startPos = calculatePinPosition(
           wire.start.componentId,
@@ -2477,22 +2480,16 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
           startY,
           startRotation,
         );
-        updated.start = startPos
-          ? { ...wire.start, x: startPos.x, y: startPos.y }
-          : { ...wire.start, x: startX, y: startY };
+        updated.start = startPos ? { ...wire.start, x: startPos.x, y: startPos.y } : { ...wire.start, x: startX, y: startY };
 
         // Resolve end — same (6,6) wrapper offset as start above.
-        const endComp = state.components.find((c) => c.id === wire.end.componentId);
-        const endBoard = state.boards.find((b) => b.id === wire.end.componentId);
+        const endComp = componentsById.get(wire.end.componentId);
+        const endBoard = boardsById.get(wire.end.componentId);
         const endX = endComp ? endComp.x + 6 : endBoard ? endBoard.x : state.boardPosition.x;
         const endY = endComp ? endComp.y + 6 : endBoard ? endBoard.y : state.boardPosition.y;
         const endRotation = endComp ? Number(endComp.properties?.rotation) || 0 : 0;
-        const endPos = calculatePinPosition(
-          wire.end.componentId, wire.end.pinName, endX, endY, endRotation,
-        );
-        updated.end = endPos
-          ? { ...wire.end, x: endPos.x, y: endPos.y }
-          : { ...wire.end, x: endX, y: endY };
+        const endPos = calculatePinPosition(wire.end.componentId, wire.end.pinName, endX, endY, endRotation);
+        updated.end = endPos ? { ...wire.end, x: endPos.x, y: endPos.y } : { ...wire.end, x: endX, y: endY };
 
         return updated;
       });

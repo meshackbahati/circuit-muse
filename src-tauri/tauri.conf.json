@@ -17,12 +17,27 @@
         "height": 800,
         "minWidth": 800,
         "minHeight": 600,
-        "decorations": true,
+        "decorations": false,
         "resizable": true
       }
     ],
     "security": {
-      "csp": null
+      "csp": null,
+      "capabilities": [
+        {
+          "identifier": "custom-titlebar",
+          "windows": ["main"],
+          "permissions": [
+            "core:window:default",
+            "core:window:allow-close",
+            "core:window:allow-minimize",
+            "core:window:allow-maximize",
+            "core:window:allow-unmaximize",
+            "core:window:allow-toggle-maximize",
+            "core:window:allow-start-dragging"
+          ]
+        }
+      ]
     },
     "withGlobalTauri": true
   },

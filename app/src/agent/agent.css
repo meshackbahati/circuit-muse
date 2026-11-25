@@ -230,6 +230,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  content-visibility: auto;
 }
 
 .agent-empty-state {
@@ -648,6 +649,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  content-visibility: auto;
 }
 
 .agent-history-row {

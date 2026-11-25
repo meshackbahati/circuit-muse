@@ -5,7 +5,10 @@ import { ExamplesPage } from './pages/ExamplesPage';
 import { ExampleDetailPage } from './pages/ExampleDetailPage';
 import { ExampleEditorPage } from './pages/ExampleEditorPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { CustomTitleBar } from './components/layout/CustomTitleBar';
 import './App.css';
+
+const isDesktop = typeof window !== 'undefined' && !!(window as any).__TAURI__;
 
 const DocsPage = lazy(() =>
   import('./pages/DocsPage').then((module) => ({ default: module.DocsPage })),
@@ -14,6 +17,7 @@ const DocsPage = lazy(() =>
 function App() {
   return (
     <ErrorBoundary>
+      {isDesktop && <CustomTitleBar />}
       <Router>
         <Routes>
           {/* Desktop: everything routes to the editor workspace */}

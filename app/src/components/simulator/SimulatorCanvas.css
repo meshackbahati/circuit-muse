@@ -246,6 +246,8 @@
   right: 0;
   bottom: 0;
   z-index: 1;
+  content-visibility: auto;
+  contain-intrinsic-size: 4000px 3000px;
 }
 
 /* ── Zoom controls ───────────────────────────────── */

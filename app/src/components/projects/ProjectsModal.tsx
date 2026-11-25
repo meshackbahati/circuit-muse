@@ -228,6 +228,7 @@ export const ProjectsModal: React.FC<ProjectsModalProps> = ({ onClose }) => {
           flex: 1;
           overflow-y: auto;
           padding: 8px 0;
+          content-visibility: auto;
         }
         .projects-loading, .projects-empty {
           padding: 40px 20px;
