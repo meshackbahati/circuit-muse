@@ -13,6 +13,7 @@
 import JSZip from 'jszip';
 import { useSimulatorStore } from '../store/useSimulatorStore';
 import { useEditorStore } from '../store/useEditorStore';
+import type { BoardKind } from '../types/board';
 
 // ─── Fritzing part type → CircuitMuse metadataId mapping ──────────────────
 
@@ -59,7 +60,7 @@ interface FritzingWire {
   color: string;
 }
 
-interface FritzingImportResult {
+export interface FritzingImportResult {
   boardType: string;
   parts: FritzingPart[];
   wires: FritzingWire[];
@@ -76,11 +77,6 @@ function parseXml(text: string): Document {
 
 function getAttr(el: Element, name: string): string {
   return el.getAttribute(name) ?? '';
-}
-
-function getNum(el: Element, name: string, fallback = 0): number {
-  const v = parseFloat(getAttr(el, name));
-  return isNaN(v) ? fallback : v;
 }
 
 // ─── Main Import Function ─────────────────────────────────────────────────
@@ -210,7 +206,7 @@ export function loadFritzingIntoStores(result: FritzingImportResult): void {
   const editor = useEditorStore.getState();
 
   // Add the board
-  const boardId = sim.addBoard(result.boardType, 200, 200);
+  const boardId = sim.addBoard(result.boardType as BoardKind, 200, 200);
 
   // Set code
   const group = editor.fileGroups[`group-${boardId}`];
@@ -231,7 +227,7 @@ export function loadFritzingIntoStores(result: FritzingImportResult): void {
       rotate: part.rotation,
       attrs: {},
     };
-    sim.recordAddComponent(component);
+    sim.recordAddComponent(component as unknown as Parameters<typeof sim.recordAddComponent>[0]);
   }
 
   // Add wires
@@ -248,6 +244,6 @@ export function loadFritzingIntoStores(result: FritzingImportResult): void {
       },
       color: wire.color,
     };
-    sim.recordAddWire(wireObj);
+    sim.recordAddWire(wireObj as unknown as Parameters<typeof sim.recordAddWire>[0]);
   }
 }

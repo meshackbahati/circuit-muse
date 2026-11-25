@@ -15,7 +15,7 @@ import type { PartSimulationLogic } from './PartSimulationRegistry';
 
 function twoInputGate(compute: (a: boolean, b: boolean) => boolean): PartSimulationLogic {
   return {
-    attachEvents: (element, simulator, getPin, _componentId, getPinResolver) => {
+    attachEvents: (_element, simulator, getPin, _componentId, getPinResolver) => {
       const pinY = getPin('Y');
       if (pinY === null) return () => {};
 
@@ -113,7 +113,7 @@ function nInputGate(
   compute: (inputs: boolean[]) => boolean,
 ): PartSimulationLogic {
   return {
-    attachEvents: (element, simulator, getPin, _componentId, getPinResolver) => {
+    attachEvents: (_element, simulator, getPin, _componentId, getPinResolver) => {
       const pinY = getPin('Y');
       if (pinY === null) return () => {};
 
@@ -172,7 +172,7 @@ function edgeTriggeredFF(
   sample: (state: boolean, inputs: boolean[]) => boolean,
 ): PartSimulationLogic {
   return {
-    attachEvents: (element, simulator, getPin, _componentId, getPinResolver) => {
+    attachEvents: (_element, simulator, getPin, _componentId, getPinResolver) => {
       const qPin = getPin('Q');
       const qbarPin = getPin('Qbar');
       if (qPin === null || qbarPin === null) return () => {};
@@ -281,7 +281,7 @@ PartSimulationRegistry.register('logic-gate-nor-4', nInputGate(['A', 'B', 'C', '
 
 // ─── NOT (inverter) ───────────────────────────────────────────────────────────
 PartSimulationRegistry.register('logic-gate-not', {
-  attachEvents: (element, simulator, getPin, _componentId, getPinResolver) => {
+  attachEvents: (_element, simulator, getPin, _componentId, getPinResolver) => {
     const pinY = getPin('Y');
     if (pinY === null) return () => {};
 

@@ -44,7 +44,7 @@ async function getAdapter(): Promise<SolverPort> {
     const mod = await import(/* @vite-ignore */ specifier);
     singleton = new mod.NgSpiceNodeAdapter();
   }
-  return singleton;
+  return singleton!;
 }
 
 function detectAnalysis(netlist: string):
@@ -128,8 +128,6 @@ export async function runNetlist(netlist: string): Promise<SpiceResult> {
     solveMs: 0,
     warnings: [] as string[],
   };
-  const rawVecs = all.rawNames;
-
   const variableNames = Array.from(result.vectors.keys()).map(legacyNameFor);
   const getVec = (name: string): VectorValue[] => {
     const ngKey = ngspiceNameFor(name);

@@ -9,6 +9,7 @@ interface AgentState {
   panelWidth: number;
 
   addMessage: (message: Omit<Message, 'id' | 'timestamp'>) => string;
+  setMessages: (messages: Message[]) => void;
   updateMessage: (id: string, patch: Partial<Message>) => void;
   updateLastAssistantMessage: (content: string) => void;
   setStreaming: (streaming: boolean) => void;
@@ -33,6 +34,7 @@ export const useAgentStore = create<AgentState>()((set) => ({
     return id;
   },
 
+  setMessages: (messages) => set({ messages }),
   updateMessage: (id, patch) => set((state) => ({
     messages: state.messages.map(m => m.id === id ? { ...m, ...patch } : m),
   })),

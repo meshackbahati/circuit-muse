@@ -56,7 +56,7 @@ export interface I2CMaster {
 export class I2CBusManager implements TWIEventHandler {
   private devices: Map<number, I2CDevice> = new Map();
   private activeDevice: I2CDevice | null = null;
-  private writeMode = true;
+  public writeMode = true;
 
   /** Peer buses that this bus can forward transactions to when the requested address is not local. */
   private bridges: I2CBusManager[] = [];
@@ -73,7 +73,10 @@ export class I2CBusManager implements TWIEventHandler {
    * peripherals with per-callback wiring (RPI2C), the caller is
    * responsible for routing each master event into the bus's methods.
    */
-  constructor(private master: I2CMaster) {
+  private master: I2CMaster;
+
+  constructor(master: I2CMaster) {
+    this.master = master;
     this.bindEventHandler(master);
   }
 
@@ -84,7 +87,7 @@ export class I2CBusManager implements TWIEventHandler {
       'eventHandler' in (master as object)
     ) {
       try {
-        (master as { eventHandler: TWIEventHandler }).eventHandler = this;
+        (master as I2CMaster & { eventHandler: TWIEventHandler }).eventHandler = this;
       } catch {
         /* setter rejected — caller will wire events manually */
       }
@@ -370,7 +373,11 @@ export class I2CMemoryDevice implements I2CDevice {
   /** Callback fired whenever a register is written */
   public onRegisterWrite: ((reg: number, value: number) => void) | null = null;
 
-  constructor(public address: number) {}
+  public address: number;
+
+  constructor(address: number) {
+    this.address = address;
+  }
 
   writeByte(value: number): boolean {
     if (this.firstByte) {

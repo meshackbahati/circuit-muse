@@ -79,7 +79,7 @@ export async function* streamFlash(req: FlashRequest): AsyncGenerator<FlashEvent
     : new TextEncoder().encode(req.programData);
   fd.append(
     'program',
-    new Blob([bytes], { type: 'application/octet-stream' }),
+    new Blob([bytes as Uint8Array<ArrayBuffer>], { type: 'application/octet-stream' }),
     `program.${req.programFormat}`,
   );
 

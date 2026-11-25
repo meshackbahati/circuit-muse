@@ -8,7 +8,7 @@
  */
 
 import { useCallback, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, type NavigateOptions } from "react-router-dom";
 import { getLocaleFromPath, localizedPath } from "./path";
 import type { Locale } from "./config";
 
@@ -35,7 +35,7 @@ export function useLocalizedNavigate() {
   const navigate = useNavigate();
   const locale = useCurrentLocale();
   return useMemo(
-    () => (path: string, opts?: Parameters<typeof navigate>[1]) =>
+    () => (path: string, opts?: NavigateOptions) =>
       navigate(localizedPath(path, locale), opts),
     [navigate, locale]
   );

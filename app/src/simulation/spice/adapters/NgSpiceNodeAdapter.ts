@@ -88,7 +88,7 @@ export class NgSpiceNodeAdapter implements SolverPort {
   private readonly wasmDir: string;
   private stdoutBuffer: string[] = [];
   private stderrBuffer: string[] = [];
-  private callbackPointers: number[] = [];
+  callbackPointers: number[] = [];
 
   constructor(opts: { wasmDir?: string } = {}) {
     this.wasmDir = opts.wasmDir ?? defaultWasmDir();
@@ -115,18 +115,24 @@ export class NgSpiceNodeAdapter implements SolverPort {
   private bindApi(): void {
     if (!this.module) throw new Error('Module not ready');
     const M = this.module;
+    // cwrap is typed generically; each symbol has a known C signature at runtime.
+    const cw = <K extends keyof NgSpiceApi>(
+      name: string,
+      ret: string | null,
+      args: readonly string[],
+    ): NgSpiceApi[K] => M.cwrap(name, ret, args) as unknown as NgSpiceApi[K];
     this.api = {
-      init: M.cwrap('ngSpice_Init', 'number', [
+      init: cw<'init'>('ngSpice_Init', 'number', [
         'number', 'number', 'number', 'number', 'number', 'number', 'number',
       ]),
-      command: M.cwrap('ngSpice_Command', 'number', ['string']),
-      circ: M.cwrap('ngSpice_Circ', 'number', ['number']),
-      allVecs: M.cwrap('ngSpice_AllVecs', 'number', ['string']),
-      curPlot: M.cwrap('ngSpice_CurPlot', 'string', []),
-      getVecInfo: M.cwrap('ngGet_Vec_Info', 'number', ['string']),
-      reset: M.cwrap('ngSpice_Reset', 'number', []),
-      nospiceinit: M.cwrap('ngSpice_nospiceinit', 'number', []),
-      setInputPath: M.cwrap('ngCM_Input_Path', 'number', ['string']),
+      command: cw<'command'>('ngSpice_Command', 'number', ['string']),
+      circ: cw<'circ'>('ngSpice_Circ', 'number', ['number']),
+      allVecs: cw<'allVecs'>('ngSpice_AllVecs', 'number', ['string']),
+      curPlot: cw<'curPlot'>('ngSpice_CurPlot', 'string', []),
+      getVecInfo: cw<'getVecInfo'>('ngGet_Vec_Info', 'number', ['string']),
+      reset: cw<'reset'>('ngSpice_Reset', 'number', []),
+      nospiceinit: cw<'nospiceinit'>('ngSpice_nospiceinit', 'number', []),
+      setInputPath: cw<'setInputPath'>('ngCM_Input_Path', 'number', ['string']),
     };
   }
 

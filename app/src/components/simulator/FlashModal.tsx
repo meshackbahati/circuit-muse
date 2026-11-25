@@ -15,9 +15,9 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { BoardInstance } from '../../store/useSimulatorStore';
+import type { BoardInstance } from '../../types/board';
 import { isTauri, listSerialPorts, type SerialPortInfo } from '../../desktop/tauriBridge';
-import { streamFlash, type FlashEvent } from '../../services/flashService';
+import { streamFlash } from '../../services/flashService';
 
 interface Props {
   board: BoardInstance;

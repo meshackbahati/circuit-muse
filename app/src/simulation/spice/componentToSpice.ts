@@ -40,7 +40,7 @@ type Mapper = (
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 function twoPin(
-  comp: ComponentForSpice,
+  _comp: ComponentForSpice,
   netLookup: NetLookup,
   pinA: string,
   pinB: string,

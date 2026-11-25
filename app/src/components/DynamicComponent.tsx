@@ -538,7 +538,7 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
           id,
           componentPinName,
           {
-            components: state.components,
+            components: state.components as unknown as import('../types/components').Component[],
             boards: state.boards,
             wires: state.wires,
             ownerBoard,

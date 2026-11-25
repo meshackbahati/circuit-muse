@@ -111,8 +111,8 @@ export class HD44780Decoder {
   private cursorOn = false;
   private cursorBlink = false;
   private cursorInc = true; // I/D bit — true = address increments after each write
-  private shiftOnEntry = false;
-  private twoLine = false;
+  public shiftOnEntry = false;
+  public twoLine = false;
 
   // ── 4-bit assembly state ──────────────────────────────────────────────
   private highNibble: number | null = null;
@@ -129,7 +129,7 @@ export class HD44780Decoder {
    * pairing only AFTER the controller is observed to be in 4-bit
    * mode (Function set with DL=0).
    */
-  private fourBitMode = false;
+  public fourBitMode = false;
 
   constructor(geometry: HD44780Geometry) {
     this.cols = geometry.cols;

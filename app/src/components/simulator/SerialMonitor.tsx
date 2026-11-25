@@ -8,7 +8,6 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSimulatorStore } from '../../store/useSimulatorStore';
 import { getTabSessionId } from '../../simulation/Esp32Bridge';
-import type { BoardKind } from '../../types/board';
 import { boardDisplayName } from '../../types/board';
 
 // Short labels for tabs

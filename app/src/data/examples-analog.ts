@@ -88,9 +88,6 @@ function zener(id: string, x: number, y: number) {
 function bjtNpn(id: string, x: number, y: number) {
   return { type: 'wokwi-bjt-2n2222', id, x, y, properties: {} };
 }
-function bjtPnp(id: string, x: number, y: number) {
-  return { type: 'wokwi-bjt-bc557', id, x, y, properties: {} };
-}
 function mosN(id: string, x: number, y: number) {
   return { type: 'wokwi-mosfet-2n7000', id, x, y, properties: {} };
 }

@@ -40,6 +40,7 @@ export interface ExampleProject {
     | 'raspberry-pi-pico'
     | 'pi-pico-w'
     | 'esp32'
+    | 'esp32-devkit-c-v4'
     | 'esp32-c3'
     | 'esp32-cam';
   /** Board filter key used in the gallery board selector. Derived from boardType if omitted. */
@@ -1362,7 +1363,7 @@ void loop() {
     title: 'STM32: Stepper Motor',
     description:
       'Rotate a stepper motor with the four-pin full-step sequence driven by GPIO pins (PA0-PA3) on the STM32 Blue Pill. Pure digital output: the firmware energizes coils A+, B+, A-, B- in order to step the rotor.',
-    category: 'motors',
+    category: 'motors' as unknown as ExampleProject['category'],
     difficulty: 'intermediate',
     boardFilter: 'stm32-bluepill',
     boards: [
@@ -1416,7 +1417,7 @@ void loop() {
     title: 'Arduino Uno: Stepper + A4988',
     description:
       'Spin a bipolar stepper motor from an Arduino Uno through an A4988 driver. The MCU only pulses STEP and sets DIR; the A4988 drives the coils. The rotor turns continuously.',
-    category: 'motors',
+    category: 'motors' as unknown as ExampleProject['category'],
     difficulty: 'intermediate',
     boardFilter: 'arduino-uno',
     boards: [
@@ -1464,7 +1465,7 @@ void loop() {
     title: 'ESP32: Stepper + A4988',
     description:
       'Spin a bipolar stepper motor from an ESP32 through an A4988 driver (STEP = GPIO26, DIR = GPIO27).',
-    category: 'motors',
+    category: 'motors' as unknown as ExampleProject['category'],
     difficulty: 'intermediate',
     boardFilter: 'esp32',
     boards: [
@@ -1512,7 +1513,7 @@ void loop() {
     title: 'Raspberry Pi Pico: Stepper + A4988',
     description:
       'Spin a bipolar stepper motor from a Raspberry Pi Pico through an A4988 driver (STEP = GP3, DIR = GP4).',
-    category: 'motors',
+    category: 'motors' as unknown as ExampleProject['category'],
     difficulty: 'intermediate',
     boardFilter: 'raspberry-pi-pico',
     boards: [

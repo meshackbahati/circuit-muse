@@ -322,6 +322,28 @@ export const AGENT_TOOLS: ToolDefinition[] = [
   {
     type: 'function',
     function: {
+      name: 'list_uploaded_files',
+      description: 'List files the user attached to the chat, with id, name, type, size and extracted text length.',
+      parameters: { type: 'object', properties: {} },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'read_uploaded_file',
+      description: 'Read an attached file. Omit name to get all files. Set include_data for image base64.',
+      parameters: {
+        type: 'object',
+        properties: {
+          name: { type: 'string', description: 'Optional file name' },
+          include_data: { type: 'boolean', description: 'Include image data URL when true' },
+        },
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
       name: 'delegate_to_subagent',
       description: 'Hand a focused part of a large circuit to a sub-agent. Roles: planner, circuit_designer, firmware_engineer, debugger, verifier. Returns written analysis, not canvas changes.',
       parameters: {

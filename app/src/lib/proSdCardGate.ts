@@ -24,6 +24,7 @@ export function installSdCardUploadGate(impl: (() => boolean) | null): void {
 
 /** Whether the current user may upload files to the microSD card. */
 export function sdCardUploadAllowed(): boolean {
+  void _impl; // The overlay owns the gate; OSS always allows.
   return true;
 }
 

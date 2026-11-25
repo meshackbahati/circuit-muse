@@ -54,7 +54,11 @@ export class FakeSolverAdapter implements SolverPort {
   /** Hook for tests that want to react to an alter (e.g. update canned vectors). */
   public onAlter: ((name: string, dcValue: number) => void) | null = null;
 
-  constructor(private readonly config: FakeSolverConfig = {}) {}
+  private readonly config: FakeSolverConfig;
+
+  constructor(config: FakeSolverConfig = {}) {
+    this.config = config;
+  }
 
   async init(): Promise<void> {
     this.calls.init++;

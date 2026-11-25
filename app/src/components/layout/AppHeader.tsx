@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useProjectStore } from '../../store/useProjectStore';
 import { ShareModal } from './ShareModal';
-import { useLocalizedHref, useCurrentLocale } from '../../i18n/useLocalizedNavigate';
+import { useLocalizedHref } from '../../i18n/useLocalizedNavigate';
 import type { AutoSaveState } from '../../hooks/useAutoSaveProject';
 import './LanguageSwitcher.css';
 
@@ -44,7 +43,6 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ autoSave }) => {
   const location = useLocation();
   const currentProject = useProjectStore((s) => s.currentProject);
   const [showShareModal, setShowShareModal] = useState(false);
-  const { t } = useTranslation();
   const localize = useLocalizedHref();
 
   // Desktop: only hide the header on the editor workspace pages,

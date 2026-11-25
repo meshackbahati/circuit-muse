@@ -43,7 +43,7 @@ export class Uc8179Decoder {
   private winX0 = 0;
   private winX1 = 0;
   private winY0 = 0;
-  private winY1 = 0;
+  public winY1 = 0;
   private cx = 0;
   private cy = 0;
 

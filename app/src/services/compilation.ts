@@ -180,7 +180,7 @@ export async function compileCode(
     if (onProgress) {
       try {
         onProgress({
-          state: status.state,
+          state: status.state as 'pending' | 'running',
           stdout: status.stdout || '',
           elapsedSeconds: Math.round((Date.now() - startedAt) / 1000),
         });

@@ -5,102 +5,67 @@
 </p>
 
 <p align="center">
-  <strong>Design. Simulate. Code. Create.</strong>
-</p>
-
-<p align="center">
   <a href="https://github.com/meshackbahati/circuit-muse/releases"><img src="https://img.shields.io/github/v/release/meshackbahati/circuit-muse?style=flat-square&logo=github" alt="Release"></a>
   <a href="https://github.com/meshackbahati/circuit-muse/blob/main/LICENSE"><img src="https://img.shields.io/github/license/meshackbahati/circuit-muse?style=flat-square" alt="License"></a>
   <a href="https://github.com/meshackbahati/circuit-muse/actions"><img src="https://img.shields.io/github/actions/workflow/status/meshackbahati/circuit-muse/ci.yml?style=flat-square&label=build" alt="Build Status"></a>
-  <a href="https://github.com/meshackbahati/circuit-muse/releases/latest"><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square" alt="Platforms"></a>
-  <a href="https://github.com/meshackbahati/circuit-muse/releases"><img src="https://img.shields.io/badge/version-1.0.4-blue?style=flat-square" alt="Version"></a>
 </p>
 
-<p align="center">
-  AI-powered circuit simulator and embedded board emulator for desktop. Write Arduino C++ or MicroPython, compile it, simulate it with real CPU emulation and 150+ interactive electronic components — and chat with an AI to design circuits, debug code, and wire components.
-</p>
+CircuitMuse is a desktop application for building microcontroller circuits. It provides a canvas with electronic parts, a code editor for each board, a compiler backed by a local Python engine, and simulators for several board families. An assistant can change the canvas, write code, compile, run, inspect output, and repair faults through tools.
 
----
+Simulation and project data stay on the machine. Releases bundle the desktop shell, the Python engine, and Arduino CLI. Board cores are fetched on first compile, and optional QEMU runtimes are downloaded when those boards are used.
 
-## What CircuitMuse Does
+## What is in a session
 
-CircuitMuse is a desktop application that lets you:
+- A canvas with boards, components, and wires.
+- A code editor with separate file groups per board.
+- Compile and run controls with an output console.
+- A serial monitor for board output and a send field for input.
+- An oscilloscope with selectable board pins and trigger modes.
+- Electrical verification before a run, which reports shorts, LED overcurrent, resistor overpower, and dark indicators.
+- A project store in IndexedDB with autosave, explicit save, project history, and import and export.
+- An assistant panel that can work on the circuit through tools.
 
-- **Write code** for microcontrollers (Arduino C++, MicroPython, ESP-IDF C)
-- **Compile it** automatically using bundled toolchains
-- **Simulate it** with real CPU emulation (not mocked — actual AVR, RP2040, ESP32, STM32, Raspberry Pi silicon)
-- **Build circuits** with 150+ electronic components on a drag-and-drop canvas
-- **Chat with AI** to design circuits, place components, wire them up, and debug code
+## Supported boards
 
-Simulation and project data run locally on your machine. The desktop release includes the app, Python API engine, and Arduino CLI. Arduino board cores are fetched when first needed, and optional QEMU runtimes are downloaded when you first use those boards; AI providers that use cloud models also need internet.
+| Board | CPU | Simulator |
+|-------|-----|-----------|
+| Arduino Uno, Nano, Mega 2560 | ATmega328P, ATmega2560 | avr8js |
+| ATtiny85 | ATtiny85 | avr8js |
+| Raspberry Pi Pico and Pico W | RP2040 | rp2040js |
+| ESP32 DevKit, CAM, Lolin32 | Xtensa LX6 | QEMU |
+| ESP32-S3 and XIAO ESP32-S3 | Xtensa LX7 | QEMU |
+| ESP32-C3 and SuperMini | RISC-V RV32IMC | QEMU |
+| STM32 Blue Pill and Nucleo | ARM Cortex-M3 | QEMU |
+| Raspberry Pi 3B, 4B, 5 | ARM Cortex-A | QEMU |
 
----
+Release packages are produced for Windows x64, macOS Apple Silicon, and Linux x64. Linux formats are `.deb`, `.rpm`, `.pkg.tar.zst`, and `.AppImage`.
 
-## Supported Boards
+## Install
 
-| Board | CPU | Simulation Engine |
-|-------|-----|-------------------|
-| Arduino Uno / Nano / Mega 2560 | ATmega328p / ATmega2560 | avr8js (in-browser) |
-| ATtiny85 | ATtiny85 | avr8js (in-browser) |
-| Raspberry Pi Pico / Pico W | RP2040 | rp2040js (in-browser) |
-| ESP32 DevKit / CAM / Lolin32 | Xtensa LX6 | QEMU (bundled) |
-| ESP32-S3 / XIAO ESP32-S3 | Xtensa LX7 | QEMU (bundled) |
-| ESP32-C3 / SuperMini | RISC-V RV32IMC | QEMU (bundled) |
-| STM32 Blue Pill / Nucleo | ARM Cortex-M3 | QEMU (bundled) |
-| Raspberry Pi 3B / 4B / 5 | ARM Cortex-A | QEMU + Linux (bundled) |
+Download a package from [GitHub Releases](https://github.com/meshackbahati/circuit-muse/releases).
 
-**Supported platforms:** Windows (x64), macOS (Apple Silicon), and Linux (x64: Debian/Ubuntu, Fedora, Arch, or AppImage).
+| Platform | Format | Install |
+|----------|--------|---------|
+| Windows | `.msi` or `.exe` | Run the installer |
+| macOS | `.dmg` | Drag to Applications |
+| Ubuntu and Debian | `.deb` | `sudo dpkg -i circuit-muse_*.deb` |
+| Arch | `.pkg.tar.zst` | `sudo pacman -U circuit-muse-*.pkg.tar.zst` |
+| Fedora | `.rpm` | `sudo dnf install ./circuit-muse-*.rpm` |
+| Any Linux | `.AppImage` | `chmod +x CircuitMuse_*.AppImage && ./CircuitMuse_*.AppImage` |
 
----
+The app opens straight into the editor. A setup dialog appears on first launch and reports which tools are present.
 
-## Installation
+The AppImage needs WebKit2GTK 4.1 and GTK 3 on the host. Software rendering is selected automatically when no GPU render device is found. To force it:
 
-### Download
+```bash
+CIRCUIT_MUSE_SOFTWARE_RENDERING=1 ./CircuitMuse_*.AppImage
+```
 
-Get the latest release for your platform from [GitHub Releases](https://github.com/meshackbahati/circuit-muse/releases):
+## Build from source
 
-| Platform | Format | Notes |
-|----------|--------|-------|
-| **Windows** | `.msi` or `.exe` | Installer with start menu shortcut |
-| **macOS** | `.dmg` | Drag to Applications folder |
-| **Linux (Ubuntu/Debian)** | `.deb` | `sudo dpkg -i circuit-muse_*.deb` |
-| **Linux (Arch)** | `.pkg.tar.zst` | `sudo pacman -U circuit-muse-*.pkg.tar.zst` |
-| **Linux (Fedora)** | `.rpm` | Install the release RPM with Software or `sudo dnf install ./circuit-muse-*.rpm` |
-| **Linux (Universal)** | `.AppImage` | `chmod +x CircuitMuse_*.AppImage && ./CircuitMuse_*.AppImage` |
+Prerequisites are Node.js 20 or newer, Python 3.12 or newer, Rust stable, and the WebKit2GTK development packages for the target platform.
 
-> **Linux graphics:** CircuitMuse detects systems without a GPU render device and enables software rendering automatically. If your graphics driver still causes a white screen, launch with `CIRCUIT_MUSE_SOFTWARE_RENDERING=1 ./CircuitMuse_*.AppImage`. Set `CIRCUIT_MUSE_HARDWARE_RENDERING=1` to override the automatic software fallback.
-
-> **Linux runtime:** The AppImage needs WebKit2GTK 4.1 and GTK 3 from the host system. The `.deb` and `.rpm` installers declare these system dependencies for the package manager.
-
-### First Launch
-
-1. Double-click the installer or AppImage
-2. You'll see the CircuitMuse splash screen with loading status
-3. The editor workspace opens directly — no landing page
-4. The setup wizard runs automatically on first launch, showing what's installed and what needs downloading
-
-### System Requirements
-
-| Component | Required | Auto-installed |
-|-----------|----------|----------------|
-| Node.js 20+ | Build only | No |
-| Python 3.12+ | Source builds only | Bundled engine in releases |
-| arduino-cli 1.5+ | Compilation | Yes, bundled |
-| ESP-IDF (optional) | ESP32 advanced builds | No |
-| Ollama (optional) | Local AI agent | No |
-
----
-
-## Building from Source
-
-### Prerequisites
-
-- Node.js 20+
-- Python 3.12+
-- Rust (stable)
-- Platform-specific dependencies (see below)
-
-### Linux (Ubuntu/Debian)
+On Ubuntu or Debian:
 
 ```bash
 sudo apt install -y \
@@ -109,230 +74,106 @@ sudo apt install -y \
   libjavascriptcoregtk-4.1-dev libudev-dev
 ```
 
-### Linux (Arch)
+On Arch:
 
 ```bash
 sudo pacman -S webkit2gtk-4.1 appmenu-gtk-module libappindicator-gtk3 \
   librsvg patchelf openssl gtk3 libsoup3
 ```
 
-### Linux (Fedora)
+On Fedora:
 
 ```bash
 sudo dnf install -y gcc webkit2gtk4.1-devel gtk3-devel libsoup3-devel \
   patchelf openssl-devel
 ```
 
-### macOS
-
-```bash
-xcode-select --install
-```
-
-### Windows
-
-Install [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) with "Desktop development with C++" workload.
-
-### Build Steps
+Then build:
 
 ```bash
 git clone https://github.com/meshackbahati/circuit-muse.git
 cd circuit-muse
 
-# Install app dependencies
 cd app && npm install && cd ..
-
-# Install engine dependencies
 cd engine && python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt && cd ..
 
-# Download arduino-cli (for compilation)
 bash scripts/download-deps.sh
-
-# Package the API engine as the platform-specific Tauri sidecar
 bash scripts/build-engine.sh
 
-# Install Tauri CLI
 cargo install tauri-cli --version "^2"
-
-# Run the desktop app in development mode (starts Vite and the engine)
-cd src-tauri && cargo tauri dev
+cd src-tauri && cargo tauri build
 ```
 
-The app opens with the editor workspace ready to use.
+Packages appear under `src-tauri/target/release/bundle/`. For development, run `cargo tauri dev` from `src-tauri`.
 
-### Building Release Packages
+The sidecar files under `src-tauri/binaries/` are empty placeholders in git. Both `build-engine.sh` and the release workflow populate them before Tauri bundles the app.
 
-```bash
-cd src-tauri
-cargo tauri build
-```
+## Assistant providers
 
-Output: `src-tauri/target/release/bundle/` contains platform-specific installers.
+Open the assistant panel from the toolbar and use the gear icon for provider settings. Each provider has its own base URL and API key fields.
 
----
-
-## AI Agent
-
-The built-in AI agent lets you design circuits using natural language.
-
-### Setup
-
-1. Open the AI Agent panel from the toolbar (hamburger menu or Agent button)
-2. Click the gear icon to open settings
-3. Configure a provider:
+The model dropdown is populated by `listModels()` on the configured provider. Manual entry covers endpoints without model discovery. No model catalogue is bundled with the application.
 
 | Provider | Setup |
 |----------|-------|
-| **Ollama** (recommended for offline) | Install [Ollama](https://ollama.com), run `ollama pull llama3` — no API key needed |
-| **OpenAI** | Paste API key from [platform.openai.com](https://platform.openai.com) |
-| **Anthropic** | Paste API key from [console.anthropic.com](https://console.anthropic.com) |
-| **Google Gemini** | Paste API key from [aistudio.google.com](https://aistudio.google.com) |
-| **OpenRouter** | Paste API key from [openrouter.ai](https://openrouter.ai) |
-| **Custom** | Any OpenAI-compatible endpoint (LM Studio, vLLM, etc.) |
+| Ollama | Install Ollama and pull a model. No API key is needed. |
+| OpenAI | Add a key from platform.openai.com. |
+| Anthropic | Add a key from console.anthropic.com. |
+| Google Gemini | Add a key from aistudio.google.com. |
+| OpenRouter | Add a key from openrouter.ai. |
+| Moonshot | Add a key from the Moonshot console. |
+| NVIDIA NIM | Add an NVIDIA API key. The base URL defaults to `https://integrate.api.nvidia.com`. |
+| Custom | Any OpenAI-compatible endpoint. |
 
-### What the AI Can Do
+The assistant can inspect the canvas, list valid boards and components, query pin names, add and remove parts, wire pins, write and read files, check the environment, install cores and libraries, verify the circuit, compile, run, stop, reset, read serial output, and delegate focused work to sub-agents. Sub-agent roles are `planner`, `circuit_designer`, `firmware_engineer`, `debugger`, and `verifier`.
 
-- Add boards to the canvas
-- Add electronic components (LEDs, resistors, sensors, displays)
-- Wire components together
-- Write Arduino C++ or MicroPython code
-- Compile and run simulations
-- Debug compilation errors
+The assistant continues after tool results and stops only after a final answer or when a call repeats without progress. It keeps the chat history with the project.
 
-Example prompts:
-- "Add an Arduino Uno and wire an LED to pin 13"
-- "Create a temperature sensor circuit with DHT22 and LCD display"
-- "Write a blink sketch for the ESP32"
+## Projects
 
----
+Projects are saved locally in IndexedDB. Autosave runs after canvas, code, or chat changes. Use the Projects button in the toolbar for the project list, or press `Ctrl+S` (`Cmd+S` on macOS) to save immediately. The dialog has a name field, a Save Current button, a New button, an Import button, and a Continue current project button. Each saved entry shows its board count, component count, chat message count, and last change date.
 
-## Project Persistence
+Import accepts `.vlx`, `.zip`, and `.fzz` files. Export writes `.vlx`, `.zip`, `.json`, and `.html` files. The native `.vlx` format keeps boards, file groups, components, wires, and chat history.
 
-### Auto-Save
+## Components and simulation
 
-Projects automatically save to IndexedDB every few seconds. Close and reopen the app — your work is still there.
+The component catalogue has more than 150 parts, including resistors, capacitors, inductors, transistors, LEDs, NeoPixels, servos, relays, pushbuttons, sensors, displays, logic gates, and communication chips. The canvas snaps wires to named pins and keeps undo history for changes.
 
-### Creating Projects
+Analog simulation uses ngspice compiled to WebAssembly. Digital and mixed circuits run with the board simulator and shared pin state. Instruments include a voltmeter, ammeter, and oscilloscope.
 
-Click the Projects button in the toolbar to:
-- Create a new empty project
-- Open an existing saved project
-- Delete old projects
+## Serial monitor
 
-### Import/Export
+The serial monitor shows output from running boards, detects baud rate, accepts input with several line endings, and supports multiple UART channels on ESP32.
 
-**Import formats:**
-- `.vlx` — CircuitMuse native format
-- `.zip` — Wokwi-compatible (diagram.json + code)
-- `.fzz` — Fritzing projects
-- `.json` — Raw project data
+## Project layout
 
-**Export formats:**
-- `.vlx` — Full project snapshot
-- `.zip` — Wokwi-compatible bundle
-- `.json` — Raw data
-- `.html` — Shareable report with boards, components, and code
-
----
-
-## Component System
-
-150+ electronic components across categories:
-
-- **Passive:** Resistors, capacitors, inductors, potentiometers
-- **Active:** Transistors (NPN, PNP, MOSFET), op-amps, voltage regulators
-- **Output:** LEDs, NeoPixels, buzzers, servos, motors, relays
-- **Input:** Pushbuttons, switches, encoders, joysticks
-- **Sensors:** DHT22, HC-SR04, BMP280, MPU6050, photoresistors
-- **Displays:** LCD1602, SSD1306 OLED, ePaper, 7-segment, LED bar
-- **Logic:** AND, OR, NOT, NAND, NOR, XOR gates, flip-flops, shift registers
-- **Communication:** I2C, SPI devices (24LC256, MCP3008, DS3231)
-
----
-
-## Electrical Simulation
-
-- **ngspice-WASM** — real SPICE analog simulation in the browser
-- **Mixed-mode** — digital MCU + analog circuits simulated together
-- **Instruments:** Voltmeter, ammeter, oscilloscope, function generator
-- **44+ SPICE component models**
-
----
-
-## Serial Monitor
-
-- Live serial output from simulated boards
-- Auto baud-rate detection
-- Send data to RX pin
-- Multi-UART support on ESP32
-
----
-
-## Project Structure
-
-```
+```text
 circuit-muse/
-├── app/                     # Application layer (React + Vite + TypeScript)
-│   ├── src/agent/           # AI agent (providers, tools, chat UI)
-│   ├── src/components/      # Editor, simulator canvas, modals
-│   ├── src/simulation/      # CPU emulation bridges
-│   ├── src/store/           # Zustand state stores
-│   ├── src/services/        # API clients, project persistence
-│   └── src/desktop/         # Tauri desktop integration
-├── engine/                  # Simulation engine (FastAPI + Python)
-│   └── app/api/routes/      # compile, agent, libraries, simulation
-├── src-tauri/               # Desktop shell (Rust + Tauri)
-│   ├── src/commands/        # Serial, debug, QEMU commands
-│   └── icons/               # App icons
-└── scripts/                 # Build helpers
+  app/          React, Vite, TypeScript application
+  engine/       Python FastAPI compile and simulation engine
+  src-tauri/    Rust Tauri desktop shell
+  scripts/      Build helpers
 ```
-
----
 
 ## Troubleshooting
 
-### App shows white screen on Linux
+White screen on Linux: force software rendering with the environment variable shown in the install section.
 
-The app uses software rendering for compatibility. If you still see issues:
+Arduino CLI missing: run `bash scripts/download-deps.sh` or open the setup dialog.
 
-```bash
-# Force software rendering if automatic detection does not resolve the issue
-CIRCUIT_MUSE_SOFTWARE_RENDERING=1 ./CircuitMuse_*.AppImage
-```
+Engine not starting: check that Python 3.12 or newer is available, then run `pip install -r requirements.txt` inside `engine/` and restart the app.
 
-### "arduino-cli not found"
-
-Run the setup wizard (gear icon in toolbar) or manually install:
-```bash
-bash scripts/download-deps.sh
-```
-
-### Engine not starting
-
-The Python engine auto-starts on launch. If it fails:
-1. Check Python 3.12+ is installed
-2. Run `cd engine && pip install -r requirements.txt`
-3. Restart the app
-
-### QEMU boards not working
-
-ESP32/STM32/Raspberry Pi boards need QEMU runtimes. The app auto-downloads them on first use via the setup wizard.
-
----
+QEMU boards not running: ESP32, STM32, and Raspberry Pi targets need their QEMU runtime. Install it from the board prompt or the setup dialog.
 
 ## License
 
-MIT License
-
----
+MIT
 
 ## Author
 
-Meshack Bahati Ouma
+[Meshack Bahati Ouma](https://github.com/meshackbahati)
 
----
-
-## Acknowledgments
+## Credits
 
 Based on [Velxio](https://github.com/davidmonterocrespo24/velxio) by David Montero Crespo. Built on [avr8js](https://github.com/wokwi/avr8js), [rp2040js](https://github.com/wokwi/rp2040js), [wokwi-elements](https://github.com/wokwi/wokwi-elements), [ngspice-wasm](https://github.com/wokwi/ngspice-wasm), [lcgamboa/qemu](https://github.com/lcgamboa/qemu), [Espressif QEMU](https://github.com/espressif/qemu), [Tauri](https://tauri.app), and [Monaco Editor](https://microsoft.github.io/monaco-editor/).

@@ -23,12 +23,13 @@
 export type V4 = '0' | '1' | 'Z' | 'X';
 
 /** Verilog-style drive strengths — only the few that matter for digital buses. */
-export enum Strength {
-  HIGHZ = 0, // not driving (a tri-stated / input pin contributes this)
-  PULL = 1, // pull-up / pull-down resistor, or INPUT_PULLUP/PULLDOWN
-  STRONG = 2, // a normal gate / chip output (the default for VX_OUTPUT)
-  SUPPLY = 3, // a hard power / ground rail
-}
+export const Strength = {
+  HIGHZ: 0, // not driving (a tri-stated / input pin contributes this)
+  PULL: 1, // pull-up / pull-down resistor, or INPUT_PULLUP/PULLDOWN
+  STRONG: 2, // a normal gate / chip output (the default for VX_OUTPUT)
+  SUPPLY: 3, // a hard power / ground rail
+} as const;
+export type Strength = (typeof Strength)[keyof typeof Strength];
 
 /** One driver's contribution to a net. `HIGHZ` strength means "not driving". */
 export interface Drive {

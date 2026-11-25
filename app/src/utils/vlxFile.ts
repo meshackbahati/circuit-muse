@@ -30,10 +30,12 @@
  */
 
 import type { BoardInstance } from '../types/board';
-import type { Component } from '../types/component';
 import type { Wire } from '../types/wire';
 import { useEditorStore, chipFileGroupId } from '../store/useEditorStore';
 import { useSimulatorStore } from '../store/useSimulatorStore';
+
+// Component is private to the simulator store, so derive its shape from there.
+type Component = ReturnType<typeof useSimulatorStore.getState>['components'][number];
 
 const VLX_FORMAT = 'circuit-muse-project';
 const VLX_VERSION = 1;

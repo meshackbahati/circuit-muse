@@ -1,7 +1,7 @@
 import { PartSimulationRegistry } from './PartSimulationRegistry';
-import type { AnySimulator } from './PartSimulationRegistry';
+import type { AnySimulator, PartSimulationLogic } from './PartSimulationRegistry';
 import { RP2040Simulator } from '../RP2040Simulator';
-import { getADC, setAdcVoltage, emitPropertyChange } from './partUtils';
+import { setAdcVoltage, emitPropertyChange } from './partUtils';
 import { registerSensorUpdate, unregisterSensorUpdate } from '../SensorUpdateRegistry';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -834,7 +834,7 @@ PartSimulationRegistry.register('lcd2002', createLcdSimulation(20, 2));
  *
  * DC/RS pin: LOW = command byte, HIGH = data bytes.
  */
-const ili9341Simulation = {
+const ili9341Simulation: PartSimulationLogic = {
   attachEvents: (element, simulator, getArduinoPinHelper) => {
     const el = element as any;
     const pinManager = (simulator as any).pinManager;

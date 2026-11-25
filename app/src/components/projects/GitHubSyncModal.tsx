@@ -4,7 +4,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useEditorStore } from '../../store/useEditorStore';
-import { useProjectStore } from '../../store/useProjectStore';
 
 interface GitHubSyncModalProps {
   onClose: () => void;
@@ -34,7 +33,6 @@ export const GitHubSyncModal: React.FC<GitHubSyncModalProps> = ({ onClose }) => 
   });
 
   const files = useEditorStore((s) => s.files);
-  const currentProject = useProjectStore((s) => s.currentProject);
 
   // Helper to fetch user repositories from GitHub REST API
   const handleFetchRepos = useCallback(async (tokenValue: string, silenceError = false) => {

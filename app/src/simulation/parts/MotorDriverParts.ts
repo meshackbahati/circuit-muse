@@ -37,7 +37,7 @@ const STEPPER_TAGS = ['wokwi-stepper-motor', 'wokwi-biaxial-stepper'];
 const FULL_STEP_DEG = 1.8;
 
 PartSimulationRegistry.register('a4988', {
-  attachEvents: (element, simulator, getArduinoPinHelper, componentId) => {
+  attachEvents: (_element, simulator, getArduinoPinHelper, componentId) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const pinManager = (simulator as any).pinManager;
     if (!pinManager) return () => {};

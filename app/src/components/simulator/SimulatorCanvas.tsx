@@ -137,7 +137,6 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
   const activeBoard = boards.find((b) => b.id === activeBoardId) ?? null;
 
   // Legacy derived values for components that still use them
-  const boardType = useSimulatorStore((s) => s.boardType);
   const boardPosition = useSimulatorStore((s) => s.boardPosition);
 
   // Wire management from store
@@ -164,6 +163,7 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
   const recordRotate = useSimulatorStore((s) => s.recordRotate);
   const recordSetProperty = useSimulatorStore((s) => s.recordSetProperty);
   const recordRemoveWire = useSimulatorStore((s) => s.recordRemoveWire);
+  const recordUpdateWire = useSimulatorStore((s) => s.recordUpdateWire);
   // Subscribe to history shape so the undo/redo buttons reactively
   // enable/disable and their tooltips reflect the next command.
   const history = useSimulatorStore((s) => s.history);
@@ -1136,7 +1136,6 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
       switch (board.boardKind) {
         case 'raspberry-pi-pico':
         case 'pi-pico-w':
-        case 'nano-rp2040':
           ledPin = 25; // GPIO25
           break;
         case 'attiny85':
@@ -1936,7 +1935,7 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
       // they're hard to hit with a finger anyway. Desktop still uses overlays
       // (hover/select shows them so the user can click with a mouse).
       const showPinsForComponent =
-        !dialogOpen && !isTouchDevice && (wireInProgress || isSelected || isHovered);
+        !dialogOpen && !isTouchDevice && (!!wireInProgress || isSelected || isHovered);
       return (
         <React.Fragment key={component.id}>
           <div
@@ -1987,7 +1986,7 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
     // Hidden when a dialog is open. Hidden entirely on touch — there the
     // PinPickerDialog (tap component → list of pins) replaces the overlays.
     const showPinsForComponent =
-      !dialogOpen && !isTouchDevice && (wireInProgress || isSelected || isHovered);
+      !dialogOpen && !isTouchDevice && (!!wireInProgress || isSelected || isHovered);
 
     return (
       <React.Fragment key={component.id}>
@@ -2509,7 +2508,7 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
               // since the PinPickerDialog (tap board to open list) replaces
               // the overlays — fingers can't reliably hit a 12px pin anyway.
               const showPins =
-                !dialogOpen && !isTouchDevice && (wireInProgress || isHovered || isActive);
+                !dialogOpen && !isTouchDevice && (!!wireInProgress || isHovered || isActive);
               return (
                 <BoardOnCanvas
                   key={board.id}
@@ -2618,9 +2617,9 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
               panRef.current = p;
               setPan(p);
             }}
-            components={components}
+            components={components as unknown as React.ComponentProps<typeof CanvasMinimap>['components']}
             boards={boards}
-            viewportRef={canvasRef}
+            viewportRef={canvasRef as React.RefObject<HTMLElement>}
           />
         </div>
       </div>

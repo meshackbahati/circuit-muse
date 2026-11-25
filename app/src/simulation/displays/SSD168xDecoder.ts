@@ -93,7 +93,7 @@ export class SSD168xDecoder {
   private currentCmd = -1;
   private params: number[] = [];
   /** Which RAM plane subsequent data bytes target. */
-  private ramTarget: 'bw' | 'red' = 'bw';
+  public ramTarget: 'bw' | 'red' = 'bw';
 
   /** Current X position in bytes (1 byte = 8 px). */
   private xByte = 0;

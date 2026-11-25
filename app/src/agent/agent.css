@@ -28,6 +28,38 @@
   font-weight: 600;
 }
 
+.agent-upload-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 14px;
+  border-bottom: 1px solid #2c2c33;
+  max-height: 72px;
+  overflow-y: auto;
+}
+
+.agent-upload-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 3px 8px;
+  background: #2c2c33;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #d4d4d8;
+}
+
+.agent-upload-chip button {
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+}
+
 .agent-chat-header-actions {
   display: flex;
   align-items: center;

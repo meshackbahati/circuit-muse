@@ -203,7 +203,7 @@ export const useOscilloscopeStore = create<OscilloscopeState>((set, get) => ({
     // peek at the previous state on the trigger channel.  Auto mode
     // skips this entirely — the scope free-runs.
     let nextTriggeredAtMs = s.triggeredAtMs;
-    let nextRunning = s.running;
+    let nextRunning: boolean = s.running;
     let nextStatus = s.triggerStatus;
 
     if (s.triggerMode !== 'auto') {

@@ -15,7 +15,6 @@ import { ComponentRegistry } from '../services/ComponentRegistry';
 import type { ComponentMetadata, ComponentCategory } from '../types/component-metadata';
 import type { BoardKind } from '../types/board';
 import { BOARD_KIND_LABELS } from '../types/board';
-import { isProBoardKind } from '../lib/proBoardGate';
 import raspberryPi3Svg from '../assets/Raspberry_Pi_3_illustration.svg';
 import { Attiny85 } from './circuit-components/Attiny85';
 import './circuit-components/Esp32Element'; // registers circuit-muse-esp32

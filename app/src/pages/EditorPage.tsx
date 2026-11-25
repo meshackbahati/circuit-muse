@@ -35,8 +35,8 @@ import { useEditorStore } from '../store/useEditorStore';
 import { useCompileLogsStore } from '../store/useCompileLogsStore';
 import { useOscilloscopeStore } from '../store/useOscilloscopeStore';
 import { useProjectStore } from '../store/useProjectStore';
-import { useAutoSaveProject } from '../hooks/useAutoSaveProject';
-import type { CompilationLog } from '../utils/compilationLogger';
+import { useWorkspaceStore } from '../store/useWorkspaceStore';
+import { saveCurrentWorkspace, loadProjectIntoStores } from '../services/localProjectStore';
 import '../App.css';
 
 const MOBILE_BREAKPOINT = 768;
@@ -70,10 +70,6 @@ export const EditorPage: React.FC = () => {
     url: 'https://circuit-muse.dev/editor',
   });
 
-  // Silent auto-save for the loaded project (only fires when authed AND
-  // currentProject has a UUID — see useAutoSaveProject for the gating rules).
-  const autoSave = useAutoSaveProject();
-
   const [editorWidthPct, setEditorWidthPct] = useState(45);
   // Desktop-only 3-way layout switch (code-only / circuit-only / both).
   // Lets users hide a pane to give the right-docked chat more room.
@@ -104,11 +100,47 @@ export const EditorPage: React.FC = () => {
   const [showExport, setShowExport] = useState(false);
   const [showSetup, setShowSetup] = useState(false);
   const [showGitHubSync, setShowGitHubSync] = useState(false);
+  const [savedFlash, setSavedFlash] = useState(false);
 
-  // Auto-save to IndexedDB
-  const currentProjectId = useProjectStore((s) => s.currentProject?.id ?? null);
-  const currentProjectName = useProjectStore((s) => s.currentProject?.slug ?? 'untitled');
-  useLocalAutoSave(currentProjectId, currentProjectName);
+  const workspaceProjectId = useWorkspaceStore((s) => s.projectId);
+  const workspaceProjectName = useWorkspaceStore((s) => s.projectName);
+  const setWorkspaceProject = useWorkspaceStore((s) => s.setProject);
+
+  useEffect(() => {
+    if (!workspaceProjectId) {
+      setWorkspaceProject(crypto.randomUUID(), 'Untitled Project');
+    }
+  }, [workspaceProjectId, setWorkspaceProject]);
+
+  const autosaveId = workspaceProjectId ?? 'pending-project';
+  useLocalAutoSave(autosaveId, workspaceProjectName);
+
+  const handleSaveNow = useCallback(async () => {
+    const id = useWorkspaceStore.getState().projectId ?? crypto.randomUUID();
+    const name = useWorkspaceStore.getState().projectName;
+    setWorkspaceProject(id, name);
+    await saveCurrentWorkspace(id, name);
+    setSavedFlash(true);
+    window.setTimeout(() => setSavedFlash(false), 1500);
+  }, [setWorkspaceProject]);
+
+  const restoredProject = useRef(false);
+  useEffect(() => {
+    if (restoredProject.current || !workspaceProjectId) return;
+    restoredProject.current = true;
+    void loadProjectIntoStores(workspaceProjectId);
+  }, [workspaceProjectId]);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+        event.preventDefault();
+        void handleSaveNow();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [handleSaveNow]);
 
   // Show setup once on first launch. Users can reopen it from the menu.
   useEffect(() => {
@@ -528,6 +560,7 @@ export const EditorPage: React.FC = () => {
                 boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
               }}>
                 {[
+                  { label: 'Save (Ctrl+S)', action: () => { void handleSaveNow(); setMenuOpen(false); } },
                   { label: 'Projects', action: () => { setShowProjects(true); setMenuOpen(false); } },
                   { label: 'Export', action: () => { setShowExport(true); setMenuOpen(false); } },
                   { label: 'Examples', action: () => { navigate(localize('/examples')); setMenuOpen(false); } },
@@ -547,6 +580,14 @@ export const EditorPage: React.FC = () => {
                 ))}
               </div>
             )}
+            <button
+              onClick={() => setShowProjects(true)}
+              style={{ background: 'transparent', border: 'none', color: '#aaa', cursor: 'pointer', padding: '4px 8px', borderRadius: 3, fontSize: 12 }}
+              title="Projects and history"
+            >
+              Projects
+            </button>
+            {savedFlash && <span style={{ color: '#4ade80', fontSize: 11 }}>Saved</span>}
             {/* Agent toggle */}
             <button
               onClick={toggleAgentPanel}

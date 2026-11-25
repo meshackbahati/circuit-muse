@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEditorStore, chipFileGroupId } from '../../store/useEditorStore';
-import { useSimulatorStore } from '../../store/useSimulatorStore';
+import { useSimulatorStore, type BoardType } from '../../store/useSimulatorStore';
 import {
   isProgrammableChip,
   targetForChip,
@@ -178,7 +178,7 @@ const IcoChip = () => (
 );
 
 // Board emoji icons — mirrors BoardPickerModal
-const BOARD_ICON: Record<BoardKind, string> = {
+const BOARD_ICON: Partial<Record<BoardKind, string>> = {
   'arduino-uno': '⬤',
   'arduino-nano': '▪',
   'arduino-mega': '▬',
@@ -198,7 +198,7 @@ const BOARD_ICON: Record<BoardKind, string> = {
 };
 
 // Color accent per board family
-const BOARD_COLOR: Record<BoardKind, string> = {
+const BOARD_COLOR: Partial<Record<BoardKind, string>> = {
   'arduino-uno': '#4fc3f7',
   'arduino-nano': '#4fc3f7',
   'arduino-mega': '#4fc3f7',
@@ -271,7 +271,7 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ onSaveClick, onNewCl
         const { setComponents, setWires, setBoardType, setBoardPosition, stopSimulation } =
           useSimulatorStore.getState();
         stopSimulation();
-        if (result.boardType) setBoardType(result.boardType);
+        if (result.boardType) setBoardType(result.boardType as BoardType);
         setBoardPosition(result.boardPosition);
         setComponents(result.components);
         setWires(result.wires);

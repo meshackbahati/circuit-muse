@@ -592,6 +592,42 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
 
       return JSON.stringify({ success: true, role, response: reply.content });
     }
+    case 'list_uploaded_files': {
+      const { useUploadsStore } = await import('../store/useUploadsStore');
+      const files = useUploadsStore.getState().files.map((f) => ({
+        id: f.id,
+        name: f.name,
+        kind: f.kind,
+        size: f.size,
+        text_length: f.text?.length ?? 0,
+        width: f.width ?? null,
+        height: f.height ?? null,
+        error: f.error ?? null,
+      }));
+      return JSON.stringify({ files });
+    }
+    case 'read_uploaded_file': {
+      const { useUploadsStore } = await import('../store/useUploadsStore');
+      const files = useUploadsStore.getState().files;
+      const selected = args.name
+        ? files.filter(f => f.name === args.name)
+        : files;
+      if (selected.length === 0) {
+        return JSON.stringify({ error: `File not found: ${args.name ?? '(none attached)'}` });
+      }
+      const includeData = args.include_data === true;
+      const output = selected.map(f => ({
+        id: f.id,
+        name: f.name,
+        kind: f.kind,
+        text: f.text ?? null,
+        ...(includeData && f.dataUrl ? { data_url: f.dataUrl } : {}),
+        width: f.width ?? null,
+        height: f.height ?? null,
+        error: f.error ?? null,
+      }));
+      return JSON.stringify({ files: output });
+    }
     case 'list_available_boards': {
       return JSON.stringify({
         boards: [

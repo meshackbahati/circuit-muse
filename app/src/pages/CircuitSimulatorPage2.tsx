@@ -87,22 +87,6 @@ const IcoSensor = () => (
   </svg>
 );
 
-const IcoTerminal = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="4 17 10 11 4 5" />
-    <line x1="12" y1="19" x2="20" y2="19" />
-  </svg>
-);
-
 const IcoTestTube = () => (
   <svg
     width="20"
@@ -191,25 +175,6 @@ const IcoStar = () => (
     strokeLinejoin="round"
   >
     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-  </svg>
-);
-
-const IcoMultiBoard = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <rect x="2" y="3" width="8" height="7" rx="1.5" />
-    <rect x="14" y="3" width="8" height="7" rx="1.5" />
-    <rect x="8" y="14" width="8" height="7" rx="1.5" />
-    <path d="M6 10v2.5a1.5 1.5 0 0 0 1.5 1.5H8" />
-    <path d="M18 10v2.5a1.5 1.5 0 0 1-1.5 1.5H16" />
   </svg>
 );
 

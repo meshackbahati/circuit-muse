@@ -55,7 +55,7 @@ export function hasBoardGateImpl(): boolean {
  * user. Non-Pro boards are always allowed. For Pro boards, the overlay's impl
  * decides; with no overlay the desktop default is 'allow'.
  */
-export function boardGateDecision(kind: BoardKind): BoardGateDecision {
+export function boardGateDecision(_kind: BoardKind): BoardGateDecision {
   return 'allow';
 }
 

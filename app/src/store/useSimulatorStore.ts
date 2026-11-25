@@ -677,6 +677,9 @@ class Stm32BridgeShim {
   }
 }
 
+// The STM32 shim shares the simulator map but routes serial over its bridge.
+type SerialWritableSim = { serialWrite: (text: string) => void };
+
 // ── Runtime Maps (outside Zustand — not serialisable) ─────────────────────
 const simulatorMap = new Map<
   string,
@@ -1333,7 +1336,7 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
           ? 'arduino-uno'
           : board.boardKind) as BoardType,
         boardPosition: { x: board.x, y: board.y },
-        simulator: simulatorMap.get(boardId) ?? null,
+        simulator: (simulatorMap.get(boardId) ?? null) as SimulatorState['simulator'],
         pinManager: pinManagerMap.get(boardId) ?? legacyPinManager,
         running: board.running,
         compiledHex: board.compiledProgram,
@@ -2351,7 +2354,7 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
     setWires: (wires) =>
       set({
         // Ensure every wire has waypoints (backwards-compatible with saved projects)
-        wires: wires.map((w) => ({ waypoints: [], ...w })),
+        wires: wires.map((w) => Object.assign({ waypoints: [] }, w)),
         // Bulk replacement clears history for the same reason as setComponents.
         history: [],
         historyIndex: -1,
@@ -2757,7 +2760,7 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
           esp32Bridge.sendSerialBytes(Array.from(new TextEncoder().encode(text)));
         }
       } else {
-        getBoardSimulator(boardId)?.serialWrite(text);
+        (getBoardSimulator(boardId) as SerialWritableSim | undefined)?.serialWrite(text);
       }
     },
 
@@ -2786,7 +2789,7 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
           esp32Bridge.sendSerialBytes(Array.from(new TextEncoder().encode(text)));
         }
       } else {
-        getBoardSimulator(boardId)?.serialWrite(text);
+        (getBoardSimulator(boardId) as SerialWritableSim | undefined)?.serialWrite(text);
       }
     },
 

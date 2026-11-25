@@ -11,7 +11,7 @@ import {
   triggerDownload,
   safeFilename,
 } from '../../utils/exportFormats';
-import { useProjectStore } from '../../store/useProjectStore';
+import { useWorkspaceStore } from '../../store/useWorkspaceStore';
 
 interface ExportMenuProps {
   onClose: () => void;
@@ -19,7 +19,7 @@ interface ExportMenuProps {
 
 export const ExportMenu: React.FC<ExportMenuProps> = ({ onClose }) => {
   const [exporting, setExporting] = useState<string | null>(null);
-  const projectName = useProjectStore((s) => s.currentProject?.slug ?? 'circuit-muse-project');
+  const projectName = useWorkspaceStore((s) => s.projectName || 'circuit-muse-project');
 
   const handleExport = async (format: string) => {
     setExporting(format);

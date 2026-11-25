@@ -229,6 +229,26 @@ interface ChannelCanvasProps {
   triggerXFrac: number | null;
 }
 
+function fitCanvas(
+  canvas: HTMLCanvasElement,
+  wrap: HTMLDivElement,
+  draw: () => void,
+): ResizeObserver {
+  const resize = () => {
+    const { width, height } = wrap.getBoundingClientRect();
+    if (width === 0 || height === 0) return;
+    canvas.width = Math.floor(width) * window.devicePixelRatio;
+    canvas.height = Math.floor(height) * window.devicePixelRatio;
+    const ctx = canvas.getContext('2d');
+    if (ctx) ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    draw();
+  };
+  resize();
+  const observer = new ResizeObserver(resize);
+  observer.observe(wrap);
+  return observer;
+}
+
 const ChannelCanvas: React.FC<ChannelCanvasProps> = ({
   channel,
   samples,
@@ -244,14 +264,10 @@ const ChannelCanvas: React.FC<ChannelCanvasProps> = ({
     const wrap = wrapRef.current;
     if (!canvas || !wrap) return;
 
-    const { width, height } = wrap.getBoundingClientRect();
-    if (width === 0 || height === 0) return;
-
-    canvas.width = Math.floor(width) * window.devicePixelRatio;
-    canvas.height = Math.floor(height) * window.devicePixelRatio;
-    const ctx = canvas.getContext('2d');
-    if (ctx) ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    drawWaveform(canvas, samples, channel.color, windowEndMs, windowMs, triggerXFrac);
+    const observer = fitCanvas(canvas, wrap, () =>
+      drawWaveform(canvas, samples, channel.color, windowEndMs, windowMs, triggerXFrac),
+    );
+    return () => observer.disconnect();
   }, [samples, channel.color, windowEndMs, windowMs, triggerXFrac]);
 
   return (
@@ -278,14 +294,10 @@ const RulerCanvas: React.FC<RulerCanvasProps> = ({ windowEndMs, windowMs, timeDi
     const wrap = wrapRef.current;
     if (!canvas || !wrap) return;
 
-    const { width, height } = wrap.getBoundingClientRect();
-    if (width === 0 || height === 0) return;
-
-    canvas.width = Math.floor(width) * window.devicePixelRatio;
-    canvas.height = Math.floor(height) * window.devicePixelRatio;
-    const ctx = canvas.getContext('2d');
-    if (ctx) ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    drawRuler(canvas, windowEndMs, windowMs, timeDivMs);
+    const observer = fitCanvas(canvas, wrap, () =>
+      drawRuler(canvas, windowEndMs, windowMs, timeDivMs),
+    );
+    return () => observer.disconnect();
   }, [windowEndMs, windowMs, timeDivMs]);
 
   return (
@@ -302,7 +314,7 @@ interface ChannelPickerProps {
   activeChannels: OscChannel[];
   onClose: () => void;
   anchorRect: DOMRect;
-  dropdownRef: React.RefObject<HTMLDivElement>;
+  dropdownRef: React.RefObject<HTMLDivElement | null>;
 }
 
 const ChannelPicker: React.FC<ChannelPickerProps> = ({

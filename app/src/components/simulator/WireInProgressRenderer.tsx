@@ -5,7 +5,7 @@
 
 import React from 'react';
 import type { WireInProgress } from '../../types/wire';
-import { generatePreviewPath, generateOrthogonalPath } from '../../utils/wireUtils';
+import { generatePreviewPath } from '../../utils/wireUtils';
 
 interface Props {
   wireInProgress: WireInProgress;

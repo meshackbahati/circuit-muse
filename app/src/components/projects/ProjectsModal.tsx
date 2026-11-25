@@ -7,10 +7,13 @@ import {
   getAllProjects,
   deleteProject,
   loadProjectIntoStores,
+  saveCurrentWorkspace,
   type LocalProject,
 } from '../../services/localProjectStore';
 import { useSimulatorStore } from '../../store/useSimulatorStore';
 import { useEditorStore } from '../../store/useEditorStore';
+import { useAgentStore } from '../../store/useAgentStore';
+import { useWorkspaceStore } from '../../store/useWorkspaceStore';
 
 interface ProjectsModalProps {
   onClose: () => void;
@@ -19,16 +22,31 @@ interface ProjectsModalProps {
 export const ProjectsModal: React.FC<ProjectsModalProps> = ({ onClose }) => {
   const [projects, setProjects] = useState<LocalProject[]>([]);
   const [loading, setLoading] = useState(true);
+  const projectId = useWorkspaceStore((s) => s.projectId);
+  const projectName = useWorkspaceStore((s) => s.projectName);
+  const setWorkspaceProject = useWorkspaceStore((s) => s.setProject);
+  const renameProject = useWorkspaceStore((s) => s.renameProject);
 
-  useEffect(() => {
-    getAllProjects().then((p) => {
+  const refresh = () => {
+    void getAllProjects().then((p) => {
       setProjects(p);
       setLoading(false);
     });
-  }, []);
+  };
+
+  useEffect(refresh, []);
+
+  const handleSave = async () => {
+    const id = projectId ?? crypto.randomUUID();
+    const name = projectName.trim() || 'Untitled Project';
+    setWorkspaceProject(id, name);
+    await saveCurrentWorkspace(id, name);
+    refresh();
+  };
 
   const handleOpen = async (id: string) => {
-    await loadProjectIntoStores(id);
+    const project = await loadProjectIntoStores(id);
+    if (project) setWorkspaceProject(project.id, project.name);
     onClose();
   };
 
@@ -39,8 +57,16 @@ export const ProjectsModal: React.FC<ProjectsModalProps> = ({ onClose }) => {
   };
 
   const handleNew = () => {
-    useSimulatorStore.getState().clearCanvas();
-    useEditorStore.getState().clearAllFiles();
+    void useSimulatorStore.getState().loadProjectState({
+      boards: [],
+      fileGroups: {},
+      components: [],
+      wires: [],
+      activeBoardId: null,
+    });
+    useEditorStore.getState().loadFiles([{ name: 'sketch.ino', content: '' }]);
+    useAgentStore.getState().setMessages([]);
+    setWorkspaceProject(crypto.randomUUID(), 'Untitled Project');
     onClose();
   };
 
@@ -69,13 +95,28 @@ export const ProjectsModal: React.FC<ProjectsModalProps> = ({ onClose }) => {
         </div>
 
         <div className="projects-actions">
-          <button className="projects-btn projects-btn-primary" onClick={handleNew} type="button">
-            New Project
+          <input
+            className="projects-name-input"
+            value={projectName}
+            onChange={(e) => renameProject(e.target.value)}
+            placeholder="Project name"
+            aria-label="Project name"
+          />
+          <button className="projects-btn projects-btn-primary" onClick={() => void handleSave()} type="button">
+            Save Current
+          </button>
+          <button className="projects-btn" onClick={handleNew} type="button">
+            New
           </button>
           <button className="projects-btn" onClick={handleImport} type="button">
-            Import .vlx / .zip
+            Import
           </button>
         </div>
+        {projectId && (
+          <button className="projects-btn projects-continue" onClick={() => void handleOpen(projectId)} type="button">
+            Continue current project
+          </button>
+        )}
 
         <div className="projects-list">
           {loading && <div className="projects-loading">Loading...</div>}
@@ -91,6 +132,7 @@ export const ProjectsModal: React.FC<ProjectsModalProps> = ({ onClose }) => {
                 <div className="projects-item-meta">
                   {project.boards.length} board{project.boards.length !== 1 ? 's' : ''} ·{' '}
                   {project.components.length} component{project.components.length !== 1 ? 's' : ''} ·{' '}
+                  {project.messages?.length ?? 0} chat messages ·{' '}
                   {new Date(project.updatedAt).toLocaleDateString()}
                 </div>
               </div>
@@ -148,6 +190,23 @@ export const ProjectsModal: React.FC<ProjectsModalProps> = ({ onClose }) => {
           gap: 8px;
           padding: 12px 20px;
           border-bottom: 1px solid #2c2c33;
+          flex-wrap: wrap;
+          align-items: center;
+        }
+        .projects-name-input {
+          flex: 1;
+          min-width: 140px;
+          background: #0c0c11;
+          color: #e6e6e9;
+          border: 1px solid #2c2c33;
+          border-radius: 4px;
+          padding: 8px 10px;
+          font-size: 13px;
+          font-family: inherit;
+        }
+        .projects-continue {
+          margin: 8px 20px 0;
+          width: calc(100% - 40px);
         }
         .projects-btn {
           padding: 8px 16px;

@@ -2,50 +2,7 @@ import { GoogleGenAI } from '@google/genai';
 import type { LLMProvider, ChatParams, StreamChunk, Message, ToolCall } from '../types';
 import { resolveModel } from './base';
 
-// Tool results need a Struct wrapper, not a bare array or string.
-function asStruct(value: unknown): Record<string, unknown> {
-  const convert = (input: unknown): unknown => {
-    if (input === null || input === undefined) return '';
-    if (typeof input === 'string') return input;
-    if (typeof input === 'number' || typeof input === 'boolean') return String(input);
-    if (Array.isArray(input)) return input.map(convert);
-    if (typeof input === 'object') {
-      const output: Record<string, unknown> = {};
-      for (const [key, nested] of Object.entries(input as Record<string, unknown>)) {
-        if (key === '$ref' || key === '$defs' || key === 'definitions') continue;
-        output[key] = convert(nested);
-      }
-      return output;
-    }
-    return String(input);
-  };
-
-  const converted = convert(value);
-  return converted && typeof converted === 'object' && !Array.isArray(converted)
-    ? converted as Record<string, unknown>
-    : { output: converted };
-}
-
-function parseToolResult(content: string): unknown {
-  try {
-    return JSON.parse(content);
-  } catch {
-    return { output: content };
-  }
-}
-
-function parseArguments(value: unknown): Record<string, unknown> {
-  try {
-    const parsed = typeof value === 'string' ? JSON.parse(value) : value;
-    return parsed && typeof parsed === 'object' && !Array.isArray(parsed)
-      ? parsed as Record<string, unknown>
-      : {};
-  } catch {
-    return {};
-  }
-}
-
-// Gemini wants native calls and responses, paired in order.
+// Plain-text tool history keeps every Gemini model on the same path.
 export function buildGeminiContents(messages: Message[]): any[] {
   const callNames = new Map<string, string>();
   for (const m of messages) {
@@ -54,48 +11,21 @@ export function buildGeminiContents(messages: Message[]): any[] {
     }
   }
 
-  // Consume names in order so a result never lands on the wrong call.
-  let pendingNames: string[] = [];
   const contents: any[] = [];
-
   for (const m of messages) {
     if (m.role === 'system') continue;
 
     if (m.role === 'tool') {
-      const name = pendingNames.shift() ?? (m.toolCallId ? callNames.get(m.toolCallId) : undefined);
-      if (!name) {
-        contents.push({ role: 'user', parts: [{ text: String(m.content) }] });
-        continue;
-      }
-      const part = {
-        functionResponse: { name, response: asStruct(parseToolResult(m.content)) },
-      };
-      const previous = contents[contents.length - 1];
-      if (previous?.role === 'user' && previous.parts?.[0]?.functionResponse) {
-        previous.parts.push(part);
-      } else {
-        contents.push({ role: 'user', parts: [part] });
-      }
+      const name = (m.toolCallId && callNames.get(m.toolCallId)) || 'tool';
+      contents.push({
+        role: 'user',
+        parts: [{ text: `Tool result (${name}):\n${m.content}` }],
+      });
       continue;
     }
 
     if (m.role === 'assistant') {
-      const parts: any[] = [];
-      if (m.content) parts.push({ text: m.content });
-      const names: string[] = [];
-      for (const tc of m.toolCalls ?? []) {
-        parts.push({
-          functionCall: {
-            name: tc.function.name,
-            args: parseArguments(tc.function.arguments),
-            ...(tc.thoughtSignature ? { thoughtSignature: tc.thoughtSignature } : {}),
-          },
-        });
-        names.push(tc.function.name);
-      }
-      if (parts.length === 0) parts.push({ text: m.content || ' ' });
-      contents.push({ role: 'model', parts });
-      if (names.length > 0) pendingNames = names;
+      contents.push({ role: 'model', parts: [{ text: m.content || ' ' }] });
       continue;
     }
 

@@ -83,11 +83,13 @@ export class IdleSpinDetector {
   private loopTarget = -1;
   private iters = 0;
   private gpioAtLastIter = -1;
+  private readonly threshold: number;
+  private readonly maxStride: number;
 
-  constructor(
-    private readonly threshold = 32,
-    private readonly maxStride = 256,
-  ) {}
+  constructor(threshold = 32, maxStride = 256) {
+    this.threshold = threshold;
+    this.maxStride = maxStride;
+  }
 
   /**
    * @param pc   program counter about to execute
@@ -656,7 +658,9 @@ export class RP2040Simulator {
     if (!baud || baud <= 0) return;
 
     const txPin = this.rp2040UartTxPin(uartIdx);
-    const dataBits = uart.bitsPerChar;
+    // Keep the original property read: rp2040js names it wordLength, but
+    // switching would start emitting data bits where none were emitted before.
+    const dataBits = (uart as unknown as { bitsPerChar: number }).bitsPerChar;
     const clk = (this.rp2040 as unknown as { clock?: { nanos: number } }).clock;
     const startMs = clk ? clk.nanos / 1_000_000 : 0;
     const bitMs = 1000 / baud;
@@ -694,7 +698,8 @@ export class RP2040Simulator {
     // registered before the firmware loaded are preserved.
     const busManager = this.i2cBuses[bus];
     busManager.attachMaster(i2c);
-    wireRpI2cToBus(i2c, busManager);
+    // RPI2C declares required callbacks with extra params; the runtime shapes line up.
+    wireRpI2cToBus(i2c as unknown as Parameters<typeof wireRpI2cToBus>[0], busManager);
   }
 
   private setupGpioListeners(): void {
@@ -1088,7 +1093,7 @@ export class RP2040Simulator {
   step(): number {
     if (!this.rp2040) return 0;
     const core = this.rp2040.core;
-    const clock = this.rp2040.clock;
+    const clock = (this.rp2040 as unknown as { clock?: SimClock }).clock ?? null;
     if (core.waiting) {
       // CPU is in WFE/WFI — advance clock to the next alarm so an
       // interrupt can wake it.  Without this, single-stepping a

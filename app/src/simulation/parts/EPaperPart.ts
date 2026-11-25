@@ -71,7 +71,7 @@ function isAvr(sim: AnySimulator): sim is AVRSimulator {
   return !!s.spi && typeof s.spi.onByte === 'function';
 }
 
-function isEsp32Shim(sim: AnySimulator): sim is Esp32LikeSimulator {
+function isEsp32Shim(sim: AnySimulator): sim is AnySimulator & Esp32LikeSimulator {
   const s = sim as Esp32LikeSimulator;
   return typeof s.getBridge === 'function' && typeof s.registerSensor === 'function';
 }

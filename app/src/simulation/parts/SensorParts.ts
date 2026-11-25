@@ -238,7 +238,7 @@ PartSimulationRegistry.register('flame-sensor', {
  * Every 1000ms: briefly pulls OUT HIGH for 100ms, then LOW again.
  */
 PartSimulationRegistry.register('heart-beat-sensor', {
-  attachEvents: (element, simulator, getArduinoPinHelper) => {
+  attachEvents: (_element, simulator, getArduinoPinHelper) => {
     const pin = getArduinoPinHelper('OUT');
     if (pin === null) return () => {};
 

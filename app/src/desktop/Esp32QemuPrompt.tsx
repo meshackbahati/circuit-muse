@@ -8,7 +8,7 @@
 import { useEffect, useState } from 'react';
 import { useSimulatorStore } from '../store/useSimulatorStore';
 import type { BoardKind } from '../types/board';
-import { isTauri, listen } from './tauriBridge';
+import { listen } from './tauriBridge';
 
 const ESP32_KINDS: BoardKind[] = ['esp32', 'esp32-s3', 'esp32-c3'];
 

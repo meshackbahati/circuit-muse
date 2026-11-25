@@ -3,10 +3,13 @@
  * Supports: .vlx (JSON), .zip (Wokwi-compatible), raw JSON, HTML report.
  */
 
-import { buildVlxPayload, type VlxPayload } from './vlxFile';
+import { buildVlxPayload } from './vlxFile';
 import { useSimulatorStore } from '../store/useSimulatorStore';
 import { useEditorStore } from '../store/useEditorStore';
-import type { BoardKind } from '../types/board';
+
+// Saved projects can still carry the legacy Wokwi field names.
+type WokwiComponent = { top: number; left: number; attrs?: Record<string, unknown> };
+type WokwiEndpoint = { pinId: string };
 
 // ─── Board type mapping (CircuitMuse → Wokwi) ─────────────────────────────────
 const BOARD_TO_WOKWI: Record<string, string> = {
@@ -42,7 +45,7 @@ export function exportAsJson(): Blob {
 }
 
 // ─── Wokwi ZIP Export ─────────────────────────────────────────────────────
-export async function exportAsWokwiZip(name?: string): Promise<Blob> {
+export async function exportAsWokwiZip(_name?: string): Promise<Blob> {
   const { default: JSZip } = await import('jszip');
   const zip = new JSZip();
   const sim = useSimulatorStore.getState();
@@ -66,29 +69,32 @@ export async function exportAsWokwiZip(name?: string): Promise<Blob> {
 
   // Add components
   for (const comp of sim.components) {
-    const topEl = document.getElementById(comp.id);
+    document.getElementById(comp.id);
+    const legacy = comp as unknown as WokwiComponent;
     const attrs: Record<string, string> = {};
-    if (comp.attrs) {
-      for (const [k, v] of Object.entries(comp.attrs)) {
+    if (legacy.attrs) {
+      for (const [k, v] of Object.entries(legacy.attrs)) {
         if (v != null && v !== '') attrs[k] = String(v);
       }
     }
     parts.push({
       type: comp.metadataId,
       id: comp.id,
-      top: comp.top,
-      left: comp.left,
+      top: legacy.top,
+      left: legacy.left,
       attrs,
     });
   }
 
   // Add wires
   for (const wire of sim.wires) {
+    const start = wire.start as unknown as WokwiEndpoint;
+    const end = wire.end as unknown as WokwiEndpoint;
     connections.push([
       wire.start.componentId,
-      wire.start.pinId,
+      start.pinId,
       wire.end.componentId,
-      wire.end.pinId,
+      end.pinId,
       wire.color ?? 'green',
     ]);
   }
@@ -110,9 +116,8 @@ export async function exportAsWokwiZip(name?: string): Promise<Blob> {
 export function exportAsHtmlReport(name?: string): Blob {
   const sim = useSimulatorStore.getState();
   const editor = useEditorStore.getState();
-  const payload = buildVlxPayload({ name });
+  buildVlxPayload({ name });
 
-  const boardList = sim.boards.map(b => `<li><strong>${b.boardKind}</strong> at (${b.x}, ${b.y})</li>`).join('\n');
   const componentCount = sim.components.length;
   const wireCount = sim.wires.length;
 
@@ -166,13 +171,13 @@ export function exportAsHtmlReport(name?: string): Blob {
   <h2>Components</h2>
   <table>
     <tr><th>Type</th><th>Position</th><th>ID</th></tr>
-    ${sim.components.map(c => `<tr><td>${c.metadataId}</td><td>(${c.left}, ${c.top})</td><td>${c.id}</td></tr>`).join('\n')}
+    ${sim.components.map(c => `<tr><td>${c.metadataId}</td><td>(${(c as unknown as WokwiComponent).left}, ${(c as unknown as WokwiComponent).top})</td><td>${c.id}</td></tr>`).join('\n')}
   </table>
 
   <h2>Wires</h2>
   <table>
     <tr><th>From</th><th>To</th><th>Color</th></tr>
-    ${sim.wires.map(w => `<tr><td>${w.start.componentId}.${w.start.pinId}</td><td>${w.end.componentId}.${w.end.pinId}</td><td>${w.color ?? 'green'}</td></tr>`).join('\n')}
+    ${sim.wires.map(w => `<tr><td>${w.start.componentId}.${(w.start as unknown as WokwiEndpoint).pinId}</td><td>${w.end.componentId}.${(w.end as unknown as WokwiEndpoint).pinId}</td><td>${w.color ?? 'green'}</td></tr>`).join('\n')}
   </table>
 
   <h2>Source Code</h2>

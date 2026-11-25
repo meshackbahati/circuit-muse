@@ -16,6 +16,7 @@
 import type { BuildNetlistInput, AnalysisMode } from '../simulation/spice/types';
 import { buildInputFromStore } from '../simulation/spice/storeAdapter';
 import type { BoardKind } from '../types/board';
+import type { Wire } from '../types/wire';
 import type { ExampleProject } from '../data/examples';
 
 /**
@@ -92,7 +93,7 @@ export function exampleToBuildNetlistInput(
 
   const input = buildInputFromStore({
     components,
-    wires,
+    wires: wires as unknown as Wire[],
     boards: opts.boards ?? [],
   });
   // Caller may override the auto-picked analysis (e.g. force `.op`).
