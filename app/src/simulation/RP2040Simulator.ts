@@ -788,7 +788,14 @@ export class RP2040Simulator {
 
     let cyclesDone = 0;
     let instructionsExecuted = 0;
+    // Leave part of each animation frame for pointer, scroll and paint work.
+    // Low-power laptops were losing interactivity when the ARM core ran at
+    // full speed for the whole frame.
+    const frameStart = performance.now();
+    const frameBudgetMs = 6;
+    let budgetTick = 0;
     while (cyclesDone < cyclesTarget) {
+      if ((budgetTick++ & 0x3ff) === 0 && performance.now() - frameStart > frameBudgetMs) break;
       if (core.waiting) {
         // CPU asleep (WFI/WFE): jump to the next timer alarm, but never past
         // this frame's wall-clock budget, so a long sleep advances at real

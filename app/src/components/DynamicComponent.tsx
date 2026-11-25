@@ -13,7 +13,7 @@
 
 import React, { useRef, useEffect, useCallback } from 'react';
 import type { ComponentMetadata } from '../types/component-metadata';
-import { useSimulatorStore } from '../store/useSimulatorStore';
+import { getBoardSimulator, useSimulatorStore } from '../store/useSimulatorStore';
 import { useElectricalStore } from '../store/useElectricalStore';
 import { useEditorStore } from '../store/useEditorStore';
 import { buildProjectSdImage, decodeSdFiles } from '../utils/sdCardFiles';
@@ -125,8 +125,8 @@ function traceDetailed(
   fromPin: string,
   depth: number,
   activeSeen = false,
-): { arduinoPin: number | null; crossedActiveDevice: boolean } {
-  if (depth > 6) return { arduinoPin: null, crossedActiveDevice: activeSeen };
+): { arduinoPin: number | null; crossedActiveDevice: boolean; boardId: string | null } {
+  if (depth > 6) return { arduinoPin: null, crossedActiveDevice: activeSeen, boardId: null };
 
   const wires = state.wires.filter(
     (w) =>
@@ -148,7 +148,7 @@ function traceDetailed(
         state.boards.find((b) => b.id === otherEp.componentId)?.boardKind ??
         otherEp.componentId;
       const pin = boardPinToNumber(boardKind, otherEp.pinName);
-      if (pin !== null) return { arduinoPin: pin, crossedActiveDevice: activeSeen };
+      if (pin !== null) return { arduinoPin: pin, crossedActiveDevice: activeSeen, boardId: otherEp.componentId };
     } else {
       const comp = state.components.find((c) => c.id === otherEp.componentId);
       if (!chipNeighbour && comp?.metadataId === 'custom-chip') {
@@ -185,7 +185,7 @@ function traceDetailed(
   if (depth === 0) {
     const netKey = resolveChipNetKey(state, fromId, fromPin);
     if (netKey !== null) {
-      return { arduinoPin: netKey, crossedActiveDevice: activeSeen };
+      return { arduinoPin: netKey, crossedActiveDevice: activeSeen, boardId: null };
     }
   }
 
@@ -195,12 +195,13 @@ function traceDetailed(
     return {
       arduinoPin: syntheticChipPin(chipNeighbour.id, chipNeighbour.pin),
       crossedActiveDevice: activeSeen,
+      boardId: null,
     };
   }
   if (depth === 0 && state.components.find((c) => c.id === fromId)?.metadataId === 'custom-chip') {
-    return { arduinoPin: syntheticChipPin(fromId, fromPin), crossedActiveDevice: activeSeen };
+    return { arduinoPin: syntheticChipPin(fromId, fromPin), crossedActiveDevice: activeSeen, boardId: null };
   }
-  return { arduinoPin: null, crossedActiveDevice: activeSeen };
+  return { arduinoPin: null, crossedActiveDevice: activeSeen, boardId: null };
 }
 
 interface DynamicComponentProps {
@@ -443,7 +444,29 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
       // null pin lookup (`getArduinoPin` returns null when there's no board),
       // so the stub below is enough — it satisfies the type signature without
       // doing anything when called.
+      // A part wired to board B must write board B's pin registers, not the
+      // active board's. In multi-board circuits the flat `simulator` field
+      // always points at the active board, which made every input on the
+      // other boards read LOW.
+      const liveState = useSimulatorStore.getState();
+      let ownerBoardId: string | null = null;
+      for (const wire of liveState.wires) {
+        const endpoint =
+          wire.start.componentId === id
+            ? wire.start
+            : wire.end.componentId === id
+              ? wire.end
+              : null;
+        if (!endpoint) continue;
+        const traced = traceDetailed(liveState, id, endpoint.pinName, 0);
+        if (traced.boardId) {
+          ownerBoardId = traced.boardId;
+          break;
+        }
+      }
+      const ownerSimulator = ownerBoardId ? getBoardSimulator(ownerBoardId) ?? null : null;
       const stubSimulator =
+        ownerSimulator ??
         simulator ??
         ({
           setPinState: () => {},
@@ -496,7 +519,9 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
       // to logic states.
       const simState = useSimulatorStore.getState();
       const ownerBoard =
-        simState.boards.find((b) => b.id === simState.activeBoardId) ?? null;
+        simState.boards.find((b) => b.id === ownerBoardId) ??
+        simState.boards.find((b) => b.id === simState.activeBoardId) ??
+        null;
       const ownerBoardVcc =
         (ownerBoard && BOARD_PIN_GROUPS[ownerBoard.boardKind as keyof typeof BOARD_PIN_GROUPS]?.vcc) ?? 5;
       const getPinResolver = (componentPinName: string): PinResolver | null => {

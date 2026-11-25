@@ -17,7 +17,9 @@ const DocsPage = lazy(() =>
 function App() {
   return (
     <ErrorBoundary>
-      {isDesktop && <CustomTitleBar />}
+      <div className="app-frame">
+        {isDesktop && <CustomTitleBar />}
+        <div className="app-view">
       <Router>
         <Routes>
           {/* Desktop: everything routes to the editor workspace */}
@@ -45,6 +47,8 @@ function App() {
           <Route path="*" element={<EditorPage />} />
         </Routes>
       </Router>
+        </div>
+      </div>
     </ErrorBoundary>
   );
 }

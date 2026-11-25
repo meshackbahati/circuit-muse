@@ -1429,8 +1429,11 @@ export class Esp32C3Simulator {
     if (!this.running) return;
 
     // Execute in 1 ms chunks so FreeRTOS tick interrupts fire at ~1 kHz.
+    // A wall-clock budget keeps input responsive on modest hardware.
+    const frameStart = performance.now();
     let rem = CYCLES_PER_FRAME;
     while (rem > 0) {
+      if (performance.now() - frameStart > 6) break;
       const n = rem < CYCLES_PER_TICK ? rem : CYCLES_PER_TICK;
       for (let i = 0; i < n; i++) {
         this.core.step();

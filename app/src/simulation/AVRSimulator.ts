@@ -780,12 +780,20 @@ export class AVRSimulator {
       lastTimestamp = timestamp;
 
       const cyclesPerFrame = Math.floor(CYCLES_PER_MS * deltaMs * this.speed);
+      // Keep the UI thread responsive. A full 16 MHz emulation at 60 fps
+      // costs roughly 270k instructions per frame, which starves pointer and
+      // scroll events on low-power laptops. Time-slicing the frame at 6 ms
+      // leaves the rest of the frame for input while the simulation slows
+      // down only when the host cannot keep up.
+      const frameStart = performance.now();
+      const frameBudgetMs = 6;
 
       try {
         for (let i = 0; i < cyclesPerFrame; i++) {
           avrInstruction(this.cpu); // Execute the AVR instruction
           this.cpu.tick(); // Update peripheral timers and cycles
           if (this.scheduledPinChanges.length > 0) this.flushScheduledPinChanges();
+          if ((i & 0x3ff) === 0 && performance.now() - frameStart > frameBudgetMs) break;
         }
 
         // Poll PWM registers every frame

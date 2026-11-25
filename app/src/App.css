@@ -78,17 +78,41 @@ body {
   color: #ff6b6b;
 }
 
+html,
+body,
 #root {
   height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+#root {
   display: flex;
   flex-direction: column;
 }
 
-/* On platforms where GTK still reserves a space for native decorations, keep
-   the in-app workspace flush against the bottom edge by making the app
-   grow with the root instead of overflowing by a fixed titlebar height. */
-.app {
-  min-height: 100%;
+/* The title bar and the routed workspace share the viewport height. This
+   stops the workspace from extending below the screen when the custom
+   title bar is visible. */
+.app-frame {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-view {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-view .app {
+  height: 100%;
+  min-height: 0;
 }
 
 /* ── Header ─────────────────────────────────────── */
