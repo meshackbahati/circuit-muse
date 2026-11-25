@@ -167,18 +167,21 @@ describe('cross-provider tool history', () => {
 });
 
 describe('Gemini history', () => {
-  it('carries tool results as text so every model accepts the next turn', () => {
+  it('pairs native function responses with the preceding call', () => {
     const history = buildGeminiContents([
       {
         id: '1', role: 'assistant', content: '', timestamp: 0,
-        toolCalls: [{ id: 'call-1', type: 'function', function: { name: 'read_code', arguments: '{}' } }],
+        toolCalls: [{
+          id: 'call-1', type: 'function', thoughtSignature: 'sig-1',
+          function: { name: 'read_code', arguments: '{}' },
+        }],
       },
       { id: '2', role: 'tool', content: '{"files":[]}', toolCallId: 'call-1', timestamp: 0 },
     ]);
     expect(history[0].role).toBe('model');
+    expect(history[0].parts[0].functionCall.thoughtSignature).toBe('sig-1');
     expect(history[1].role).toBe('user');
-    expect(history[1].parts[0].text).toContain('read_code');
-    expect(JSON.stringify(history)).not.toContain('functionResponse');
+    expect(history[1].parts[0].functionResponse).toMatchObject({ name: 'read_code' });
   });
 });
 
