@@ -391,8 +391,18 @@ export async function sendMessage(content: string): Promise<void> {
     };
 
     let iterations = 0;
-    let previousCallSignature = '';
-    let repeatedCalls = 0;
+    // Tools that describe the same state are dangerous to repeat: a model can
+    // alternate verify_circuit with compile_code and never make progress.
+    const LOOP_SENSITIVE_TOOLS = new Set([
+      'verify_circuit',
+      'compile_code',
+      'compile_all_code',
+      'run_simulation',
+      'get_simulation_output',
+      'check_wiring',
+      'read_code',
+    ]);
+    const callCounts = new Map<string, number>();
     let nudges = 0;
     let verificationNudges = 0;
     let usedTools = false;
@@ -462,16 +472,24 @@ export async function sendMessage(content: string): Promise<void> {
       verificationNudges = 0;
       usedTools = true;
 
-      // Stop when the same call repeats without progress.
-      const callSignature = toolCalls
-        .map(tc => `${tc.function.name}:${tc.function.arguments}`)
-        .join('|');
-      repeatedCalls = callSignature === previousCallSignature ? repeatedCalls + 1 : 0;
-      previousCallSignature = callSignature;
-      if (repeatedCalls >= 2) {
+      // Stop when the same call repeats without progress. For inspection
+      // tools the name alone is enough: changing an argument slightly does
+      // not count as progress when the circuit state is unchanged.
+      const signatures = toolCalls.map((tc) =>
+        LOOP_SENSITIVE_TOOLS.has(tc.function.name)
+          ? tc.function.name
+          : `${tc.function.name}:${tc.function.arguments}`,
+      );
+      let repeated = false;
+      for (const signature of signatures) {
+        const count = (callCounts.get(signature) ?? 0) + 1;
+        callCounts.set(signature, count);
+        if (count >= 3) repeated = true;
+      }
+      if (repeated) {
         agentStore.addMessage({
           role: 'assistant',
-          content: 'I repeated the same tool call without progress, so I stopped to avoid a loop. Review the last tool result or give me a different instruction.',
+          content: `I called ${[...callCounts.entries()].find(([, count]) => count >= 3)?.[0] ?? 'a tool'} three times without progress, so I stopped to avoid a loop. The last tool result contains the evidence; make one specific change or give me a different instruction.`,
         });
         break;
       }

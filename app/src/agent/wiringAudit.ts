@@ -303,7 +303,7 @@ export function auditWiring(input: WiringAuditInput): WiringAuditResult {
         const issue = {
           component_id: component.id,
           type: component.metadataId,
-          reason: `Pushbutton ${component.id} is wired on only one contact side; connect one pin from each side (for example 1.l to a GPIO and 2.l to ground).`,
+          reason: `Pushbutton ${component.id} is wired on only one contact side. A four-pin pushbutton has one terminal on the left (1.l, 2.l) and the other on the right (1.r, 2.r); connect one pin from each terminal, for example 1.l to a GPIO and 1.r to ground.`,
           connected_pins: [...connected],
         };
         incomplete.push(issue);

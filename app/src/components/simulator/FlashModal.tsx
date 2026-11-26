@@ -239,6 +239,34 @@ interface PickerProps {
 
 const PickerView = ({ board, ports, selected, onSelect, onRefresh, onFlash }: PickerProps) => {
   const hasCompiled = !!board.compiledProgram;
+  const [names, setNames] = useState<Record<string, string>>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('circuit-muse-port-names') ?? '{}');
+    } catch {
+      return {};
+    }
+  });
+  const [naming, setNaming] = useState(false);
+  const [draftName, setDraftName] = useState('');
+
+  const portKey = (p: SerialPortInfo) =>
+    p.serial_number ? `sn:${p.serial_number}` : `path:${p.path}`;
+  const selectedPort = ports.find((p) => p.path === selected);
+  const displayLabel = (p: SerialPortInfo) => names[portKey(p)] || portLabel(p);
+
+  const saveName = () => {
+    if (!selectedPort) return;
+    const next = { ...names };
+    if (draftName.trim()) next[portKey(selectedPort)] = draftName.trim();
+    else delete next[portKey(selectedPort)];
+    setNames(next);
+    try {
+      localStorage.setItem('circuit-muse-port-names', JSON.stringify(next));
+    } catch {
+      /* storage unavailable: the name still applies for this session */
+    }
+    setNaming(false);
+  };
 
   if (ports.length === 0) {
     return (
@@ -277,10 +305,43 @@ const PickerView = ({ board, ports, selected, onSelect, onRefresh, onFlash }: Pi
       >
         {ports.map((p) => (
           <option key={p.path} value={p.path}>
-            {portLabel(p)}
+            {displayLabel(p)}
           </option>
         ))}
       </select>
+
+      {selectedPort && (
+        <div style={{ marginTop: 8, display: 'flex', gap: 6, alignItems: 'center' }}>
+          {naming ? (
+            <>
+              <input
+                value={draftName}
+                onChange={(event) => setDraftName(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') saveName();
+                  if (event.key === 'Escape') setNaming(false);
+                }}
+                placeholder="Name this board, for example Bench Uno"
+                style={{ ...selectStyle, flex: 1 }}
+              />
+              <button type="button" onClick={saveName} style={secondaryBtnStyle}>
+                Save
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setDraftName(names[portKey(selectedPort)] ?? '');
+                setNaming(true);
+              }}
+              style={secondaryBtnStyle}
+            >
+              Name this port
+            </button>
+          )}
+        </div>
+      )}
 
       {!hasCompiled && (
         <div style={{ marginTop: 10, padding: 10, background: '#3a2e1a', color: '#ffb84d', borderRadius: 4, fontSize: 12 }}>
@@ -407,15 +468,32 @@ const ProgressView = ({ state, onRetry, onClose, onBackToPicker }: ProgressProps
 
 // ── Helpers + shared styles ─────────────────────────────────────────
 
+/** VID/PID pairs seen on common boards and USB serial adapters. */
+const KNOWN_DEVICES: Record<string, string> = {
+  '2341:0043': 'Arduino Uno',
+  '2341:0001': 'Arduino Uno',
+  '2341:0042': 'Arduino Mega',
+  '2341:003b': 'Arduino Nano',
+  '1a86:7523': 'CH340 USB serial',
+  '1a86:55d4': 'CH340 USB serial',
+  '10c4:ea60': 'CP210x USB serial',
+  '0403:6001': 'FTDI USB serial',
+  '303a:1001': 'ESP32 USB',
+  '2e8a:000a': 'Raspberry Pi Pico',
+};
+
 function portLabel(p: SerialPortInfo): string {
-  const parts: string[] = [p.path];
-  if (p.product || p.manufacturer) {
-    parts.push('-', p.product ?? p.manufacturer ?? '');
-  }
-  if (p.vid !== undefined && p.vid !== null && p.pid !== undefined && p.pid !== null) {
-    parts.push(`(${hex4(p.vid)}:${hex4(p.pid)})`);
-  }
-  return parts.join(' ');
+  const key =
+    p.vid !== undefined && p.vid !== null && p.pid !== undefined && p.pid !== null
+      ? `${hex4(p.vid)}:${hex4(p.pid)}`
+      : '';
+  const friendly =
+    KNOWN_DEVICES[key] ??
+    (p.product && p.manufacturer ? `${p.manufacturer} ${p.product}` : null) ??
+    p.product ??
+    p.manufacturer ??
+    'USB serial device';
+  return `${friendly} (${p.path})`;
 }
 
 function hex4(n: number): string {

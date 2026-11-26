@@ -20,6 +20,7 @@ export function buildGeminiContents(messages: Message[]): any[] {
   }
 
   const contents: any[] = [];
+  const emittedCallIds = new Set<string>();
   let pendingToolParts: any[] = [];
 
   const flushToolParts = () => {
@@ -59,6 +60,10 @@ export function buildGeminiContents(messages: Message[]): any[] {
       const parts: any[] = [];
       if (m.content && m.content.trim()) parts.push({ text: m.content });
       for (const tc of m.toolCalls ?? []) {
+        // Gemini rejects a request when the same call id appears twice in the
+        // history. Older transcripts can contain repeated ids after retries.
+        if (!tc.id || emittedCallIds.has(tc.id)) continue;
+        emittedCallIds.add(tc.id);
         let args: Record<string, unknown> = {};
         try {
           const parsed = JSON.parse(tc.function.arguments || '{}');

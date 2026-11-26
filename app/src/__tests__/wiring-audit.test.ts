@@ -158,6 +158,19 @@ describe('auditWiring', () => {
     expect(result.blocking_issues.some((issue) => /one contact side/.test(issue.reason))).toBe(true);
   });
 
+  it('accepts a pushbutton wired across its two contact sides', () => {
+    const result = auditWiring(
+      circuit(
+        [{ id: 'btn1', metadataId: 'pushbutton' }],
+        [
+          ['b1', 'D2', 'btn1', '1.l'],
+          ['b1', 'GND', 'btn1', '1.r'],
+        ],
+      ),
+    );
+    expect(result.complete).toBe(true);
+  });
+
   it('rejects a board that shares signals but not ground', () => {
     const result = auditWiring(
       circuit(
