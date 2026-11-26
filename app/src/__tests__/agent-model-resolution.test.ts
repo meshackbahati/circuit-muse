@@ -170,17 +170,28 @@ describe('cross-provider tool history', () => {
 });
 
 describe('Gemini history', () => {
-  it('carries tool results as text so the next request is accepted', () => {
+  it('replies to function calls with native function response parts', () => {
     const history = buildGeminiContents([
       {
         id: '1', role: 'assistant', content: '', timestamp: 0,
-        toolCalls: [{ id: 'call-1', type: 'function', function: { name: 'read_code', arguments: '{}' } }],
+        toolCalls: [{ id: 'call-1', type: 'function', function: { name: 'read_code', arguments: '{"board":"b1"}' } }],
       },
       { id: '2', role: 'tool', content: '{"files":[]}', toolCallId: 'call-1', timestamp: 0 },
     ]);
+    expect(history[0].role).toBe('model');
+    expect(history[0].parts[0].functionCall.name).toBe('read_code');
+    expect(history[0].parts[0].functionCall.args).toEqual({ board: 'b1' });
     expect(history[1].role).toBe('user');
-    expect(history[1].parts[0].text).toContain('read_code');
-    expect(JSON.stringify(history)).not.toContain('functionResponse');
+    expect(history[1].parts[0].functionResponse.id).toBe('call-1');
+    expect(history[1].parts[0].functionResponse.name).toBe('read_code');
+    expect(history[1].parts[0].functionResponse.response.result).toContain('files');
+  });
+
+  it('keeps orphan tool results as text', () => {
+    const history = buildGeminiContents([
+      { id: '1', role: 'tool', content: 'orphan', toolCallId: 'missing', timestamp: 0 },
+    ]);
+    expect(history[0].parts[0].text).toContain('orphan');
   });
 });
 
