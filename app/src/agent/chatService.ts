@@ -17,7 +17,66 @@ const MAX_STREAM_ATTEMPTS = 5;
 const RETRY_BASE_MS = 700;
 const RETRY_MAX_MS = 8000;
 const MAX_VERIFICATION_NUDGES = 3;
+/** Provider requests above this many messages risk an HTTP 400 with a
+ *  non-JSON body. Older turns are summarised rather than silently dropped. */
+const MAX_PROVIDER_MESSAGES = 20;
+const MAX_TOOL_RESULT_CHARS = 16_000;
+const COMPACTION_PREFIX = 'Earlier session summary:';
 let activeRequest: AbortController | null = null;
+
+/** Turn tool results into a short factual summary. The live stores remain the
+ *  source of truth for the completion gate, so this only preserves context. */
+export function summarizeDropped(messages: Message[]): string {
+  const lines: string[] = [];
+  for (const message of messages) {
+    if (message.role === 'tool') {
+      let data: any = null;
+      try {
+        data = JSON.parse(message.content);
+      } catch {
+        continue;
+      }
+      if (!data || typeof data !== 'object') continue;
+      if (data.complete !== undefined) {
+        lines.push(`wiring complete: ${data.complete}`);
+        for (const issue of (data.blocking_issues ?? []).slice(0, 3)) {
+          lines.push(`wiring issue: ${String(issue.reason ?? '').slice(0, 160)}`);
+        }
+      }
+      if (data.success !== undefined && (data.board_id !== undefined || data.boards !== undefined)) {
+        lines.push(`compile success: ${data.success}`);
+        if (!data.success) lines.push(`compile error: ${String(data.error ?? '').slice(0, 200)}`);
+      }
+      if (typeof data.serial_output === 'string' && data.serial_output.trim()) {
+        lines.push(`serial output: ${data.serial_output.trim().slice(0, 240)}`);
+      }
+      if (message.content.startsWith(COMPACTION_PREFIX)) {
+        lines.push(message.content.slice(0, 800));
+      }
+      continue;
+    }
+    if (message.role === 'assistant' && message.content.trim()) {
+      lines.push(`assistant said: ${message.content.trim().slice(0, 200)}`);
+    }
+  }
+  const unique = [...new Set(lines)];
+  const summary = unique.join('\n').slice(0, 2400);
+  return `${COMPACTION_PREFIX}\n${summary || 'No prior tool evidence was recorded.'}\nUse the current tool results and live circuit state as the source of truth.`;
+}
+
+/** Keep a bounded provider transcript by replacing the oldest turns with a
+ *  factual summary. The full transcript stays in the UI and saved project. */
+export function compactMessages(messages: Message[]): void {
+  if (messages.length <= MAX_PROVIDER_MESSAGES) return;
+  const dropped = messages.splice(1, messages.length - MAX_PROVIDER_MESSAGES);
+  const summary = summarizeDropped(dropped);
+  messages.splice(1, 0, {
+    id: `compaction-${Date.now()}`,
+    role: 'user',
+    content: summary,
+    timestamp: Date.now(),
+  });
+}
 
 /** Tools that change the canvas or the firmware. A turn that used one of
  *  these must end with a wiring audit, a successful compile and an observed
@@ -369,10 +428,23 @@ export async function sendMessage(content: string): Promise<void> {
   };
 
   try {
+    // A long tool loop can exceed the provider request limit. Gemini then
+    // replies with a non-JSON HTTP 400 ("exception parsing response"). Only
+    // the recent transcript is needed to continue, and the full history is
+    // still kept in the UI and in the saved conversation.
+    const compactTool = (text: string) =>
+      text.length > MAX_TOOL_RESULT_CHARS
+        ? `${text.slice(0, 8_000)}\n[truncated for context limit]\n${text.slice(-6_000)}`
+        : text;
+    const history = useAgentStore
+      .getState()
+      .messages.filter((m) => m.role !== 'system')
+      .map((m) => (m.role === 'tool' ? { ...m, content: compactTool(m.content) } : m));
     const messages: Message[] = [
       { id: 'system', role: 'system', content: SYSTEM_PROMPT, timestamp: Date.now() },
-      ...useAgentStore.getState().messages.filter(m => m.role !== 'system'),
+      ...history,
     ];
+    compactMessages(messages);
 
     const addToolResult = (tc: ToolCall, result: string) => {
       if (activeRequest !== controller) return;
@@ -410,6 +482,7 @@ export async function sendMessage(content: string): Promise<void> {
     while (iterations < MAX_TOOL_ITERATIONS) {
       iterations++;
       if (controller.signal.aborted || activeRequest !== controller) break;
+      compactMessages(messages);
       let fullContent = '';
       let toolCalls: ToolCall[] = [];
       let assistantId: string | null = null;

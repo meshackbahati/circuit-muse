@@ -2,7 +2,7 @@
   "name": "circuit-muse",
   "homepage": "/",
   "private": true,
-  "version": "1.0.10",
+  "version": "1.0.11",
   "author": "Meshack Bahati Ouma",
   "type": "module",
   "scripts": {

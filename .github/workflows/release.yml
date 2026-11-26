@@ -402,7 +402,7 @@ jobs:
           cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
-          pkgver=1.0.10
+          pkgver=1.0.11
           pkgrel=1
           pkgdesc="AI-powered circuit simulator and embedded board emulator"
           arch=('x86_64')
@@ -457,6 +457,7 @@ jobs:
 
             ### Changes in this release
 
+            - Long chat histories are compacted into a factual summary before each provider request. This keeps tool evidence without exceeding request limits, which was the cause of HTTP 400 errors late in a build.
             - The pushbutton wiring audit now tells the truth about the four-pin part: one pin from the left terminal and one from the right terminal. The previous example was wrong and sent the agent into a rewiring loop.
             - Repeated inspection tools are limited to three calls per turn, which stops compile and verify loops without waiting for user input.
             - Gemini history drops duplicate call ids before a request, which removes a source of HTTP 400 responses during long tool turns.
@@ -518,7 +519,7 @@ jobs:
             |----------|--------|-------|
             | **Linux (x86_64)** | AppImage | Universal, works on Ubuntu, Debian, Fedora, Arch, and derivatives |
             | **Linux (x86_64)** | .deb | Debian/Ubuntu/Mint |
-            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.0.10-1-x86_64.pkg.tar.zst` |
+            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.0.11-1-x86_64.pkg.tar.zst` |
             | **Windows (x86_64)** | .exe (NSIS) | Windows 10/11 installer |
             | **Windows (x86_64)** | .msi | Windows MSI installer |
             | **macOS (ARM64)** | .dmg | Apple Silicon (M1/M2/M3/M4) |
