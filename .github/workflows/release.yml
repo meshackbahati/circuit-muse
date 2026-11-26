@@ -74,8 +74,14 @@ jobs:
       - name: Verify sidecars are populated
         shell: bash
         run: |
-          for sidecar in src-tauri/binaries/circuit-muse-engine-* src-tauri/binaries/arduino-cli-*; do
-            if [ ! -s "$sidecar" ]; then echo "sidecar is empty: $sidecar"; exit 1; fi
+          # The repository keeps empty placeholders for other target triples.
+          # Require one populated sidecar per prefix rather than every match.
+          for prefix in circuit-muse-engine arduino-cli; do
+            found=0
+            for sidecar in src-tauri/binaries/${prefix}-*; do
+              if [ -s "$sidecar" ]; then found=1; break; fi
+            done
+            if [ "$found" -ne 1 ]; then echo "no populated sidecar for $prefix"; exit 1; fi
           done
 
       - name: Install app dependencies and build
@@ -145,8 +151,14 @@ jobs:
       - name: Verify sidecars are populated
         shell: bash
         run: |
-          for sidecar in src-tauri/binaries/circuit-muse-engine-* src-tauri/binaries/arduino-cli-*; do
-            if [ ! -s "$sidecar" ]; then echo "sidecar is empty: $sidecar"; exit 1; fi
+          # The repository keeps empty placeholders for other target triples.
+          # Require one populated sidecar per prefix rather than every match.
+          for prefix in circuit-muse-engine arduino-cli; do
+            found=0
+            for sidecar in src-tauri/binaries/${prefix}-*; do
+              if [ -s "$sidecar" ]; then found=1; break; fi
+            done
+            if [ "$found" -ne 1 ]; then echo "no populated sidecar for $prefix"; exit 1; fi
           done
 
       - name: Install app dependencies and build
@@ -212,8 +224,14 @@ jobs:
       - name: Verify sidecars are populated
         shell: bash
         run: |
-          for sidecar in src-tauri/binaries/circuit-muse-engine-* src-tauri/binaries/arduino-cli-*; do
-            if [ ! -s "$sidecar" ]; then echo "sidecar is empty: $sidecar"; exit 1; fi
+          # The repository keeps empty placeholders for other target triples.
+          # Require one populated sidecar per prefix rather than every match.
+          for prefix in circuit-muse-engine arduino-cli; do
+            found=0
+            for sidecar in src-tauri/binaries/${prefix}-*; do
+              if [ -s "$sidecar" ]; then found=1; break; fi
+            done
+            if [ "$found" -ne 1 ]; then echo "no populated sidecar for $prefix"; exit 1; fi
           done
 
       - name: Install app dependencies and build
@@ -284,8 +302,14 @@ jobs:
       - name: Verify sidecars are populated
         shell: bash
         run: |
-          for sidecar in src-tauri/binaries/circuit-muse-engine-* src-tauri/binaries/arduino-cli-*; do
-            if [ ! -s "$sidecar" ]; then echo "sidecar is empty: $sidecar"; exit 1; fi
+          # The repository keeps empty placeholders for other target triples.
+          # Require one populated sidecar per prefix rather than every match.
+          for prefix in circuit-muse-engine arduino-cli; do
+            found=0
+            for sidecar in src-tauri/binaries/${prefix}-*; do
+              if [ -s "$sidecar" ]; then found=1; break; fi
+            done
+            if [ "$found" -ne 1 ]; then echo "no populated sidecar for $prefix"; exit 1; fi
           done
 
       - name: Install app dependencies and build
@@ -348,8 +372,14 @@ jobs:
       - name: Verify sidecars are populated
         shell: bash
         run: |
-          for sidecar in src-tauri/binaries/circuit-muse-engine-* src-tauri/binaries/arduino-cli-*; do
-            if [ ! -s "$sidecar" ]; then echo "sidecar is empty: $sidecar"; exit 1; fi
+          # The repository keeps empty placeholders for other target triples.
+          # Require one populated sidecar per prefix rather than every match.
+          for prefix in circuit-muse-engine arduino-cli; do
+            found=0
+            for sidecar in src-tauri/binaries/${prefix}-*; do
+              if [ -s "$sidecar" ]; then found=1; break; fi
+            done
+            if [ "$found" -ne 1 ]; then echo "no populated sidecar for $prefix"; exit 1; fi
           done
 
       - name: Install app dependencies and build

@@ -121,7 +121,7 @@ async function observeBoard(
   if (budget > 0) {
     try {
       while (Date.now() - start < budget) {
-        const state = useSimulatorStoreSnapshot();
+        const state = getSimulatorSnapshot();
         const current = boardOutput(state, boardId);
         if (current.serial_length > initial && /[\r\n]/.test(current.serial_output)) break;
         await sleep(Math.min(120, Math.max(20, budget - (Date.now() - start))), signal);
@@ -130,14 +130,14 @@ async function observeBoard(
       if (signal?.aborted) throw error;
     }
   }
-  const state = useSimulatorStoreSnapshot();
+  const state = getSimulatorSnapshot();
   return { ...boardOutput(state, boardId), waited_ms: Date.now() - start };
 }
 
 /** The store module is imported dynamically to avoid a cycle at module load;
  *  after the first tool call it is cached, so this accessor is cheap. */
 let simulatorStoreRef: MutableState | null = null;
-function useSimulatorStoreSnapshot(): MutableState {
+function getSimulatorSnapshot(): MutableState {
   if (!simulatorStoreRef) {
     throw new Error('Simulator store is not ready');
   }

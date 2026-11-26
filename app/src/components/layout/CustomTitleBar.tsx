@@ -4,8 +4,6 @@ import { invoke } from '../../desktop/tauriBridge';
 const isDesktop = typeof window !== 'undefined' && !!(window as any).__TAURI__;
 
 export const CustomTitleBar: React.FC = () => {
-  if (!isDesktop) return null;
-
   const run = async (command: string, fallback?: () => void) => {
     try {
       await invoke(command);
@@ -19,6 +17,10 @@ export const CustomTitleBar: React.FC = () => {
   const minimize = useCallback(() => run('plugin:window|minimize'), []);
   const toggleMaximize = useCallback(() => run('plugin:window|toggle_maximize'), []);
   const drag = useCallback(() => run('plugin:window|startDragging'), []);
+
+  // Hooks must run in the same order on every render. The web build still
+  // mounts this component, so the early return has to come after the hooks.
+  if (!isDesktop) return null;
 
   return (
     <div
