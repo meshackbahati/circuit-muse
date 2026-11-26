@@ -90,9 +90,45 @@ describe('state-backed agent tools', () => {
   });
 
   it('refuses to run a board that has not compiled', async () => {
+    useSimulatorStore.getState().setComponents([]);
+    useSimulatorStore.getState().setWires([]);
     const boardId = addBoard();
     const result = JSON.parse(await call('run_simulation', { board_id: boardId }));
     expect(result.error).toMatch(/compile_code/);
+  });
+
+  it('adds a complete circuit in one batch and reports it as wired', async () => {
+    useSimulatorStore.getState().setComponents([]);
+    useSimulatorStore.getState().setWires([]);
+    const boardId = addBoard();
+    const result = JSON.parse(await call('build_circuit', {
+      components: [
+        { ref: 'r1', type: 'resistor', x: 100, y: 100, attrs: { value: '220' } },
+        { ref: 'led1', type: 'led', x: 200, y: 100, attrs: { color: 'red' } },
+      ],
+      wires: [
+        { from: boardId, from_pin: '5V', to: 'r1', to_pin: '1' },
+        { from: 'r1', from_pin: '2', to: 'led1', to_pin: 'A' },
+        { from: 'led1', from_pin: 'C', to: boardId, to_pin: 'GND' },
+      ],
+    }));
+    expect(result.success).toBe(true);
+    expect(result.components).toHaveLength(2);
+    expect(result.wires).toHaveLength(3);
+    expect(result.wiring.complete).toBe(true);
+  });
+
+  it('blocks compilation while a component is left dangling', async () => {
+    useSimulatorStore.getState().setComponents([]);
+    useSimulatorStore.getState().setWires([]);
+    const boardId = addBoard();
+    const added = JSON.parse(await call('add_component', { type: 'wokwi-led', x: 10, y: 10 }));
+    const result = JSON.parse(await call('compile_code', { board_id: boardId }));
+    expect(result.success).toBe(false);
+    expect(result.blocked_by).toBe('wiring');
+    expect(result.wiring.unconnected_components.some(
+      (issue: { component_id: string }) => issue.component_id === added.component_id,
+    )).toBe(true);
   });
 
   it('reports serial output and compiled state for every board', async () => {

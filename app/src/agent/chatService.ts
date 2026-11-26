@@ -7,6 +7,7 @@ import { useConversationStore } from '../store/useConversationStore';
 import { AGENT_TOOLS } from './toolDefs';
 import { SYSTEM_PROMPT } from './systemPrompt';
 import { executeToolCall } from './toolExecutor';
+import { auditWiring } from './wiringAudit';
 
 // A full build-and-verify cycle takes more than a few tool rounds.
 const MAX_TOOL_ITERATIONS = 30;
@@ -15,7 +16,26 @@ const MAX_TOOL_ITERATIONS = 30;
 const MAX_STREAM_ATTEMPTS = 5;
 const RETRY_BASE_MS = 700;
 const RETRY_MAX_MS = 8000;
+const MAX_VERIFICATION_NUDGES = 3;
 let activeRequest: AbortController | null = null;
+
+/** Tools that change the canvas or the firmware. A turn that used one of
+ *  these must end with a wiring audit, a successful compile and an observed
+ *  run before the agent is allowed to report completion. */
+const MUTATION_TOOLS = new Set([
+  'add_board',
+  'remove_board',
+  'add_component',
+  'build_circuit',
+  'remove_component',
+  'set_component_property',
+  'wire_components',
+  'remove_wire',
+  'update_code',
+  'compile_code',
+  'compile_all_code',
+  'reset_simulation',
+]);
 
 function isFragment(text: string): boolean {
   const value = text.trim();
@@ -53,6 +73,24 @@ function sleep(ms: number, signal?: AbortSignal): Promise<void> {
       resolve();
     }, ms);
     signal?.addEventListener('abort', onAbort, { once: true });
+  });
+}
+
+async function raceAbort<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> {
+  if (signal.aborted) throw abortError();
+  return new Promise<T>((resolve, reject) => {
+    const onAbort = () => reject(abortError());
+    signal.addEventListener('abort', onAbort, { once: true });
+    promise.then(
+      (value) => {
+        signal.removeEventListener('abort', onAbort);
+        resolve(value);
+      },
+      (error) => {
+        signal.removeEventListener('abort', onAbort);
+        reject(error);
+      },
+    );
   });
 }
 
@@ -95,7 +133,107 @@ async function* streamWithRetry(
 }
 
 export function abortMessage(): void {
-  activeRequest?.abort();
+  const controller = activeRequest;
+  if (!controller) return;
+  controller.abort();
+  // Stop must be visible immediately. Waiting for the current compile or
+  // install call to return made the button look dead for many seconds.
+  const store = useAgentStore.getState();
+  store.setStreaming(false);
+  store.setExecutingTool(null);
+  store.setRetryNotice(null);
+}
+
+interface RunProgress {
+  usedMutation: boolean;
+  wiringComplete: boolean | null;
+  compiled: boolean;
+  /** Source changed after the last successful compile, so any compiled image
+   *  still on a board is stale and must not be treated as verified firmware. */
+  codeDirty: boolean;
+  ran: boolean;
+  serialRead: boolean;
+  lastSerial: string;
+  lastSerialLength: number;
+  lastCompileError: string | null;
+}
+
+/**
+ * Refuse to let the model declare victory after a partial build. The check is
+ * derived from the live stores, not from the model's own claim, so a turn that
+ * stopped after writing code but before wiring or running is sent back to the
+ * build loop with the exact missing step.
+ */
+async function completionNudge(progress: RunProgress): Promise<string | null> {
+  if (!progress.usedMutation) return null;
+
+  const { useSimulatorStore } = await import('../store/useSimulatorStore');
+  const { useEditorStore } = await import('../store/useEditorStore');
+  const { isPiBoardKind } = await import('../types/board');
+  const sim = useSimulatorStore.getState();
+  const editor = useEditorStore.getState();
+
+  const audit = auditWiring({
+    boards: sim.boards.map((b) => ({ id: b.id, boardKind: b.boardKind, name: b.name })),
+    components: sim.components.map((c) => ({
+      id: c.id,
+      metadataId: c.metadataId,
+      properties: c.properties ?? {},
+    })),
+    wires: sim.wires,
+  });
+
+  if (!audit.complete) {
+    return [
+      'The circuit is not finished. The wiring audit still reports blocking issues:',
+      ...audit.blocking_issues.map((issue) => `- ${issue.reason}`),
+      'Call check_wiring, then use wire_components or build_circuit to connect every listed pin. Do not compile until the audit reports complete true.',
+    ].join('\n');
+  }
+
+  const compileTargets = sim.boards.filter(
+    (board) =>
+      !isPiBoardKind(board.boardKind) &&
+      board.languageMode !== 'micropython' &&
+      !board.compiledProgram,
+  );
+  if (compileTargets.length > 0) {
+    const missingSource = compileTargets.filter((board) => {
+      const group = editor.fileGroups[board.activeFileGroupId] ?? [];
+      const source = group.length > 0 ? group : editor.files;
+      return !source.some((file) => file.content.trim().length > 0);
+    });
+    if (missingSource.length > 0) {
+      return `The wiring is complete, but ${missingSource
+        .map((board) => board.id)
+        .join(', ')} has no firmware. Call update_code with a complete sketch, then compile_code.`;
+    }
+    if (progress.lastCompileError) {
+      return `The last compile failed: ${progress.lastCompileError}. Fix the reported line with update_code and compile again.`;
+    }
+    return `The wiring is complete, but ${compileTargets
+      .map((board) => board.id)
+      .join(', ')} has no compiled firmware. Call compile_code (or compile_all_code for several boards) now.`;
+  }
+
+  if (progress.codeDirty) {
+    return 'Firmware source changed after the last successful compile. Call compile_code (or compile_all_code) again before running, so the simulation boots the new code rather than the previous image.';
+  }
+
+  const hasFirmware = sim.boards.some((board) => Boolean(board.compiledProgram));
+  if (hasFirmware && !progress.ran) {
+    return 'Firmware compiled successfully but the simulation has not run. Call run_simulation with observe_ms so the serial output can be checked.';
+  }
+  if (progress.ran && !progress.serialRead) {
+    return 'The board was started but its serial output was not read. Call get_simulation_output with wait_ms to capture the behaviour before reporting completion.';
+  }
+  if (progress.ran && progress.lastSerialLength === 0) {
+    return 'The simulation ran but produced no serial output. Add Serial.begin and a Serial.print line that reports the measured state, recompile, run again, and read the output. Without observable output the circuit cannot be verified.';
+  }
+  if (progress.lastSerial && /\b(error|failed|panic|crash|assert|exception|watchdog|guru meditation|stack overflow)\b/i.test(progress.lastSerial)) {
+    return 'The serial output contains a failure. Diagnose the reported error, change one thing in the code or wiring, reset the board, recompile and run again.';
+  }
+  return null;
 }
 
 export async function sendMessage(content: string): Promise<void> {
@@ -120,8 +258,9 @@ export async function sendMessage(content: string): Promise<void> {
 
   let model: string;
   try {
-    model = await resolveModel(provider, config.model);
+    model = await raceAbort(resolveModel(provider, config.model), controller.signal);
   } catch (error) {
+    if (controller.signal.aborted) return;
     agentStore.addMessage({
       role: 'assistant',
       content: `Error: ${error instanceof Error ? error.message : String(error)}`,
@@ -136,20 +275,131 @@ export async function sendMessage(content: string): Promise<void> {
 
   agentStore.setStreaming(true);
 
+  const progress: RunProgress = {
+    usedMutation: false,
+    wiringComplete: null,
+    compiled: false,
+    codeDirty: false,
+    ran: false,
+    serialRead: false,
+    lastSerial: '',
+    lastSerialLength: 0,
+    lastCompileError: null,
+  };
+
+  const observeRun = (run: any) => {
+    if (!run) return;
+    progress.ran = true;
+    progress.serialRead = true;
+    progress.lastSerial = String(run.serial_output ?? '');
+    progress.lastSerialLength = Number(run.serial_length ?? 0);
+  };
+  const bestRun = (runs: any) =>
+    Array.isArray(runs) && runs.length > 0
+      ? runs.reduce((best: any, run: any) =>
+          Number(run?.serial_length ?? 0) > Number(best?.serial_length ?? 0) ? run : best,
+        )
+      : null;
+
+  const recordToolResult = (name: string, result: string) => {
+    let data: any = null;
+    try {
+      data = JSON.parse(result);
+    } catch {
+      data = null;
+    }
+    if (MUTATION_TOOLS.has(name)) progress.usedMutation = true;
+
+    switch (name) {
+      case 'check_wiring':
+        progress.wiringComplete = data?.complete === true;
+        break;
+      case 'build_circuit':
+        if (data?.wiring) progress.wiringComplete = data.wiring.complete === true;
+        progress.ran = false;
+        progress.serialRead = false;
+        break;
+      case 'add_component':
+      case 'remove_component':
+      case 'wire_components':
+      case 'remove_wire':
+        progress.wiringComplete = null;
+        progress.ran = false;
+        progress.serialRead = false;
+        break;
+      case 'update_code':
+        progress.compiled = false;
+        progress.codeDirty = true;
+        progress.ran = false;
+        progress.serialRead = false;
+        progress.lastCompileError = null;
+        break;
+      case 'compile_code':
+      case 'compile_all_code': {
+        if (data?.success) {
+          progress.compiled = true;
+          progress.codeDirty = false;
+          progress.lastCompileError = null;
+          progress.ran = false;
+          progress.serialRead = false;
+        } else {
+          progress.compiled = false;
+          progress.lastCompileError = String(data?.error ?? 'Compilation failed').slice(0, 800);
+        }
+        observeRun(data?.run ?? bestRun(data?.runs));
+        break;
+      }
+      case 'run_simulation':
+        if (data?.success) observeRun(bestRun(data?.runs) ?? data);
+        break;
+      case 'get_simulation_output':
+        progress.serialRead = true;
+        progress.lastSerial = String(data?.serial_output ?? '');
+        progress.lastSerialLength = Number(data?.serial_length ?? 0);
+        break;
+      case 'reset_simulation':
+        progress.ran = false;
+        progress.serialRead = false;
+        progress.lastSerial = '';
+        progress.lastSerialLength = 0;
+        break;
+      default:
+        break;
+    }
+  };
+
   try {
     const messages: Message[] = [
       { id: 'system', role: 'system', content: SYSTEM_PROMPT, timestamp: Date.now() },
       ...useAgentStore.getState().messages.filter(m => m.role !== 'system'),
     ];
 
+    const addToolResult = (tc: ToolCall, result: string) => {
+      if (activeRequest !== controller) return;
+      agentStore.addMessage({
+        role: 'tool',
+        content: result,
+        toolCallId: tc.id,
+      });
+      messages.push({
+        id: tc.id,
+        role: 'tool',
+        content: result,
+        toolCallId: tc.id,
+        timestamp: Date.now(),
+      });
+    };
+
     let iterations = 0;
     let previousCallSignature = '';
     let repeatedCalls = 0;
     let nudges = 0;
+    let verificationNudges = 0;
     let usedTools = false;
 
     while (iterations < MAX_TOOL_ITERATIONS) {
       iterations++;
+      if (controller.signal.aborted || activeRequest !== controller) break;
       let fullContent = '';
       let toolCalls: ToolCall[] = [];
       let assistantId: string | null = null;
@@ -181,6 +431,22 @@ export async function sendMessage(content: string): Promise<void> {
 
       if (controller.signal.aborted) break;
       if (toolCalls.length === 0) {
+        // A model can stop mid-build. Check the live stores before accepting
+        // that stop, and send it back with the exact missing stage.
+        if (verificationNudges < MAX_VERIFICATION_NUDGES) {
+          const nudge = await completionNudge(progress);
+          if (controller.signal.aborted) break;
+          if (nudge) {
+            verificationNudges++;
+            messages.push({
+              id: crypto.randomUUID(),
+              role: 'user',
+              content: nudge,
+              timestamp: Date.now(),
+            });
+            continue;
+          }
+        }
         const complete = fullContent.trim() && (!usedTools || !isFragment(fullContent));
         if (complete || nudges >= 3) break;
         nudges++;
@@ -193,6 +459,7 @@ export async function sendMessage(content: string): Promise<void> {
         continue;
       }
       nudges = 0;
+      verificationNudges = 0;
       usedTools = true;
 
       // Stop when the same call repeats without progress.
@@ -225,24 +492,45 @@ export async function sendMessage(content: string): Promise<void> {
         timestamp: Date.now(),
       });
 
-      for (const tc of toolCalls) {
-        if (controller.signal.aborted) break;
+      for (let index = 0; index < toolCalls.length; index++) {
+        const tc = toolCalls[index];
+        if (controller.signal.aborted) {
+          for (let rest = index; rest < toolCalls.length; rest++) {
+            addToolResult(
+              toolCalls[rest],
+              JSON.stringify({ success: false, aborted: true, error: 'Stopped by user' }),
+            );
+          }
+          break;
+        }
+
         agentStore.setExecutingTool(tc.function.name);
-        const result = await executeToolCall(tc);
-        agentStore.setExecutingTool(null);
-        agentStore.addMessage({
-          role: 'tool',
-          content: result,
-          toolCallId: tc.id,
-        });
-        messages.push({
-          id: tc.id,
-          role: 'tool',
-          content: result,
-          toolCallId: tc.id,
-          timestamp: Date.now(),
-        });
+        let result: string;
+        try {
+          result = await executeToolCall(tc, controller.signal);
+        } catch (error) {
+          if (controller.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) {
+            result = JSON.stringify({ success: false, aborted: true, error: 'Stopped by user' });
+          } else {
+            result = JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) });
+          }
+        } finally {
+          agentStore.setExecutingTool(null);
+        }
+        addToolResult(tc, result);
+        recordToolResult(tc.function.name, result);
+
+        if (controller.signal.aborted) {
+          for (let rest = index + 1; rest < toolCalls.length; rest++) {
+            addToolResult(
+              toolCalls[rest],
+              JSON.stringify({ success: false, aborted: true, error: 'Stopped by user' }),
+            );
+          }
+          break;
+        }
       }
+      if (controller.signal.aborted) break;
     }
   } catch (error) {
     if (controller.signal.aborted) return;
@@ -257,8 +545,8 @@ export async function sendMessage(content: string): Promise<void> {
     agentStore.addMessage({ role: 'assistant', content: friendly });
   } finally {
     useAgentStore.getState().setRetryNotice(null);
-    useConversationStore.getState().save(useAgentStore.getState().messages);
     if (activeRequest === controller) {
+      useConversationStore.getState().save(useAgentStore.getState().messages);
       activeRequest = null;
       agentStore.setStreaming(false);
       agentStore.setExecutingTool(null);

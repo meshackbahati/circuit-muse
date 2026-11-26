@@ -797,6 +797,10 @@ interface SimulatorState {
   setBoardLanguageMode: (boardId: string, mode: LanguageMode) => void;
   startBoard: (boardId: string) => void;
   stopBoard: (boardId: string) => void;
+  /** Stop every board, including boards whose per-board running flag drifted
+   *  out of sync with the flat `running` flag. The toolbar Stop button uses
+   *  this so one click always cuts power to the whole circuit. */
+  stopAllBoards: () => void;
   resetBoard: (boardId: string) => void;
 
   // ── Legacy single-board API (reads/writes activeBoardId board) ───────────
@@ -1875,6 +1879,14 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
         const isActive = s.activeBoardId === boardId;
         return { boards, ...(isActive ? { running: false } : {}) };
       });
+    },
+
+    stopAllBoards: () => {
+      const { boards } = get();
+      for (const board of boards) {
+        get().stopBoard(board.id);
+      }
+      set({ running: false });
     },
 
     resetBoard: (boardId: string) => {

@@ -1,10 +1,165 @@
 import type { ToolCall } from './types';
+import { auditWiring, boardPinExists, type WiringAuditResult } from './wiringAudit';
 
 type MutableState = any;
+
+/** Refs created by `build_circuit`, so a later wire_components call can use
+ *  the same short names instead of asking the model to copy generated ids. */
+let lastBuildRefs = new Map<string, string>();
 
 function tail(text: string | undefined, max = 4000): string {
   if (!text) return '';
   return text.length > max ? text.slice(-max) : text;
+}
+
+function abortResult(): string {
+  return JSON.stringify({ success: false, aborted: true, error: 'Stopped by user' });
+}
+
+function throwIfAborted(signal?: AbortSignal): void {
+  if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+}
+
+function sleep(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(new DOMException('Aborted', 'AbortError'));
+      return;
+    }
+    const timer = setTimeout(() => {
+      signal?.removeEventListener('abort', onAbort);
+      resolve();
+    }, ms);
+    const onAbort = () => {
+      clearTimeout(timer);
+      reject(new DOMException('Aborted', 'AbortError'));
+    };
+    signal?.addEventListener('abort', onAbort, { once: true });
+  });
+}
+
+/** Let a tool return as soon as Stop is pressed even when the underlying
+ *  compile or install call does not accept an AbortSignal. The call keeps
+ *  running in the background, but its result is ignored. */
+async function raceAbort<T>(promise: Promise<T>, signal?: AbortSignal): Promise<T> {
+  if (!signal) return promise;
+  throwIfAborted(signal);
+  return new Promise<T>((resolve, reject) => {
+    const onAbort = () => reject(new DOMException('Aborted', 'AbortError'));
+    signal.addEventListener('abort', onAbort, { once: true });
+    promise.then(
+      (value) => {
+        signal.removeEventListener('abort', onAbort);
+        resolve(value);
+      },
+      (error) => {
+        signal.removeEventListener('abort', onAbort);
+        reject(error);
+      },
+    );
+  });
+}
+
+function currentAudit(sim: MutableState): WiringAuditResult {
+  return auditWiring({
+    boards: sim.boards.map((b: MutableState) => ({
+      id: b.id,
+      boardKind: b.boardKind,
+      name: b.name,
+    })),
+    components: sim.components.map((c: MutableState) => ({
+      id: c.id,
+      metadataId: c.metadataId,
+      properties: c.properties ?? c.attrs ?? {},
+    })),
+    wires: sim.wires,
+  });
+}
+
+function wiringBlocked(audit: WiringAuditResult): string {
+  return JSON.stringify({
+    success: false,
+    blocked_by: 'wiring',
+    error: `Compile refused: the canvas is not fully wired. ${audit.blocking_issues
+      .map((issue) => issue.reason)
+      .join(' ')}`,
+    wiring: audit,
+    next_actions: audit.next_actions,
+  });
+}
+
+function boardOutput(sim: MutableState, boardId?: string): {
+  serial_output: string;
+  serial_length: number;
+  running: boolean;
+  crash_board_id: string | null;
+} {
+  const board = boardId
+    ? sim.boards.find((b: MutableState) => b.id === boardId)
+    : sim.boards.find((b: MutableState) => b.id === sim.activeBoardId) ?? sim.boards[0];
+  const text = board?.serialOutput ?? sim.serialOutput ?? '';
+  return {
+    serial_output: tail(text, 6000),
+    serial_length: text.length,
+    running: Boolean(board?.running),
+    crash_board_id: sim.esp32CrashBoardId ?? null,
+  };
+}
+
+/** Wait for serial output to grow, or for the observation window to expire.
+ *  A run followed immediately by get_simulation_output used to read an empty
+ *  buffer because the sketch had not reached Serial.begin yet. */
+async function observeBoard(
+  sim: MutableState,
+  boardId: string | undefined,
+  waitMs: number,
+  signal?: AbortSignal,
+): Promise<{ serial_output: string; serial_length: number; running: boolean; crash_board_id: string | null; waited_ms: number }> {
+  const start = Date.now();
+  const initial = boardOutput(sim, boardId).serial_length;
+  const budget = Math.max(0, Math.min(waitMs, 10_000));
+  if (budget > 0) {
+    try {
+      while (Date.now() - start < budget) {
+        const state = useSimulatorStoreSnapshot();
+        const current = boardOutput(state, boardId);
+        if (current.serial_length > initial && /[\r\n]/.test(current.serial_output)) break;
+        await sleep(Math.min(120, Math.max(20, budget - (Date.now() - start))), signal);
+      }
+    } catch (error) {
+      if (signal?.aborted) throw error;
+    }
+  }
+  const state = useSimulatorStoreSnapshot();
+  return { ...boardOutput(state, boardId), waited_ms: Date.now() - start };
+}
+
+/** The store module is imported dynamically to avoid a cycle at module load;
+ *  after the first tool call it is cached, so this accessor is cheap. */
+let simulatorStoreRef: MutableState | null = null;
+function useSimulatorStoreSnapshot(): MutableState {
+  if (!simulatorStoreRef) {
+    throw new Error('Simulator store is not ready');
+  }
+  return simulatorStoreRef.getState();
+}
+
+function resolvePartId(part: string, known: Set<string>): string | null {
+  if (known.has(part)) return part;
+  const mapped = lastBuildRefs.get(part);
+  if (mapped && known.has(mapped)) return mapped;
+  return null;
+}
+
+function componentPinNames(componentId: string): string[] | null {
+  if (typeof document === 'undefined') return null;
+  const element = document.getElementById(componentId) as
+    | { pinInfo?: Array<{ name?: string }> }
+    | null;
+  const info = element?.pinInfo;
+  if (!Array.isArray(info)) return null;
+  const names = info.map((pin) => String(pin?.name ?? '').trim()).filter(Boolean);
+  return names.length > 0 ? names : null;
 }
 
 function resolveBoard(sim: MutableState, requested?: string): MutableState | null {
@@ -71,7 +226,7 @@ function filesForBoard(editor: MutableState, board: MutableState | null): Array<
   return (source ?? []).map((f: MutableState) => ({ name: f.name, content: f.content }));
 }
 
-export async function executeToolCall(toolCall: ToolCall): Promise<string> {
+export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal): Promise<string> {
   const { name, arguments: argsStr } = toolCall.function;
   let args: Record<string, any> = {};
   try {
@@ -80,9 +235,14 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
     return JSON.stringify({ error: 'Invalid tool arguments' });
   }
 
+  if (signal?.aborted) return abortResult();
+
   const { useSimulatorStore } = await import('../store/useSimulatorStore');
   const { useCompileLogsStore } = await import('../store/useCompileLogsStore');
   const { useEditorStore } = await import('../store/useEditorStore');
+  simulatorStoreRef = useSimulatorStore;
+
+  if (signal?.aborted) return abortResult();
 
   switch (name) {
     case 'add_board': {
@@ -122,13 +282,138 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
       sim.recordAddComponent(component);
       return JSON.stringify({ success: true, component_id: component.id, type: resolved.id });
     }
+    case 'build_circuit': {
+      const metadata = await loadComponentMetadata();
+      const rawComponents = Array.isArray(args.components) ? args.components : [];
+      const rawWires = Array.isArray(args.wires) ? args.wires : [];
+      if (rawComponents.length === 0) {
+        return JSON.stringify({ error: 'build_circuit needs at least one component. Use add_board for boards.' });
+      }
+
+      const sim = useSimulatorStore.getState();
+      const known = new Set<string>([
+        ...sim.boards.map((b: MutableState) => b.id),
+        ...sim.components.map((c: MutableState) => c.id),
+      ]);
+      const refs = new Set<string>();
+      const prepared: Array<{ ref: string; resolved: ComponentMeta; raw: MutableState }> = [];
+
+      for (const raw of rawComponents) {
+        const ref = String(raw?.ref ?? '').trim();
+        if (!ref) return JSON.stringify({ error: 'Every component in build_circuit needs a ref such as "led1".' });
+        if (refs.has(ref) || known.has(ref)) {
+          return JSON.stringify({ error: `Duplicate component ref ${ref}. Use a unique ref for each part.` });
+        }
+        refs.add(ref);
+        const requested = String(raw?.type ?? '');
+        const resolved = resolveComponentType(requested, metadata);
+        if (!resolved) {
+          return JSON.stringify({
+            error: `Unknown component type: ${requested}`,
+            suggestions: metadata
+              .filter((m) => m.id.includes(requested.replace(/^wokwi-/, '').toLowerCase()))
+              .slice(0, 10)
+              .map((m) => m.id),
+          });
+        }
+        prepared.push({ ref, resolved, raw });
+      }
+
+      const boardById = new Map<string, MutableState>(sim.boards.map((b: MutableState) => [b.id, b]));
+      for (const wire of rawWires) {
+        const from = String(wire?.from ?? wire?.from_part ?? '');
+        const to = String(wire?.to ?? wire?.to_part ?? '');
+        const fromPin = String(wire?.from_pin ?? '');
+        const toPin = String(wire?.to_pin ?? '');
+        if (!from || !to || !fromPin || !toPin) {
+          return JSON.stringify({ error: 'Every wire needs from, from_pin, to and to_pin.' });
+        }
+        for (const part of [from, to]) {
+          if (refs.has(part) || known.has(part)) continue;
+          return JSON.stringify({ error: `Wire endpoint ${part} is neither a ref in this build nor a part already on the canvas.` });
+        }
+        const fromBoard = boardById.get(from);
+        if (fromBoard && !boardPinExists(fromBoard.boardKind, fromPin)) {
+          return JSON.stringify({ error: `Board pin ${fromPin} does not exist on ${fromBoard.boardKind}.` });
+        }
+        const toBoard = boardById.get(to);
+        if (toBoard && !boardPinExists(toBoard.boardKind, toPin)) {
+          return JSON.stringify({ error: `Board pin ${toPin} does not exist on ${toBoard.boardKind}.` });
+        }
+      }
+
+      const stamp = Date.now();
+      const created: Array<{ ref: string; component_id: string; type: string }> = [];
+      const refMap = new Map<string, string>();
+      for (let index = 0; index < prepared.length; index++) {
+        const { ref, resolved, raw } = prepared[index];
+        const id = `comp-${stamp}-${index}`;
+        const component = {
+          id,
+          metadataId: resolved.id,
+          left: raw.x ?? 200,
+          top: raw.y ?? 200,
+          rotate: raw.rotation ?? 0,
+          attrs: raw.attrs ?? {},
+          x: raw.x ?? 200,
+          y: raw.y ?? 200,
+          properties: raw.attrs ?? {},
+        } as MutableState;
+        useSimulatorStore.getState().recordAddComponent(component);
+        refMap.set(ref, id);
+        created.push({ ref, component_id: id, type: resolved.id });
+      }
+      lastBuildRefs = refMap;
+
+      const addedWires: Array<Record<string, unknown>> = [];
+      for (let index = 0; index < rawWires.length; index++) {
+        const raw = rawWires[index];
+        const from = refMap.get(String(raw.from ?? raw.from_part)) ?? String(raw.from ?? raw.from_part);
+        const to = refMap.get(String(raw.to ?? raw.to_part)) ?? String(raw.to ?? raw.to_part);
+        const waypoints = Array.isArray(raw.waypoints)
+          ? raw.waypoints
+              .filter((point: unknown): point is { x: number; y: number } => {
+                if (!point || typeof point !== 'object') return false;
+                const value = point as { x?: unknown; y?: unknown };
+                return typeof value.x === 'number' && typeof value.y === 'number';
+              })
+              .map((point: { x: number; y: number }) => ({ x: point.x, y: point.y }))
+          : [];
+        const wire = {
+          id: `wire-${stamp}-${index}`,
+          start: { componentId: from, pinName: String(raw.from_pin) },
+          end: { componentId: to, pinName: String(raw.to_pin) },
+          color: raw.color ?? 'green',
+          waypoints,
+        } as MutableState;
+        useSimulatorStore.getState().recordAddWire(wire);
+        addedWires.push({
+          wire_id: wire.id,
+          from_part: from,
+          from_pin: wire.start.pinName,
+          to_part: to,
+          to_pin: wire.end.pinName,
+        });
+      }
+
+      const audit = currentAudit(useSimulatorStore.getState());
+      return JSON.stringify({
+        success: true,
+        components: created,
+        wires: addedWires,
+        wiring: audit,
+        next_actions: audit.next_actions,
+      });
+    }
     case 'remove_component': {
       const sim = useSimulatorStore.getState();
       if (!sim.components.some((c: MutableState) => c.id === args.component_id)) {
-        return JSON.stringify({ error: `Component not found: ${args.component_id}` });
+        // Removal is idempotent: a retry after a stale id must not trap the
+        // agent in a loop when the part is already gone.
+        return JSON.stringify({ success: true, component_id: args.component_id, already_removed: true });
       }
       sim.recordRemoveComponent(args.component_id);
-      return JSON.stringify({ success: true });
+      return JSON.stringify({ success: true, component_id: args.component_id });
     }
     case 'set_component_property': {
       const sim = useSimulatorStore.getState();
@@ -151,9 +436,50 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
         ...sim.boards.map((b: MutableState) => b.id),
         ...sim.components.map((c: MutableState) => c.id),
       ]);
-      for (const id of [args.from_part, args.to_part]) {
-        if (!known.has(id)) return JSON.stringify({ error: `Part not found on canvas: ${id}` });
+      const fromId = resolvePartId(String(args.from_part), known);
+      const toId = resolvePartId(String(args.to_part), known);
+      if (!fromId) return JSON.stringify({ error: `Part not found on canvas: ${args.from_part}` });
+      if (!toId) return JSON.stringify({ error: `Part not found on canvas: ${args.to_part}` });
+
+      const fromBoard = sim.boards.find((b: MutableState) => b.id === fromId);
+      if (fromBoard && !boardPinExists(fromBoard.boardKind, String(args.from_pin))) {
+        return JSON.stringify({
+          error: `Board pin ${args.from_pin} does not exist on ${fromBoard.boardKind}. Use get_pin_names to read the exact pin names.`,
+        });
       }
+      const toBoard = sim.boards.find((b: MutableState) => b.id === toId);
+      if (toBoard && !boardPinExists(toBoard.boardKind, String(args.to_pin))) {
+        return JSON.stringify({
+          error: `Board pin ${args.to_pin} does not exist on ${toBoard.boardKind}. Use get_pin_names to read the exact pin names.`,
+        });
+      }
+      const fromPins = componentPinNames(fromId);
+      if (fromPins && !fromPins.includes(String(args.from_pin))) {
+        return JSON.stringify({
+          error: `Pin ${args.from_pin} does not exist on ${fromId}. Valid pins: ${fromPins.join(', ')}.`,
+        });
+      }
+      const toPins = componentPinNames(toId);
+      if (toPins && !toPins.includes(String(args.to_pin))) {
+        return JSON.stringify({
+          error: `Pin ${args.to_pin} does not exist on ${toId}. Valid pins: ${toPins.join(', ')}.`,
+        });
+      }
+      const duplicate = sim.wires.find(
+        (w: MutableState) =>
+          (w.start.componentId === fromId &&
+            w.start.pinName === args.from_pin &&
+            w.end.componentId === toId &&
+            w.end.pinName === args.to_pin) ||
+          (w.start.componentId === toId &&
+            w.start.pinName === args.to_pin &&
+            w.end.componentId === fromId &&
+            w.end.pinName === args.from_pin),
+      );
+      if (duplicate) {
+        return JSON.stringify({ success: true, wire_id: duplicate.id, duplicate: true });
+      }
+
       const waypoints = Array.isArray(args.waypoints)
         ? args.waypoints
             .filter((p: unknown): p is { x: number; y: number } => {
@@ -164,22 +490,30 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
             .map((p) => ({ x: p.x, y: p.y }))
         : [];
       const wire = {
-        id: `wire-${Date.now()}`,
-        start: { componentId: args.from_part, pinName: args.from_pin },
-        end: { componentId: args.to_part, pinName: args.to_pin },
+        id: `wire-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        start: { componentId: fromId, pinName: String(args.from_pin) },
+        end: { componentId: toId, pinName: String(args.to_pin) },
         color: args.color ?? 'green',
         waypoints,
       } as any;
       sim.recordAddWire(wire);
-      return JSON.stringify({ success: true, wire_id: wire.id });
+      const audit = currentAudit(useSimulatorStore.getState());
+      return JSON.stringify({
+        success: true,
+        wire_id: wire.id,
+        wiring_complete: audit.complete,
+        next_actions: audit.next_actions,
+      });
     }
     case 'remove_wire': {
       const sim = useSimulatorStore.getState();
       if (!sim.wires.some((w: MutableState) => w.id === args.wire_id)) {
-        return JSON.stringify({ error: `Wire not found: ${args.wire_id}` });
+        // Idempotent for the same reason as remove_component: a stale id from
+        // an earlier turn must not stall the repair loop.
+        return JSON.stringify({ success: true, wire_id: args.wire_id, already_removed: true });
       }
       sim.recordRemoveWire(args.wire_id);
-      return JSON.stringify({ success: true });
+      return JSON.stringify({ success: true, wire_id: args.wire_id });
     }
     case 'get_pin_names': {
       let pins: Array<{ name: string; signals: string[] }> = [];
@@ -200,29 +534,19 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
       return JSON.stringify({ part_id: args.part_id, pins });
     }
     case 'check_wiring': {
-      const sim = useSimulatorStore.getState();
-      const wires = sim.wires.map((w: MutableState) => ({
-        id: w.id,
-        from_part: w.start.componentId,
-        from_pin: w.start.pinName,
-        to_part: w.end.componentId,
-        to_pin: w.end.pinName,
-      }));
-      const knownParts = new Set<string>(
-        [...sim.boards.map((b: MutableState) => b.id), ...sim.components.map((c: MutableState) => c.id)],
-      );
-      const usedParts = new Set(wires.flatMap((w: Record<string, string>) => [w.from_part, w.to_part]));
-      const unconnected_components = sim.components
-        .filter((c: MutableState) => !usedParts.has(c.id))
-        .map((c: MutableState) => ({ component_id: c.id, type: c.metadataId }));
-      const orphan_wires = wires.filter(
-        (w: Record<string, string>) => !knownParts.has(w.from_part) || !knownParts.has(w.to_part),
-      );
+      const audit = currentAudit(useSimulatorStore.getState());
+      const includeWires = args.include_wires !== false;
       return JSON.stringify({
-        wire_count: wires.length,
-        wires,
-        unconnected_components,
-        orphan_wires,
+        complete: audit.complete,
+        wire_count: audit.wire_count,
+        blocking_issues: audit.blocking_issues,
+        warnings: audit.warnings,
+        unconnected_components: audit.unconnected_components,
+        incomplete_components: audit.incomplete_components,
+        orphan_wires: audit.orphan_wires,
+        boards_without_ground: audit.boards_without_ground,
+        next_actions: audit.next_actions,
+        ...(includeWires ? { wires: audit.wires } : {}),
       });
     }
     case 'compile_code': {
@@ -231,6 +555,9 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
       const { parseCompileResult } = await import('../utils/compilationLogger');
 
       const sim = useSimulatorStore.getState();
+      const audit = currentAudit(sim);
+      if (!audit.complete) return wiringBlocked(audit);
+
       const board = resolveBoard(sim, args.board_id);
       if (!board) return JSON.stringify({ error: `Board not found: ${args.board_id ?? '(active)'}` });
       const fqbn = (BOARD_KIND_FQBN as Record<string, string | null>)[board.boardKind];
@@ -247,10 +574,12 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
 
       let result: MutableState;
       try {
-        result = await compileCode(files, fqbn, null);
+        result = await raceAbort(compileCode(files, fqbn, null), signal);
       } catch (error) {
+        if (signal?.aborted) return abortResult();
         return JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) });
       }
+      throwIfAborted(signal);
 
       useCompileLogsStore.getState().appendLogs(parseCompileResult(result, board.name || board.boardKind, {
         id: board.id,
@@ -276,56 +605,149 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
         return JSON.stringify({ success: false, board_id: board.id, error: 'Compiler produced no program image' });
       }
       sim.compileBoardProgram(board.id, program);
+
+      let run: MutableState = null;
+      if (args.run_after === true) {
+        useSimulatorStore.getState().startBoard(board.id);
+        const observed = await observeBoard(
+          useSimulatorStore.getState(),
+          board.id,
+          Number(args.observe_ms ?? 1500),
+          signal,
+        );
+        run = observed;
+      }
+
       return JSON.stringify({
         success: true,
         board_id: board.id,
         board_kind: board.boardKind,
         message: 'Compilation successful; firmware loaded into the board',
+        wiring_complete: audit.complete,
         stdout_tail: tail(result.stdout, 2000),
+        ...(run ? { run } : {}),
       });
     }
     case 'compile_all_code': {
       const sim = useSimulatorStore.getState();
+      const audit = currentAudit(sim);
+      if (!audit.complete) return wiringBlocked(audit);
+
       const results: Array<Record<string, unknown>> = [];
       for (const board of sim.boards) {
-        const raw = await executeToolCall({
-          id: `compile-${board.id}`,
-          type: 'function',
-          function: { name: 'compile_code', arguments: JSON.stringify({ board_id: board.id }) },
-        });
+        throwIfAborted(signal);
+        const raw = await executeToolCall(
+          {
+            id: `compile-${board.id}`,
+            type: 'function',
+            function: { name: 'compile_code', arguments: JSON.stringify({ board_id: board.id, run_after: false }) },
+          },
+          signal,
+        );
+        if (signal?.aborted) return abortResult();
         results.push({ board_id: board.id, ...JSON.parse(raw) });
       }
+
+      let runs: MutableState[] = [];
+      if (args.run_after === true) {
+        const refreshed = useSimulatorStore.getState();
+        for (const board of refreshed.boards) {
+          if (!board.compiledProgram) continue;
+          refreshed.startBoard(board.id);
+        }
+        for (const board of useSimulatorStore.getState().boards) {
+          if (!board.compiledProgram) continue;
+          runs.push({
+            board_id: board.id,
+            ...(await observeBoard(
+              useSimulatorStore.getState(),
+              board.id,
+              Number(args.observe_ms ?? 1200),
+              signal,
+            )),
+          });
+        }
+      }
+
       return JSON.stringify({
         success: results.every(r => r.success === true),
+        wiring_complete: audit.complete,
         boards: results,
+        ...(runs.length > 0 ? { runs } : {}),
       });
     }
     case 'run_simulation': {
       const sim = useSimulatorStore.getState();
+      const audit = currentAudit(sim);
+      if (!audit.complete) return wiringBlocked(audit);
+
+      const runAll = args.run_all === true;
       const board = resolveBoard(sim, args.board_id);
-      if (!board) return JSON.stringify({ error: `Board not found: ${args.board_id ?? '(active)'}` });
-      if (!board.compiledProgram) {
+      if (!runAll && !board) return JSON.stringify({ error: `Board not found: ${args.board_id ?? '(active)'}` });
+      if (!runAll && !board.compiledProgram) {
         return JSON.stringify({
           error: `Board ${board.id} has no compiled firmware. Call compile_code before run_simulation.`,
         });
       }
-      if (args.board_id) sim.startBoard(board.id);
-      else sim.startSimulation();
-      const running = useSimulatorStore.getState().boards.find((b: MutableState) => b.id === board.id)?.running ?? false;
+
+      const started: string[] = [];
+      if (runAll) {
+        for (const candidate of sim.boards) {
+          if (!candidate.compiledProgram) continue;
+          useSimulatorStore.getState().startBoard(candidate.id);
+          started.push(candidate.id);
+        }
+      } else if (args.board_id) {
+        sim.startBoard(board.id);
+        started.push(board.id);
+      } else {
+        sim.startSimulation();
+        started.push(board.id);
+      }
+
+      const observeMs = Number(args.observe_ms ?? 1500);
+      const runs = [];
+      for (const boardId of started) {
+        runs.push({
+          board_id: boardId,
+          ...(await observeBoard(useSimulatorStore.getState(), boardId, observeMs, signal)),
+        });
+      }
+      const first = runs[0];
       return JSON.stringify({
         success: true,
-        board_id: board.id,
-        running,
-        message: running ? 'Simulation running' : 'Start requested; check get_simulation_output for state',
+        board_id: runAll ? null : board.id,
+        run_all: runAll,
+        started,
+        running: first?.running ?? false,
+        serial_output: first?.serial_output ?? '',
+        serial_length: first?.serial_length ?? 0,
+        crash_board_id: first?.crash_board_id ?? null,
+        runs,
+        message: first?.serial_output
+          ? 'Simulation running; serial output captured'
+          : 'Simulation started; no serial output yet',
       });
     }
     case 'stop_simulation': {
       const sim = useSimulatorStore.getState();
-      const board = resolveBoard(sim, args.board_id);
-      if (!board) return JSON.stringify({ error: `Board not found: ${args.board_id ?? '(active)'}` });
-      if (args.board_id) sim.stopBoard(board.id);
-      else sim.stopSimulation();
-      return JSON.stringify({ success: true, board_id: board.id, message: 'Simulation stopped' });
+      const stopped: string[] = [];
+      if (args.board_id) {
+        const board = resolveBoard(sim, args.board_id);
+        if (!board) return JSON.stringify({ error: `Board not found: ${args.board_id}` });
+        sim.stopBoard(board.id);
+        stopped.push(board.id);
+      } else {
+        for (const board of sim.boards) {
+          sim.stopBoard(board.id);
+          stopped.push(board.id);
+        }
+        if (sim.boards.length === 0) {
+          const { useElectricalStore } = await import('../store/useElectricalStore');
+          useElectricalStore.getState().setPaused(true);
+        }
+      }
+      return JSON.stringify({ success: true, stopped, message: 'Simulation stopped' });
     }
     case 'reset_simulation': {
       const sim = useSimulatorStore.getState();
@@ -336,18 +758,26 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
     }
     case 'get_simulation_output': {
       const sim = useSimulatorStore.getState();
-      const boards = sim.boards.map((b: MutableState) => ({
+      const waitMs = Number(args.wait_ms ?? 0);
+      const observed = waitMs > 0
+        ? await observeBoard(sim, args.board_id, waitMs, signal)
+        : { ...boardOutput(sim, args.board_id), waited_ms: 0 };
+      const boards = useSimulatorStore.getState().boards.map((b: MutableState) => ({
         id: b.id,
         kind: b.boardKind,
         running: Boolean(b.running),
         compiled: Boolean(b.compiledProgram),
+        serial_length: b.serialOutput?.length ?? 0,
         serial_output: tail(b.serialOutput, 4000),
       }));
       return JSON.stringify({
         active_board_id: sim.activeBoardId,
-        serial_output: tail(sim.serialOutput, 4000),
+        serial_output: observed.serial_output,
+        serial_length: observed.serial_length,
+        running: observed.running,
+        waited_ms: observed.waited_ms,
         baud_rate: sim.serialBaudRate,
-        crash_board_id: sim.esp32CrashBoardId,
+        crash_board_id: observed.crash_board_id,
         boards,
       });
     }
@@ -391,8 +821,11 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
     }
     case 'get_circuit_state': {
       const sim = useSimulatorStore.getState();
+      const audit = currentAudit(sim);
       return JSON.stringify({
         active_board_id: sim.activeBoardId,
+        wiring_complete: audit.complete,
+        wiring_issue_count: audit.blocking_issues.length,
         boards: sim.boards.map((b: MutableState) => ({
           id: b.id,
           kind: b.boardKind,
@@ -400,6 +833,7 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
           y: b.y,
           running: Boolean(b.running),
           compiled: Boolean(b.compiledProgram),
+          serial_length: b.serialOutput?.length ?? 0,
         })),
         components: sim.components.map((c: MutableState) => ({
           id: c.id,
@@ -508,11 +942,11 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
 
       switch (component) {
         case 'qemu-esp32':
-          success = await installQemuRuntime('esp32');
+          success = await raceAbort(installQemuRuntime('esp32'), signal);
           message = success ? 'ESP32 QEMU runtime installed' : 'ESP32 QEMU install failed or requires the desktop app';
           break;
         case 'qemu-stm32':
-          success = await installQemuRuntime('stm32');
+          success = await raceAbort(installQemuRuntime('stm32'), signal);
           message = success ? 'STM32 QEMU runtime installed' : 'STM32 QEMU install failed or requires the desktop app';
           break;
         case 'arduino-core': {
@@ -523,7 +957,7 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
             if (fqbn) core = fqbn.split(':').slice(0, 2).join(':');
           }
           if (!core) return JSON.stringify({ error: 'Provide a core identifier such as arduino:avr when no board is selected' });
-          success = await installArduinoCore(core);
+          success = await raceAbort(installArduinoCore(core), signal);
           message = success ? `Installed Arduino core ${core}` : `Failed to install Arduino core ${core}`;
           break;
         }
@@ -531,10 +965,10 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
           if (!board) return JSON.stringify({ error: 'A board is required to install MicroPython firmware' });
           if (isEsp32Kind(board.boardKind)) {
             const { getEsp32Firmware } = await import('../simulation/Esp32MicroPythonLoader');
-            await getEsp32Firmware(board.boardKind);
+            await raceAbort(getEsp32Firmware(board.boardKind), signal);
           } else {
             const { getFirmware } = await import('../simulation/MicroPythonLoader');
-            await getFirmware();
+            await raceAbort(getFirmware(), signal);
           }
           success = true;
           message = 'MicroPython firmware downloaded and cached';
@@ -542,7 +976,7 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
         }
         case 'all-for-board': {
           if (!board) return JSON.stringify({ error: 'A board is required for all-for-board installation' });
-          await autoInstallForBoard(board.boardKind);
+          await raceAbort(autoInstallForBoard(board.boardKind), signal);
           success = true;
           message = `Installed runtimes and core required by ${board.boardKind}`;
           break;
@@ -585,7 +1019,10 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
       const name = String(args.name ?? '').trim();
       if (!name) return JSON.stringify({ error: 'A library name is required' });
       try {
-        const result = await installLibrary(name, typeof args.version === 'string' ? args.version : undefined);
+        const result = await raceAbort(
+          installLibrary(name, typeof args.version === 'string' ? args.version : undefined),
+          signal,
+        );
         return JSON.stringify({ success: Boolean(result.success), library: name, result });
       } catch (error) {
         return JSON.stringify({ error: error instanceof Error ? error.message : String(error) });
@@ -628,18 +1065,22 @@ export async function executeToolCall(toolCall: ToolCall): Promise<string> {
         })),
       });
 
-      const reply = await provider.chat({
-        messages: [
-          { id: 'sub-system', role: 'system', content: SUBAGENT_PROMPTS[role], timestamp: Date.now() },
-          {
-            id: 'sub-task',
-            role: 'user',
-            content: `Task: ${task}\nCurrent circuit: ${context}`,
-            timestamp: Date.now(),
-          },
-        ],
-        model: config.model,
-      });
+      const reply = await raceAbort(
+        provider.chat({
+          messages: [
+            { id: 'sub-system', role: 'system', content: SUBAGENT_PROMPTS[role], timestamp: Date.now() },
+            {
+              id: 'sub-task',
+              role: 'user',
+              content: `Task: ${task}\nCurrent circuit: ${context}`,
+              timestamp: Date.now(),
+            },
+          ],
+          model: config.model,
+          signal,
+        }),
+        signal,
+      );
 
       return JSON.stringify({ success: true, role, response: reply.content });
     }

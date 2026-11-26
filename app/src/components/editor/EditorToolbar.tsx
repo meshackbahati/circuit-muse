@@ -118,10 +118,10 @@ export const EditorToolbar = ({
     updateBoard,
     startBoard,
     stopBoard,
+    stopAllBoards,
     resetBoard,
     // legacy compat
     startSimulation,
-    stopSimulation,
     resetSimulation,
     running,
     compiledHex,
@@ -855,12 +855,10 @@ export const EditorToolbar = ({
       setMessage(null);
       return;
     }
-    // Stop EVERY running board — Run-All can start several, and leaving any
-    // running keeps chips ticking (their gate is boards.some(running)).
-    const runningBoards = useSimulatorStore.getState().boards.filter((b) => b.running);
-    if (runningBoards.length > 0) runningBoards.forEach((b) => stopBoard(b.id));
-    else if (activeBoardId) stopBoard(activeBoardId);
-    else stopSimulation();
+    // Stop EVERY board, not just the boards whose running flag happens to be
+    // set. Run-All can start several boards, and a remote bridge can still be
+    // alive after its flag drifted; stopAllBoards cuts both.
+    stopAllBoards();
     // A chip wired to a board drives its LEDs via its own SPICE sources, which
     // stopBoard doesn't touch — clear them so those LEDs also go dark.
     clearAllChipDrives();

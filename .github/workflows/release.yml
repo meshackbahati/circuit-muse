@@ -74,8 +74,9 @@ jobs:
       - name: Verify sidecars are populated
         shell: bash
         run: |
-          test -s src-tauri/binaries/circuit-muse-engine-* || { echo "engine sidecar is empty"; exit 1; }
-          test -s src-tauri/binaries/arduino-cli-* || { echo "arduino-cli sidecar is empty"; exit 1; }
+          for sidecar in src-tauri/binaries/circuit-muse-engine-* src-tauri/binaries/arduino-cli-*; do
+            if [ ! -s "$sidecar" ]; then echo "sidecar is empty: $sidecar"; exit 1; fi
+          done
 
       - name: Install app dependencies and build
         working-directory: app
@@ -144,8 +145,9 @@ jobs:
       - name: Verify sidecars are populated
         shell: bash
         run: |
-          test -s src-tauri/binaries/circuit-muse-engine-* || { echo "engine sidecar is empty"; exit 1; }
-          test -s src-tauri/binaries/arduino-cli-* || { echo "arduino-cli sidecar is empty"; exit 1; }
+          for sidecar in src-tauri/binaries/circuit-muse-engine-* src-tauri/binaries/arduino-cli-*; do
+            if [ ! -s "$sidecar" ]; then echo "sidecar is empty: $sidecar"; exit 1; fi
+          done
 
       - name: Install app dependencies and build
         working-directory: app
@@ -210,8 +212,9 @@ jobs:
       - name: Verify sidecars are populated
         shell: bash
         run: |
-          test -s src-tauri/binaries/circuit-muse-engine-* || { echo "engine sidecar is empty"; exit 1; }
-          test -s src-tauri/binaries/arduino-cli-* || { echo "arduino-cli sidecar is empty"; exit 1; }
+          for sidecar in src-tauri/binaries/circuit-muse-engine-* src-tauri/binaries/arduino-cli-*; do
+            if [ ! -s "$sidecar" ]; then echo "sidecar is empty: $sidecar"; exit 1; fi
+          done
 
       - name: Install app dependencies and build
         working-directory: app
@@ -281,8 +284,9 @@ jobs:
       - name: Verify sidecars are populated
         shell: bash
         run: |
-          test -s src-tauri/binaries/circuit-muse-engine-* || { echo "engine sidecar is empty"; exit 1; }
-          test -s src-tauri/binaries/arduino-cli-* || { echo "arduino-cli sidecar is empty"; exit 1; }
+          for sidecar in src-tauri/binaries/circuit-muse-engine-* src-tauri/binaries/arduino-cli-*; do
+            if [ ! -s "$sidecar" ]; then echo "sidecar is empty: $sidecar"; exit 1; fi
+          done
 
       - name: Install app dependencies and build
         working-directory: app
@@ -344,8 +348,9 @@ jobs:
       - name: Verify sidecars are populated
         shell: bash
         run: |
-          test -s src-tauri/binaries/circuit-muse-engine-* || { echo "engine sidecar is empty"; exit 1; }
-          test -s src-tauri/binaries/arduino-cli-* || { echo "arduino-cli sidecar is empty"; exit 1; }
+          for sidecar in src-tauri/binaries/circuit-muse-engine-* src-tauri/binaries/arduino-cli-*; do
+            if [ ! -s "$sidecar" ]; then echo "sidecar is empty: $sidecar"; exit 1; fi
+          done
 
       - name: Install app dependencies and build
         working-directory: app
@@ -367,7 +372,7 @@ jobs:
           cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
-          pkgver=1.0.7
+          pkgver=1.0.8
           pkgrel=1
           pkgdesc="AI-powered circuit simulator and embedded board emulator"
           arch=('x86_64')
@@ -422,6 +427,10 @@ jobs:
 
             ### Changes in this release
 
+            - Chat Stop now cancels the provider stream and any tool that is already running, and the chat leaves its streaming state on the same click.
+            - The agent wires before it compiles. Compiling and running are refused while the wiring audit reports dangling parts, missing required pins, orphan wires, or a board without ground.
+            - A batch circuit builder, combined compile and run, and serial observation shorten the build loop. The agent continues through compile and runtime failures and checks serial output against the requested behaviour before it reports completion.
+            - Editor dialogs now show readable English labels instead of raw translation keys, including the property dialog and the component picker.
             - NVIDIA NIM now works in the desktop app. Model discovery and chat requests are relayed through the bundled local engine because the NVIDIA API sends no CORS headers to the desktop WebView. The live API returned its current catalogue and accepted streaming tool calls.
             - Model lists are discovered from each provider API at runtime. No model names are bundled.
             - Anthropic requests now send the browser access header that Anthropic requires, so direct calls succeed from the desktop shell.
@@ -475,7 +484,7 @@ jobs:
             |----------|--------|-------|
             | **Linux (x86_64)** | AppImage | Universal, works on Ubuntu, Debian, Fedora, Arch, and derivatives |
             | **Linux (x86_64)** | .deb | Debian/Ubuntu/Mint |
-            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.0.7-1-x86_64.pkg.tar.zst` |
+            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.0.8-1-x86_64.pkg.tar.zst` |
             | **Windows (x86_64)** | .exe (NSIS) | Windows 10/11 installer |
             | **Windows (x86_64)** | .msi | Windows MSI installer |
             | **macOS (ARM64)** | .dmg | Apple Silicon (M1/M2/M3/M4) |

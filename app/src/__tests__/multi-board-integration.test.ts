@@ -311,6 +311,24 @@ describe('useSimulatorStore — multi-board', () => {
     expect(board?.serialMonitorOpen).toBe(true);
   });
 
+  it('stopAllBoards clears every board even when the flat running flag drifted', () => {
+    const { addBoard, updateBoard, stopAllBoards } = useSimulatorStore.getState();
+    const first = addBoard('arduino-nano', 0, 0);
+    const second = addBoard('arduino-mega', 100, 0);
+    // Simulate the stale state that made the toolbar Stop appear broken:
+    // one board is flagged running while the flat flag says stopped.
+    updateBoard(first, { running: true });
+    updateBoard(second, { running: true });
+    useSimulatorStore.getState().setRunning(false);
+
+    stopAllBoards();
+
+    const state = useSimulatorStore.getState();
+    expect(state.running).toBe(false);
+    expect(state.boards.find((b) => b.id === first)?.running).toBe(false);
+    expect(state.boards.find((b) => b.id === second)?.running).toBe(false);
+  });
+
   it('addBoard for raspberry-pi-3 creates a bridge (not a simulator)', () => {
     const { addBoard } = useSimulatorStore.getState();
     const id = addBoard('raspberry-pi-3', 500, 50);

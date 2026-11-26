@@ -22,6 +22,8 @@ import {
   type TriggerEdge,
 } from '../../store/useOscilloscopeStore';
 import { useSimulatorStore } from '../../store/useSimulatorStore';
+import { useEditorStore } from '../../store/useEditorStore';
+import { channelHints, chooseChannelPin } from '../../utils/oscilloscopeChannelHints';
 import { boardDisplayName } from '../../types/board';
 import type { BoardKind } from '../../types/board';
 import './Oscilloscope.css';
@@ -620,9 +622,19 @@ export const Oscilloscope: React.FC = () => {
       if (wire.end.componentId === board.id) wired.add(wire.end.pinName);
     }
     const pins = getPinsForBoardKind(board.boardKind);
-    const choice = pins.find((p) => wired.has(String(p.pin))) ?? pins[0];
+    const editor = useEditorStore.getState();
+    const group = editor.fileGroups[board.activeFileGroupId] ?? [];
+    const files = group.length > 0 ? group : editor.files;
+    const hints = channelHints(files.map((file) => file.content ?? '').join('\n'));
+    const selectedPin = chooseChannelPin(
+      pins.map((pin) => pin.pin),
+      wired,
+      hints.pins,
+    );
+    const choice = pins.find((pin) => pin.pin === selectedPin);
     if (choice) addChannel(board.id, choice.pin, choice.label);
-  }, [boards, activeBoardId, channels.length, addChannel]);
+    if (hints.timeDivMs !== null) setTimeDivMs(hints.timeDivMs);
+  }, [boards, activeBoardId, channels.length, addChannel, setTimeDivMs]);
 
   const [showPicker, setShowPicker] = useState(false);
   const [pickerAnchor, setPickerAnchor] = useState<DOMRect | null>(null);
@@ -649,12 +661,19 @@ export const Oscilloscope: React.FC = () => {
       if (wire.end.componentId === board.id) wired.add(wire.end.pinName);
     }
     const pins = getPinsForBoardKind(board.boardKind);
-    const choice =
-      pins.find((pin) => wired.has(String(pin.pin))) ??
-      pins.find((pin) => pin.pin === 13) ??
-      pins[0];
+    const editor = useEditorStore.getState();
+    const group = editor.fileGroups[board.activeFileGroupId] ?? [];
+    const files = group.length > 0 ? group : editor.files;
+    const hints = channelHints(files.map((file) => file.content ?? '').join('\n'));
+    const selectedPin = chooseChannelPin(
+      pins.map((pin) => pin.pin),
+      wired,
+      hints.pins,
+    );
+    const choice = pins.find((pin) => pin.pin === selectedPin);
     if (choice) addChannel(board.id, choice.pin, choice.label);
-  }, [boards, activeBoardId, addChannel]);
+    if (hints.timeDivMs !== null) setTimeDivMs(hints.timeDivMs);
+  }, [boards, activeBoardId, addChannel, setTimeDivMs]);
 
   const handleTogglePicker = () => {
     if (showPicker) {

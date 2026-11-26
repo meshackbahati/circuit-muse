@@ -86,6 +86,58 @@ export const AGENT_TOOLS: ToolDefinition[] = [
   {
     type: 'function',
     function: {
+      name: 'build_circuit',
+      description: 'Add many components and their wires in one call. Use refs such as "led1" and "r1" for new parts, then refer to those refs in wires. This is faster than one add_component and wire_components call per part, and it returns a full wiring audit so dangling parts are caught immediately.',
+      parameters: {
+        type: 'object',
+        properties: {
+          components: {
+            type: 'array',
+            description: 'Parts to add. Each part needs a unique ref, a type from list_available_components, and a position.',
+            items: {
+              type: 'object',
+              properties: {
+                ref: { type: 'string', description: 'Short unique name used by wires, for example led1' },
+                type: { type: 'string', description: 'Component type id' },
+                x: { type: 'number' },
+                y: { type: 'number' },
+                rotation: { type: 'number' },
+                attrs: { type: 'object', description: 'Component properties, for example {"value":"220"}' },
+              },
+              required: ['ref', 'type', 'x', 'y'],
+            },
+          },
+          wires: {
+            type: 'array',
+            description: 'Connections between refs or existing board/component ids.',
+            items: {
+              type: 'object',
+              properties: {
+                from: { type: 'string', description: 'Source ref or existing part id' },
+                from_pin: { type: 'string' },
+                to: { type: 'string', description: 'Destination ref or existing part id' },
+                to_pin: { type: 'string' },
+                color: { type: 'string' },
+                waypoints: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: { x: { type: 'number' }, y: { type: 'number' } },
+                    required: ['x', 'y'],
+                  },
+                },
+              },
+              required: ['from', 'from_pin', 'to', 'to_pin'],
+            },
+          },
+        },
+        required: ['components', 'wires'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
       name: 'remove_component',
       description: 'Remove a component and its wires when a wiring or layout mistake must be corrected.',
       parameters: {
@@ -157,8 +209,13 @@ export const AGENT_TOOLS: ToolDefinition[] = [
     type: 'function',
     function: {
       name: 'check_wiring',
-      description: 'Report the canvas wiring: every wire with endpoints, components with no wires on them, and any wires that point at missing parts. Use this after creating components or wires to make sure nothing is left dangling.',
-      parameters: { type: 'object', properties: {} },
+      description: 'Audit every part and wire. A part is complete only when all of its required pins are connected, not merely when one wire touches it. Returns blocking_issues, missing pins, orphan wires, boards without ground and next_actions. Compile and run are refused while this audit is incomplete, so call it after adding parts and again after changing wires.',
+      parameters: {
+        type: 'object',
+        properties: {
+          include_wires: { type: 'boolean', description: 'Set false for a compact audit without the wire list' },
+        },
+      },
     },
   },
   {
@@ -195,10 +252,14 @@ export const AGENT_TOOLS: ToolDefinition[] = [
     type: 'function',
     function: {
       name: 'compile_code',
-      description: 'Compile a board sketch and load the resulting firmware. Returns compiler diagnostics on failure. Always compile after writing or changing code.',
+      description: 'Compile a board sketch and load the resulting firmware. Refuses to compile while check_wiring reports blocking issues, because firmware cannot be tested on a half-wired circuit. Set run_after true to start the board and capture serial output in the same call.',
       parameters: {
         type: 'object',
-        properties: { board_id: { type: 'string', description: 'Optional board id; defaults to the active board' } },
+        properties: {
+          board_id: { type: 'string', description: 'Optional board id; defaults to the active board' },
+          run_after: { type: 'boolean', description: 'Start the board after a successful compile and return serial output' },
+          observe_ms: { type: 'number', description: 'How long to collect serial output after starting, in milliseconds' },
+        },
       },
     },
   },
@@ -206,8 +267,14 @@ export const AGENT_TOOLS: ToolDefinition[] = [
     type: 'function',
     function: {
       name: 'compile_all_code',
-      description: 'Compile every board on the canvas once and return a combined result. Use this for multi-board circuits instead of calling compile_code per board.',
-      parameters: { type: 'object', properties: {} },
+      description: 'Compile every board on the canvas once and return a combined result. Refuses to compile while wiring is incomplete. Set run_after true to start every compiled board and capture serial output.',
+      parameters: {
+        type: 'object',
+        properties: {
+          run_after: { type: 'boolean', description: 'Start every compiled board after success' },
+          observe_ms: { type: 'number', description: 'How long to collect serial output per board, in milliseconds' },
+        },
+      },
     },
   },
   {
@@ -230,10 +297,14 @@ export const AGENT_TOOLS: ToolDefinition[] = [
     type: 'function',
     function: {
       name: 'run_simulation',
-      description: 'Run a board that has compiled firmware. Compile first. Omit board_id to run the active board.',
+      description: 'Run a board that has compiled firmware and wait briefly for serial output. Refuses to run while wiring is incomplete. Use run_all true for a multi-board circuit. The returned serial_output is the evidence to judge, not the fact that the board started.',
       parameters: {
         type: 'object',
-        properties: { board_id: { type: 'string', description: 'Optional board id; defaults to the active board' } },
+        properties: {
+          board_id: { type: 'string', description: 'Optional board id; defaults to the active board' },
+          run_all: { type: 'boolean', description: 'Start every board that has compiled firmware' },
+          observe_ms: { type: 'number', description: 'How long to collect serial output, in milliseconds; defaults to 1500' },
+        },
       },
     },
   },
@@ -241,10 +312,10 @@ export const AGENT_TOOLS: ToolDefinition[] = [
     type: 'function',
     function: {
       name: 'stop_simulation',
-      description: 'Stop a running board. Omit board_id to stop the active board.',
+      description: 'Stop the simulation. Omit board_id to stop every board, matching the toolbar Stop button.',
       parameters: {
         type: 'object',
-        properties: { board_id: { type: 'string', description: 'Optional board id; defaults to the active board' } },
+        properties: { board_id: { type: 'string', description: 'Optional board id; omit to stop every board' } },
       },
     },
   },
@@ -263,10 +334,13 @@ export const AGENT_TOOLS: ToolDefinition[] = [
     type: 'function',
     function: {
       name: 'get_simulation_output',
-      description: 'Read serial output, running state, compile state and crash information for every board. Use this after run_simulation to check whether the sketch behaved as intended.',
+      description: 'Read serial output, running state, compile state and crash information for every board. Set wait_ms when the sketch may not have printed yet. Compare the output with the expected behaviour instead of assuming the run succeeded.',
       parameters: {
         type: 'object',
-        properties: { board_id: { type: 'string', description: 'Optional board id; returns all boards when omitted' } },
+        properties: {
+          board_id: { type: 'string', description: 'Optional board id; returns all boards when omitted' },
+          wait_ms: { type: 'number', description: 'Wait up to this many milliseconds for new serial output' },
+        },
       },
     },
   },
