@@ -427,24 +427,33 @@ export async function sendMessage(content: string): Promise<void> {
     }
   };
 
+  // Some providers reject a request after a long tool turn with a bare HTTP
+  // 400 and no JSON body. Retry with a minimal transcript before giving up,
+  // and keep the original error if the compact retry also fails.
+  let messages: Message[] = [];
   try {
-    // A long tool loop can exceed the provider request limit. Gemini then
-    // replies with a non-JSON HTTP 400 ("exception parsing response"). Only
-    // the recent transcript is needed to continue, and the full history is
-    // still kept in the UI and in the saved conversation.
-    const compactTool = (text: string) =>
-      text.length > MAX_TOOL_RESULT_CHARS
-        ? `${text.slice(0, 8_000)}\n[truncated for context limit]\n${text.slice(-6_000)}`
-        : text;
-    const history = useAgentStore
-      .getState()
-      .messages.filter((m) => m.role !== 'system')
-      .map((m) => (m.role === 'tool' ? { ...m, content: compactTool(m.content) } : m));
-    const messages: Message[] = [
-      { id: 'system', role: 'system', content: SYSTEM_PROMPT, timestamp: Date.now() },
-      ...history,
-    ];
-    compactMessages(messages);
+  for (let providerAttempt = 0; providerAttempt < 3; providerAttempt++) {
+    let completed = false;
+    try {
+    if (providerAttempt === 0) {
+      // A long tool loop can exceed the provider request limit. Gemini then
+      // replies with a non-JSON HTTP 400 ("exception parsing response"). Only
+      // the recent transcript is needed to continue, and the full history is
+      // still kept in the UI and in the saved conversation.
+      const compactTool = (text: string) =>
+        text.length > MAX_TOOL_RESULT_CHARS
+          ? `${text.slice(0, 8_000)}\n[truncated for context limit]\n${text.slice(-6_000)}`
+          : text;
+      const history = useAgentStore
+        .getState()
+        .messages.filter((m) => m.role !== 'system')
+        .map((m) => (m.role === 'tool' ? { ...m, content: compactTool(m.content) } : m));
+      messages = [
+        { id: 'system', role: 'system', content: SYSTEM_PROMPT, timestamp: Date.now() },
+        ...history,
+      ];
+      compactMessages(messages);
+    }
 
     const addToolResult = (tc: ToolCall, result: string) => {
       if (activeRequest !== controller) return;
@@ -623,9 +632,34 @@ export async function sendMessage(content: string): Promise<void> {
       }
       if (controller.signal.aborted) break;
     }
+    completed = true;
   } catch (error) {
-    if (controller.signal.aborted) return;
     const errorMsg = error instanceof Error ? error.message : String(error);
+    const isProviderRejection =
+      /\b400\b/.test(errorMsg) && /exception parsing response|Bad Request/i.test(errorMsg);
+    if (
+      isProviderRejection &&
+      providerAttempt < 2 &&
+      !controller.signal.aborted &&
+      activeRequest === controller
+    ) {
+      // Strip history to the system prompt, the last user turn and the last
+      // tool turn. The live stores still carry the verified circuit state.
+      messages.splice(1, Math.max(0, messages.length - 5));
+      agentStore.addMessage({
+        role: 'assistant',
+        content: 'The provider rejected the long transcript. I compacted the history and am continuing with the last tool result.',
+      });
+      continue;
+    }
+    if (controller.signal.aborted) return;
+    if (providerAttempt > 0 && /\b400\b/.test(errorMsg)) {
+      agentStore.addMessage({
+        role: 'assistant',
+        content: `The provider rejected the request twice after compaction. Try a new chat or a different model. ${errorMsg}`,
+      });
+      return;
+    }
     const friendly = /503|429|\b50[02]\b/.test(errorMsg)
       ? `The model provider stayed busy after ${MAX_STREAM_ATTEMPTS} attempts. Send again in a moment, or choose another provider or model. ${errorMsg}`
       : /\b40[13]\b/.test(errorMsg)
@@ -634,6 +668,9 @@ export async function sendMessage(content: string): Promise<void> {
           ? `The app could not reach the model provider. Check the connection and the provider base URL. ${errorMsg}`
           : `Error: ${errorMsg}`;
     agentStore.addMessage({ role: 'assistant', content: friendly });
+    }
+    if (completed) break;
+  }
   } finally {
     useAgentStore.getState().setRetryNotice(null);
     if (activeRequest === controller) {

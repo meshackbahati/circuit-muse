@@ -81,4 +81,32 @@ describe('chat Stop', () => {
     await pending;
     expect(useAgentStore.getState().isStreaming).toBe(false);
   });
+
+  it('retries a provider 400 with a compacted transcript instead of ending the turn', async () => {
+    let attempts = 0;
+    const provider: LLMProvider = {
+      id: 'gemini',
+      chatStream: async function* () {
+        attempts++;
+        if (attempts === 1) {
+          throw new Error('got status: 400 Bad Request. {"error":{"message":"exception parsing response","code":400,"status":"Bad Request"}}');
+        }
+        yield { content: 'Verified the circuit.', done: false };
+        yield { done: true };
+      },
+      chat: async () => ({ id: 'stub', role: 'assistant', content: '', timestamp: 0 }),
+      listModels: async () => ['test-model'],
+    };
+    vi.mocked(createProvider).mockReturnValue(provider);
+    useProviderStore.getState().setActiveProvider('gemini');
+    useProviderStore.getState().setModel('gemini', 'test-model');
+
+    await sendMessage('verify my circuit');
+
+    expect(attempts).toBe(2);
+    expect(useAgentStore.getState().isStreaming).toBe(false);
+    const messages = useAgentStore.getState().messages;
+    expect(messages.some((m) => m.content.includes('Verified the circuit.'))).toBe(true);
+    expect(messages.some((m) => m.content.includes('twice after compaction'))).toBe(false);
+  });
 });
