@@ -605,6 +605,7 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = ({
         getArduinoPin,
         id,
         getPinResolver,
+        ownerBoardId ?? liveState.activeBoardId ?? null,
       );
     }
 

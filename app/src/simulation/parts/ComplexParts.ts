@@ -1,4 +1,7 @@
 import { PartSimulationRegistry } from './PartSimulationRegistry';
+import { ToneTracker } from '../audio/toneTracker';
+import { ToneVoice } from '../audio/soundEngine';
+import { subscribePinTime } from '../audio/pinTimeBus';
 import type { AnySimulator, PartSimulationLogic } from './PartSimulationRegistry';
 import { RP2040Simulator } from '../RP2040Simulator';
 import { setAdcVoltage, emitPropertyChange } from './partUtils';
@@ -486,143 +489,89 @@ PartSimulationRegistry.register('servo', {
 // ─── Buzzer ──────────────────────────────────────────────────────────────────
 
 /**
- * Buzzer — uses Web Audio API to generate a tone.
+ * Buzzer — plays what its pin does, on any board.
  *
- * Reads OCR2A (Timer2 CTC mode) to determine frequency:
- *   f = F_CPU / (2 × prescaler × (OCR2A + 1))
- *
- * Prescaler detected from TCCR2B[2:0] bits.
- * Activates when duty cycle > 0 (pin is driven HIGH).
+ * The pitch comes from the time between rising edges in simulated time
+ * (tone(), bit-banged square waves); a pin held HIGH beeps like an active
+ * buzzer; analogWrite PWM plays at the usual PWM rate; LOW is silent. See
+ * simulation/audio/toneTracker.ts. The old version read AVR Timer2 registers,
+ * so it was silent on other boards, guessed ~125 kHz for digitalWrite, and
+ * could not stop after digitalWrite(LOW).
  */
 PartSimulationRegistry.register('buzzer', {
-  attachEvents: (element, avrSimulator, getArduinoPinHelper, _componentId, getPinResolver) => {
-    const pinSIG =
+  attachEvents: (element, simulator, getArduinoPinHelper, _componentId, getPinResolver, boardId) => {
+    const pin =
       getArduinoPinHelper('1') ?? getArduinoPinHelper('+') ?? getArduinoPinHelper('POS');
-    const pinManager = (avrSimulator as any).pinManager;
-    // PWM tracking still needs the integer pin number; resolver doesn't
-    // expose duty. The HIGH/LOW path migrates to PinResolver below.
-    const useResolver = typeof getPinResolver === 'function';
-    const sigResolver = useResolver
-      ? getPinResolver!('1') ?? getPinResolver!('+') ?? getPinResolver!('POS')
-      : null;
+    const pinManager = (simulator as any)?.pinManager;
+    const resolver =
+      typeof getPinResolver === 'function'
+        ? getPinResolver('1') ?? getPinResolver('+') ?? getPinResolver('POS')
+        : null;
 
-    let audioCtx: AudioContext | null = null;
-    let oscillator: OscillatorNode | null = null;
-    let gainNode: GainNode | null = null;
-    let isSounding = false;
     const el = element as any;
+    const tracker = new ToneTracker();
+    const voice = new ToneVoice();
+    const unsubscribers: (() => void)[] = [];
+    let sawTimedEdges = false;
 
-    // Timer2 register addresses
-    const OCR2A = 0xb3;
-    const TCCR2B = 0xb1;
-    const F_CPU = 16_000_000;
-
-    const prescalerTable: Record<number, number> = {
-      1: 1,
-      2: 8,
-      3: 32,
-      4: 64,
-      5: 128,
-      6: 256,
-      7: 1024,
+    const update = () => {
+      const decision = tracker.decide(performance.now());
+      if (decision.kind === 'tone') {
+        voice.play(decision.frequency);
+        if (el.playing !== undefined) el.playing = true;
+      } else if (voice.playing) {
+        voice.stop();
+        if (el.playing !== undefined) el.playing = false;
+      }
     };
 
-    function getFrequency(cpu: any): number {
-      const ocr2a = cpu.data[OCR2A] ?? 0;
-      const tccr2b = cpu.data[TCCR2B] ?? 0;
-      const csField = tccr2b & 0x07;
-      const prescaler = prescalerTable[csField] ?? 64;
-      // CTC mode: f = F_CPU / (2 × prescaler × (OCR2A + 1))
-      return F_CPU / (2 * prescaler * (ocr2a + 1));
-    }
-
-    function startTone(freq: number) {
-      if (!audioCtx) {
-        audioCtx = new AudioContext();
-        gainNode = audioCtx.createGain();
-        gainNode.gain.value = 0.1;
-        gainNode.connect(audioCtx.destination);
-      }
-      // Browser autoplay policy: AudioContext starts in 'suspended' state
-      // until a user gesture has occurred. Resume it here so sound plays.
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-      if (oscillator) {
-        oscillator.frequency.setTargetAtTime(freq, audioCtx.currentTime, 0.01);
-        return;
-      }
-      oscillator = audioCtx.createOscillator();
-      oscillator.type = 'square';
-      oscillator.frequency.value = freq;
-      oscillator.connect(gainNode!);
-      oscillator.start();
-      isSounding = true;
-      if (el.playing !== undefined) el.playing = true;
-    }
-
-    function stopTone() {
-      if (oscillator) {
-        oscillator.stop();
-        oscillator.disconnect();
-        oscillator = null;
-      }
-      isSounding = false;
-      if (el.playing !== undefined) el.playing = false;
-    }
-
-    // Poll via PWM duty cycle on the buzzer pin
-    const unsubscribers: (() => void)[] = [];
-
-    if (pinSIG !== null && pinManager) {
-      unsubscribers.push(
-        pinManager.onPwmChange(pinSIG, (_: number, dc: number) => {
-          const cpu = (avrSimulator as any).cpu;
-          if (dc > 0) {
-            const freq = cpu ? getFrequency(cpu) : 440;
-            startTone(Math.max(20, Math.min(20000, freq)));
-          } else {
-            stopTone();
-          }
-        }),
-      );
-
-      // Also respond to digital HIGH/LOW (tone() toggles the pin).
-      // Prefer the resolver — a buzzer driven through a transistor sees
-      // the real collector voltage and threshold-converts via the board
-      // logic family.
-      if (sigResolver) {
+    if (pin !== null && pin >= 0) {
+      if (boardId) {
         unsubscribers.push(
-          sigResolver.onChange((state) => {
-            if (!isSounding && state === 'HIGH') {
-              const cpu = (avrSimulator as any).cpu;
-              const freq = cpu ? getFrequency(cpu) : 440;
-              startTone(Math.max(20, Math.min(20000, freq)));
-            }
-            // tone() produces a square wave — don't stop on every LOW;
-            // stop only when duty drops to 0 via onPwmChange.
+          subscribePinTime(boardId, pin, (state, timeMs) => {
+            sawTimedEdges = true;
+            tracker.edge(state, timeMs, performance.now());
+            update();
           }),
         );
-      } else {
+      }
+      if (resolver) {
+        // Covers boards without timed events and buzzers driven through a
+        // transistor (the resolver follows the real collector voltage).
         unsubscribers.push(
-          pinManager.onPinChange(pinSIG, (_: number, state: boolean) => {
-            if (!isSounding && state) {
-              const cpu = (avrSimulator as any).cpu;
-              const freq = cpu ? getFrequency(cpu) : 440;
-              startTone(Math.max(20, Math.min(20000, freq)));
-            }
+          resolver.onChange((state) => {
+            if (sawTimedEdges) return;
+            tracker.setLevel(state === 'HIGH');
+            update();
+          }),
+        );
+      } else if (pinManager?.onPinChange) {
+        unsubscribers.push(
+          pinManager.onPinChange(pin, (_: number, state: boolean) => {
+            if (sawTimedEdges) return;
+            tracker.setLevel(state);
+            update();
+          }),
+        );
+      }
+      if (pinManager?.onPwmChange) {
+        unsubscribers.push(
+          pinManager.onPwmChange(pin, (_: number, duty: number) => {
+            tracker.setPwmDuty(duty);
+            update();
           }),
         );
       }
     }
+
+    // Ends a tone once edges stop arriving (the pin may stop toggling HIGH).
+    const timer = window.setInterval(update, 40);
 
     return () => {
-      stopTone();
-      if (audioCtx) {
-        audioCtx.close();
-        audioCtx = null;
-      }
+      window.clearInterval(timer);
       unsubscribers.forEach((u) => u());
+      voice.stop();
+      if (el.playing !== undefined) el.playing = false;
     };
   },
 });
