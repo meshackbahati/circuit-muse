@@ -70,7 +70,7 @@ function masterLevel(): number {
 
 function applyMasterGain(): void {
   if (!ctx || !master) return;
-  master.gain.setTargetAtTime(masterLevel(), ctx.currentTime, 0.02);
+  ramp(master.gain, masterLevel(), ctx.currentTime, 0.02);
 }
 
 function installUnlock(): void {
@@ -84,9 +84,11 @@ function installUnlock(): void {
 }
 
 function getContext(): { ctx: AudioContext; master: GainNode } | null {
-  if (typeof window === 'undefined') return null;
-  const AudioCtor: typeof AudioContext | undefined =
-    window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  const g = globalThis as unknown as {
+    AudioContext?: typeof AudioContext;
+    webkitAudioContext?: typeof AudioContext;
+  };
+  const AudioCtor = g.AudioContext ?? g.webkitAudioContext;
   if (!AudioCtor) return null;
   if (!ctx) {
     try {
@@ -99,8 +101,28 @@ function getContext(): { ctx: AudioContext; master: GainNode } | null {
     master.connect(ctx.destination);
     installUnlock();
   }
-  if (ctx.state === 'suspended') void ctx.resume().catch(() => undefined);
+  if (ctx.state === 'suspended' && typeof ctx.resume === 'function') {
+    void ctx.resume().catch(() => undefined);
+  }
   return { ctx, master: master! };
+}
+
+/** Smooth change when supported, otherwise set directly. */
+function ramp(param: AudioParam | undefined, value: number, time: number, constant: number): void {
+  if (!param) return;
+  if (typeof param.setTargetAtTime === 'function') param.setTargetAtTime(value, time, constant);
+  else param.value = value;
+}
+
+/** Close the shared context. For tests and teardown. */
+export function resetSoundEngine(): void {
+  try {
+    void ctx?.close?.();
+  } catch {
+    // Already closed.
+  }
+  ctx = null;
+  master = null;
 }
 
 /** A continuous tone source, e.g. one buzzer. */
@@ -132,10 +154,10 @@ export class ToneVoice {
       this.osc.connect(this.gain);
       this.osc.start();
       // Short fade-in avoids a click at the start of each beep.
-      this.gain.gain.setTargetAtTime(Math.min(1, Math.max(0, level)), c.currentTime, 0.004);
+      ramp(this.gain.gain, Math.min(1, Math.max(0, level)), c.currentTime, 0.004);
     } else if (Math.abs(frequency - this.frequency) > 0.5) {
-      this.osc.frequency.setTargetAtTime(frequency, c.currentTime, 0.003);
-      this.gain?.gain.setTargetAtTime(Math.min(1, Math.max(0, level)), c.currentTime, 0.004);
+      ramp(this.osc.frequency, frequency, c.currentTime, 0.003);
+      ramp(this.gain?.gain, Math.min(1, Math.max(0, level)), c.currentTime, 0.004);
     }
     this.frequency = frequency;
   }
@@ -151,7 +173,7 @@ export class ToneVoice {
     this.gain = null;
     this.frequency = 0;
     const end = ctx.currentTime + 0.03;
-    gain?.gain.setTargetAtTime(0, ctx.currentTime, 0.005);
+    ramp(gain?.gain, 0, ctx.currentTime, 0.005);
     try {
       osc.stop(end);
     } catch {

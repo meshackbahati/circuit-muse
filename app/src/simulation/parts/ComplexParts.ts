@@ -565,10 +565,10 @@ PartSimulationRegistry.register('buzzer', {
     }
 
     // Ends a tone once edges stop arriving (the pin may stop toggling HIGH).
-    const timer = window.setInterval(update, 40);
+    const timer = setInterval(update, 40);
 
     return () => {
-      window.clearInterval(timer);
+      clearInterval(timer);
       unsubscribers.forEach((u) => u());
       voice.stop();
       if (el.playing !== undefined) el.playing = false;
