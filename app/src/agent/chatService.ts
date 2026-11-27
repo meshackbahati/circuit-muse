@@ -168,6 +168,22 @@ export function minimalTranscript(messages: Message[]): Message[] {
   return result;
 }
 
+/** Tools whose success changes what a repeated compile or check would see. */
+const PROGRESS_TOOLS = new Set([
+  'add_board',
+  'remove_board',
+  'add_component',
+  'build_circuit',
+  'remove_component',
+  'set_component_property',
+  'wire_components',
+  'remove_wire',
+  'update_code',
+  'install_library',
+  'install_firmware',
+  'set_board_language',
+]);
+
 /** Tools that change the canvas or the firmware. A turn that used one of
  *  these must end with a wiring audit, a successful compile and an observed
  *  run before the agent is allowed to report completion. */
@@ -580,6 +596,10 @@ export async function sendMessage(content: string): Promise<void> {
       'read_code',
     ]);
     const callCounts = new Map<string, number>();
+    // Bumped whenever a tool changes the circuit, code or libraries. An
+    // inspection tool repeated after such a change is progress, not a loop
+    // (compile, fix the code, compile again).
+    let stateVersion = 0;
     let nudges = 0;
     let verificationNudges = 0;
     let usedTools = false;
@@ -657,8 +677,8 @@ export async function sendMessage(content: string): Promise<void> {
       // not count as progress when the circuit state is unchanged.
       const signatures = toolCalls.map((tc) =>
         LOOP_SENSITIVE_TOOLS.has(tc.function.name)
-          ? tc.function.name
-          : `${tc.function.name}:${tc.function.arguments}`,
+          ? `${tc.function.name}@${stateVersion}`
+          : `${tc.function.name}:${tc.function.arguments}@${stateVersion}`,
       );
       let repeated = false;
       for (const signature of signatures) {
@@ -669,7 +689,7 @@ export async function sendMessage(content: string): Promise<void> {
       if (repeated) {
         agentStore.addMessage({
           role: 'assistant',
-          content: `I called ${[...callCounts.entries()].find(([, count]) => count >= 3)?.[0] ?? 'a tool'} three times without progress, so I stopped to avoid a loop. The last tool result contains the evidence; make one specific change or give me a different instruction.`,
+          content: `I called ${([...callCounts.entries()].find(([, count]) => count >= 3)?.[0] ?? 'a tool').split(/[:@]/)[0]} three times without changing the code or circuit in between, so I stopped to avoid a loop. The last tool result contains the evidence; make one specific change or give me a different instruction.`,
         });
         break;
       }
@@ -717,6 +737,9 @@ export async function sendMessage(content: string): Promise<void> {
         }
         addToolResult(tc, result);
         recordToolResult(tc.function.name, result);
+        if (PROGRESS_TOOLS.has(tc.function.name) && !/"success"\s*:\s*false|"error"\s*:/.test(result)) {
+          stateVersion++;
+        }
 
         if (controller.signal.aborted) {
           for (let rest = index + 1; rest < toolCalls.length; rest++) {
