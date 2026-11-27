@@ -235,10 +235,15 @@ class ArduinoCLIService:
         )
         return core_id in result.stdout
 
-    async def ensure_core_for_board(self, fqbn: str) -> dict:
+    async def ensure_core_for_board(self, fqbn: str, on_output=None) -> dict:
         """
         Auto-install the core required by a board FQBN if not present.
         Returns status dict with install log.
+
+        `on_output`, if given, receives each line of installer output (with a
+        trailing newline) plus a progress line every few seconds. The first
+        ESP32 compile downloads several hundred MB of toolchains; without this
+        the compile console sat on "Starting compilation" for many minutes.
         """
         core_id = self._core_id_for_fqbn(fqbn)
         if core_id is None:
@@ -259,13 +264,14 @@ class ArduinoCLIService:
         install_spec = f"{core_id}@{version}" if version else core_id
         print(f"[arduino-cli] Auto-installing core {install_spec} for board {fqbn}...")
 
-        def _install():
-            return subprocess.run(
-                [self.cli_path, "core", "install", install_spec],
-                capture_output=True, text=True
+        if on_output is not None:
+            on_output(
+                f"Installing board support {install_spec}. This happens once per board "
+                "family and downloads the compiler toolchain (several hundred MB for "
+                "ESP32), so it can take a while on a slow connection.\n"
             )
 
-        result = await asyncio.to_thread(_install)
+        result = await asyncio.to_thread(self._run_core_install, install_spec, on_output)
         log = result.stdout + "\n" + result.stderr
 
         if result.returncode == 0:
@@ -274,6 +280,75 @@ class ArduinoCLIService:
         else:
             print(f"[arduino-cli] Failed to install core {core_id}: {result.stderr}")
             return {"needed": True, "installed": False, "core_id": core_id, "log": log.strip()}
+
+    def _staging_dir(self) -> str | None:
+        """arduino-cli's download folder, used to report install progress."""
+        try:
+            out = subprocess.run(
+                [self.cli_path, "config", "get", "directories.data"],
+                capture_output=True, text=True, timeout=10,
+            )
+            data_dir = out.stdout.strip()
+            return os.path.join(data_dir, "staging") if out.returncode == 0 and data_dir else None
+        except Exception:
+            return None
+
+    @staticmethod
+    def _dir_size_mb(path: str | None) -> float:
+        if not path or not os.path.isdir(path):
+            return 0.0
+        total = 0
+        for root, _dirs, names in os.walk(path):
+            for name in names:
+                try:
+                    total += os.path.getsize(os.path.join(root, name))
+                except OSError:
+                    pass
+        return total / (1024 * 1024)
+
+    def _run_core_install(self, install_spec: str, on_output=None) -> subprocess.CompletedProcess:
+        """Run `arduino-cli core install`, forwarding output line by line."""
+        cmd = [self.cli_path, "core", "install", install_spec]
+        if on_output is None:
+            return subprocess.run(cmd, capture_output=True, text=True)
+
+        import threading
+        import time
+
+        proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+        lines: list[str] = []
+        done = threading.Event()
+        staging = self._staging_dir()
+        start_mb = self._dir_size_mb(staging)
+        started = time.monotonic()
+
+        def heartbeat() -> None:
+            # arduino-cli prints nothing while a large archive downloads.
+            while not done.wait(15):
+                elapsed = int(time.monotonic() - started)
+                got = max(0.0, self._dir_size_mb(staging) - start_mb)
+                on_output(
+                    f"  still installing ({elapsed // 60} min {elapsed % 60:02d} s, "
+                    f"{got:.0f} MB downloaded so far)\n"
+                )
+
+        threading.Thread(target=heartbeat, daemon=True).start()
+        try:
+            assert proc.stdout is not None
+            for line in proc.stdout:
+                lines.append(line)
+                if line.strip():
+                    on_output(line if line.endswith("\n") else line + "\n")
+            proc.wait()
+        finally:
+            done.set()
+        return subprocess.CompletedProcess(cmd, proc.returncode, "".join(lines), "")
 
     async def get_setup_status(self) -> dict:
         """Return the current state of arduino-cli and installed cores."""
