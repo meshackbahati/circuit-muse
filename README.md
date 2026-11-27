@@ -136,7 +136,7 @@ On Linux, ports appear as `/dev/ttyACM*` or `/dev/ttyUSB*` and the user must bel
 
 ## Build from source
 
-Prerequisites are Node.js 20 or newer, Python 3.12 or newer, Rust stable, and the WebKit2GTK development packages for the target platform.
+Prerequisites are Node.js 20 or newer, Python 3.12 or 3.13 (3.14 is not supported by the pinned engine dependencies yet), Rust stable, and the WebKit2GTK development packages for the target platform.
 
 On Ubuntu or Debian:
 
@@ -199,7 +199,7 @@ White screen on Linux: force software rendering with the environment variable sh
 
 Arduino CLI missing: run `bash scripts/download-deps.sh` or open the setup dialog.
 
-Engine not starting: check that Python 3.12 or newer is available, then run `pip install -r requirements.txt` inside `engine/` and restart the app.
+Engine not starting: check that Python 3.12 or 3.13 is available, then run `pip install -r requirements.txt` inside `engine/` and restart the app.
 
 QEMU boards not running: ESP32, STM32, and Raspberry Pi targets need their QEMU runtime. Install it from the board prompt or the setup dialog. The STM32 button installs the xPack QEMU Arm runtime, which supplies `qemu-system-arm` for the host platform. STM32 board emulation inside the app still requires the `libqemu-arm` shared library when that path is selected. See [docs/runtime-setup.md](docs/runtime-setup.md) for the per-platform details.
 
