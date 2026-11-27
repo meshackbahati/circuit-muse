@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=CircuitMuse
+GenericName=Circuit Simulator
+Comment=Build circuits, write firmware and simulate microcontroller boards
+Exec=circuit-muse
+Icon=circuit-muse
+Terminal=false
+Categories=Development;Electronics;
+Keywords=arduino;esp32;pico;circuit;simulator;electronics;
+StartupWMClass=circuit-muse

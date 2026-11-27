@@ -62,8 +62,9 @@ reused when the same device returns. This removes the need to remember which
 The web build cannot enumerate local serial ports, so the flash controls are
 hidden outside the desktop shell. On Linux, native USB boards appear as
 `/dev/ttyACM*`, adapter boards as `/dev/ttyUSB*`, and the user must belong to
-the `dialout` group. Log out and back in after `sudo usermod -a -G dialout
-$USER`. On macOS, use `/dev/cu.usbmodem*` for native boards and
+the `dialout` group (`uucp` on Arch Linux). Log out and back in after
+`sudo usermod -a -G dialout $USER` (Arch: `sudo usermod -a -G uucp $USER`).
+On macOS, use `/dev/cu.usbmodem*` for native boards and
 `/dev/cu.usbserial*` for adapters; CH340 and CP210x parts need a vendor driver,
 and recent macOS versions require approval of driver extensions under Privacy
 and Security. On Windows, ports are `COM*` entries and a vendor driver is

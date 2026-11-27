@@ -32,6 +32,7 @@ import logging
 import os
 import re
 import shutil
+import sys
 import tempfile
 import time
 from pathlib import Path
@@ -90,17 +91,44 @@ MAX_PROGRAM_BYTES = 8 * 1024 * 1024
 
 
 def _arduino_cli_bin() -> str | None:
-    """Pick the arduino-cli binary the sidecar uses for compile.
+    """The arduino-cli used for compiling, so flashing finds the same one.
 
-    Desktop bundle: `pro/desktop/sidecar/main.py::_expose_bundled_arduino_cli`
-    has already prepended `<resources>/binaries/arduino-cli/` to PATH,
-    so `shutil.which("arduino-cli")` resolves to the bundled one.
-    Self-host / dev: relies on the user's system arduino-cli.
+    The desktop app passes the bundled sidecar as ARDUINO_CLI_PATH (named
+    arduino-cli-<target-triple>, so it is not found by name on PATH).
+    Looking only at ARDUINO_CLI_BIN and PATH made every flash fail with
+    "arduino-cli not found" while compiling worked. ARDUINO_CLI_BIN still
+    overrides.
     """
     explicit = os.environ.get("ARDUINO_CLI_BIN", "").strip()
     if explicit:
         return explicit if Path(explicit).is_file() else None
-    return shutil.which("arduino-cli")
+    from app.services.arduino_cli import ArduinoCLIService
+
+    resolved = ArduinoCLIService._find_arduino_cli()
+    if resolved and os.path.isabs(resolved):
+        return resolved if Path(resolved).is_file() else None
+    return shutil.which(resolved or "arduino-cli")
+
+
+def _esptool_command(port: str, program: Path) -> list[str]:
+    """esptool writing a compiled ESP32 image.
+
+    The compiler returns a merged image (bootloader, partition table and app,
+    padded to the flash size) that belongs at 0x0. arduino-cli's ESP32 upload
+    recipe expects separate .bootloader.bin / .partitions.bin files next to the
+    app instead, so flashing the merged image through it cannot work. A plain
+    app image (smaller than 1 MB) goes to the app partition at 0x10000.
+    """
+    offset = "0x0" if program.stat().st_size >= 1024 * 1024 else "0x10000"
+    if getattr(sys, "frozen", False):
+        # Packaged engine: __main__.py runs esptool for this subcommand.
+        base = [sys.executable, "esptool"]
+    else:
+        base = [sys.executable, "-m", "esptool"]
+    return base + [
+        "--chip", "auto", "--port", port, "--baud", "460800",
+        "write-flash", offset, str(program),
+    ]
 
 
 def _safe_port_label(port: str) -> str:
@@ -233,13 +261,16 @@ async def _run_flash(
     SSE events, yield a final `done` event with success + elapsed_ms.
     """
     started = time.monotonic()
-    cmd = [
-        cli, "upload",
-        "-p", port,
-        "-i", str(program),
-        "--fqbn", fqbn,
-        "-v",  # verbose — gives the uploader's per-byte progress
-    ]
+    if fqbn.startswith("esp32:esp32:"):
+        cmd = _esptool_command(port, program)
+    else:
+        cmd = [
+            cli, "upload",
+            "-p", port,
+            "-i", str(program),
+            "--fqbn", fqbn,
+            "-v",  # verbose — gives the uploader's per-byte progress
+        ]
     yield {
         "phase": "starting",
         "line": f"$ {' '.join(cmd)}",
@@ -252,7 +283,7 @@ async def _run_flash(
             stderr=asyncio.subprocess.STDOUT,
         )
     except FileNotFoundError as exc:
-        yield _done(False, error=f"could not start arduino-cli: {exc}",
+        yield _done(False, error=f"could not start the uploader: {exc}",
                     elapsed_ms=int((time.monotonic() - started) * 1000))
         return
 
@@ -260,7 +291,8 @@ async def _run_flash(
     # avrdude / esptool progress lines look like:
     #   "Writing | ################################################## | 100% 1.23s"
     # capture the 0-100 number for the frontend's progress bar.
-    progress_re = re.compile(r"(\d{1,3})%")
+    # esptool reports decimals ("45.2 %"), so take the whole-number part.
+    progress_re = re.compile(r"(\d{1,3})(?:\.\d+)?\s?%")
     async for raw in proc.stdout:
         try:
             line = raw.decode(errors="replace").rstrip("\r\n")
@@ -285,7 +317,7 @@ async def _run_flash(
     else:
         yield _done(
             False,
-            error=f"arduino-cli upload exited {rc}",
+            error=f"{'esptool' if fqbn.startswith('esp32:esp32:') else 'arduino-cli upload'} exited {rc}",
             elapsed_ms=elapsed_ms,
         )
 

@@ -16,7 +16,7 @@ Thanks for your interest in contributing! Here's how to get started.
 ### Prerequisites
 
 - Node.js 20+
-- Python 3.12+
+- Python 3.12 or 3.13 (not 3.14 yet)
 - Rust (for Tauri desktop build)
 
 ### Setup

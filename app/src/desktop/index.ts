@@ -9,8 +9,8 @@ import { Stm32QemuPrompt } from './Stm32QemuPrompt';
 import { UpdateAvailableToast } from './UpdateAvailableToast';
 import { installDesktopMenuListener } from './menu';
 import { dlog } from './log';
-import { listen } from './tauriBridge';
-import { detectEnginePort, setEnginePort } from '../services/engineConfig';
+import { invoke, listen } from './tauriBridge';
+import { clearEnginePort, detectEnginePort, setEnginePort } from '../services/engineConfig';
 import './desktop.css';
 
 let mounted = false;
@@ -45,41 +45,54 @@ function mountStatusBar(): void {
     // Will be shown by SetupWizard component via localStorage check
   }
 
-  detectEnginePort().then((port) => {
+  const showReady = (port: number) => {
+    bar.innerHTML = '<span style="color:#22c55e;">&#9679;</span> Engine ready on port ' + port;
+    setTimeout(() => {
+      bar.style.transition = 'opacity 0.5s';
+      bar.style.opacity = '0';
+      setTimeout(() => bar.remove(), 500);
+    }, 2000);
+  };
+
+  void waitForEnginePort().then((port) => {
     if (port) {
-      bar.innerHTML = '<span style="color:#22c55e;">&#9679;</span> Engine ready on port ' + port;
-      setTimeout(() => {
-        bar.style.transition = 'opacity 0.5s';
-        bar.style.opacity = '0';
-        setTimeout(() => bar.remove(), 500);
-      }, 2000);
-      dlog(`Engine detected on port ${port}`);
-    } else {
-      bar.innerHTML = '<span style="color:#f59e0b;">&#9679;</span> Engine starting... (compiling may take a moment)';
-      // Retry after delay
-      setTimeout(() => {
-        detectEnginePort().then((p) => {
-          if (p) {
-            bar.innerHTML = '<span style="color:#22c55e;">&#9679;</span> Engine ready on port ' + p;
-            setTimeout(() => {
-              bar.style.transition = 'opacity 0.5s';
-              bar.style.opacity = '0';
-              setTimeout(() => bar.remove(), 500);
-            }, 2000);
-          } else {
-            bar.innerHTML = '<span style="color:#ef4444;">&#9679;</span> Engine not found. Check settings.';
-          }
-        });
-      }, 10000);
-      dlog('Engine not detected yet');
+      setEnginePort(port);
+      showReady(port);
+      dlog(`Engine port from the shell: ${port}`);
+      return;
     }
+    // Older shells without the engine_port command: scan as a last resort.
+    void detectEnginePort().then((scanned) => {
+      if (scanned) {
+        showReady(scanned);
+      } else {
+        bar.innerHTML = '<span style="color:#ef4444;">&#9679;</span> Engine not found. Check settings.';
+      }
+    });
   });
+}
+
+/** Ask the shell which port its own engine reported. Polls while the engine
+ *  starts (up to 60 s). Returns null when the shell cannot answer. */
+async function waitForEnginePort(): Promise<number | null> {
+  const deadline = Date.now() + 60_000;
+  while (Date.now() < deadline) {
+    try {
+      const port = await invoke<number | null>('engine_port');
+      if (typeof port === 'number' && port > 0) return port;
+    } catch {
+      return null;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+  return null;
 }
 
 export const mountDesktop = (): void => {
   if (mounted) return;
   mounted = true;
   dlog('mountDesktop - Tauri shell active');
+  clearEnginePort();
 
   // Listen for engine-ready event from Rust backend
   void listen<number>('engine-ready', (event) => {

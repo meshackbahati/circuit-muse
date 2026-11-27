@@ -132,11 +132,11 @@ A compiled board can be flashed to a physical USB board. The lightning button in
 
 The frontend posts the compiled program to `/api/flash/upload` on the local engine with the port, FQBN, and program format. The engine writes a temporary file with the extension the uploader expects and runs `arduino-cli upload -p PORT -i FILE --fqbn FQBN -v`. Arduino CLI selects the uploader from the FQBN: avrdude for AVR, picotool for RP2040, and esptool for ESP32. Upload output streams back as server-sent events and drives the progress bar. One flash runs per port at a time. The web build cannot enumerate local serial ports, so flash controls are hidden outside the desktop shell.
 
-On Linux, ports appear as `/dev/ttyACM*` or `/dev/ttyUSB*` and the user must belong to the `dialout` group. On macOS, ports appear as `/dev/cu.usbmodem*` or `/dev/cu.usbserial*` and adapter chips need a vendor driver. On Windows, ports appear as `COM*` and a vendor driver is required. See [docs/hardware-flashing.md](docs/hardware-flashing.md) for details and limitations.
+On Linux, ports appear as `/dev/ttyACM*` or `/dev/ttyUSB*` and the user must belong to the serial group: `dialout` on Debian, Ubuntu and Fedora, `uucp` on Arch. On macOS, ports appear as `/dev/cu.usbmodem*` or `/dev/cu.usbserial*` and adapter chips need a vendor driver. On Windows, ports appear as `COM*` and a vendor driver is required. See [docs/hardware-flashing.md](docs/hardware-flashing.md) for details and limitations.
 
 ## Build from source
 
-Prerequisites are Node.js 20 or newer, Python 3.12 or newer, Rust stable, and the WebKit2GTK development packages for the target platform.
+Prerequisites are Node.js 20 or newer, Python 3.12 or 3.13 (3.14 is not supported by the pinned engine dependencies yet), Rust stable, and the WebKit2GTK development packages for the target platform.
 
 On Ubuntu or Debian:
 
@@ -199,11 +199,11 @@ White screen on Linux: force software rendering with the environment variable sh
 
 Arduino CLI missing: run `bash scripts/download-deps.sh` or open the setup dialog.
 
-Engine not starting: check that Python 3.12 or newer is available, then run `pip install -r requirements.txt` inside `engine/` and restart the app.
+Engine not starting: check that Python 3.12 or 3.13 is available, then run `pip install -r requirements.txt` inside `engine/` and restart the app.
 
 QEMU boards not running: ESP32, STM32, and Raspberry Pi targets need their QEMU runtime. Install it from the board prompt or the setup dialog. The STM32 button installs the xPack QEMU Arm runtime, which supplies `qemu-system-arm` for the host platform. STM32 board emulation inside the app still requires the `libqemu-arm` shared library when that path is selected. See [docs/runtime-setup.md](docs/runtime-setup.md) for the per-platform details.
 
-No serial ports in the flash dialog: attach a board by USB. On Linux add the user to `dialout` and log out and back in. On macOS and Windows install the adapter driver.
+No serial ports in the flash dialog: attach a board by USB. On Linux add the user to `dialout` (`uucp` on Arch) and log out and back in. On macOS and Windows install the adapter driver.
 
 Assistant returns HTTP 400 with `exception parsing response`: start a new chat. Long or corrupted transcripts with mismatched tool turns can be rejected; the app compacts history and retries, but a fresh chat is the reliable recovery. If the error occurs again in a fresh chat with Gemini, confirm that the configured model supports function calling.
 

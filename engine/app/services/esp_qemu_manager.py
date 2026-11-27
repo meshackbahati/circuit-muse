@@ -25,6 +25,8 @@ import asyncio
 import base64
 import logging
 import os
+import shutil
+import re
 import socket
 import tempfile
 import time
@@ -34,8 +36,8 @@ from app.services.wifi_status_parser import parse_serial_text
 logger = logging.getLogger(__name__)
 
 # ── QEMU binary paths (configurable via env) ──────────────────────────────────
-QEMU_XTENSA   = os.environ.get('QEMU_ESP32_BINARY',  'qemu-system-xtensa')
-QEMU_RISCV32  = os.environ.get('QEMU_RISCV32_BINARY', 'qemu-system-riscv32')
+QEMU_XTENSA   = os.environ.get('QEMU_ESP32_BINARY') or 'qemu-system-xtensa'
+QEMU_RISCV32  = os.environ.get('QEMU_RISCV32_BINARY') or 'qemu-system-riscv32'
 
 # ── Machine names per board type ──────────────────────────────────────────────
 _MACHINE: dict[str, tuple[str, str]] = {
@@ -43,6 +45,42 @@ _MACHINE: dict[str, tuple[str, str]] = {
     'esp32-s3': (QEMU_XTENSA,  'esp32s3'),
     'esp32-c3': (QEMU_RISCV32, 'esp32c3'),
 }
+
+# GPIO outputs. The Espressif QEMU build has no GPIO chardev and its GPIO
+# block does not keep the output registers (they read back 0), so pin changes
+# are taken from QEMU's memory_region_ops_write trace: every write the firmware
+# makes to the GPIO block is logged on stderr. Offsets are the same on ESP32,
+# ESP32-S3 and ESP32-C3 (technical reference manuals, GPIO_OUT*_REG).
+_GPIO_OUT, _GPIO_OUT_W1TS, _GPIO_OUT_W1TC = 0x04, 0x08, 0x0C
+_GPIO_OUT1, _GPIO_OUT1_W1TS, _GPIO_OUT1_W1TC = 0x10, 0x14, 0x18
+_GPIO_TRACE = re.compile(r"addr 0x([0-9a-fA-F]+) value 0x([0-9a-fA-F]+) size \d+ name '[^']*\.gpio'")
+
+
+def apply_gpio_write(out_state: int, offset: int, value: int) -> int:
+    """New 64-bit output state after a write to a GPIO output register."""
+    low, high = out_state & 0xFFFFFFFF, out_state >> 32
+    if offset == _GPIO_OUT:
+        low = value
+    elif offset == _GPIO_OUT_W1TS:
+        low |= value
+    elif offset == _GPIO_OUT_W1TC:
+        low &= ~value & 0xFFFFFFFF
+    elif offset == _GPIO_OUT1:
+        high = value
+    elif offset == _GPIO_OUT1_W1TS:
+        high |= value
+    elif offset == _GPIO_OUT1_W1TC:
+        high &= ~value & 0xFFFFFFFF
+    return (high << 32) | low
+
+
+def _resolve_binary(path_or_name: str) -> str | None:
+    """Absolute path of an executable QEMU binary, or None. Resolved at launch
+    time so a runtime installed while the engine runs is picked up."""
+    if os.path.isabs(path_or_name):
+        return path_or_name if os.path.isfile(path_or_name) and os.access(path_or_name, os.X_OK) else None
+    return shutil.which(path_or_name)
+
 
 EventCallback = Callable[[str, dict], Awaitable[None]]
 
@@ -66,6 +104,7 @@ class EspInstance:
         self.firmware_path:  str | None = None  # temp file, deleted on stop
         self.serial_port:    int = 0  # UART0 TCP port
         self.gpio_port:      int = 0  # GPIO chardev TCP port
+        self.gpio_out:       int = 0  # last known GPIO output state (bit per pin)
         self._serial_writer: asyncio.StreamWriter | None = None
         self._gpio_writer:   asyncio.StreamWriter | None = None
         self._tasks:         list[asyncio.Task] = []
@@ -202,7 +241,15 @@ class EspQemuManager:
                 self._instances.pop(inst.client_id, None)
                 return
 
-        qemu_bin, machine = _MACHINE[inst.board_type]
+        qemu_name, machine = _MACHINE[inst.board_type]
+        qemu_bin = _resolve_binary(qemu_name)
+        if qemu_bin is None:
+            await inst.emit('error', {'message': (
+                f'The {inst.board_type.upper()} emulator is not installed ({os.path.basename(qemu_name)} '
+                'was not found). Open Setup from the menu and install the ESP32 QEMU runtime.'
+            )})
+            self._instances.pop(inst.client_id, None)
+            return
 
         # Allocate TCP port for UART0 serial
         inst.serial_port = _find_free_port()
@@ -217,7 +264,14 @@ class EspQemuManager:
             '-machine', machine,
             # UART0 → TCP (serial I/O)
             '-serial', f'tcp:127.0.0.1:{inst.serial_port},server=on,wait=off',
+            # Pin outputs come from this trace (see _GPIO_TRACE).
+            '-trace', 'memory_region_ops_write',
         ]
+        # Arduino-ESP32 (ESP-IDF 5) firmware resets under the emulated timer
+        # group watchdogs, so turn them off. A -global for a device the
+        # machine does not have is ignored, so the generic name is safe too.
+        for timg in dict.fromkeys((f'timer.{machine}.timg', 'timer.esp32.timg')):
+            cmd += ['-global', f'driver={timg},property=wdt_disable,value=true']
 
         if firmware_path:
             cmd += ['-drive', f'file={firmware_path},if=mtd,format=raw']
@@ -441,16 +495,54 @@ class EspQemuManager:
     async def _watch_stderr(self, inst: EspInstance) -> None:
         if not inst.process or not inst.process.stderr:
             return
+        # stderr carries the memory_region_ops_write trace: hundreds of
+        # thousands of lines during boot. Read it in large chunks so QEMU never
+        # blocks on a full pipe (a slow reader stalled the guest and broke
+        # boot), and only parse lines that touch the GPIO block.
+        pending = b''
         try:
-            async for line in inst.process.stderr:
-                text = line.decode('utf-8', errors='replace').rstrip()
-                if text:
-                    logger.debug('QEMU[%s] %s', inst.client_id, text)
+            while True:
+                chunk = await inst.process.stderr.read(65536)
+                if not chunk:
+                    break
+                data = pending + chunk
+                cut = data.rfind(b'\n')
+                if cut < 0:
+                    pending = data
+                    continue
+                pending = data[cut + 1:]
+                block = data[:cut]
+                if b'.gpio' in block:
+                    for line in block.split(b'\n'):
+                        if b'.gpio' in line and line.startswith(b'memory_region_ops_write'):
+                            self._handle_gpio_trace(inst, line.decode('ascii', 'ignore'))
+                if logger.isEnabledFor(logging.DEBUG):
+                    for line in block.split(b'\n'):
+                        if line and not line.startswith(b'memory_region_ops_write'):
+                            logger.debug('QEMU[%s] %s', inst.client_id, line.decode('utf-8', 'replace'))
         except Exception:
             pass
         logger.info('QEMU[%s] process exited', inst.client_id)
         inst.running = False
         await inst.emit('system', {'event': 'exited'})
+
+    def _handle_gpio_trace(self, inst: EspInstance, line: str) -> None:
+        match = _GPIO_TRACE.search(line)
+        if not match:
+            return
+        offset = int(match.group(1), 16) & 0xFFF
+        new_state = apply_gpio_write(inst.gpio_out, offset, int(match.group(2), 16))
+        changed = new_state ^ inst.gpio_out
+        inst.gpio_out = new_state
+        pin = 0
+        while changed:
+            if changed & 1:
+                # Fire and forget: the stderr reader must keep draining.
+                asyncio.create_task(
+                    inst.emit('gpio_change', {'pin': pin, 'state': (new_state >> pin) & 1})
+                )
+            changed >>= 1
+            pin += 1
 
     # ── Shutdown ───────────────────────────────────────────────────────────────
 

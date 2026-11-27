@@ -326,7 +326,9 @@ async def _run_compile(
         )
 
     # AVR, RP2040, and ESP32 fallback: use arduino-cli
-    core_status = await arduino_cli.ensure_core_for_board(request.board_fqbn)
+    core_status = await arduino_cli.ensure_core_for_board(
+        request.board_fqbn, on_output=progress_callback,
+    )
     core_log = core_status.get("log", "")
     if core_status.get("needed") and not core_status.get("installed"):
         return CompileResponse(

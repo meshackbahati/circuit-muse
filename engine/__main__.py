@@ -10,6 +10,16 @@ import sys
 import threading
 import time
 
+# `circuit-muse-engine esptool ...` runs esptool. The packaged engine has no
+# separate Python interpreter, so the flash route uses this to write ESP32
+# images (see app/api/routes/flash.py::_esptool_command).
+if len(sys.argv) > 1 and sys.argv[1] == "esptool":
+    import esptool
+
+    sys.argv = ["esptool", *sys.argv[2:]]
+    esptool._main()
+    raise SystemExit(0)
+
 # Check that the engine's dependencies are installed without importing them.
 # Importing wasmtime, esptool and mcp here only to test for presence loaded
 # them into memory at startup, before any feature needed them.
