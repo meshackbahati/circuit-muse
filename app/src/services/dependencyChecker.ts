@@ -132,7 +132,9 @@ export async function scanDependencies(): Promise<Dependency[]> {
       status: arduinoCli ? 'installed' : 'missing',
       installUrl: 'https://arduino.github.io/arduino-cli/latest/installation/',
       installCommand: arduinoCli ? undefined : arduinoCommand || undefined,
-      notes: osNotes,
+      notes: !arduinoCli && isTauri()
+        ? `${host.label}: click Install to download it (about 17 MB). No admin rights needed.`
+        : osNotes,
     });
   }
 
@@ -215,6 +217,7 @@ const INSTALLERS: Record<string, { command: string; event: string }> = {
   'qemu-esp32': { command: 'esp32_qemu_install', event: 'esp32-qemu-progress' },
   'qemu-stm32': { command: 'stm32_qemu_install', event: 'stm32-qemu-progress' },
   'wasi-sdk': { command: 'wasi_sdk_install', event: 'wasi-sdk-progress' },
+  'arduino-cli': { command: 'arduino_cli_install', event: 'arduino-cli-progress' },
 };
 
 export function canAutoInstall(depId: string): boolean {

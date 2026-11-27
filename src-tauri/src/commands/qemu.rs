@@ -16,7 +16,7 @@ fn qemu_dir(app: &AppHandle, arch: &str) -> Result<PathBuf, String> {
 fn qemu_binary_name(arch: &str) -> &'static str {
     match arch {
         "esp32" => "qemu-system-xtensa",
-        "riscv32" => "qemu-system-riscv32",
+        "riscv32" | "esp32-riscv" => "qemu-system-riscv32",
         "stm32" => "qemu-system-arm",
         _ => "qemu-system-unknown",
     }
@@ -36,9 +36,17 @@ fn qemu_status_for(app: &AppHandle, arch: &str) -> Result<QemuStatus, String> {
     })
 }
 
+/// ESP32 and ESP32-S3 run on qemu-system-xtensa, ESP32-C3 on
+/// qemu-system-riscv32. Both come from Espressif's QEMU release and are
+/// installed together; the runtime is ready only when both are present.
 #[tauri::command]
 pub fn esp32_qemu_status(app: AppHandle) -> Result<QemuStatus, String> {
-    qemu_status_for(&app, "esp32")
+    let xtensa = qemu_status_for(&app, "esp32")?;
+    let riscv = qemu_status_for(&app, "esp32-riscv")?;
+    Ok(QemuStatus {
+        installed: xtensa.installed && riscv.installed,
+        path: xtensa.path,
+    })
 }
 
 #[tauri::command]
@@ -48,25 +56,71 @@ pub fn stm32_qemu_status(app: AppHandle) -> Result<QemuStatus, String> {
 
 #[tauri::command]
 pub async fn esp32_qemu_install(app: AppHandle, window: tauri::Window) -> Result<(), String> {
-    let dir = qemu_dir(&app, "esp32")?;
     let tag = "esp-develop-9.2.2-20260417";
+    let version = "esp_develop_9.2.2_20260417";
     let base = format!("https://github.com/espressif/qemu/releases/download/{}", tag);
-    let filename = if cfg!(target_os = "linux") && cfg!(target_arch = "x86_64") {
-        "qemu-xtensa-softmmu-esp_develop_9.2.2_20260417-x86_64-linux-gnu.tar.xz"
+    let platform = if cfg!(target_os = "linux") && cfg!(target_arch = "x86_64") {
+        "x86_64-linux-gnu"
     } else if cfg!(target_os = "linux") && cfg!(target_arch = "aarch64") {
-        "qemu-xtensa-softmmu-esp_develop_9.2.2_20260417-aarch64-linux-gnu.tar.xz"
+        "aarch64-linux-gnu"
     } else if cfg!(target_os = "macos") && cfg!(target_arch = "aarch64") {
-        "qemu-xtensa-softmmu-esp_develop_9.2.2_20260417-aarch64-apple-darwin.tar.xz"
+        "aarch64-apple-darwin"
     } else if cfg!(target_os = "macos") && cfg!(target_arch = "x86_64") {
-        "qemu-xtensa-softmmu-esp_develop_9.2.2_20260417-x86_64-apple-darwin.tar.xz"
+        "x86_64-apple-darwin"
     } else if cfg!(target_os = "windows") {
-        "qemu-xtensa-softmmu-esp_develop_9.2.2_20260417-x86_64-w64-mingw32.tar.xz"
+        "x86_64-w64-mingw32"
     } else {
         return Err("Unsupported platform".to_string());
     };
-    let url = format!("{}/{}", base, filename);
-    let required = format!("bin/{}", exe_name("qemu-system-xtensa"));
-    install_archive(window, "esp32-qemu-progress", url, dir, required).await
+
+    // ESP32 / ESP32-S3 (Xtensa), then ESP32-C3 (RISC-V). Each lands in its own
+    // folder because both archives unpack to the same layout.
+    for (arch, folder, binary) in [
+        ("xtensa", "esp32", "qemu-system-xtensa"),
+        ("riscv32", "esp32-riscv", "qemu-system-riscv32"),
+    ] {
+        let dir = qemu_dir(&app, folder)?;
+        if dir.join("bin").join(exe_name(binary)).exists() {
+            continue;
+        }
+        let url = format!("{}/qemu-{}-softmmu-{}-{}.tar.xz", base, arch, version, platform);
+        let required = format!("bin/{}", exe_name(binary));
+        install_archive(window.clone(), "esp32-qemu-progress", url, dir, required, true).await?;
+    }
+    Ok(())
+}
+
+/// arduino-cli downloaded from Setup when no bundled or system copy works.
+pub fn arduino_cli_install_path(app: &AppHandle) -> Option<PathBuf> {
+    let data_dir = app.path().app_data_dir().ok()?;
+    Some(data_dir.join("arduino-cli").join(exe_name("arduino-cli")))
+}
+
+#[tauri::command]
+pub async fn arduino_cli_install(app: AppHandle, window: tauri::Window) -> Result<(), String> {
+    const VERSION: &str = "1.5.1";
+    let asset = if cfg!(target_os = "linux") && cfg!(target_arch = "x86_64") {
+        "Linux_64bit.tar.gz"
+    } else if cfg!(target_os = "linux") && cfg!(target_arch = "aarch64") {
+        "Linux_ARM64.tar.gz"
+    } else if cfg!(target_os = "macos") && cfg!(target_arch = "aarch64") {
+        "macOS_ARM64.tar.gz"
+    } else if cfg!(target_os = "macos") && cfg!(target_arch = "x86_64") {
+        "macOS_64bit.tar.gz"
+    } else if cfg!(target_os = "windows") && cfg!(target_arch = "x86_64") {
+        "Windows_64bit.zip"
+    } else {
+        return Err("Unsupported platform".to_string());
+    };
+    let url = format!(
+        "https://github.com/arduino/arduino-cli/releases/download/v{v}/arduino-cli_{v}_{a}",
+        v = VERSION,
+        a = asset
+    );
+    let binary = arduino_cli_install_path(&app).ok_or("No app data folder")?;
+    let dir = binary.parent().ok_or("No install folder")?.to_path_buf();
+    // The release archives hold the binary at their root (no top folder).
+    install_archive(window, "arduino-cli-progress", url, dir, exe_name("arduino-cli"), false).await
 }
 
 fn exe_name(name: &str) -> String {
@@ -121,7 +175,7 @@ pub async fn wasi_sdk_install(app: AppHandle, window: tauri::Window) -> Result<(
     );
     let dir = wasi_sdk_dir(&app)?;
     let required = format!("bin/{}", exe_name("clang"));
-    install_archive(window, "wasi-sdk-progress", url, dir, required).await
+    install_archive(window, "wasi-sdk-progress", url, dir, required, true).await
 }
 
 /// Download a .tar.xz / .tar.gz release archive, unpack it (dropping the
@@ -134,9 +188,12 @@ async fn install_archive(
     url: String,
     dir: PathBuf,
     required: String,
+    strip_top_folder: bool,
 ) -> Result<(), String> {
     let _ = window.emit(event, serde_json::json!({"phase": "starting", "progress": 0}));
-    tokio::task::spawn_blocking(move || download_and_extract(&window, event, &url, &dir, &required))
+    tokio::task::spawn_blocking(move || {
+        download_and_extract(&window, event, &url, &dir, &required, strip_top_folder)
+    })
         .await
         .map_err(|e| format!("Task failed: {}", e))?
 }
@@ -147,6 +204,7 @@ fn download_and_extract(
     url: &str,
     dir: &std::path::Path,
     required: &str,
+    strip_top_folder: bool,
 ) -> Result<(), String> {
     use std::io::{Read, Write};
 
@@ -221,7 +279,7 @@ fn download_and_extract(
         "total_bytes": total_size
     }));
 
-    let result = extract(&archive, &staging);
+    let result = extract(&archive, &staging, strip_top_folder);
     std::fs::remove_file(&archive).ok();
     if let Err(e) = result {
         let _ = std::fs::remove_dir_all(&staging);
@@ -242,10 +300,13 @@ fn download_and_extract(
 
 /// Unpack with the system `tar` (bsdtar ships with Windows 10 and later at
 /// System32\tar.exe, GNU or bsd tar elsewhere), falling back to 7-Zip.
-fn extract(archive: &std::path::Path, dest: &std::path::Path) -> Result<(), String> {
+fn extract(archive: &std::path::Path, dest: &std::path::Path, strip_top_folder: bool) -> Result<(), String> {
     let archive_str = archive.to_string_lossy().to_string();
     let dest_str = dest.to_string_lossy().to_string();
-    let tar_args = ["-xf", archive_str.as_str(), "-C", dest_str.as_str(), "--strip-components=1"];
+    let mut tar_args = vec!["-xf", archive_str.as_str(), "-C", dest_str.as_str()];
+    if strip_top_folder {
+        tar_args.push("--strip-components=1");
+    }
 
     let mut candidates: Vec<std::path::PathBuf> = vec![std::path::PathBuf::from("tar")];
     if cfg!(target_os = "windows") {
@@ -253,7 +314,7 @@ fn extract(archive: &std::path::Path, dest: &std::path::Path) -> Result<(), Stri
     }
     for tar in &candidates {
         let mut cmd = std::process::Command::new(tar);
-        cmd.args(tar_args);
+        cmd.args(&tar_args);
         #[cfg(windows)]
         {
             use std::os::windows::process::CommandExt;
@@ -295,5 +356,5 @@ pub async fn stm32_qemu_install(app: AppHandle, window: tauri::Window) -> Result
     );
     let dir = qemu_dir(&app, "stm32")?;
     let required = format!("bin/{}", exe_name("qemu-system-arm"));
-    install_archive(window, "stm32-qemu-progress", url, dir, required).await
+    install_archive(window, "stm32-qemu-progress", url, dir, required, true).await
 }

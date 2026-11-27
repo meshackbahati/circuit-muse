@@ -114,3 +114,27 @@ fn stop_child(child: EngineChild, pid: u32) {
         child.force_kill();
     }
 }
+
+/// Port the engine reported ("Starting on port N"). The window asks for it at
+/// startup with the `engine_port` command: the `engine-ready` event can fire
+/// before the page listens, and guessing or scanning ports could reach a
+/// different engine (an old instance or another app on 8001).
+#[derive(Default)]
+pub struct EnginePort(Mutex<Option<u16>>);
+
+impl EnginePort {
+    pub fn set(&self, port: u16) {
+        if let Ok(mut slot) = self.0.lock() {
+            *slot = Some(port);
+        }
+    }
+
+    pub fn get(&self) -> Option<u16> {
+        self.0.lock().ok().and_then(|slot| *slot)
+    }
+}
+
+#[tauri::command]
+pub fn engine_port(state: tauri::State<'_, EnginePort>) -> Option<u16> {
+    state.get()
+}

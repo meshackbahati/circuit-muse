@@ -34,8 +34,20 @@ export function setEnginePort(port: number): void {
   }
 }
 
+/** Forget the port remembered from an earlier session. The engine picks a
+ *  free port on every launch, so a stored value can point at another process. */
+export function clearEnginePort(): void {
+  cachedPort = null;
+  try {
+    localStorage.removeItem(ENGINE_PORT_KEY);
+  } catch {
+    // Storage may be unavailable.
+  }
+}
+
 /**
- * Try to find the engine by scanning ports.
+ * Try to find the engine by scanning ports. Last resort only: the first
+ * engine that answers may not be the one this app started.
  */
 export async function detectEnginePort(): Promise<number | null> {
   const ports = Array.from(

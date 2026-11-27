@@ -11,6 +11,7 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init())
         .manage(engine_process::EngineProcess::default())
+        .manage(engine_process::EnginePort::default())
         .setup(|app| {
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
@@ -27,6 +28,8 @@ pub fn run() {
             commands::qemu::stm32_qemu_install,
             commands::qemu::wasi_sdk_status,
             commands::qemu::wasi_sdk_install,
+            commands::qemu::arduino_cli_install,
+            engine_process::engine_port,
         ])
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
@@ -124,6 +127,8 @@ fn qemu_binary_path(app: &tauri::AppHandle, arch: &str) -> Option<String> {
         "riscv32" => "qemu-system-riscv32",
         _ => return None,
     };
+    // Matches the folders esp32_qemu_install writes to.
+    let folder = if arch == "riscv32" { "esp32-riscv" } else { "esp32" };
     let name = if cfg!(target_os = "windows") {
         format!("{name}.exe")
     } else {
@@ -134,7 +139,7 @@ fn qemu_binary_path(app: &tauri::AppHandle, arch: &str) -> Option<String> {
         .app_data_dir()
         .ok()?
         .join("qemu")
-        .join("esp32")
+        .join(folder)
         .join("bin")
         .join(name);
     Some(path.to_string_lossy().to_string())
@@ -150,6 +155,10 @@ fn spawn_python_fallback(
     use std::process::{Command, Stdio};
 
     let engine_dir_str = engine_dir.to_string_lossy().to_string();
+    let qemu_riscv = qemu_binary_path(app, "riscv32").unwrap_or_default();
+    let cli_fallback = commands::qemu::arduino_cli_install_path(app)
+        .map(|p| p.to_string_lossy().to_string())
+        .unwrap_or_default();
     let wasi_sdk = commands::qemu::wasi_sdk_path(app)
         .map(|p| p.to_string_lossy().to_string())
         .unwrap_or_default();
@@ -169,6 +178,8 @@ fn spawn_python_fallback(
             .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
             .env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string())
             .env("WASI_SDK", &wasi_sdk)
+            .env("QEMU_RISCV32_BINARY", &qemu_riscv)
+            .env("ARDUINO_CLI_FALLBACK", &cli_fallback)
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
@@ -185,6 +196,8 @@ fn spawn_python_fallback(
             .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
             .env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string())
             .env("WASI_SDK", &wasi_sdk)
+            .env("QEMU_RISCV32_BINARY", &qemu_riscv)
+            .env("ARDUINO_CLI_FALLBACK", &cli_fallback)
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
@@ -195,6 +208,8 @@ fn spawn_python_fallback(
                     .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
                     .env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string())
                     .env("WASI_SDK", &wasi_sdk)
+                    .env("QEMU_RISCV32_BINARY", &qemu_riscv)
+            .env("ARDUINO_CLI_FALLBACK", &cli_fallback)
                     .stdout(Stdio::piped())
                     .stderr(Stdio::piped())
                     .spawn()
@@ -221,6 +236,8 @@ fn spawn_python_fallback(
                 if line.contains("Starting on port") {
                     if let Some(port_str) = line.split("port ").nth(1) {
                         if let Ok(port) = port_str.trim().parse::<u16>() {
+                            use tauri::Manager;
+                            app_clone.state::<engine_process::EnginePort>().set(port);
                             let _ = app_clone.emit("engine-ready", port);
                         }
                     }
@@ -286,10 +303,14 @@ async fn start_engine(app: &tauri::AppHandle) {
             if let Some(path) = commands::qemu::wasi_sdk_path(app) {
                 command = command.env("WASI_SDK", path.to_string_lossy().to_string());
             }
+            // Where Setup installs arduino-cli; the engine falls back to it.
+            if let Some(path) = commands::qemu::arduino_cli_install_path(app) {
+                command = command.env("ARDUINO_CLI_FALLBACK", path.to_string_lossy().to_string());
+            }
+            // Passed even before it exists: the engine checks at launch time,
+            // so a runtime installed from Setup works without a restart.
             if let Some(ref path) = qemu_riscv_path {
-                if std::path::Path::new(path).exists() {
-                    command = command.env("QEMU_RISCV32_BINARY", path);
-                }
+                command = command.env("QEMU_RISCV32_BINARY", path);
             }
             match command.spawn() {
                 Ok((mut rx, child)) => {
@@ -303,6 +324,8 @@ async fn start_engine(app: &tauri::AppHandle) {
                                 if line.contains("Starting on port") {
                                     if let Some(port_str) = line.split("port ").nth(1) {
                                         if let Ok(port) = port_str.trim().parse::<u16>() {
+                                            use tauri::Manager;
+                                            app.state::<engine_process::EnginePort>().set(port);
                                             let _ = app.emit("engine-ready", port);
                                         }
                                     }
