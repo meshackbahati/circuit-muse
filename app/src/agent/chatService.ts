@@ -64,18 +64,103 @@ export function summarizeDropped(messages: Message[]): string {
   return `${COMPACTION_PREFIX}\n${summary || 'No prior tool evidence was recorded.'}\nUse the current tool results and live circuit state as the source of truth.`;
 }
 
+/** Make every tool result follow the assistant message that called it.
+ *
+ *  Anthropic and OpenAI reject a request that contains a tool result without
+ *  its tool call ("unexpected tool_use_id found in tool_result blocks") or a
+ *  tool call without its result. Compaction, an abort or a failed tool can
+ *  leave either behind. Orphan results are removed and unanswered calls are
+ *  stripped from their assistant message, which is dropped if nothing is left.
+ *  Mutates `messages` in place. */
+export function repairToolPairs(messages: Message[]): void {
+  const repaired: Message[] = [];
+  let i = 0;
+  while (i < messages.length) {
+    const message = messages[i];
+
+    if (message.role === 'tool') {
+      // Results are only valid directly after the assistant turn that asked
+      // for them; anything reaching here has lost its call.
+      i++;
+      continue;
+    }
+
+    if (message.role === 'assistant' && (message.toolCalls?.length ?? 0) > 0) {
+      const callIds = new Set(message.toolCalls!.map((tc) => tc.id));
+      const results: Message[] = [];
+      let j = i + 1;
+      while (j < messages.length && messages[j].role === 'tool') {
+        const result = messages[j];
+        if (result.toolCallId && callIds.has(result.toolCallId)
+          && !results.some((r) => r.toolCallId === result.toolCallId)) {
+          results.push(result);
+        }
+        j++;
+      }
+      const answered = new Set(results.map((r) => r.toolCallId));
+      const toolCalls = message.toolCalls!.filter((tc) => answered.has(tc.id));
+      if (toolCalls.length > 0) {
+        repaired.push(
+          toolCalls.length === message.toolCalls!.length ? message : { ...message, toolCalls },
+          ...results,
+        );
+      } else if (message.content.trim()) {
+        repaired.push({ ...message, toolCalls: undefined });
+      }
+      i = j;
+      continue;
+    }
+
+    repaired.push(message);
+    i++;
+  }
+  if (repaired.length !== messages.length || repaired.some((m, k) => m !== messages[k])) {
+    messages.splice(0, messages.length, ...repaired);
+  }
+}
+
 /** Keep a bounded provider transcript by replacing the oldest turns with a
- *  factual summary. The full transcript stays in the UI and saved project. */
+ *  factual summary. The full transcript stays in the UI and saved project.
+ *  The cut never separates a tool call from its results: if it would start on
+ *  a tool result, that whole tool round moves into the summary. */
 export function compactMessages(messages: Message[]): void {
-  if (messages.length <= MAX_PROVIDER_MESSAGES) return;
-  const dropped = messages.splice(1, messages.length - MAX_PROVIDER_MESSAGES);
-  const summary = summarizeDropped(dropped);
-  messages.splice(1, 0, {
-    id: `compaction-${Date.now()}`,
-    role: 'user',
-    content: summary,
-    timestamp: Date.now(),
+  if (messages.length > MAX_PROVIDER_MESSAGES) {
+    let cut = messages.length - MAX_PROVIDER_MESSAGES + 1;
+    while (cut < messages.length && messages[cut].role === 'tool') cut++;
+    const dropped = messages.splice(1, cut - 1);
+    const summary = summarizeDropped(dropped);
+    messages.splice(1, 0, {
+      id: `compaction-${Date.now()}`,
+      role: 'user',
+      content: summary,
+      timestamp: Date.now(),
+    });
+  }
+  repairToolPairs(messages);
+}
+
+/** System prompt, the latest user request and the latest complete tool round.
+ *  A blind "keep the last N messages" cut could start on a tool result whose
+ *  call was dropped, which providers reject. */
+export function minimalTranscript(messages: Message[]): Message[] {
+  const system = messages[0]?.role === 'system' ? [messages[0]] : [];
+  let lastUser = -1;
+  let lastRound = -1;
+  messages.forEach((m, index) => {
+    if (m.role === 'user') lastUser = index;
+    if (m.role === 'assistant' && (m.toolCalls?.length ?? 0) > 0) lastRound = index;
   });
+  const kept: Message[] = [];
+  if (lastUser >= 0 && lastUser < lastRound) {
+    kept.push(messages[lastUser], ...messages.slice(lastRound));
+  } else if (lastUser >= 0) {
+    kept.push(...messages.slice(lastUser));
+  } else if (lastRound >= 0) {
+    kept.push(...messages.slice(lastRound));
+  }
+  const result = [...system, ...kept];
+  repairToolPairs(result);
+  return result;
 }
 
 /** Tools that change the canvas or the firmware. A turn that used one of
@@ -648,7 +733,7 @@ export async function sendMessage(content: string): Promise<void> {
     ) {
       // Strip history to the system prompt, the last user turn and the last
       // tool turn. The live stores still carry the verified circuit state.
-      messages.splice(1, Math.max(0, messages.length - 5));
+      messages.splice(0, messages.length, ...minimalTranscript(messages));
       agentStore.addMessage({
         role: 'assistant',
         content: 'The provider rejected the long transcript. I compacted the history and am continuing with the last tool result.',
