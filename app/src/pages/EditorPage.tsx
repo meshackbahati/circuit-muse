@@ -21,14 +21,8 @@ const RaspberryPiWorkspace = lazy(() =>
 import { CompilationConsole } from '../components/editor/CompilationConsole';
 import { SimulatorCanvas } from '../components/simulator/SimulatorCanvas';
 import { SerialMonitor } from '../components/simulator/SerialMonitor';
-import { Oscilloscope } from '../components/simulator/Oscilloscope';
 import { triggerSaveAction } from '../lib/proSaveAction';
-import { AgentChatPanel } from '../agent/components/AgentChatPanel';
 import { useAgentStore } from '../store/useAgentStore';
-import { ProjectsModal } from '../components/projects/ProjectsModal';
-import { ExportMenu } from '../components/projects/ExportMenu';
-import { SetupWizard } from '../components/projects/SetupWizard';
-import { GitHubSyncModal } from '../components/projects/GitHubSyncModal';
 import { useLocalAutoSave } from '../hooks/useLocalAutoSave';
 import { useSimulatorStore, DEFAULT_BOARD_POSITION } from '../store/useSimulatorStore';
 import { useEditorStore } from '../store/useEditorStore';
@@ -38,6 +32,27 @@ import { useProjectStore } from '../store/useProjectStore';
 import { useWorkspaceStore } from '../store/useWorkspaceStore';
 import { saveCurrentWorkspace, loadProjectIntoStores } from '../services/localProjectStore';
 import '../App.css';
+
+// Panels and dialogs that are closed by default load on first open. The AI
+// panel alone brings the provider SDKs, Markdown and syntax highlighting.
+const Oscilloscope = lazy(() =>
+  import('../components/simulator/Oscilloscope').then((module) => ({ default: module.Oscilloscope })),
+);
+const AgentChatPanel = lazy(() =>
+  import('../agent/components/AgentChatPanel').then((module) => ({ default: module.AgentChatPanel })),
+);
+const ProjectsModal = lazy(() =>
+  import('../components/projects/ProjectsModal').then((module) => ({ default: module.ProjectsModal })),
+);
+const ExportMenu = lazy(() =>
+  import('../components/projects/ExportMenu').then((module) => ({ default: module.ExportMenu })),
+);
+const SetupWizard = lazy(() =>
+  import('../components/projects/SetupWizard').then((module) => ({ default: module.SetupWizard })),
+);
+const GitHubSyncModal = lazy(() =>
+  import('../components/projects/GitHubSyncModal').then((module) => ({ default: module.GitHubSyncModal })),
+);
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -790,7 +805,9 @@ export const EditorPage: React.FC = () => {
                 title={t('editor.shell.dragResize')}
               />
               <div style={{ height: bottomPanelHeight, flexShrink: 0 }}>
-                <Oscilloscope />
+                <Suspense fallback={null}>
+                  <Oscilloscope />
+                </Suspense>
               </div>
             </>
           )}
@@ -826,7 +843,9 @@ export const EditorPage: React.FC = () => {
                 }}
               />
             )}
-            <AgentChatPanel />
+            <Suspense fallback={null}>
+              <AgentChatPanel />
+            </Suspense>
           </div>
         )}
 
@@ -859,8 +878,10 @@ export const EditorPage: React.FC = () => {
       </div>
 
       {/* ── Modals ── */}
-      {showProjects && <ProjectsModal onClose={() => setShowProjects(false)} />}
-      {showExport && <ExportMenu onClose={() => setShowExport(false)} />}
+      <Suspense fallback={null}>
+        {showProjects && <ProjectsModal onClose={() => setShowProjects(false)} />}
+        {showExport && <ExportMenu onClose={() => setShowExport(false)} />}
+      </Suspense>
       {saveDialog && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 10002, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ background: '#1e1e23', border: '1px solid #2c2c33', borderRadius: 8, padding: 20, width: 340 }}>
@@ -882,8 +903,10 @@ export const EditorPage: React.FC = () => {
           </div>
         </div>
       )}
-      {showSetup && <SetupWizard onClose={() => setShowSetup(false)} />}
-      {showGitHubSync && <GitHubSyncModal onClose={() => setShowGitHubSync(false)} />}
+      <Suspense fallback={null}>
+        {showSetup && <SetupWizard onClose={() => setShowSetup(false)} />}
+        {showGitHubSync && <GitHubSyncModal onClose={() => setShowGitHubSync(false)} />}
+      </Suspense>
     </div>
   );
 };

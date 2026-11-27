@@ -248,3 +248,16 @@ body {
 .ap-link:hover {
   text-decoration: underline;
 }
+
+/* Respect the OS "reduce motion" setting. Looping status pulses also cost
+   a repaint per frame when the WebView renders without a GPU. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
