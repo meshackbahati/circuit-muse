@@ -41,11 +41,33 @@ chosen from the board FQBN: Intel HEX for AVR, binary for ESP32 and SAMD, and
 UF2 for RP2040. The flash endpoint refuses to start when the board has no
 compiled program.
 
+### Port discovery and readable names
+
+The Tauri command `list_serial_ports` uses the Rust `serialport` crate and
+returns the native path together with USB vendor id, product id, manufacturer,
+product, and serial number. The dialog maps known vendor and product pairs to
+names such as `Arduino Uno`, `Arduino Mega`, `CH340 USB serial`, `CP210x USB
+serial`, `FTDI USB serial`, `ESP32 USB`, and `Raspberry Pi Pico`. Unrecognised
+devices fall back to the reported manufacturer and product, then to the path.
+The path remains visible in parentheses, so the technical identifier is never
+lost.
+
+A `Name this port` control stores a custom label in local storage, keyed by
+serial number when the device reports one and by path otherwise. The label is
+reused when the same device returns. This removes the need to remember which
+`COM*` or `/dev/tty*` entry belongs to which board.
+
 ### Platform constraints
 
-The web build cannot enumerate local serial ports. The flash controls are
-therefore hidden outside the desktop shell. Linux users must belong to the
-`dialout` group, and the dialog states this requirement when no port is found.
+The web build cannot enumerate local serial ports, so the flash controls are
+hidden outside the desktop shell. On Linux, native USB boards appear as
+`/dev/ttyACM*`, adapter boards as `/dev/ttyUSB*`, and the user must belong to
+the `dialout` group. Log out and back in after `sudo usermod -a -G dialout
+$USER`. On macOS, use `/dev/cu.usbmodem*` for native boards and
+`/dev/cu.usbserial*` for adapters; CH340 and CP210x parts need a vendor driver,
+and recent macOS versions require approval of driver extensions under Privacy
+and Security. On Windows, ports are `COM*` entries and a vendor driver is
+required; Zadig is needed when a board presents an unclaimed USB interface.
 
 ## Gaps
 
@@ -57,8 +79,9 @@ hardware loop.
    current editor contents. A compile timestamp and a stale warning are needed.
 2. The flash dialog handles one board at a time. A multi-board project with
    three physical boards requires three separate selections.
-3. There is no record of which physical port was used for which board. Users
-   with several identical boards must identify the correct port on every run.
+3. Custom port labels are stored locally per device, but a project does not
+   remember which physical port belongs to which canvas board. Users with
+   several identical boards still confirm the mapping on each run.
 4. The emulator run and the hardware flash are separate actions. There is no
    post-run handoff that offers to flash the firmware that was just tested.
 5. Upload verification relies on `arduino-cli` exit status. There is no

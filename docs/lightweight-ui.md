@@ -33,16 +33,34 @@ all run inside one page.
 - Run stylelint and `tsc --noUnusedLocals` to remove dead selectors and
   unused imports before release.
 
-## Planned changes
+## Implemented changes
 
-1. Disable `decorations` on the desktop window and add a 32 px custom title
-   bar with dragging and window controls.
-2. Add `content-visibility: auto` to the project list, history list, message
-   list and upload tray.
-3. Split `AgentChatPanel` into a lazy chunk, remove `BlazeMarkdown` and any
-   other editor-only modules from the initial editor bundle if feasible.
-4. Measure after each change with `top` and `spectacle`, then tune by at
-   least 10 percent or revert.
+1. The desktop window uses `decorations: false` with a 32 px custom title
+   bar. It declares `data-tauri-drag-region` and requests the
+   `core:window:allow-start-dragging` permission. The bar owns close,
+   minimize, and maximize, and the hook order is stable on the web build.
+2. Long lists use `content-visibility: auto`, including the project list,
+   conversation history, message list, and upload tray.
+3. The assistant panel is a flex sibling of the workspace and can be
+   resized, minimized, or closed without covering the canvas. History is
+   capped in memory. Long provider transcripts are compacted into a factual
+   summary before each request, and tool result content is capped.
+4. Simulation frames use bounded CPU budgets. The RP2040 scheduler stops a
+   frame after 6 ms of CPU work, which leaves pointer, scroll, and paint work
+   responsive on low-power machines. Serial buffers, conversation transcripts,
+   and oscilloscope sample buffers are bounded.
+5. The oscilloscope redraws at 20 fps while capturing instead of driving a
+   60 Hz animation frame per sample. Canvases are DPR-aware and resize once
+   per layout change rather than once per sample.
+6. Embedded WebKit falls back to software rendering when no GPU render device
+   is found. `CIRCUIT_MUSE_SOFTWARE_RENDERING=1` forces that path.
+
+## Remaining work
+
+Profiling through `gdb` and `perf` is blocked by ptrace and perf permissions
+on the development machine. Measurements rely on `top`, process inspection,
+and screenshots. Further bundle splitting of editor-only modules remains
+possible but has not been measured.
 
 ## Commands
 
