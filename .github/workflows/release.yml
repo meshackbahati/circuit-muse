@@ -399,6 +399,13 @@ jobs:
           cp src-tauri/binaries/circuit-muse-engine-x86_64-unknown-linux-gnu arch-build/circuit-muse-engine-x86_64-unknown-linux-gnu
           cp src-tauri/binaries/arduino-cli-x86_64-unknown-linux-gnu arch-build/arduino-cli-x86_64-unknown-linux-gnu
           chmod +x arch-build/*
+          # Menu entry and icons, so the app appears in the launcher and the
+          # dock shows its icon. The window reports itself as circuit-muse.
+          cp src-tauri/linux/circuit-muse.desktop arch-build/circuit-muse.desktop
+          cp src-tauri/icons/32x32.png arch-build/icon-32.png
+          cp src-tauri/icons/128x128.png arch-build/icon-128.png
+          cp src-tauri/icons/128x128@2x.png arch-build/icon-256.png
+          cp LICENSE arch-build/LICENSE
           cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
@@ -409,12 +416,18 @@ jobs:
           url="https://github.com/meshackbahati/circuit-muse"
           license=('MIT')
           depends=('webkit2gtk-4.1' 'gtk3' 'libsoup3' 'libappindicator-gtk3')
-          source=("circuit-muse" "circuit-muse-engine-x86_64-unknown-linux-gnu" "arduino-cli-x86_64-unknown-linux-gnu")
-          sha256sums=('SKIP' 'SKIP' 'SKIP')
+          source=("circuit-muse" "circuit-muse-engine-x86_64-unknown-linux-gnu" "arduino-cli-x86_64-unknown-linux-gnu"
+                  "circuit-muse.desktop" "icon-32.png" "icon-128.png" "icon-256.png" "LICENSE")
+          sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
           package() {
             install -Dm755 "$srcdir/circuit-muse" "$pkgdir/usr/bin/circuit-muse"
             install -Dm755 "$srcdir/circuit-muse-engine-x86_64-unknown-linux-gnu" "$pkgdir/usr/bin/circuit-muse-engine-x86_64-unknown-linux-gnu"
             install -Dm755 "$srcdir/arduino-cli-x86_64-unknown-linux-gnu" "$pkgdir/usr/bin/arduino-cli-x86_64-unknown-linux-gnu"
+            install -Dm644 "$srcdir/circuit-muse.desktop" "$pkgdir/usr/share/applications/circuit-muse.desktop"
+            install -Dm644 "$srcdir/icon-32.png" "$pkgdir/usr/share/icons/hicolor/32x32/apps/circuit-muse.png"
+            install -Dm644 "$srcdir/icon-128.png" "$pkgdir/usr/share/icons/hicolor/128x128/apps/circuit-muse.png"
+            install -Dm644 "$srcdir/icon-256.png" "$pkgdir/usr/share/icons/hicolor/256x256/apps/circuit-muse.png"
+            install -Dm644 "$srcdir/LICENSE" "$pkgdir/usr/share/licenses/circuit-muse/LICENSE"
           }
           PKGEOF
           useradd -m builder
