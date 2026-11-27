@@ -20,6 +20,9 @@ tauri-plugin-shell = "2"
 tauri-plugin-dialog = "2"
 tauri-plugin-fs = "2"
 tauri-plugin-opener = "2"
+# Opening the app twice focuses the running window instead of starting a
+# second app and engine.
+tauri-plugin-single-instance = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 serialport = "4"
@@ -27,7 +30,7 @@ serialport = "4"
 # regardless of its OpenSSL version (the Arch package built against OpenSSL 4
 # did not start on systems with OpenSSL 3).
 reqwest = { version = "0.12", default-features = false, features = ["blocking", "rustls-tls", "http2"] }
-tokio = { version = "1", features = ["rt", "macros"] }
+tokio = { version = "1", features = ["rt", "macros", "time"] }
 
 [target.'cfg(unix)'.dependencies]
 libc = "0.2"
