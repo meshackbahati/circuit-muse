@@ -409,7 +409,7 @@ jobs:
           cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
-          pkgver=1.2.1
+          pkgver=1.2.2
           pkgrel=1
           pkgdesc="AI-powered circuit simulator and embedded board emulator"
           arch=('x86_64')
@@ -470,6 +470,10 @@ jobs:
 
             ### Changes in this release
 
+            - ESP32 boards now run in the open-source desktop build without libqemu-xtensa. Simulation builds use loop core 0, watchdogs are disabled, and GPIO transitions are read from QEMU trace events so blink sketches toggle pins and print serial output.
+            - Hardware flashing works from the desktop app. The route now uses the bundled Arduino CLI path, and ESP32 images go through esptool at the correct flash offset. The Arduino CLI installer is available from Setup, and the ESP32 runtime also installs the RISC-V emulator needed by ESP32-C3.
+            - The first compile shows progress while a board core installs. The Arch package now adds a desktop entry, icons, and the license, and the binary uses rustls instead of the system OpenSSL. The engine builds with Python 3.12 or 3.13.
+            - The window now keeps the port of its own engine, so a second engine on 8001 cannot take over the session.
             - The setup wizard detects the host operating system and shows matching commands. The Install button still works the same way, while each runtime downloads the correct archive for Windows, macOS, or Linux underneath. Install buttons now run independently, so several downloads can proceed at once.
             - STM32 QEMU can now be installed from the setup wizard and the board prompt. The command downloads the xPack QEMU Arm release for the host platform and verifies the `qemu-system-arm` binary before replacing an existing install.
             - Closing the app now stops the engine, QEMU runtimes, and worker processes. The engine watches the app process and exits if the app crashes. Idle engine memory is lower because dependencies are checked without importing them.
@@ -542,7 +546,7 @@ jobs:
             |----------|--------|-------|
             | **Linux (x86_64)** | AppImage | Universal, works on Ubuntu, Debian, Fedora, Arch, and derivatives |
             | **Linux (x86_64)** | .deb | Debian/Ubuntu/Mint |
-            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.2.1-1-x86_64.pkg.tar.zst` |
+            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.2.2-1-x86_64.pkg.tar.zst` |
             | **Windows (x86_64)** | .exe (NSIS) | Windows 10/11 installer |
             | **Windows (x86_64)** | .msi | Windows MSI installer |
             | **macOS (ARM64)** | .dmg | Apple Silicon (M1/M2/M3/M4) |
