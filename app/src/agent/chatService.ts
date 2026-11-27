@@ -663,7 +663,12 @@ export async function sendMessage(content: string): Promise<void> {
       });
       return;
     }
-    const friendly = /503|429|\b50[02]\b/.test(errorMsg)
+    const retiredModel = /\b404\b/.test(errorMsg) && /(no longer available|not found|does not exist|deprecated)/i.test(errorMsg)
+      ? (/models\/([\w.-]+)/.exec(errorMsg)?.[1] ?? activeModelName())
+      : null;
+    const friendly = retiredModel
+      ? `The model "${retiredModel}" is not available for this API key (it may be retired). Open AI Provider Settings with the gear icon and choose another model from the list. ${errorMsg}`
+      : /503|429|\b50[02]\b/.test(errorMsg)
       ? `The model provider stayed busy after ${MAX_STREAM_ATTEMPTS} attempts. Send again in a moment, or choose another provider or model. ${errorMsg}`
       : /\b40[13]\b/.test(errorMsg)
         ? `The provider rejected the credentials. Check the API key in AI Provider Settings. ${errorMsg}`

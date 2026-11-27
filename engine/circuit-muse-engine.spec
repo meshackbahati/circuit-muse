@@ -34,6 +34,8 @@ a = Analysis(
         ('app/services/esp-idf-template', 'app/services/esp-idf-template'),
         ('app/services/boot_images', 'app/services/boot_images'),
         ('app/mcp', 'app/mcp'),
+        # Header for custom chip compilation (chip_compile.py looks in sdk/).
+        ('sdk', 'sdk'),
     ] + wasmtime_datas,
     hiddenimports=[
         'app.main',

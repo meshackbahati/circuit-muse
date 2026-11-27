@@ -25,6 +25,8 @@ pub fn run() {
             commands::qemu::esp32_qemu_install,
             commands::qemu::stm32_qemu_status,
             commands::qemu::stm32_qemu_install,
+            commands::qemu::wasi_sdk_status,
+            commands::qemu::wasi_sdk_install,
         ])
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
@@ -141,6 +143,9 @@ fn spawn_python_fallback(
     use std::process::{Command, Stdio};
 
     let engine_dir_str = engine_dir.to_string_lossy().to_string();
+    let wasi_sdk = commands::qemu::wasi_sdk_path(app)
+        .map(|p| p.to_string_lossy().to_string())
+        .unwrap_or_default();
 
     // Look for virtual environment python executable
     let venv_python = if cfg!(target_os = "windows") {
@@ -156,6 +161,7 @@ fn spawn_python_fallback(
             .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
             .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
             .env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string())
+            .env("WASI_SDK", &wasi_sdk)
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
@@ -171,6 +177,7 @@ fn spawn_python_fallback(
             .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
             .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
             .env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string())
+            .env("WASI_SDK", &wasi_sdk)
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
@@ -180,6 +187,7 @@ fn spawn_python_fallback(
                     .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
                     .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
                     .env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string())
+                    .env("WASI_SDK", &wasi_sdk)
                     .stdout(Stdio::piped())
                     .stderr(Stdio::piped())
                     .spawn()
@@ -267,6 +275,9 @@ async fn start_engine(app: &tauri::AppHandle) {
             }
             if let Some(ref path) = qemu_xtensa_path {
                 command = command.env("QEMU_ESP32_BINARY", path);
+            }
+            if let Some(path) = commands::qemu::wasi_sdk_path(app) {
+                command = command.env("WASI_SDK", path.to_string_lossy().to_string());
             }
             if let Some(ref path) = qemu_riscv_path {
                 if std::path::Path::new(path).exists() {

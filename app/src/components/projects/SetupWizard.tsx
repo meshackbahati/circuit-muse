@@ -12,7 +12,7 @@ import {
   scanDependencies,
   type Dependency,
   type QemuInstallProgress,
-  autoInstallQemu,
+  autoInstallTool,
   canAutoInstall,
 } from '../../services/dependencyChecker';
 import { openExternal } from '../../desktop/tauriBridge';
@@ -76,10 +76,7 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
 
     let failure: string | null = null;
     try {
-      const arch = dep.id === 'qemu-esp32' ? 'esp32' : 'stm32';
-      await autoInstallQemu(arch, (_pct, _phase, detail) => {
-        if (detail) setProgress(detail);
-      });
+      await autoInstallTool(dep.id, setProgress);
     } catch (err) {
       failure = err instanceof Error ? err.message : String(err);
     }
