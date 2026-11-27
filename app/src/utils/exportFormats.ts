@@ -4,24 +4,7 @@
  */
 
 import { buildVlxPayload } from './vlxFile';
-import { useSimulatorStore } from '../store/useSimulatorStore';
-import { useEditorStore } from '../store/useEditorStore';
-
-// Saved projects can still carry the legacy Wokwi field names.
-type WokwiComponent = { top: number; left: number; attrs?: Record<string, unknown> };
-type WokwiEndpoint = { pinId: string };
-
-// ─── Board type mapping (CircuitMuse → Wokwi) ─────────────────────────────────
-const BOARD_TO_WOKWI: Record<string, string> = {
-  'arduino-uno': 'wokwi-arduino-uno',
-  'arduino-nano': 'wokwi-arduino-nano',
-  'arduino-mega': 'wokwi-arduino-mega',
-  'raspberry-pi-pico': 'wokwi-pi-pico',
-  'pi-pico-w': 'wokwi-pi-pico-w',
-  'esp32': 'wokwi-esp32-devkit-v1',
-  'esp32-s3': 'wokwi-esp32-devkit-v1',
-  'esp32-c3': 'wokwi-esp32-devkit-v1',
-};
+import { buildWokwiZipBlob } from './wokwiZip';
 
 // ─── .vlx Export ──────────────────────────────────────────────────────────
 export function exportAsVlx(name?: string): Blob {
@@ -30,112 +13,51 @@ export function exportAsVlx(name?: string): Blob {
 }
 
 // ─── Raw JSON Export ──────────────────────────────────────────────────────
-export function exportAsJson(): Blob {
-  const sim = useSimulatorStore.getState();
-  const editor = useEditorStore.getState();
-  const data = {
-    boards: sim.boards,
-    components: sim.components,
-    wires: sim.wires,
-    fileGroups: editor.fileGroups,
-    activeBoardId: sim.activeBoardId,
-    exportedAt: new Date().toISOString(),
-  };
-  return new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+// Same validated shape as .vlx so it imports back through the same checks.
+// (It used to dump live board state — compiled firmware, serial output,
+// running flags — and skip chip programs and per-board settings.)
+export function exportAsJson(name?: string): Blob {
+  const payload = buildVlxPayload({ name });
+  return new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
 }
 
 // ─── Wokwi ZIP Export ─────────────────────────────────────────────────────
-export async function exportAsWokwiZip(_name?: string): Promise<Blob> {
-  const { default: JSZip } = await import('jszip');
-  const zip = new JSZip();
-  const sim = useSimulatorStore.getState();
-  const editor = useEditorStore.getState();
-
-  // Build diagram.json (Wokwi format)
-  const parts: unknown[] = [];
-  const connections: string[][] = [];
-
-  // Add board as first part
-  const activeBoard = sim.boards.find(b => b.id === sim.activeBoardId) ?? sim.boards[0];
-  if (activeBoard) {
-    const wokwiType = BOARD_TO_WOKWI[activeBoard.boardKind] ?? 'wokwi-arduino-uno';
-    parts.push({
-      type: wokwiType,
-      id: 'board',
-      top: activeBoard.y,
-      left: activeBoard.x,
-    });
-  }
-
-  // Add components
-  for (const comp of sim.components) {
-    document.getElementById(comp.id);
-    const legacy = comp as unknown as WokwiComponent;
-    const attrs: Record<string, string> = {};
-    if (legacy.attrs) {
-      for (const [k, v] of Object.entries(legacy.attrs)) {
-        if (v != null && v !== '') attrs[k] = String(v);
-      }
-    }
-    parts.push({
-      type: comp.metadataId,
-      id: comp.id,
-      top: legacy.top,
-      left: legacy.left,
-      attrs,
-    });
-  }
-
-  // Add wires
-  for (const wire of sim.wires) {
-    const start = wire.start as unknown as WokwiEndpoint;
-    const end = wire.end as unknown as WokwiEndpoint;
-    connections.push([
-      wire.start.componentId,
-      start.pinId,
-      wire.end.componentId,
-      end.pinId,
-      wire.color ?? 'green',
-    ]);
-  }
-
-  zip.file('diagram.json', JSON.stringify({ version: 1, author: 'CircuitMuse', parts, connections }, null, 2));
-
-  // Add sketch files
-  const activeGroupId = activeBoard?.activeFileGroupId;
-  if (activeGroupId && editor.fileGroups[activeGroupId]) {
-    for (const file of editor.fileGroups[activeGroupId]) {
-      zip.file(file.name, file.content);
-    }
-  }
-
-  return zip.generateAsync({ type: 'blob' });
+// diagram.json + sketch files for Wokwi, plus the full snapshot so a
+// CircuitMuse round-trip loses nothing.
+export async function exportAsWokwiZip(name?: string): Promise<Blob> {
+  return buildWokwiZipBlob(buildVlxPayload({ name }));
 }
 
 // ─── HTML Report Export ───────────────────────────────────────────────────
 export function exportAsHtmlReport(name?: string): Blob {
-  const sim = useSimulatorStore.getState();
-  const editor = useEditorStore.getState();
-  buildVlxPayload({ name });
-
-  const componentCount = sim.components.length;
-  const wireCount = sim.wires.length;
+  const payload = buildVlxPayload({ name, includeChat: false });
+  const title = escapeHtml(name ?? 'CircuitMuse Project');
+  const boardLabel = new Map(payload.boards.map((b) => [b.id, b.name || b.boardKind]));
 
   let codeSection = '';
-  for (const [gid, files] of Object.entries(editor.fileGroups)) {
+  for (const [gid, files] of Object.entries(payload.fileGroups)) {
     if (!files.length) continue;
-    codeSection += `<h3>${gid}</h3>`;
+    const owner = payload.boards.find((b) => b.activeFileGroupId === gid);
+    codeSection += `<h3>${escapeHtml(owner ? (boardLabel.get(owner.id) ?? gid) : gid)}</h3>`;
     for (const file of files) {
-      codeSection += `<h4>${file.name}</h4><pre><code>${escapeHtml(file.content)}</code></pre>`;
+      codeSection += `<h4>${escapeHtml(file.name)}</h4><pre><code>${escapeHtml(file.content)}</code></pre>`;
     }
   }
+
+  const fmt = (n: number) => (Number.isFinite(n) ? String(Math.round(n)) : '?');
+  const props = (p: Record<string, unknown>) =>
+    Object.entries(p ?? {})
+      .filter(([, v]) => v !== undefined && v !== null && typeof v !== 'object')
+      .map(([k, v]) => `${escapeHtml(k)}=${escapeHtml(String(v))}`)
+      .join(', ');
 
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(name ?? 'CircuitMuse Project')} — Report</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:">
+  <title>${title} — Report</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
     h1 { border-bottom: 2px solid #007acc; padding-bottom: 10px; }
@@ -153,31 +75,31 @@ export function exportAsHtmlReport(name?: string): Blob {
   </style>
 </head>
 <body>
-  <h1>${escapeHtml(name ?? 'CircuitMuse Project')}</h1>
-  <p>Exported ${new Date().toLocaleString()}</p>
+  <h1>${title}</h1>
+  <p>Exported ${escapeHtml(new Date().toLocaleString())}</p>
 
   <div>
-    <div class="stat"><div class="stat-value">${sim.boards.length}</div><div class="stat-label">Boards</div></div>
-    <div class="stat"><div class="stat-value">${componentCount}</div><div class="stat-label">Components</div></div>
-    <div class="stat"><div class="stat-value">${wireCount}</div><div class="stat-label">Wires</div></div>
+    <div class="stat"><div class="stat-value">${payload.boards.length}</div><div class="stat-label">Boards</div></div>
+    <div class="stat"><div class="stat-value">${payload.components.length}</div><div class="stat-label">Components</div></div>
+    <div class="stat"><div class="stat-value">${payload.wires.length}</div><div class="stat-label">Wires</div></div>
   </div>
 
   <h2>Boards</h2>
   <table>
-    <tr><th>Board</th><th>Position</th><th>ID</th></tr>
-    ${sim.boards.map(b => `<tr><td>${b.boardKind}</td><td>(${b.x}, ${b.y})</td><td>${b.id}</td></tr>`).join('\n')}
+    <tr><th>Board</th><th>Position</th><th>ID</th><th>Language</th></tr>
+    ${payload.boards.map((b) => `<tr><td>${escapeHtml(b.name ? `${b.name} (${b.boardKind})` : b.boardKind)}</td><td>(${fmt(b.x)}, ${fmt(b.y)})</td><td>${escapeHtml(b.id)}</td><td>${escapeHtml(b.languageMode ?? 'arduino')}</td></tr>`).join('\n')}
   </table>
 
   <h2>Components</h2>
   <table>
-    <tr><th>Type</th><th>Position</th><th>ID</th></tr>
-    ${sim.components.map(c => `<tr><td>${c.metadataId}</td><td>(${(c as unknown as WokwiComponent).left}, ${(c as unknown as WokwiComponent).top})</td><td>${c.id}</td></tr>`).join('\n')}
+    <tr><th>Type</th><th>Position</th><th>ID</th><th>Properties</th></tr>
+    ${payload.components.map((c) => `<tr><td>${escapeHtml(c.metadataId)}</td><td>(${fmt(c.x)}, ${fmt(c.y)})</td><td>${escapeHtml(c.id)}</td><td>${props(c.properties)}</td></tr>`).join('\n')}
   </table>
 
   <h2>Wires</h2>
   <table>
     <tr><th>From</th><th>To</th><th>Color</th></tr>
-    ${sim.wires.map(w => `<tr><td>${w.start.componentId}.${(w.start as unknown as WokwiEndpoint).pinId}</td><td>${w.end.componentId}.${(w.end as unknown as WokwiEndpoint).pinId}</td><td>${w.color ?? 'green'}</td></tr>`).join('\n')}
+    ${payload.wires.map((w) => `<tr><td>${escapeHtml(`${w.start.componentId}.${w.start.pinName}`)}</td><td>${escapeHtml(`${w.end.componentId}.${w.end.pinName}`)}</td><td>${escapeHtml(w.color ?? '')}</td></tr>`).join('\n')}
   </table>
 
   <h2>Source Code</h2>
@@ -192,8 +114,13 @@ export function exportAsHtmlReport(name?: string): Blob {
   return new Blob([html], { type: 'text/html' });
 }
 
-function escapeHtml(str: string): string {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+export function escapeHtml(str: unknown): string {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 // ─── Trigger Download ─────────────────────────────────────────────────────
@@ -211,6 +138,12 @@ export function triggerDownload(blob: Blob, filename: string): void {
 }
 
 export function safeFilename(name: string, ext: string): string {
-  const cleaned = name.replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
+  // Keep letters/digits from any script (é, ü, 中文) — only strip characters
+  // that are unsafe in file names. Leading dots would make a hidden file.
+  const cleaned = name
+    .normalize('NFC')
+    .replace(/[^\p{L}\p{N}._-]+/gu, '-')
+    .replace(/^[-.]+|-+$/g, '')
+    .slice(0, 80);
   return `${cleaned || 'circuit-muse-project'}.${ext}`;
 }

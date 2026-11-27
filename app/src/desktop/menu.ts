@@ -24,7 +24,8 @@
 
 import { listen } from './tauriBridge';
 import { dlog } from './log';
-import { triggerDownloadVlx, importVlxFile } from '../utils/vlxFile';
+import { triggerDownloadVlx } from '../utils/vlxFile';
+import { importProjectFile, PROJECT_FILE_ACCEPT } from '../utils/importProject';
 import { useSimulatorStore } from '../store/useSimulatorStore';
 import { useEditorStore } from '../store/useEditorStore';
 import { useProjectStore } from '../store/useProjectStore';
@@ -139,17 +140,18 @@ function setLocale(locale: string): void {
 function pickAndImportVlx(): void {
   const input = document.createElement('input');
   input.type = 'file';
-  input.accept = '.vlx,application/json';
+  input.accept = PROJECT_FILE_ACCEPT;
   input.style.display = 'none';
   document.body.appendChild(input);
   input.addEventListener('change', async () => {
     const file = input.files?.[0];
     if (file) {
       try {
-        await importVlxFile(file);
+        // Validates before touching the workspace; a bad file leaves the
+        // current project as it was.
+        await importProjectFile(file);
       } catch (err) {
-
-        alert(`Failed to open .vlx: ${(err as Error).message}`);
+        alert((err as Error).message);
       }
     }
     document.body.removeChild(input);

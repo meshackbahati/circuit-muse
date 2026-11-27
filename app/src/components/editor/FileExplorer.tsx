@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEditorStore, chipFileGroupId } from '../../store/useEditorStore';
-import { useSimulatorStore, type BoardType } from '../../store/useSimulatorStore';
+import { useSimulatorStore } from '../../store/useSimulatorStore';
 import {
   isProgrammableChip,
   targetForChip,
@@ -250,7 +250,14 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ onSaveClick, onNewCl
     // Reset so picking the SAME file again later still fires onchange.
     e.target.value = '';
     if (!file) return;
-    const friendlyName = file.name.toLowerCase().endsWith('.zip') ? 'Wokwi .zip' : '.vlx';
+    const lower = file.name.toLowerCase();
+    const friendlyName = lower.endsWith('.zip')
+      ? 'Wokwi .zip'
+      : lower.endsWith('.fzz')
+        ? 'Fritzing .fzz'
+        : lower.endsWith('.json')
+          ? '.json'
+          : '.vlx';
     if (
       !window.confirm(
         `Load this ${friendlyName} project? Your current workspace will be replaced. ` +
@@ -260,28 +267,17 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ onSaveClick, onNewCl
       return;
     }
     try {
+      // Every format is validated before the workspace is replaced; on any
+      // failure the current project stays as it was.
       const result = await importProjectFile(file);
-      // .zip needs the caller to apply the payload to the stores (we keep
-      // that asymmetry so the toolbar's import flow can also pop the
-      // install-libraries modal afterwards). Here in the file explorer we
-      // don't have that modal, so we apply the payload silently and just
-      // warn in the console if the project references uninstalled libs.
-      if (result.kind === 'zip') {
-        const { loadFiles } = useEditorStore.getState();
-        const { setComponents, setWires, setBoardType, setBoardPosition, stopSimulation } =
-          useSimulatorStore.getState();
-        stopSimulation();
-        if (result.boardType) setBoardType(result.boardType as BoardType);
-        setBoardPosition(result.boardPosition);
-        setComponents(result.components);
-        setWires(result.wires);
-        if (result.files.length > 0) loadFiles(result.files);
-        if (result.libraries.length > 0) {
-          console.warn(
-            '[FileExplorer] Imported Wokwi zip references libraries you may need to install:',
-            result.libraries,
-          );
-        }
+      if (result.libraries.length > 0) {
+        console.warn(
+          '[FileExplorer] Imported project references libraries you may need to install:',
+          result.libraries,
+        );
+      }
+      if (result.warnings.length > 0) {
+        window.alert(`Imported ${file.name} with warnings:\n\n- ${result.warnings.join('\n- ')}`);
       }
     } catch (err) {
       window.alert((err as Error).message);

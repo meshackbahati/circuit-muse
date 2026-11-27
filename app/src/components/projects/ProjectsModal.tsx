@@ -73,13 +73,21 @@ export const ProjectsModal: React.FC<ProjectsModalProps> = ({ onClose }) => {
   const handleImport = async () => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.vlx,.zip';
+    input.accept = '.vlx,.zip,.fzz,.json,application/json,application/zip';
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
-      const { importProjectFile } = await import('../../utils/importProject');
-      await importProjectFile(file);
-      onClose();
+      try {
+        const { importProjectFile } = await import('../../utils/importProject');
+        // Imports into a NEW local project; the open one is left untouched.
+        const result = await importProjectFile(file);
+        if (result.warnings.length > 0) {
+          window.alert(`Imported ${file.name} with warnings:\n\n- ${result.warnings.join('\n- ')}`);
+        }
+        onClose();
+      } catch (err) {
+        window.alert((err as Error).message || 'Import failed.');
+      }
     };
     input.click();
   };
