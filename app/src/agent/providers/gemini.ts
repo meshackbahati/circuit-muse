@@ -91,13 +91,14 @@ export function buildGeminiContents(messages: Message[]): any[] {
         } catch {
           args = {};
         }
-        const functionCall: Record<string, unknown> = {
-          id: tc.id,
-          name: tc.function.name,
-          args,
+        // Gemini 3 requires the opaque thought signature from the original
+        // call to be echoed on the same Part when the call is replayed. The
+        // SDK models it on Part, not inside FunctionCall.
+        const part: Record<string, unknown> = {
+          functionCall: { id: tc.id, name: tc.function.name, args },
         };
-        if (tc.thoughtSignature) functionCall.thoughtSignature = tc.thoughtSignature;
-        parts.push({ functionCall });
+        if (tc.thoughtSignature) part.thoughtSignature = tc.thoughtSignature;
+        parts.push(part);
       }
       if (parts.length > 0) contents.push({ role: 'model', parts });
       continue;
@@ -150,10 +151,13 @@ export class GeminiProvider implements LLMProvider {
     try {
       for await (const chunk of response) {
         const toolCalls: ToolCall[] = [];
-        for (const fc of chunk.functionCalls ?? []) {
+        const parts = chunk.candidates?.[0]?.content?.parts ?? [];
+        for (const part of parts) {
+          const fc = part.functionCall;
+          if (!fc) continue;
           // Keep the id the API supplied. A generated id would not match the
           // functionResponse sent on the next turn.
-          const id = (fc as any).id || crypto.randomUUID();
+          const id = fc.id || crypto.randomUUID();
           if (seenCalls.has(id)) continue;
           seenCalls.add(id);
           toolCalls.push({
@@ -163,7 +167,7 @@ export class GeminiProvider implements LLMProvider {
               name: fc.name ?? '',
               arguments: JSON.stringify(fc.args || {}),
             },
-            thoughtSignature: (fc as any).thoughtSignature || (fc as any).thought_signature || undefined,
+            thoughtSignature: (part as any).thoughtSignature || undefined,
           });
         }
 

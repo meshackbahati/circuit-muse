@@ -402,7 +402,7 @@ jobs:
           cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
-          pkgver=1.0.13
+          pkgver=1.0.14
           pkgrel=1
           pkgdesc="AI-powered circuit simulator and embedded board emulator"
           arch=('x86_64')
@@ -457,6 +457,7 @@ jobs:
 
             ### Changes in this release
 
+            - The Google GenAI SDK is upgraded to 3.6.1 so Gemini 3 thought signatures are supported. The signature is now read from the response part and echoed on the replayed call, which removes the HTTP 400 after the first tool turn.
             - Gemini history now guarantees one function response part for every function call part. A mismatch caused the API to reject the request with HTTP 400 during tool turns.
             - A provider HTTP 400 now triggers one bounded retry with a minimal transcript. The turn continues from the last tool result instead of ending with an error, and the original error is shown only if the retry also fails.
             - Long chat histories are compacted into a factual summary before each provider request. This keeps tool evidence without exceeding request limits.
@@ -521,7 +522,7 @@ jobs:
             |----------|--------|-------|
             | **Linux (x86_64)** | AppImage | Universal, works on Ubuntu, Debian, Fedora, Arch, and derivatives |
             | **Linux (x86_64)** | .deb | Debian/Ubuntu/Mint |
-            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.0.13-1-x86_64.pkg.tar.zst` |
+            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.0.14-1-x86_64.pkg.tar.zst` |
             | **Windows (x86_64)** | .exe (NSIS) | Windows 10/11 installer |
             | **Windows (x86_64)** | .msi | Windows MSI installer |
             | **macOS (ARM64)** | .dmg | Apple Silicon (M1/M2/M3/M4) |

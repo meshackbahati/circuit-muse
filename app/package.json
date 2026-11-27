@@ -2,7 +2,7 @@
   "name": "circuit-muse",
   "homepage": "/",
   "private": true,
-  "version": "1.0.13",
+  "version": "1.0.14",
   "author": "Meshack Bahati Ouma",
   "type": "module",
   "scripts": {
@@ -23,7 +23,7 @@
     "tsc": "tsc -b"
   },
   "dependencies": {
-    "@google/genai": "^0.6.0",
+    "@google/genai": "^3.6.1",
     "@monaco-editor/react": "^4.7.0",
     "@tanstack/react-table": "^8.20.5",
     "@wokwi/elements": "1.9.2",

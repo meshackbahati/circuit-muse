@@ -30,16 +30,22 @@ describe('Gemini tool calls', () => {
   it('preserves API call ids and ignores repeated chunks for the same call', async () => {
     streamChunks.value = [
       {
-        text: '',
-        functionCalls: [
-          { id: 'call-abc', name: 'build_circuit', args: { components: [] } },
-        ],
+        candidates: [{
+          content: {
+            parts: [
+              { functionCall: { id: 'call-abc', name: 'build_circuit', args: { components: [] } }, thoughtSignature: 'sig-abc' },
+            ],
+          },
+        }],
       },
       {
-        text: '',
-        functionCalls: [
-          { id: 'call-abc', name: 'build_circuit', args: { components: [] } },
-        ],
+        candidates: [{
+          content: {
+            parts: [
+              { functionCall: { id: 'call-abc', name: 'build_circuit', args: { components: [] } }, thoughtSignature: 'sig-abc' },
+            ],
+          },
+        }],
       },
     ];
 
@@ -66,6 +72,7 @@ describe('Gemini tool calls', () => {
 
     expect(calls).toHaveLength(1);
     expect(calls[0].id).toBe('call-abc');
+    expect(calls[0].thoughtSignature).toBe('sig-abc');
     expect(JSON.parse(calls[0].function.arguments)).toEqual({ components: [] });
   });
 });
