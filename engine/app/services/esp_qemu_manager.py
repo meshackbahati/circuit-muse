@@ -107,6 +107,20 @@ class EspQemuManager:
         if inst:
             asyncio.create_task(self._shutdown(inst))
 
+    async def shutdown_all(self) -> None:
+        """Stop every running instance and wait for the processes to exit.
+
+        Used when the engine itself shuts down: ``stop_instance`` only
+        schedules a task, which may never run once the event loop closes.
+        """
+        instances = list(self._instances.values())
+        self._instances.clear()
+        if instances:
+            await asyncio.gather(
+                *(self._shutdown(inst) for inst in instances),
+                return_exceptions=True,
+            )
+
     def load_firmware(self, client_id: str, firmware_b64: str,
                       wifi_enabled: bool = False,
                       wifi_hostfwd_port: int = 0) -> None:

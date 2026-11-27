@@ -346,6 +346,16 @@ class EspLibManager:
         await asyncio.to_thread(_wait_and_kill)
         logger.info('WorkerInstance %s shut down', client_id)
 
+    async def shutdown_all(self) -> None:
+        """Stop every worker process. Used when the engine shuts down."""
+        with self._instances_lock:
+            client_ids = list(self._instances)
+        if client_ids:
+            await asyncio.gather(
+                *(self.stop_instance(cid) for cid in client_ids),
+                return_exceptions=True,
+            )
+
     def load_firmware(self, client_id: str, firmware_b64: str) -> None:
         """Hot-reload firmware: stop the current worker and start a fresh one."""
         with self._instances_lock:

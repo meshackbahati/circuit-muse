@@ -48,6 +48,10 @@ async def lifespan(_app: FastAPI):
     # the expected behavior of a stateless OSS image.
     await run_lifespan_startup()
     yield
+    # Stop emulator processes before the engine exits, otherwise QEMU and
+    # worker processes keep running (and holding memory) after the app closes.
+    from app.api.routes.simulation import stop_all_instances
+    await stop_all_instances()
 
 
 app = FastAPI(

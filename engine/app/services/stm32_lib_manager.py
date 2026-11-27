@@ -257,6 +257,16 @@ class Stm32LibManager:
         await asyncio.to_thread(_wait_and_kill)
         logger.info('Stm32 WorkerInstance %s shut down', client_id)
 
+    async def shutdown_all(self) -> None:
+        """Stop every worker process. Used when the engine shuts down."""
+        with self._instances_lock:
+            client_ids = list(self._instances)
+        if client_ids:
+            await asyncio.gather(
+                *(self.stop_instance(cid) for cid in client_ids),
+                return_exceptions=True,
+            )
+
     def load_firmware(self, client_id: str, firmware_b64: str) -> None:
         with self._instances_lock:
             inst = self._instances.get(client_id)

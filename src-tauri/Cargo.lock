@@ -469,6 +469,7 @@ dependencies = [
 name = "circuit-muse"
 version = "1.0.14"
 dependencies = [
+ "libc",
  "reqwest 0.12.28",
  "serde",
  "serde_json",

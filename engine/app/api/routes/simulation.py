@@ -1,3 +1,4 @@
+import inspect
 import json
 import logging
 import socket
@@ -19,6 +20,53 @@ def _find_free_port() -> int:
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
+
+async def stop_client_instances(client_id: str) -> None:
+    """Stop every emulator a client may own when its socket goes away.
+
+    Each board family runs in its own process (QEMU or a worker). Missing one
+    here leaves that process running with its memory after the tab or window
+    is gone. Every manager is tried even if an earlier one raises.
+    """
+    stoppers = (
+        ('qemu', lambda: qemu_manager.stop_instance(client_id)),
+        ('esp_lib', lambda: esp_lib_manager.stop_instance(client_id)),
+        ('esp_qemu', lambda: esp_qemu_manager.stop_instance(client_id)),
+        ('stm32', lambda: stm32_lib_manager.stop_instance(client_id)),
+        ('picow_net', lambda: picow_net_manager.stop_instance(client_id)),
+    )
+    for label, stop in stoppers:
+        try:
+            result = stop()
+            if inspect.isawaitable(result):
+                await result
+        except Exception:
+            logger.exception('[%s] %s cleanup failed', client_id, label)
+
+
+
+async def stop_all_instances(timeout: float = 10.0) -> None:
+    """Stop every emulator process the engine started.
+
+    Called when the engine shuts down so QEMU and worker processes do not
+    outlive it. Bounded by ``timeout`` so a stuck process cannot hold up exit.
+    """
+    import asyncio
+
+    managers = (
+        qemu_manager, esp_qemu_manager, esp_lib_manager,
+        stm32_lib_manager, picow_net_manager,
+    )
+    try:
+        await asyncio.wait_for(
+            asyncio.gather(
+                *(m.shutdown_all() for m in managers),
+                return_exceptions=True,
+            ),
+            timeout=timeout,
+        )
+    except asyncio.TimeoutError:
+        logger.warning('Emulator shutdown did not finish in %.0f s', timeout)
 
 class ConnectionManager:
     def __init__(self):
@@ -381,15 +429,11 @@ async def simulation_websocket(websocket: WebSocket, client_id: str):
         # A newer simulation_websocket may have already connected and replaced us.
         if manager.active_connections.get(client_id) is websocket:
             manager.disconnect(client_id)
-            qemu_manager.stop_instance(client_id)
-            await esp_lib_manager.stop_instance(client_id)
-            esp_qemu_manager.stop_instance(client_id)
+            await stop_client_instances(client_id)
         else:
             logger.info('[%s] old WS session ended; newer session is active — skipping cleanup', client_id)
     except Exception as exc:
         logger.error('WebSocket error for %s: %s', client_id, exc)
         if manager.active_connections.get(client_id) is websocket:
             manager.disconnect(client_id)
-            qemu_manager.stop_instance(client_id)
-            await esp_lib_manager.stop_instance(client_id)
-            esp_qemu_manager.stop_instance(client_id)
+            await stop_client_instances(client_id)

@@ -26,6 +26,9 @@ serialport = "4"
 reqwest = { version = "0.12", features = ["blocking"] }
 tokio = { version = "1", features = ["rt", "macros"] }
 
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
 [profile.dev]
 # Keep local Tauri builds practical on machines with limited disk space. The
 # release profile remains optimized and unchanged.
