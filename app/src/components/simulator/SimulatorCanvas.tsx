@@ -2159,6 +2159,7 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
                 toggleSerialMonitor();
                 trackToggleSerialMonitor(!serialMonitorOpen);
               }}
+              data-tour="serial"
               className={`canvas-serial-btn${serialMonitorOpen ? ' canvas-serial-btn-active' : ''}`}
               title={t('editor.canvas.toggleSerialMonitor')}
             >
@@ -2271,6 +2272,7 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
             {/* Oscilloscope toggle */}
             <button
               onClick={toggleOscilloscope}
+              data-tour="scope"
               className={`canvas-serial-btn${oscilloscopeOpen ? ' canvas-serial-btn-active' : ''}`}
               title={t('editor.canvas.toggleScope')}
             >

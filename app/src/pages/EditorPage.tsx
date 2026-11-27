@@ -32,6 +32,7 @@ import { useProjectStore } from '../store/useProjectStore';
 import { useWorkspaceStore } from '../store/useWorkspaceStore';
 import { saveCurrentWorkspace, loadProjectIntoStores } from '../services/localProjectStore';
 import '../App.css';
+import { isTourDone } from '../components/onboarding/tourStorage';
 
 // Panels and dialogs that are closed by default load on first open. The AI
 // panel alone brings the provider SDKs, Markdown and syntax highlighting.
@@ -49,6 +50,9 @@ const ExportMenu = lazy(() =>
 );
 const SetupWizard = lazy(() =>
   import('../components/projects/SetupWizard').then((module) => ({ default: module.SetupWizard })),
+);
+const GuidedTour = lazy(() =>
+  import('../components/onboarding/GuidedTour').then((module) => ({ default: module.GuidedTour })),
 );
 const GitHubSyncModal = lazy(() =>
   import('../components/projects/GitHubSyncModal').then((module) => ({ default: module.GitHubSyncModal })),
@@ -116,6 +120,7 @@ export const EditorPage: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [showSetup, setShowSetup] = useState(false);
+  const [showTour, setShowTour] = useState(false);
   const [showGitHubSync, setShowGitHubSync] = useState(false);
   const [savedFlash, setSavedFlash] = useState(false);
   const [saveDialog, setSaveDialog] = useState<{ id: string; name: string } | null>(null);
@@ -168,15 +173,32 @@ export const EditorPage: React.FC = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, [openSaveDialog]);
 
-  // Show setup once on first launch. Users can reopen it from the menu.
+  // Show setup once on first launch, then the guided tour when setup closes.
+  // Both can be reopened from the menu.
   useEffect(() => {
-    if (
-      !localStorage.getItem('circuit-muse_setup_seen') &&
-      !localStorage.getItem('circuit-muse_setup_skipped')
-    ) {
-      setShowSetup(true);
-      localStorage.setItem('circuit-muse_setup_seen', '1');
+    let firstSetup = false;
+    try {
+      firstSetup =
+        !localStorage.getItem('circuit-muse_setup_seen') &&
+        !localStorage.getItem('circuit-muse_setup_skipped');
+      if (firstSetup) localStorage.setItem('circuit-muse_setup_seen', '1');
+    } catch {
+      firstSetup = false;
     }
+    if (firstSetup) {
+      setShowSetup(true);
+      return;
+    }
+    if (!isTourDone()) {
+      // Let the workspace lay out first so the tour can find its targets.
+      const timer = window.setTimeout(() => setShowTour(true), 900);
+      return () => window.clearTimeout(timer);
+    }
+  }, []);
+
+  const closeSetup = useCallback(() => {
+    setShowSetup(false);
+    if (!isTourDone()) window.setTimeout(() => setShowTour(true), 300);
   }, []);
 
   // Browser-style editor font zoom. The editor font size lives in the shared
@@ -542,6 +564,7 @@ export const EditorPage: React.FC = () => {
           <div style={{ display: 'flex', gap: 2, marginLeft: 8, alignItems: 'center', position: 'relative' }}>
             {/* Hamburger menu */}
             <button
+              data-tour="menu"
               onClick={() => setMenuOpen(!menuOpen)}
               style={{
                 background: menuOpen ? '#2c2c33' : 'transparent',
@@ -593,6 +616,7 @@ export const EditorPage: React.FC = () => {
                   { label: 'Examples', action: () => { navigate(localize('/examples')); setMenuOpen(false); } },
                   { label: 'Docs', action: () => { navigate(localize('/docs')); setMenuOpen(false); } },
                   { label: 'Setup', action: () => { setShowSetup(true); setMenuOpen(false); } },
+                  { label: 'Take the tour', action: () => { setMenuOpen(false); setShowTour(true); } },
                   { label: 'GitHub', action: () => { window.open('https://github.com/meshackbahati/circuit-muse', '_blank'); setMenuOpen(false); } },
                 ].map((item) => (
                   <button
@@ -617,6 +641,7 @@ export const EditorPage: React.FC = () => {
             {savedFlash && <span style={{ color: '#4ade80', fontSize: 11 }}>Saved</span>}
             {/* Agent toggle */}
             <button
+              data-tour="agent"
               onClick={toggleAgentPanel}
               style={{ background: agentPanelOpen ? '#7c3aed' : 'transparent', border: 'none', color: agentPanelOpen ? 'white' : '#aaa', cursor: 'pointer', padding: '4px 8px', borderRadius: 3, fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}
               title="AI Agent"
@@ -904,7 +929,8 @@ export const EditorPage: React.FC = () => {
         </div>
       )}
       <Suspense fallback={null}>
-        {showSetup && <SetupWizard onClose={() => setShowSetup(false)} />}
+        {showSetup && <SetupWizard onClose={closeSetup} />}
+        {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
         {showGitHubSync && <GitHubSyncModal onClose={() => setShowGitHubSync(false)} />}
       </Suspense>
     </div>
