@@ -39,16 +39,33 @@ if _missing:
 
 import uvicorn  # noqa: E402
 
-def find_available_port(start_port: int = 8001, max_port: int = 8100) -> int:
-    """Find an available port starting from start_port."""
+def bind_available_port(start_port: int = 8001, max_port: int = 8100) -> socket.socket:
+    """Bind and return a listening socket on the first free port.
+
+    The socket is handed to uvicorn as-is. Probing a port, closing it and
+    letting uvicorn bind it again left a gap in which a second engine (two
+    app windows opened together) picked the same port; that engine then
+    failed with "address already in use" and its window showed "Network
+    Error" on every request.
+    """
     for port in range(start_port, max_port):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        if sys.platform == "win32" and hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
+            # Windows otherwise lets another process bind the same port.
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
         try:
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.bind(('127.0.0.1', port))
-                return port
+            sock.bind(("127.0.0.1", port))
+            sock.listen(128)
+            return sock
         except OSError:
-            continue
-    return start_port  # fallback
+            sock.close()
+    # Every preferred port is taken or blocked (other software, a firewall
+    # rule): let the OS pick any free port. The desktop app reads the port
+    # from the "Starting on port" line, so any number works.
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.bind(("127.0.0.1", 0))
+    sock.listen(128)
+    return sock
 
 
 def _process_alive(pid: int) -> bool:
@@ -95,7 +112,8 @@ def _watch_parent(server: "uvicorn.Server", parent_pid: int, interval: float = 2
 
 
 def main():
-    port = find_available_port()
+    sock = bind_available_port()
+    port = sock.getsockname()[1]
     print(f"[CircuitMuse Engine] Starting on port {port}", flush=True)
     config = uvicorn.Config(
         "app.main:app",
@@ -116,7 +134,7 @@ def main():
             daemon=True,
         ).start()
 
-    server.run()
+    server.run(sockets=[sock])
 
 
 if __name__ == "__main__":

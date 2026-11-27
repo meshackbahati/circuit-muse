@@ -52,6 +52,8 @@ export interface PartSimulationLogic {
     getArduinoPinHelper: (componentPinName: string) => number | null,
     componentId: string,
     getPinResolver?: (componentPinName: string) => PinResolver | null,
+    /** Board that drives this part, for parts that need timed pin events. */
+    boardId?: string | null,
   ) => () => void;
 }
 

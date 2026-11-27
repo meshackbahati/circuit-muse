@@ -22,6 +22,7 @@ import { BOARD_SUPPORTS_MICROPYTHON, isPiBoardKind, isStm32BoardKind } from '../
 import { boardGateDecision, proBoardFeatureName, triggerProUpgradePrompt } from '../lib/proBoardGate';
 import { calculatePinPosition } from '../utils/pinPositionCalculator';
 import { useOscilloscopeStore } from './useOscilloscopeStore';
+import { publishPinTime } from '../simulation/audio/pinTimeBus';
 import { RaspberryPi3Bridge } from '../simulation/RaspberryPi3Bridge';
 import { Esp32Bridge } from '../simulation/Esp32Bridge';
 import { Stm32Bridge, stm32PinNameToLinear } from '../simulation/Stm32Bridge';
@@ -998,6 +999,8 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
 
   function getOscilloscopeCallback(boardId: string) {
     return (pin: number, state: boolean, timeMs: number) => {
+      // Parts that need edge timing (buzzer pitch) listen on this bus.
+      publishPinTime(boardId, pin, state, timeMs);
       const { channels, pushSample } = useOscilloscopeStore.getState();
       for (const ch of channels) {
         if (ch.boardId === boardId && ch.pin === pin) pushSample(ch.id, timeMs, state);

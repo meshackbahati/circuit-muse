@@ -1,4 +1,5 @@
 import { getEngineUrl } from '../../services/engineConfig';
+import { SoundToggle } from './SoundToggle';
 import { useSimulatorStore, getEsp32Bridge } from '../../store/useSimulatorStore';
 import { useElectricalStore } from '../../store/useElectricalStore';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
@@ -2108,6 +2109,7 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
 
             {isTauriRuntime && activeBoard && (
               <button
+                data-tour="flash"
                 onClick={() => setFlashModalFor(activeBoard.id)}
                 disabled={!activeBoard.compiledProgram}
                 className="canvas-icon-btn"
@@ -2290,6 +2292,7 @@ export const SimulatorCanvas = ({ headerSlot }: SimulatorCanvasProps = {}) => {
               </svg>
               {t('editor.canvas.scope')}
             </button>
+            <SoundToggle />
           </div>
 
           <div className="canvas-header-right">

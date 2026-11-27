@@ -60,6 +60,8 @@ export type CompileProgress = (info: {
 }) => void;
 
 const POLL_INTERVAL_MS = 2000;
+/** How long a compile waits for an unreachable engine (starting/restarting). */
+const ENGINE_REACH_TIMEOUT_MS = 20_000;
 const MAX_POLL_DURATION_MS = 15 * 60 * 1000; // 15 minutes — covers cold ESP-IDF builds
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -102,32 +104,44 @@ export async function compileCode(
   // P2.3 — library manifest (resolution scope). null = legacy scan-all.
   const libraries = extras?.libraries && extras.libraries.length ? extras.libraries : null;
 
-  let jobId: string;
-  try {
-    const startResp = await axios.post<CompileStartResponse>(
-      `${getApiBase()}/compile/start`,
-      {
-        files,
-        board_fqbn: board,
-        project_id: projectId ?? null,
-        board_options,
-        spiffs_files,
-        libraries,
-      },
-      { withCredentials: true, timeout: 30000 },
-    );
-    jobId = startResp.data.job_id;
-    console.log('[compile] queued job', jobId);
-  } catch (error) {
-    console.error('Compilation request failed:', error);
-    if (axios.isAxiosError(error) && error.response) {
-      // Server returned a structured error (422, 500, etc.) — surface as a
-      // failed CompileResult so the editor can show stderr/error.
-      return error.response.data as CompileResult;
+  let jobId = '';
+  // The engine may still be starting, or restarting on a new port after a
+  // crash. Retry for a while, reading the current port on every attempt,
+  // before reporting that it cannot be reached.
+  const reachDeadline = Date.now() + ENGINE_REACH_TIMEOUT_MS;
+  for (;;) {
+    try {
+      const startResp = await axios.post<CompileStartResponse>(
+        `${getApiBase()}/compile/start`,
+        {
+          files,
+          board_fqbn: board,
+          project_id: projectId ?? null,
+          board_options,
+          spiffs_files,
+          libraries,
+        },
+        { withCredentials: true, timeout: 30000 },
+      );
+      jobId = startResp.data.job_id;
+      console.log('[compile] queued job', jobId);
+      break;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        // Server returned a structured error (422, 500, etc.) — surface as a
+        // failed CompileResult so the editor can show stderr/error.
+        return error.response.data as CompileResult;
+      }
+      if (Date.now() < reachDeadline) {
+        await sleep(1000);
+        continue;
+      }
+      console.error('Compilation request failed:', error);
+      throw new Error(
+        'Could not reach the CircuitMuse engine. It may still be starting or restarting; ' +
+          'wait a few seconds and compile again. If this keeps happening, restart the app.',
+      );
     }
-    throw error instanceof Error
-      ? error
-      : new Error('No response from server. Is the backend running?');
   }
 
   const startedAt = Date.now();

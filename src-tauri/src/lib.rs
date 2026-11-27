@@ -6,6 +6,15 @@ use tauri::Emitter;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        // Must be registered first. A second launch focuses this window.
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            use tauri::Manager;
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.unminimize();
+                let _ = window.show();
+                let _ = window.set_focus();
+            }
+        }))
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
@@ -233,14 +242,10 @@ fn spawn_python_fallback(
         for line_result in reader.lines() {
             if let Ok(line) = line_result {
                 println!("[engine-python-stdout] {}", line);
-                if line.contains("Starting on port") {
-                    if let Some(port_str) = line.split("port ").nth(1) {
-                        if let Ok(port) = port_str.trim().parse::<u16>() {
-                            use tauri::Manager;
-                            app_clone.state::<engine_process::EnginePort>().set(port);
-                            let _ = app_clone.emit("engine-ready", port);
-                        }
-                    }
+                if let Some(port) = parse_engine_port(&line) {
+                    use tauri::Manager;
+                    app_clone.state::<engine_process::EnginePort>().set(port);
+                    let _ = app_clone.emit("engine-ready", port);
                 }
             } else {
                 break;
@@ -282,89 +287,147 @@ async fn start_engine(app: &tauri::AppHandle) {
     // unsuffixed name, which is absent in installed packages on Linux,
     // Windows, and macOS. Resolve the bundled filename next to the app and
     // spawn that exact path. Keep the plugin lookup as a dev-mode fallback.
-    let engine_sidecar = match resolve_sidecar_path(app, "circuit-muse-engine") {
-        Some(path) => {
-            eprintln!("[engine] engine sidecar: {}", path);
-            Ok(app.shell().command(path))
-        }
-        None => app.shell().sidecar("circuit-muse-engine"),
-    };
+    let sidecar_path = resolve_sidecar_path(app, "circuit-muse-engine");
+    if let Some(ref path) = sidecar_path {
+        eprintln!("[engine] engine sidecar: {}", path);
+    }
 
-    match engine_sidecar {
-        Ok(command) => {
-            let mut command =
-                command.env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string());
-            if let Some(ref cli_path) = arduino_cli_path {
-                command = command.env("ARDUINO_CLI_PATH", cli_path);
+    // Supervise the engine: restart it if it exits while the app is open
+    // (crash, killed, port trouble) and tell the window the new port. Give
+    // up after repeated quick failures and report why instead of leaving
+    // the window with "Network Error".
+    let mut quick_failures: u32 = 0;
+    loop {
+        // Tauri bundles external binaries under their target-triple filename
+        // (for example `circuit-muse-engine-x86_64-unknown-linux-gnu`). The
+        // shell plugin's `sidecar("circuit-muse-engine")` resolves the plain
+        // unsuffixed name, which is absent in installed packages on Linux,
+        // Windows, and macOS. Spawn the exact bundled path; keep the plugin
+        // lookup as a dev-mode fallback.
+        let engine_sidecar = match sidecar_path {
+            Some(ref path) => Ok(app.shell().command(path)),
+            None => app.shell().sidecar("circuit-muse-engine"),
+        };
+        let command = match engine_sidecar {
+            Ok(command) => command,
+            Err(e) => {
+                eprintln!("[engine] sidecar not found: {}. Trying Python fallback...", e);
+                start_python_fallback(app, &arduino_cli_path, &qemu_xtensa_path);
+                return;
             }
-            if let Some(ref path) = qemu_xtensa_path {
-                command = command.env("QEMU_ESP32_BINARY", path);
-            }
-            if let Some(path) = commands::qemu::wasi_sdk_path(app) {
-                command = command.env("WASI_SDK", path.to_string_lossy().to_string());
-            }
-            // Where Setup installs arduino-cli; the engine falls back to it.
-            if let Some(path) = commands::qemu::arduino_cli_install_path(app) {
-                command = command.env("ARDUINO_CLI_FALLBACK", path.to_string_lossy().to_string());
-            }
-            // Passed even before it exists: the engine checks at launch time,
-            // so a runtime installed from Setup works without a restart.
-            if let Some(ref path) = qemu_riscv_path {
-                command = command.env("QEMU_RISCV32_BINARY", path);
-            }
-            match command.spawn() {
-                Ok((mut rx, child)) => {
-                    use tauri::Manager;
-                    app.state::<engine_process::EngineProcess>()
-                        .set(engine_process::EngineChild::Sidecar(child));
-                    while let Some(event) = rx.recv().await {
-                        match event {
-                            CommandEvent::Stdout(line_bytes) => {
-                                let line = String::from_utf8_lossy(&line_bytes);
-                                if line.contains("Starting on port") {
-                                    if let Some(port_str) = line.split("port ").nth(1) {
-                                        if let Ok(port) = port_str.trim().parse::<u16>() {
-                                            use tauri::Manager;
-                                            app.state::<engine_process::EnginePort>().set(port);
-                                            let _ = app.emit("engine-ready", port);
-                                        }
-                                    }
-                                }
+        };
+        let mut command =
+            command.env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string());
+        if let Some(ref cli_path) = arduino_cli_path {
+            command = command.env("ARDUINO_CLI_PATH", cli_path);
+        }
+        if let Some(ref path) = qemu_xtensa_path {
+            command = command.env("QEMU_ESP32_BINARY", path);
+        }
+        if let Some(path) = commands::qemu::wasi_sdk_path(app) {
+            command = command.env("WASI_SDK", path.to_string_lossy().to_string());
+        }
+        // Where Setup installs arduino-cli; the engine falls back to it.
+        if let Some(path) = commands::qemu::arduino_cli_install_path(app) {
+            command = command.env("ARDUINO_CLI_FALLBACK", path.to_string_lossy().to_string());
+        }
+        // Passed even before it exists: the engine checks at launch time,
+        // so a runtime installed from Setup works without a restart.
+        if let Some(ref path) = qemu_riscv_path {
+            command = command.env("QEMU_RISCV32_BINARY", path);
+        }
+
+        let started = std::time::Instant::now();
+        let mut stderr_tail: std::collections::VecDeque<String> = std::collections::VecDeque::new();
+        match command.spawn() {
+            Ok((mut rx, child)) => {
+                use tauri::Manager;
+                app.state::<engine_process::EngineProcess>()
+                    .set(engine_process::EngineChild::Sidecar(child));
+                while let Some(event) = rx.recv().await {
+                    match event {
+                        CommandEvent::Stdout(line_bytes) => {
+                            let line = String::from_utf8_lossy(&line_bytes);
+                            if let Some(port) = parse_engine_port(&line) {
+                                app.state::<engine_process::EnginePort>().set(port);
+                                let _ = app.emit("engine-ready", port);
                             }
-                            CommandEvent::Stderr(line_bytes) => {
-                                eprintln!("[engine] {}", String::from_utf8_lossy(&line_bytes));
-                            }
-                            CommandEvent::Error(err) => {
-                                eprintln!("[engine] error: {}", err);
-                            }
-                            CommandEvent::Terminated(status) => {
-                                eprintln!("[engine] exited: {:?}", status);
-                            }
-                            _ => {}
                         }
+                        CommandEvent::Stderr(line_bytes) => {
+                            let line = String::from_utf8_lossy(&line_bytes).trim_end().to_string();
+                            eprintln!("[engine] {}", line);
+                            stderr_tail.push_back(line);
+                            if stderr_tail.len() > 12 {
+                                stderr_tail.pop_front();
+                            }
+                        }
+                        CommandEvent::Error(err) => {
+                            eprintln!("[engine] error: {}", err);
+                        }
+                        CommandEvent::Terminated(status) => {
+                            eprintln!("[engine] exited: {:?}", status);
+                        }
+                        _ => {}
                     }
                 }
-                Err(err) => {
-                    eprintln!("[engine] Failed to spawn engine sidecar: {}. Trying Python fallback...", err);
-                    if let Some(engine_dir) = find_engine_dir(app) {
-                        if spawn_python_fallback(app, &engine_dir, &arduino_cli_path, &qemu_xtensa_path).is_some() {
-                            eprintln!("[engine] Python fallback started successfully from {}", engine_dir.display());
-                            return;
-                        }
-                    }
-                    eprintln!("[engine] Python fallback failed.");
-                }
+            }
+            Err(err) => {
+                eprintln!("[engine] Failed to spawn engine sidecar: {}. Trying Python fallback...", err);
+                start_python_fallback(app, &arduino_cli_path, &qemu_xtensa_path);
+                return;
             }
         }
-        Err(e) => {
-            eprintln!("[engine] sidecar not found: {}. Trying Python fallback...", e);
-            if let Some(engine_dir) = find_engine_dir(app) {
-                if spawn_python_fallback(app, &engine_dir, &arduino_cli_path, &qemu_xtensa_path).is_some() {
-                    eprintln!("[engine] Python fallback started successfully from {}", engine_dir.display());
-                    return;
-                }
+
+        // The engine has exited.
+        {
+            use tauri::Manager;
+            app.state::<engine_process::EnginePort>().clear();
+            if app.state::<engine_process::EngineProcess>().is_stopping() {
+                return;
             }
-            eprintln!("[engine] Python fallback failed.");
+        }
+        let _ = app.emit("engine-stopped", ());
+        if started.elapsed() < std::time::Duration::from_secs(30) {
+            quick_failures += 1;
+        } else {
+            quick_failures = 0;
+        }
+        if quick_failures >= 5 {
+            let reason: Vec<String> = stderr_tail.into_iter().collect();
+            eprintln!("[engine] giving up after {} quick failures", quick_failures);
+            let _ = app.emit(
+                "engine-failed",
+                serde_json::json!({ "message": reason.join("\n") }),
+            );
+            return;
+        }
+        eprintln!("[engine] restarting engine (attempt {})", quick_failures + 1);
+        tokio::time::sleep(std::time::Duration::from_secs(quick_failures.max(1) as u64)).await;
+    }
+}
+
+/// Port from the engine's "[CircuitMuse Engine] Starting on port N" line.
+fn parse_engine_port(line: &str) -> Option<u16> {
+    if !line.contains("Starting on port") {
+        return None;
+    }
+    line.split("port ").nth(1)?.trim().parse::<u16>().ok()
+}
+
+fn start_python_fallback(
+    app: &tauri::AppHandle,
+    arduino_cli_path: &Option<String>,
+    qemu_xtensa_path: &Option<String>,
+) {
+    if let Some(engine_dir) = find_engine_dir(app) {
+        if spawn_python_fallback(app, &engine_dir, arduino_cli_path, qemu_xtensa_path).is_some() {
+            eprintln!("[engine] Python fallback started successfully from {}", engine_dir.display());
+            return;
         }
     }
+    eprintln!("[engine] Python fallback failed.");
+    let _ = app.emit(
+        "engine-failed",
+        serde_json::json!({ "message": "The engine could not be started. Reinstall CircuitMuse or start engine/__main__.py from a source checkout." }),
+    );
 }

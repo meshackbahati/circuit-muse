@@ -138,3 +138,28 @@ def test_watchdog_stops_server_when_parent_is_gone() -> None:
     server = _Server()
     entry._watch_parent(server, child.pid, interval=0.01)
     assert server.should_exit is True
+
+
+def test_engines_started_together_get_different_ports() -> None:
+    entry = _load_entrypoint()
+    socks = [entry.bind_available_port(8001, 8100) for _ in range(3)]
+    try:
+        ports = [s.getsockname()[1] for s in socks]
+        assert len(set(ports)) == 3
+    finally:
+        for s in socks:
+            s.close()
+
+
+def test_falls_back_to_any_port_when_range_is_taken() -> None:
+    entry = _load_entrypoint()
+    blocker = entry.bind_available_port(8001, 8100)
+    taken = blocker.getsockname()[1]
+    try:
+        sock = entry.bind_available_port(taken, taken + 1)  # only the taken port allowed
+        try:
+            assert sock.getsockname()[1] not in (taken, 0)
+        finally:
+            sock.close()
+    finally:
+        blocker.close()

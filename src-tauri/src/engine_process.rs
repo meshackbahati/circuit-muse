@@ -6,6 +6,7 @@
 //! its own shutdown hook can stop the emulators, then it is force-killed if
 //! it has not exited in time.
 
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Mutex;
 #[cfg(unix)]
 use std::time::{Duration, Instant};
@@ -56,9 +57,15 @@ impl EngineChild {
 }
 
 #[derive(Default)]
-pub struct EngineProcess(Mutex<Option<EngineChild>>);
+pub struct EngineProcess(Mutex<Option<EngineChild>>, AtomicBool);
 
 impl EngineProcess {
+    /// True once the app has started shutting down; the supervisor then
+    /// stops restarting the engine.
+    pub fn is_stopping(&self) -> bool {
+        self.1.load(Ordering::SeqCst)
+    }
+
     pub fn set(&self, child: EngineChild) {
         if let Ok(mut slot) = self.0.lock() {
             *slot = Some(child);
@@ -67,6 +74,7 @@ impl EngineProcess {
 
     /// Stop the engine and the emulator processes it owns. Safe to call twice.
     pub fn stop(&self) {
+        self.1.store(true, Ordering::SeqCst);
         let child = match self.0.lock() {
             Ok(mut slot) => slot.take(),
             Err(_) => None,
@@ -131,6 +139,12 @@ impl EnginePort {
 
     pub fn get(&self) -> Option<u16> {
         self.0.lock().ok().and_then(|slot| *slot)
+    }
+
+    pub fn clear(&self) {
+        if let Ok(mut slot) = self.0.lock() {
+            *slot = None;
+        }
     }
 }
 

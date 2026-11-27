@@ -15,6 +15,7 @@
  * - LCD1602 (4-bit mode pin registration)
  */
 
+import { resetSoundEngine } from '../simulation/audio/soundEngine';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { PartSimulationRegistry } from '../simulation/parts/PartSimulationRegistry';
 
@@ -846,6 +847,8 @@ describe('Buzzer — attachEvents', () => {
   // Mock Web Audio API before each test in this suite.
   // Must use a real function/class (not arrow) so `new AudioContext()` works.
   beforeEach(() => {
+    // The app shares one AudioContext; start each test without one.
+    resetSoundEngine();
     const mockOscillator = {
       type: 'square',
       frequency: { value: 440, setTargetAtTime: vi.fn() },

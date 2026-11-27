@@ -470,6 +470,9 @@ jobs:
 
             ### Changes in this release
 
+            - The engine now binds and holds its port before uvicorn starts, so two app instances cannot collide. The shell supervises it and restarts it with backoff if it exits, and a second launch focuses the existing window. Compiles wait for a restarting engine instead of reporting a network error.
+            - Buzzers now sound on every board. Pitch is measured from timed pin transitions, so `tone()` works on AVR, RP2040 and ESP32 families, held HIGH drives an active buzzer, and LOW is silent. A Sound button in the canvas header mutes the shared audio context, and the setting is remembered.
+            - The guided tour adds Sound and Flash a real board steps. Returning users get a short What's new tour containing only the new steps.
             - ESP32 boards now run in the open-source desktop build without libqemu-xtensa. Simulation builds use loop core 0, watchdogs are disabled, and GPIO transitions are read from QEMU trace events so blink sketches toggle pins and print serial output.
             - Hardware flashing works from the desktop app. The route now uses the bundled Arduino CLI path, and ESP32 images go through esptool at the correct flash offset. The Arduino CLI installer is available from Setup, and the ESP32 runtime also installs the RISC-V emulator needed by ESP32-C3.
             - The first compile shows progress while a board core installs. The Arch package now adds a desktop entry, icons, and the license, and the binary uses rustls instead of the system OpenSSL. The engine builds with Python 3.12 or 3.13.
