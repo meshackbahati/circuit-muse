@@ -64,6 +64,11 @@ export function summarizeDropped(messages: Message[]): string {
   return `${COMPACTION_PREFIX}\n${summary || 'No prior tool evidence was recorded.'}\nUse the current tool results and live circuit state as the source of truth.`;
 }
 
+function activeModelName(): string {
+  const state = useProviderStore.getState();
+  return state.providers[state.activeProviderId]?.model || 'this model';
+}
+
 /** Make every tool result follow the assistant message that called it.
  *
  *  Anthropic and OpenAI reject a request that contains a tool result without
@@ -242,6 +247,9 @@ async function* streamWithRetry(
   provider: LLMProvider,
   params: ChatParams,
 ): AsyncGenerator<StreamChunk> {
+  // Last check before anything reaches a provider: no tool result without its
+  // call and no call without its result, whatever happened earlier in the turn.
+  repairToolPairs(params.messages);
   for (let attempt = 0; attempt < MAX_STREAM_ATTEMPTS; attempt++) {
     let yielded = false;
     try {
