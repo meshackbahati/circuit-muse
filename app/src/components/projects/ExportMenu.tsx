@@ -46,6 +46,14 @@ export const ExportMenu: React.FC<ExportMenuProps> = ({ onClose }) => {
           triggerDownload(blob, safeFilename(name, 'html'));
           break;
         }
+        case 'kicad_sch':
+        case 'net':
+        case 'kicad_zip': {
+          // KiCad writers are loaded only when used.
+          const { downloadKicad } = await import('../../schematic/download');
+          await downloadKicad(format === 'kicad_zip' ? 'zip' : format, name);
+          break;
+        }
       }
       onClose();
     } catch (err) {
@@ -100,6 +108,33 @@ export const ExportMenu: React.FC<ExportMenuProps> = ({ onClose }) => {
           >
             <div className="export-item-name">.html (Report)</div>
             <div className="export-item-desc">Shareable HTML report with boards, components, code</div>
+          </button>
+          <button
+            className="export-item"
+            onClick={() => handleExport('kicad_sch')}
+            disabled={!!exporting}
+            type="button"
+          >
+            <div className="export-item-name">KiCad schematic (.kicad_sch)</div>
+            <div className="export-item-desc">Opens in KiCad 8/9 with every part, label and net</div>
+          </button>
+          <button
+            className="export-item"
+            onClick={() => handleExport('net')}
+            disabled={!!exporting}
+            type="button"
+          >
+            <div className="export-item-name">KiCad netlist (.net)</div>
+            <div className="export-item-desc">Parts and connections for KiCad PCB import</div>
+          </button>
+          <button
+            className="export-item"
+            onClick={() => handleExport('kicad_zip')}
+            disabled={!!exporting}
+            type="button"
+          >
+            <div className="export-item-name">KiCad project (.zip)</div>
+            <div className="export-item-desc">Project file + schematic + netlist in one folder</div>
           </button>
         </div>
       </div>

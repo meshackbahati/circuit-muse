@@ -18,6 +18,8 @@ const RaspberryPiWorkspace = lazy(() =>
     default: m.RaspberryPiWorkspace,
   })),
 );
+// Schematic view is only loaded when the user opens it (2 GB RAM targets).
+const SchematicView = lazy(() => import('../schematic/SchematicView'));
 import { CompilationConsole } from '../components/editor/CompilationConsole';
 import { SimulatorCanvas } from '../components/simulator/SimulatorCanvas';
 import { SerialMonitor } from '../components/simulator/SerialMonitor';
@@ -94,6 +96,8 @@ export const EditorPage: React.FC = () => {
   // Lets users hide a pane to give the right-docked chat more room.
   const viewMode = useEditorStore((s) => s.viewMode);
   const setViewMode = useEditorStore((s) => s.setViewMode);
+  // Schematic overlay on the circuit pane (desktop only).
+  const [schematicOpen, setSchematicOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const resizingRef = useRef(false);
   const serialMonitorOpen = useSimulatorStore((s) => s.serialMonitorOpen);
@@ -561,6 +565,46 @@ export const EditorPage: React.FC = () => {
               </button>
             ))}
           </div>
+          <button
+            type="button"
+            className="schematic-toggle"
+            onClick={() => {
+              const next = !schematicOpen;
+              setSchematicOpen(next);
+              if (next && viewMode === 'code') setViewMode('both');
+            }}
+            aria-pressed={schematicOpen}
+            title={t('editor.shell.schematicHint')}
+            style={{
+              background: schematicOpen ? '#0e639c' : '#252526',
+              color: schematicOpen ? 'white' : '#aaa',
+              border: '1px solid #3c3c3c',
+              borderRadius: 4,
+              height: 28,
+              padding: '0 10px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 4,
+              alignSelf: 'center',
+              cursor: 'pointer',
+              fontSize: 12,
+              fontFamily: 'inherit',
+            }}
+          >
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M2 12h4l2-4 3 8 3-8 2 4h6" />
+            </svg>
+            <span>{t('editor.shell.schematic')}</span>
+          </button>
           {/* ── Hamburger menu + Action buttons ── */}
           <div style={{ display: 'flex', gap: 2, marginLeft: 8, alignItems: 'center', position: 'relative' }}>
             {/* Hamburger menu */}
@@ -810,6 +854,11 @@ export const EditorPage: React.FC = () => {
         >
           <div style={{ flex: 1, overflow: 'hidden', position: 'relative', minHeight: 0 }}>
             <SimulatorCanvas headerSlot={!isMobile ? canvasHeaderSlot : null} />
+            {schematicOpen && !isMobile && (
+              <Suspense fallback={null}>
+                <SchematicView onClose={() => setSchematicOpen(false)} />
+              </Suspense>
+            )}
           </div>
           {serialMonitorOpen && (
             <>

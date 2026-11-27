@@ -20,6 +20,8 @@ i18n.use(initReactI18next).init({
         "editor.shell.both": "Both",
         "editor.shell.circuit": "Circuit",
         "editor.shell.viewMode": "View mode",
+        "editor.shell.schematic": "Schematic",
+        "editor.shell.schematicHint": "Show the circuit as a schematic (export to KiCad from there)",
         "editor.toolbar.languageMode": "Language Mode",
         "editor.toolbar.compile": "Compile",
         "editor.toolbar.compile.addBoard": "Add a board to compile",

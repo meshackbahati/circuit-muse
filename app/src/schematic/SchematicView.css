@@ -1,0 +1,237 @@
+/* Schematic view — sits over the circuit canvas, dark editor look. */
+
+.schematic-view {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-surface-1, #141416);
+  color: var(--color-fg-default, #f5f5f7);
+  font-family: var(--font-sans, system-ui, sans-serif);
+}
+
+.schematic-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 6px);
+  height: 36px;
+  padding: 0 var(--space-4, 8px) 0 var(--space-5, 12px);
+  border-bottom: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.09));
+  background: var(--color-bg-surface-2, #1c1c1e);
+  flex-shrink: 0;
+}
+
+.schematic-title {
+  font: var(--text-footnote, 400 13px/18px sans-serif);
+  font-weight: 600;
+}
+
+.schematic-meta {
+  font: var(--text-caption1, 400 12px/16px sans-serif);
+  color: var(--color-fg-muted, #86868b);
+  font-variant-numeric: tabular-nums;
+}
+
+.schematic-spacer {
+  flex: 1;
+}
+
+.schematic-btn,
+.schematic-chip,
+.schematic-zoom button {
+  height: 26px;
+  padding: 0 var(--space-4, 8px);
+  border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.09));
+  border-radius: var(--radius-xs, 4px);
+  background: var(--color-action-secondary, #2c2c2e);
+  color: var(--color-fg-default, #f5f5f7);
+  font: var(--text-caption1, 400 12px/16px sans-serif);
+  cursor: pointer;
+}
+
+.schematic-btn:hover:not(:disabled),
+.schematic-chip:hover,
+.schematic-zoom button:hover {
+  background: var(--color-action-secondary-hover, #48484a);
+}
+
+.schematic-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.schematic-btn:focus-visible,
+.schematic-chip:focus-visible,
+.schematic-zoom button:focus-visible {
+  outline: none;
+  box-shadow: var(--color-focus-ring, 0 0 0 2px #8b5cf6);
+}
+
+.schematic-chip {
+  border-color: rgba(96, 165, 250, 0.5);
+  color: var(--blue-400, #60a5fa);
+  background: transparent;
+  font-family: var(--font-mono, monospace);
+}
+
+.schematic-close {
+  width: 28px;
+  padding: 0;
+}
+
+.schematic-canvas {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.schematic-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  background-color: var(--color-bg-surface-1, #141416);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.schematic-svg:active {
+  cursor: grabbing;
+}
+
+.schematic-zoom {
+  position: absolute;
+  right: var(--space-5, 12px);
+  bottom: var(--space-5, 12px);
+  display: flex;
+  gap: var(--space-2, 4px);
+}
+
+.schematic-zoom button {
+  min-width: 28px;
+}
+
+.schematic-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3, 6px);
+  padding: var(--space-8, 24px);
+  text-align: center;
+}
+
+.schematic-empty-title {
+  margin: 0;
+  font: var(--text-subheadline, 400 15px/20px sans-serif);
+  font-weight: 600;
+}
+
+.schematic-empty-body {
+  margin: 0;
+  max-width: 34ch;
+  font: var(--text-footnote, 400 13px/18px sans-serif);
+  color: var(--color-fg-muted, #86868b);
+}
+
+.schematic-warnings {
+  flex-shrink: 0;
+  padding: var(--space-2, 4px) var(--space-5, 12px);
+  border-top: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.09));
+  font: var(--text-caption2, 400 11px/13px sans-serif);
+  color: var(--color-feedback-warning, #f59e0b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Drawing ── */
+
+.sch-drawing text {
+  font-family: var(--font-mono, monospace);
+}
+
+.sch-body {
+  fill: none;
+  stroke: #c8c8ce;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.sch-fill-outline {
+  fill: #c8c8ce;
+}
+
+.sch-fill-bg {
+  fill: #1f1f24;
+}
+
+.sch-pin {
+  stroke: #9a9aa2;
+  stroke-width: 0.1524;
+}
+
+.sch-wire {
+  stroke: #4ade80;
+  stroke-width: 0.1524;
+}
+
+.sch-pin-name {
+  fill: #c8c8ce;
+}
+
+.sch-pin-num {
+  fill: #6e6e73;
+}
+
+.sch-ref {
+  fill: var(--purple-400, #a78bfa);
+}
+
+.sch-value {
+  fill: var(--gray-400, #aeaeb2);
+}
+
+.sch-label {
+  cursor: pointer;
+}
+
+.sch-label polygon {
+  fill: rgba(96, 165, 250, 0.08);
+  stroke: var(--blue-400, #60a5fa);
+  stroke-width: 0.1524;
+}
+
+.sch-label text {
+  fill: var(--blue-400, #60a5fa);
+}
+
+.sch-label.is-active polygon {
+  fill: rgba(96, 165, 250, 0.35);
+  stroke-width: 0.3;
+}
+
+.sch-power {
+  cursor: pointer;
+}
+
+.sch-power .sch-body {
+  stroke: var(--amber-500, #f59e0b);
+}
+
+.sch-power text {
+  fill: var(--amber-500, #f59e0b);
+}
+
+.sch-power.is-active .sch-body {
+  stroke-width: 0.4;
+}
+
+.sch-nc line {
+  stroke: #6e6e73;
+  stroke-width: 0.1524;
+}
