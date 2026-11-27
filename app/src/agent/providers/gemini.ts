@@ -5,22 +5,38 @@ import { resolveModel } from './base';
 /**
  * Build Gemini contents with native function call and response parts.
  *
- * The previous implementation flattened every tool turn into plain text.
- * Gemini then saw a model message that announced a function call with no
- * matching response, so later chunks described the call in prose instead of
- * emitting another tool call. Native parts keep the call id aligned with its
- * result, which is what the model needs to continue the build loop.
+ * The previous implementation flattened every tool turn into plain text, so
+ * Gemini saw a call with no response and described the call in prose. The
+ * current form keeps native parts, and more importantly guarantees that the
+ * number of function response parts equals the number of function call parts.
+ * Gemini rejects the whole request when those counts differ, which surfaced
+ * as an HTTP 400 with the masked message "exception parsing response".
  */
 export function buildGeminiContents(messages: Message[]): any[] {
   const callNames = new Map<string, string>();
+  const answeredCallIds = new Set<string>();
   for (const m of messages) {
     for (const tc of m.toolCalls ?? []) {
-      if (tc.id) callNames.set(tc.id, tc.function.name);
+      if (tc.id && !callNames.has(tc.id)) callNames.set(tc.id, tc.function.name);
+    }
+    if (m.role === 'tool' && m.toolCallId) answeredCallIds.add(m.toolCallId);
+  }
+
+  // Only calls that have a matching tool result may be sent. A call without a
+  // result (for example an aborted tool) must not create a response mismatch.
+  const emittableCallIds = new Set<string>();
+  for (const m of messages) {
+    if (m.role !== 'assistant') continue;
+    for (const tc of m.toolCalls ?? []) {
+      if (tc.id && answeredCallIds.has(tc.id) && !emittableCallIds.has(tc.id)) {
+        emittableCallIds.add(tc.id);
+      }
     }
   }
 
   const contents: any[] = [];
   const emittedCallIds = new Set<string>();
+  const emittedResponseIds = new Set<string>();
   let pendingToolParts: any[] = [];
 
   const flushToolParts = () => {
@@ -34,9 +50,14 @@ export function buildGeminiContents(messages: Message[]): any[] {
 
     if (m.role === 'tool') {
       const name = (m.toolCallId && callNames.get(m.toolCallId)) || 'tool';
-      if (!m.toolCallId || !callNames.has(m.toolCallId)) {
-        // An orphan result has no call id to reply to. Text is the only safe
-        // representation, and the assistant side relabels it before sending.
+      if (
+        !m.toolCallId ||
+        !emittableCallIds.has(m.toolCallId) ||
+        emittedResponseIds.has(m.toolCallId)
+      ) {
+        // A result whose call was skipped, duplicated or never sent has no
+        // function response part to pair with. Plain text keeps the evidence
+        // without breaking the call and response count invariant.
         flushToolParts();
         contents.push({
           role: 'user',
@@ -44,6 +65,7 @@ export function buildGeminiContents(messages: Message[]): any[] {
         });
         continue;
       }
+      emittedResponseIds.add(m.toolCallId);
       pendingToolParts.push({
         functionResponse: {
           id: m.toolCallId,
@@ -60,9 +82,7 @@ export function buildGeminiContents(messages: Message[]): any[] {
       const parts: any[] = [];
       if (m.content && m.content.trim()) parts.push({ text: m.content });
       for (const tc of m.toolCalls ?? []) {
-        // Gemini rejects a request when the same call id appears twice in the
-        // history. Older transcripts can contain repeated ids after retries.
-        if (!tc.id || emittedCallIds.has(tc.id)) continue;
+        if (!tc.id || !emittableCallIds.has(tc.id) || emittedCallIds.has(tc.id)) continue;
         emittedCallIds.add(tc.id);
         let args: Record<string, unknown> = {};
         try {
@@ -132,7 +152,7 @@ export class GeminiProvider implements LLMProvider {
         const toolCalls: ToolCall[] = [];
         for (const fc of chunk.functionCalls ?? []) {
           // Keep the id the API supplied. A generated id would not match the
-          // functionResponse we send on the next turn.
+          // functionResponse sent on the next turn.
           const id = (fc as any).id || crypto.randomUUID();
           if (seenCalls.has(id)) continue;
           seenCalls.add(id);

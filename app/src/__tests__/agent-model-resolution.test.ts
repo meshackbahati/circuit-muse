@@ -187,6 +187,26 @@ describe('Gemini history', () => {
     expect(history[1].parts[0].functionResponse.response.result).toContain('files');
   });
 
+  it('never sends more function responses than function calls', () => {
+    const history = buildGeminiContents([
+      {
+        id: '1', role: 'assistant', content: '', timestamp: 0,
+        toolCalls: [
+          { id: 'same', type: 'function', function: { name: 'read_code', arguments: '{}' } },
+          { id: 'same', type: 'function', function: { name: 'read_code', arguments: '{}' } },
+        ],
+      },
+      { id: '2', role: 'tool', content: 'first', toolCallId: 'same', timestamp: 0 },
+      { id: '3', role: 'tool', content: 'second', toolCallId: 'same', timestamp: 0 },
+      { id: '4', role: 'assistant', content: '', timestamp: 0,
+        toolCalls: [{ id: 'no-result', type: 'function', function: { name: 'check_wiring', arguments: '{}' } }] },
+    ]);
+    const calls = history.flatMap((c) => c.parts.filter((p: any) => p.functionCall));
+    const responses = history.flatMap((c) => c.parts.filter((p: any) => p.functionResponse));
+    expect(responses).toHaveLength(calls.length);
+    expect(calls).toHaveLength(1);
+  });
+
   it('keeps orphan tool results as text', () => {
     const history = buildGeminiContents([
       { id: '1', role: 'tool', content: 'orphan', toolCallId: 'missing', timestamp: 0 },

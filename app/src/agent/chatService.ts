@@ -440,14 +440,17 @@ export async function sendMessage(content: string): Promise<void> {
       // replies with a non-JSON HTTP 400 ("exception parsing response"). Only
       // the recent transcript is needed to continue, and the full history is
       // still kept in the UI and in the saved conversation.
-      const compactTool = (text: string) =>
+      const compactContent = (text: string) =>
         text.length > MAX_TOOL_RESULT_CHARS
           ? `${text.slice(0, 8_000)}\n[truncated for context limit]\n${text.slice(-6_000)}`
           : text;
       const history = useAgentStore
         .getState()
         .messages.filter((m) => m.role !== 'system')
-        .map((m) => (m.role === 'tool' ? { ...m, content: compactTool(m.content) } : m));
+        // Whitespace-only assistant text carries no meaning and can be very
+        // large when a model emits thinking filler.
+        .filter((m) => m.role !== 'assistant' || m.content.trim().length > 0 || (m.toolCalls?.length ?? 0) > 0)
+        .map((m) => ({ ...m, content: compactContent(m.content) }));
       messages = [
         { id: 'system', role: 'system', content: SYSTEM_PROMPT, timestamp: Date.now() },
         ...history,
