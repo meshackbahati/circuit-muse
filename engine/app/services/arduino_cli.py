@@ -59,9 +59,32 @@ class ArduinoCLIService:
     }
 
     def __init__(self, cli_path: str = None):
-        self.cli_path = cli_path or self._find_arduino_cli()
+        self._cli_path = cli_path or self._find_arduino_cli()
         self._board_urls_ready = False
         self._board_urls_lock = threading.Lock()
+
+    @staticmethod
+    def _cli_usable(path: str | None) -> bool:
+        if not path:
+            return False
+        if os.path.isabs(path):
+            try:
+                return os.path.isfile(path) and os.access(path, os.X_OK) and os.path.getsize(path) > 0
+            except OSError:
+                return False
+        return shutil.which(path) is not None
+
+    @property
+    def cli_path(self) -> str:
+        """arduino-cli to run. Looked up again while the current one is not
+        usable, so a copy installed from Setup works without a restart."""
+        if not self._cli_usable(self._cli_path):
+            self._cli_path = self._find_arduino_cli()
+        return self._cli_path
+
+    @cli_path.setter
+    def cli_path(self, value: str) -> None:
+        self._cli_path = value
 
     @staticmethod
     def _find_arduino_cli() -> str:
@@ -148,6 +171,11 @@ class ArduinoCLIService:
         found = shutil.which("arduino-cli")
         if found:
             return found
+
+        # 4. The copy the desktop app installs from Setup
+        fallback = os.environ.get("ARDUINO_CLI_FALLBACK")
+        if fallback and usable(fallback):
+            return fallback
 
         # Default — will fail with clear error
         return "arduino-cli"
@@ -327,15 +355,26 @@ class ArduinoCLIService:
         staging = self._staging_dir()
         start_mb = self._dir_size_mb(staging)
         started = time.monotonic()
+        last_sent = [started]
+        last_progress = [0.0]
+        # arduino-cli redraws a progress bar ("618.53 MiB / 784.13 MiB 78.88%")
+        # several times a second; text mode turns each redraw into a line.
+        progress_re = re.compile(r"\d+(?:\.\d+)? [KMG]iB / \d+(?:\.\d+)? [KMG]iB")
+
+        def send(text: str) -> None:
+            last_sent[0] = time.monotonic()
+            on_output(text if text.endswith("\n") else text + "\n")
 
         def heartbeat() -> None:
-            # arduino-cli prints nothing while a large archive downloads.
-            while not done.wait(15):
+            # Only when arduino-cli has been silent (e.g. while unpacking).
+            while not done.wait(5):
+                if time.monotonic() - last_sent[0] < 15:
+                    continue
                 elapsed = int(time.monotonic() - started)
                 got = max(0.0, self._dir_size_mb(staging) - start_mb)
-                on_output(
+                send(
                     f"  still installing ({elapsed // 60} min {elapsed % 60:02d} s, "
-                    f"{got:.0f} MB downloaded so far)\n"
+                    f"{got:.0f} MB downloaded so far)"
                 )
 
         threading.Thread(target=heartbeat, daemon=True).start()
@@ -343,12 +382,69 @@ class ArduinoCLIService:
             assert proc.stdout is not None
             for line in proc.stdout:
                 lines.append(line)
-                if line.strip():
-                    on_output(line if line.endswith("\n") else line + "\n")
+                text = line.strip()
+                if not text:
+                    continue
+                if progress_re.search(text):
+                    now = time.monotonic()
+                    if now - last_progress[0] < 5:
+                        continue
+                    last_progress[0] = now
+                send(text)
             proc.wait()
         finally:
             done.set()
         return subprocess.CompletedProcess(cmd, proc.returncode, "".join(lines), "")
+
+    @staticmethod
+    def _fqbn_with_options(fqbn: str, options: dict[str, str]) -> str:
+        """Add board options to an FQBN (vendor:arch:board[:k=v,k=v])."""
+        if not options:
+            return fqbn
+        parts = fqbn.split(":", 3)
+        existing = parts[3].split(",") if len(parts) == 4 and parts[3] else []
+        keys = {item.split("=", 1)[0] for item in existing}
+        merged = existing + [f"{k}={v}" for k, v in options.items() if k not in keys]
+        return ":".join(parts[:3]) + ":" + ",".join(merged)
+
+    def _board_option_names(self, fqbn: str) -> set[str]:
+        """Config option names a board offers, e.g. {'LoopCore', 'FlashMode'}."""
+        base = ":".join(fqbn.split(":")[:3])
+        cache = self.__dict__.setdefault("_board_options_cache", {})
+        if base not in cache:
+            try:
+                out = subprocess.run(
+                    [self.cli_path, "board", "details", "-b", base, "--format", "json"],
+                    capture_output=True, text=True, timeout=30,
+                )
+                import json as _json
+                data = _json.loads(out.stdout or "{}")
+                cache[base] = {o.get("option") for o in data.get("config_options", []) if o.get("option")}
+            except Exception:
+                cache[base] = set()
+        return cache[base]
+
+    def _qemu_core_options(self, fqbn: str) -> dict[str, str]:
+        """Run loop() and Arduino events on core 0 when simulating with the
+        stock Espressif QEMU, whose second core never gets a timer tick:
+        delay() on core 1 (the Arduino default) hung forever after the first
+        line. Skipped when libqemu-xtensa is available, and when the board has
+        no LoopCore menu or the user already chose a core."""
+        try:
+            from app.services.esp32_lib_manager import esp_lib_manager
+            if esp_lib_manager.is_available():
+                return {}
+        except Exception:
+            pass
+        if "LoopCore" in fqbn:
+            return {}
+        names = self._board_option_names(fqbn)
+        options: dict[str, str] = {}
+        if "LoopCore" in names:
+            options["LoopCore"] = "0"
+        if "EventsCore" in names:
+            options["EventsCore"] = "0"
+        return options
 
     async def get_setup_status(self) -> dict:
         """Return the current state of arduino-cli and installed cores."""
@@ -539,9 +635,11 @@ class ArduinoCLIService:
                     # FlashMode=dio: required by esp32-picsimlab QEMU machine
                     # IRAM_ATTR on all interrupt handlers prevents cache crashes
                     # when WiFi emulation disables the SPI flash cache on core 1.
-                    fqbn_dio = board_fqbn
+                    extra: dict[str, str] = {}
                     if 'FlashMode' not in board_fqbn:
-                        fqbn_dio = board_fqbn + ':FlashMode=dio'
+                        extra['FlashMode'] = 'dio'
+                    extra.update(self._qemu_core_options(board_fqbn))
+                    fqbn_dio = self._fqbn_with_options(board_fqbn, extra)
                     cmd[2] = '--fqbn'
                     cmd.insert(3, fqbn_dio)
                     cmd = cmd[:4]  # trim accidental duplicates

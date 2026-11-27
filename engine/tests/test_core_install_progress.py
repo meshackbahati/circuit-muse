@@ -21,6 +21,8 @@ def test_core_install_streams_output(tmp_path) -> None:
             print({str(tmp_path)!r})
             sys.exit(0)
         print("Downloading packages", flush=True)
+        for i in range(50):
+            print(f"esp32:esp-rv32 {{i}}.00 MiB / 784.13 MiB  {{i/7.84:.2f}}%", flush=True)
         print("esp32:xtensa-esp-elf-gcc downloaded", flush=True)
         sys.exit(0)
     """))
@@ -35,4 +37,20 @@ def test_core_install_streams_output(tmp_path) -> None:
     assert "Downloading packages\n" in seen
     assert any("xtensa-esp-elf-gcc" in line for line in seen)
     assert all(line.endswith("\n") for line in seen)
+    # 50 progress redraws in a burst are thinned to one line, not 50.
+    assert sum("MiB /" in line for line in seen) == 1
 
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="uses a POSIX shebang script")
+def test_cli_installed_later_is_found_without_restart(tmp_path, monkeypatch) -> None:
+    target = tmp_path / "arduino-cli"
+    monkeypatch.delenv("ARDUINO_CLI_PATH", raising=False)
+    monkeypatch.setenv("ARDUINO_CLI_FALLBACK", str(target))
+    monkeypatch.setenv("PATH", str(tmp_path / "empty"))
+    service = ArduinoCLIService(cli_path=str(tmp_path / "missing"))
+    assert service.cli_path == "arduino-cli"  # nothing usable yet
+
+    target.write_text(f"#!{sys.executable}\n")
+    target.chmod(target.stat().st_mode | stat.S_IXUSR)
+    assert service.cli_path == str(target)
