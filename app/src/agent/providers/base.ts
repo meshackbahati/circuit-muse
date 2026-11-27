@@ -17,9 +17,11 @@ export function buildOpenAIMessages(messages: Message[]): any[] {
           type: 'function',
           function: {
             name: tc.function.name,
+            // Never send an empty string back: OpenAI-compatible APIs
+            // reject it for tools without parameters.
             arguments: typeof tc.function.arguments === 'string'
-              ? tc.function.arguments
-              : JSON.stringify(tc.function.arguments),
+              ? (tc.function.arguments.trim() ? tc.function.arguments : '{}')
+              : JSON.stringify(tc.function.arguments ?? {}),
           },
         };
       });

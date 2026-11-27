@@ -231,7 +231,9 @@ export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal):
   let args: Record<string, any> = {};
   // Tools without parameters arrive with empty arguments from some providers
   // (Anthropic streams no input_json_delta for them). Treat that as {}.
-  if (typeof argsStr === 'string' && argsStr.trim()) {
+  if (argsStr && typeof argsStr === 'object') {
+    args = argsStr as Record<string, any>;
+  } else if (typeof argsStr === 'string' && argsStr.trim()) {
     try {
       const parsed = JSON.parse(argsStr);
       args = parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};

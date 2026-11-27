@@ -24,7 +24,7 @@ export class OllamaProvider implements LLMProvider {
     const model = await resolveModel(this, params.model);
     const body = {
       model,
-      messages: buildOpenAIMessages(params.messages),
+      messages: toOllamaMessages(buildOpenAIMessages(params.messages)),
       stream: true,
       ...(params.tools && { tools: params.tools }),
     };
@@ -58,7 +58,21 @@ export class OllamaProvider implements LLMProvider {
           const parsed = JSON.parse(line);
           const chunk: StreamChunk = {
             content: parsed.message?.content,
-            toolCalls: parsed.message?.tool_calls,
+            // Ollama sends complete calls without ids and with object
+            // arguments; give them the shape the agent loop expects.
+            toolCalls: Array.isArray(parsed.message?.tool_calls)
+              ? parsed.message.tool_calls.map((tc: any, i: number) => ({
+                  id: tc.id || `ollama_${Date.now().toString(36)}_${i}`,
+                  type: 'function' as const,
+                  function: {
+                    name: tc.function?.name ?? '',
+                    arguments:
+                      typeof tc.function?.arguments === 'string'
+                        ? tc.function.arguments
+                        : JSON.stringify(tc.function?.arguments ?? {}),
+                  },
+                }))
+              : undefined,
             done: parsed.done ?? false,
           };
           if (parsed.done_eval_count != null) {
@@ -92,4 +106,26 @@ export class OllamaProvider implements LLMProvider {
     };
   }
 
+}
+
+/** Ollama's /api/chat takes tool call arguments as an object, not the JSON
+ *  string the OpenAI format uses. */
+function toOllamaMessages(messages: any[]): any[] {
+  return messages.map((m) => {
+    if (!Array.isArray(m.tool_calls)) return m;
+    return {
+      ...m,
+      tool_calls: m.tool_calls.map((tc: any) => {
+        let args: unknown = tc.function?.arguments ?? {};
+        if (typeof args === 'string') {
+          try {
+            args = JSON.parse(args || '{}');
+          } catch {
+            args = {};
+          }
+        }
+        return { ...tc, function: { ...tc.function, arguments: args } };
+      }),
+    };
+  });
 }

@@ -616,6 +616,8 @@ export async function sendMessage(content: string): Promise<void> {
         }
       }
       if (assistantId) agentStore.updateMessage(assistantId, { content: fullContent });
+      // Same shape for every provider before the calls run or enter history.
+      toolCalls = toolCalls.map(normalizeToolCall);
 
       if (controller.signal.aborted) break;
       if (toolCalls.length === 0) {
@@ -783,24 +785,63 @@ export async function sendMessage(content: string): Promise<void> {
   }
 }
 
-function mergeToolCalls(existing: ToolCall[], incoming: Partial<ToolCall>[]): ToolCall[] {
+/** Stream contract for every provider: each chunk carries the latest full
+ *  state of a tool call, keyed by id. The OpenAI adapter sends the whole
+ *  argument buffer on every delta, so appending (the old behaviour) produced
+ *  invalid JSON such as `{"a"{"a":1}`; Anthropic and Gemini send each call
+ *  once. A call without an id (Ollama) gets one so it is not dropped. */
+export function mergeToolCalls(existing: ToolCall[], incoming: Partial<ToolCall>[]): ToolCall[] {
   const result = [...existing];
   for (const inc of incoming) {
-    if (inc.id) {
-      const idx = result.findIndex(r => r.id === inc.id);
-      if (idx >= 0) {
-        result[idx] = {
-          ...result[idx],
-          function: {
-            ...result[idx].function,
-            name: inc.function?.name || result[idx].function.name,
-            arguments: result[idx].function.arguments + (inc.function?.arguments || ''),
-          },
-        };
-      } else {
-        result.push(inc as ToolCall);
-      }
+    if (!inc?.function?.name && !inc?.id) continue;
+    const id = inc.id || `call_${result.length}_${Math.random().toString(36).slice(2, 10)}`;
+    const idx = inc.id ? result.findIndex((r) => r.id === inc.id) : -1;
+    const args = inc.function?.arguments;
+    if (idx >= 0) {
+      const current = result[idx];
+      result[idx] = {
+        ...current,
+        ...inc,
+        id,
+        function: {
+          name: inc.function?.name || current.function.name,
+          arguments: args === undefined || args === '' ? current.function.arguments : args,
+        },
+      } as ToolCall;
+    } else {
+      result.push({
+        ...inc,
+        id,
+        type: 'function',
+        function: { name: inc.function?.name ?? '', arguments: args ?? '' },
+      } as ToolCall);
     }
   }
   return result;
+}
+
+/** Arguments as a JSON object string. Providers send nothing for tools
+ *  without parameters (Anthropic), an object (Ollama) or a string; some
+ *  reject an empty string when the call is sent back in the history. */
+export function normalizeToolArguments(args: unknown): string {
+  if (args === undefined || args === null) return '{}';
+  if (typeof args !== 'string') {
+    try {
+      return JSON.stringify(args);
+    } catch {
+      return '{}';
+    }
+  }
+  return args.trim() ? args : '{}';
+}
+
+export function normalizeToolCall(call: ToolCall): ToolCall {
+  const args = normalizeToolArguments(call.function?.arguments as unknown);
+  if (args === call.function.arguments && call.id && call.type === 'function') return call;
+  return {
+    ...call,
+    id: call.id || `call_${Math.random().toString(36).slice(2, 12)}`,
+    type: 'function',
+    function: { ...call.function, arguments: args },
+  };
 }

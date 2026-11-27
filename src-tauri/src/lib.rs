@@ -80,7 +80,14 @@ fn resolve_sidecar_path(_app: &tauri::AppHandle, name: &str) -> Option<String> {
     };
 
     for path in candidates {
-        if path.exists() {
+        // Dev builds carry empty placeholder files for the sidecars (see
+        // build.rs). Running one fails with "Permission denied" or "Exec
+        // format error", so skip them and let the engine fall back to a
+        // system install or report the tool as missing.
+        let usable = std::fs::metadata(&path)
+            .map(|meta| meta.is_file() && meta.len() > 0)
+            .unwrap_or(false);
+        if usable {
             return path.to_str().map(String::from);
         }
     }
