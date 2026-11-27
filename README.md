@@ -22,8 +22,10 @@ Release packages bundle the desktop shell, the Python engine, and Arduino CLI. B
 - Electrical verification that reports shorts, LED overcurrent, resistor overpower, and dark indicators.
 - A serial monitor with baud detection, input with several line endings, and multiple UART channels on ESP32.
 - An oscilloscope that monitors any board and pin, measures frequency and duty, exposes trigger modes and capture, and renders at a bounded redraw rate.
+- Sound: buzzers play while the simulation runs on any board. `tone()` plays at its real pitch (measured from the pin in simulated time), a pin held HIGH beeps like an active buzzer, `analogWrite` plays a PWM tone, and LOW is silent. A Sound button in the canvas header mutes it.
 - Instruments for voltage and current, plus interactive parts such as pushbuttons, switches, potentiometers, keypads, encoders, and I2C displays that respond to pointer input while the simulation runs.
-- A hardware flash dialog that enumerates USB ports, shows readable board names, supports custom port labels, and streams upload progress.
+- A hardware flash dialog that enumerates USB ports, shows readable board names, supports custom port labels, and streams upload progress. ESP32 boards are written with esptool (merged image at 0x0); AVR, RP2040 and other boards use `arduino-cli upload`.
+- A guided tour on first launch, a short "What's new" tour after updates, and Menu → Take the tour to replay it.
 - Projects in IndexedDB with autosave, explicit save, history, import, and export.
 - A docked assistant panel that can be resized, minimized, or closed, with searchable history and pasted or dropped attachments.
 
@@ -55,7 +57,7 @@ Download a package from [GitHub Releases](https://github.com/meshackbahati/circu
 | Fedora | `.rpm` | `sudo dnf install ./circuit-muse-*.rpm` |
 | Any Linux | `.AppImage` | `chmod +x CircuitMuse_*.AppImage && ./CircuitMuse_*.AppImage` |
 
-The app opens straight into the editor. A setup dialog appears on first launch and reports which tools are present. The setup wizard detects the host operating system and shows the matching command for manual installs. The Install button downloads the matching build for that system: ESP32 QEMU from Espressif, STM32 QEMU Arm from xPack, and the WASI SDK from WebAssembly. It shows download progress inline and reports failures without leaving the dialog. Each Install button works independently, so several runtimes can download at the same time.
+The app opens straight into the editor. A setup dialog appears on first launch and reports which tools are present. The setup wizard detects the host operating system and shows the matching command for manual installs. The Install button downloads the matching build for that system: Arduino CLI from Arduino (when no bundled or system copy works), ESP32 QEMU from Espressif (Xtensa for ESP32/S3 and RISC-V for ESP32-C3), STM32 QEMU Arm from xPack, and the WASI SDK from WebAssembly. Tools install into the app's data folder for the current user, so no administrator rights are needed; Arduino board cores go to the standard `~/.arduino15` folder shared with Arduino IDE. The first compile for a board family installs its core (about 800 MB for ESP32) and shows progress in the output console. It shows download progress inline and reports failures without leaving the dialog. Each Install button works independently, so several runtimes can download at the same time.
 
 A guided tour starts after first-run setup and can be replayed from the menu. It walks through the canvas, file groups, compile, run, serial monitor, oscilloscope, and assistant in fourteen steps. Steps whose target is not visible are skipped, and the tour supports keyboard and screen-reader navigation.
 
@@ -200,6 +202,12 @@ White screen on Linux: force software rendering with the environment variable sh
 Arduino CLI missing: run `bash scripts/download-deps.sh` or open the setup dialog.
 
 Engine not starting: check that Python 3.12 or 3.13 is available, then run `pip install -r requirements.txt` inside `engine/` and restart the app.
+
+Engine port: the engine takes the first free port from 8001 to 8100, or any free port the system offers if all of those are taken, and the app tells the window which one. Nothing needs configuring when another program already uses 8001. If the engine exits while the app is open, the app restarts it and the status bar says so; after repeated failures it shows the reason.
+
+"Could not reach the CircuitMuse engine": the engine is starting or restarting. Compiles wait up to 20 seconds for it. Opening the app a second time focuses the existing window instead of starting another engine.
+
+ESP32 in the open-source build: without the optional `libqemu-xtensa`, ESP32 boards run on Espressif's QEMU. Serial output and pin outputs (LEDs, buzzers) work; Arduino's `loop()` is compiled to run on core 0 for simulation because the second core's timer does not tick in that QEMU build. Pin inputs (buttons into the ESP32) need `libqemu-xtensa`.
 
 QEMU boards not running: ESP32, STM32, and Raspberry Pi targets need their QEMU runtime. Install it from the board prompt or the setup dialog. The STM32 button installs the xPack QEMU Arm runtime, which supplies `qemu-system-arm` for the host platform. STM32 board emulation inside the app still requires the `libqemu-arm` shared library when that path is selected. See [docs/runtime-setup.md](docs/runtime-setup.md) for the per-platform details.
 

@@ -8,7 +8,7 @@
  */
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { markTourDone } from './tourStorage';
+import { lastSeenTourVersion, markTourDone } from './tourStorage';
 import './GuidedTour.css';
 
 interface TourStep {
@@ -16,6 +16,8 @@ interface TourStep {
   target?: string;
   title: string;
   body: string;
+  /** Tour version that introduced the step (default 1). */
+  since?: number;
 }
 
 const STEPS: TourStep[] = [
@@ -74,14 +76,27 @@ const STEPS: TourStep[] = [
     body: 'Watch the signal on any pin over time, with frequency and duty cycle readouts.',
   },
   {
+    target: '[data-tour="sound"]',
+    since: 2,
+    title: 'Sound',
+    body: 'Buzzers play while the simulation runs: tone() at its real pitch, a pin held HIGH as a beep. Turn sound on or off here.',
+  },
+  {
+    target: '[data-tour="flash"]',
+    since: 2,
+    title: 'Flash a real board',
+    body: 'After compiling, plug in a board by USB and send the program to it. ESP32, Arduino and Pico boards are supported.',
+  },
+  {
     target: '[data-tour="agent"]',
     title: 'AI assistant',
     body: 'Describe what you want to build. The assistant can add parts, wire them, write code, compile and run. Add a provider key or a local Ollama model in its settings first.',
   },
   {
     target: '[data-tour="menu"]',
+    since: 2,
     title: 'Menu',
-    body: 'Save, open projects, export, browse examples, open setup, and replay this tour.',
+    body: 'Save, open projects, export and browse examples. Setup installs what the app needs (Arduino CLI, board emulators, the custom chip compiler) with one click each. You can replay this tour here too.',
   },
   {
     title: 'You are ready',
@@ -116,11 +131,26 @@ function isAvailable(step: TourStep): boolean {
 
 interface GuidedTourProps {
   onClose: () => void;
+  /** Show every step (Menu → Take the tour), not only what is new. */
+  forceFull?: boolean;
 }
 
-export const GuidedTour: React.FC<GuidedTourProps> = ({ onClose }) => {
+const WHATS_NEW: TourStep = {
+  title: "What's new",
+  body: 'A few things were added since your last tour. This takes a few seconds.',
+};
+
+export const GuidedTour: React.FC<GuidedTourProps> = ({ onClose, forceFull = false }) => {
   // Resolve once on open which steps can be shown in the current layout.
-  const steps = useMemo(() => STEPS.filter(isAvailable), []);
+  // Someone who finished an earlier tour sees only the steps added since.
+  const steps = useMemo(() => {
+    const seen = forceFull ? 0 : lastSeenTourVersion();
+    const pool =
+      seen > 0
+        ? [WHATS_NEW, ...STEPS.filter((st) => (st.since ?? 1) > seen)]
+        : STEPS;
+    return pool.filter(isAvailable);
+  }, [forceFull]);
   const [index, setIndex] = useState(0);
   const [rect, setRect] = useState<Rect | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);

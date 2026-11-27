@@ -121,6 +121,7 @@ export const EditorPage: React.FC = () => {
   const [showExport, setShowExport] = useState(false);
   const [showSetup, setShowSetup] = useState(false);
   const [showTour, setShowTour] = useState(false);
+  const [fullTour, setFullTour] = useState(false);
   const [showGitHubSync, setShowGitHubSync] = useState(false);
   const [savedFlash, setSavedFlash] = useState(false);
   const [saveDialog, setSaveDialog] = useState<{ id: string; name: string } | null>(null);
@@ -616,7 +617,7 @@ export const EditorPage: React.FC = () => {
                   { label: 'Examples', action: () => { navigate(localize('/examples')); setMenuOpen(false); } },
                   { label: 'Docs', action: () => { navigate(localize('/docs')); setMenuOpen(false); } },
                   { label: 'Setup', action: () => { setShowSetup(true); setMenuOpen(false); } },
-                  { label: 'Take the tour', action: () => { setMenuOpen(false); setShowTour(true); } },
+                  { label: 'Take the tour', action: () => { setMenuOpen(false); setFullTour(true); setShowTour(true); } },
                   { label: 'GitHub', action: () => { window.open('https://github.com/meshackbahati/circuit-muse', '_blank'); setMenuOpen(false); } },
                 ].map((item) => (
                   <button
@@ -930,7 +931,15 @@ export const EditorPage: React.FC = () => {
       )}
       <Suspense fallback={null}>
         {showSetup && <SetupWizard onClose={closeSetup} />}
-        {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
+        {showTour && (
+          <GuidedTour
+            forceFull={fullTour}
+            onClose={() => {
+              setShowTour(false);
+              setFullTour(false);
+            }}
+          />
+        )}
         {showGitHubSync && <GitHubSyncModal onClose={() => setShowGitHubSync(false)} />}
       </Suspense>
     </div>
