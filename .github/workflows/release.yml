@@ -402,7 +402,7 @@ jobs:
           cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
-          pkgver=1.2.0
+          pkgver=1.2.1
           pkgrel=1
           pkgdesc="AI-powered circuit simulator and embedded board emulator"
           arch=('x86_64')
@@ -457,6 +457,8 @@ jobs:
 
             ### Changes in this release
 
+            - The setup wizard detects the host operating system and shows matching commands. The Install button still works the same way, while each runtime downloads the correct archive for Windows, macOS, or Linux underneath. Install buttons now run independently, so several downloads can proceed at once.
+            - STM32 QEMU can now be installed from the setup wizard and the board prompt. The command downloads the xPack QEMU Arm release for the host platform and verifies the `qemu-system-arm` binary before replacing an existing install.
             - Closing the app now stops the engine, QEMU runtimes, and worker processes. The engine watches the app process and exits if the app crashes. Idle engine memory is lower because dependencies are checked without importing them.
             - Startup JavaScript is reduced by lazy-loading examples, the AI panel, the oscilloscope, and closed dialogs. PrismLight replaces the full Prism build, and blur layers are removed from canvas overlays.
             - Setup now installs correctly: the window gained the event and opener permissions that Install, engine readiness, and board prompts need. Progress and errors are inline, truncated downloads fail, and WASI SDK installs from the setup wizard. Custom chip compiling is fixed by bundling the SDK header and correcting its name.
@@ -527,7 +529,7 @@ jobs:
             |----------|--------|-------|
             | **Linux (x86_64)** | AppImage | Universal, works on Ubuntu, Debian, Fedora, Arch, and derivatives |
             | **Linux (x86_64)** | .deb | Debian/Ubuntu/Mint |
-            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.2.0-1-x86_64.pkg.tar.zst` |
+            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.2.1-1-x86_64.pkg.tar.zst` |
             | **Windows (x86_64)** | .exe (NSIS) | Windows 10/11 installer |
             | **Windows (x86_64)** | .msi | Windows MSI installer |
             | **macOS (ARM64)** | .dmg | Apple Silicon (M1/M2/M3/M4) |

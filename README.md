@@ -55,7 +55,7 @@ Download a package from [GitHub Releases](https://github.com/meshackbahati/circu
 | Fedora | `.rpm` | `sudo dnf install ./circuit-muse-*.rpm` |
 | Any Linux | `.AppImage` | `chmod +x CircuitMuse_*.AppImage && ./CircuitMuse_*.AppImage` |
 
-The app opens straight into the editor. A setup dialog appears on first launch and reports which tools are present. The setup wizard can install the WASI SDK for custom chips and the QEMU runtimes for ESP32, STM32, and Raspberry Pi boards. It shows download progress inline and reports failures without leaving the dialog.
+The app opens straight into the editor. A setup dialog appears on first launch and reports which tools are present. The setup wizard detects the host operating system and shows the matching command for manual installs. The Install button downloads the matching build for that system: ESP32 QEMU from Espressif, STM32 QEMU Arm from xPack, and the WASI SDK from WebAssembly. It shows download progress inline and reports failures without leaving the dialog. Each Install button works independently, so several runtimes can download at the same time.
 
 A guided tour starts after first-run setup and can be replayed from the menu. It walks through the canvas, file groups, compile, run, serial monitor, oscilloscope, and assistant in fourteen steps. Steps whose target is not visible are skipped, and the tour supports keyboard and screen-reader navigation.
 
@@ -190,7 +190,7 @@ circuit-muse/
   engine/       Python FastAPI compile, AI relay, and flash engine
   src-tauri/    Rust Tauri desktop shell and serial port command
   scripts/      Build helpers
-  docs/         Hardware flashing and UI notes
+  docs/         Hardware flashing, runtime setup, UI, and agent workflow notes
 ```
 
 ## Troubleshooting
@@ -201,7 +201,7 @@ Arduino CLI missing: run `bash scripts/download-deps.sh` or open the setup dialo
 
 Engine not starting: check that Python 3.12 or newer is available, then run `pip install -r requirements.txt` inside `engine/` and restart the app.
 
-QEMU boards not running: ESP32, STM32, and Raspberry Pi targets need their QEMU runtime. Install it from the board prompt or the setup dialog.
+QEMU boards not running: ESP32, STM32, and Raspberry Pi targets need their QEMU runtime. Install it from the board prompt or the setup dialog. The STM32 button installs the xPack QEMU Arm runtime, which supplies `qemu-system-arm` for the host platform. STM32 board emulation inside the app still requires the `libqemu-arm` shared library when that path is selected. See [docs/runtime-setup.md](docs/runtime-setup.md) for the per-platform details.
 
 No serial ports in the flash dialog: attach a board by USB. On Linux add the user to `dialout` and log out and back in. On macOS and Windows install the adapter driver.
 

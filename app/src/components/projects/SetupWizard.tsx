@@ -14,6 +14,7 @@ import {
   type QemuInstallProgress,
   autoInstallTool,
   canAutoInstall,
+  hostPlatform,
 } from '../../services/dependencyChecker';
 import { openExternal } from '../../desktop/tauriBridge';
 import './SetupWizard.css';
@@ -44,10 +45,13 @@ function progressLabel(p: QemuInstallProgress | null): string {
 }
 
 export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
+  const host = hostPlatform();
   const [deps, setDeps] = useState<Dependency[]>([]);
   const [loading, setLoading] = useState(true);
-  const [installing, setInstalling] = useState<string | null>(null);
-  const [progress, setProgress] = useState<QemuInstallProgress | null>(null);
+  // Each download runs independently. One install must not grey out the
+  // buttons for unrelated runtimes while it is in progress.
+  const [installing, setInstalling] = useState<Set<string>>(new Set());
+  const [progress, setProgress] = useState<Record<string, QemuInstallProgress | null>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const rescan = useCallback(async () => {
@@ -66,8 +70,8 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
   const allRequiredReady = requiredMissing.length === 0;
 
   const handleInstall = async (dep: Dependency) => {
-    setInstalling(dep.id);
-    setProgress(null);
+    setInstalling((prev) => new Set(prev).add(dep.id));
+    setProgress((prev) => ({ ...prev, [dep.id]: null }));
     setErrors((prev) => {
       const next = { ...prev };
       delete next[dep.id];
@@ -76,7 +80,9 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
 
     let failure: string | null = null;
     try {
-      await autoInstallTool(dep.id, setProgress);
+      await autoInstallTool(dep.id, (detail) => {
+        setProgress((prev) => ({ ...prev, [dep.id]: detail }));
+      });
     } catch (err) {
       failure = err instanceof Error ? err.message : String(err);
     }
@@ -89,12 +95,16 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
     if (failure) {
       setErrors((prev) => ({ ...prev, [dep.id]: failure as string }));
     }
-    setInstalling(null);
-    setProgress(null);
+    setInstalling((prev) => {
+      const next = new Set(prev);
+      next.delete(dep.id);
+      return next;
+    });
   };
 
   const renderDep = (dep: Dependency) => {
-    const isInstalling = installing === dep.id;
+    const isInstalling = installing.has(dep.id);
+    const depProgress = progress[dep.id] ?? null;
     const ready = dep.status === 'installed';
     const error = errors[dep.id];
     const stateLabel = isInstalling ? 'Installing' : ready ? 'Ready' : dep.required ? 'Missing' : 'Not installed';
@@ -109,13 +119,27 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
           </div>
           <div className="setup-dep-desc">{dep.description}</div>
           {!ready && dep.notes && !isInstalling && <div className="setup-dep-notes">{dep.notes}</div>}
+          {!ready && dep.installCommand && !isInstalling && (
+            <div className="setup-dep-command">
+              <code>{dep.installCommand}</code>
+              <button
+                className="setup-link"
+                type="button"
+                onClick={() => {
+                  void navigator.clipboard?.writeText(dep.installCommand!).catch(() => undefined);
+                }}
+              >
+                Copy
+              </button>
+            </div>
+          )}
 
           {isInstalling && (
             <div className="setup-progress" role="status" aria-live="polite">
               <div className="setup-progress-track">
-                <div className="setup-progress-fill" style={{ width: `${progress?.progress ?? 0}%` }} />
+                <div className="setup-progress-fill" style={{ width: `${depProgress?.progress ?? 0}%` }} />
               </div>
-              <span className="setup-progress-label">{progressLabel(progress)}</span>
+              <span className="setup-progress-label">{progressLabel(depProgress)}</span>
             </div>
           )}
 
@@ -132,7 +156,7 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
               <button
                 className="setup-btn setup-btn--primary setup-btn--small"
                 onClick={() => handleInstall(dep)}
-                disabled={installing !== null}
+                disabled={isInstalling}
                 type="button"
               >
                 {error ? 'Retry' : 'Install'}
@@ -154,7 +178,7 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="setup-overlay" onClick={installing ? undefined : onClose}>
+    <div className="setup-overlay" onClick={installing.size > 0 ? undefined : onClose}>
       <div
         className="setup-modal"
         role="dialog"
@@ -165,7 +189,10 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
         <div className="setup-header">
           <div>
             <h2 id="setup-title">System setup</h2>
-            <p className="setup-subtitle">Tools CircuitMuse uses to compile and simulate.</p>
+            <p className="setup-subtitle">
+              Tools CircuitMuse uses to compile and simulate. Detected: {host.label}
+              {host.arch ? ` ${host.arch}` : ''}. Install uses the matching build for this system.
+            </p>
           </div>
           <button className="setup-close" onClick={onClose} type="button" aria-label="Close">
             {'✕'}
@@ -221,7 +248,7 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
                     await rescan();
                     setLoading(false);
                   }}
-                  disabled={installing !== null}
+                  disabled={installing.size > 0}
                   type="button"
                 >
                   Check again

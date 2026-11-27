@@ -160,7 +160,13 @@ fn download_and_extract(
         .map(|n| n.to_string_lossy().to_string())
         .unwrap_or_else(|| "tool".to_string());
     let staging = parent.join(format!("{}.partial", name));
-    let archive_ext = if url.ends_with(".tar.gz") { "tar.gz" } else { "tar.xz" };
+    let archive_ext = if url.ends_with(".tar.gz") {
+        "tar.gz"
+    } else if url.ends_with(".zip") {
+        "zip"
+    } else {
+        "tar.xz"
+    };
     let archive = parent.join(format!("{}.download.{}", name, archive_ext));
     let _ = std::fs::remove_dir_all(&staging);
     std::fs::create_dir_all(&staging).map_err(|e| e.to_string())?;
@@ -263,6 +269,31 @@ fn extract(archive: &std::path::Path, dest: &std::path::Path) -> Result<(), Stri
 }
 
 #[tauri::command]
-pub fn stm32_qemu_install(_app: AppHandle, _window: tauri::Window) -> Result<(), String> {
-    Err("STM32 QEMU not available for automatic installation yet".to_string())
+pub async fn stm32_qemu_install(app: AppHandle, window: tauri::Window) -> Result<(), String> {
+    // xPack publishes a self-contained QEMU Arm build for Cortex-M targets.
+    // The archive layout is `xpack-qemu-arm-<version>/bin/qemu-system-arm`,
+    // which install_archive flattens into the runtime directory.
+    const TAG: &str = "v9.2.4-1";
+    const VERSION: &str = "9.2.4-1";
+    let platform = if cfg!(target_os = "linux") && cfg!(target_arch = "x86_64") {
+        "linux-x64"
+    } else if cfg!(target_os = "linux") && cfg!(target_arch = "aarch64") {
+        "linux-arm64"
+    } else if cfg!(target_os = "macos") && cfg!(target_arch = "aarch64") {
+        "darwin-arm64"
+    } else if cfg!(target_os = "macos") && cfg!(target_arch = "x86_64") {
+        "darwin-x64"
+    } else if cfg!(target_os = "windows") && cfg!(target_arch = "x86_64") {
+        "win32-x64"
+    } else {
+        return Err("Unsupported platform".to_string());
+    };
+    let ext = if platform.starts_with("win32") { "zip" } else { "tar.gz" };
+    let filename = format!("xpack-qemu-arm-{VERSION}-{platform}.{ext}");
+    let url = format!(
+        "https://github.com/xpack-dev-tools/qemu-arm-xpack/releases/download/{TAG}/{filename}"
+    );
+    let dir = qemu_dir(&app, "stm32")?;
+    let required = format!("bin/{}", exe_name("qemu-system-arm"));
+    install_archive(window, "stm32-qemu-progress", url, dir, required).await
 }

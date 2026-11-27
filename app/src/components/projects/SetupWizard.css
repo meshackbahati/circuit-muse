@@ -151,6 +151,23 @@
   color: var(--color-fg-subtle);
 }
 
+.setup-dep-command {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.setup-dep-command code {
+  padding: 3px 6px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 4px;
+  background: var(--color-bg-subtle);
+  font: var(--text-caption1);
+  color: var(--color-fg);
+}
+
 .setup-dep-error {
   margin-top: 8px;
   font: var(--text-caption1);

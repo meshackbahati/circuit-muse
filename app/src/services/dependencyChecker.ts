@@ -8,6 +8,23 @@ import { getApiBase } from '../lib/apiBase';
 import { detectEnginePort, getEngineUrl } from './engineConfig';
 
 export type DependencyStatus = 'installed' | 'missing' | 'partial' | 'unknown';
+export type HostOS = 'windows' | 'macos' | 'linux' | 'unknown';
+
+/** Detect the host operating system so setup can show the matching commands. */
+export function hostPlatform(): { os: HostOS; label: string; arch: string } {
+  if (typeof navigator === 'undefined') return { os: 'unknown', label: 'Unknown system', arch: '' };
+  const ua = navigator.userAgent;
+  const platform = (navigator as { platform?: string }).platform ?? '';
+  const arch = /arm64|aarch64/i.test(ua + platform)
+    ? 'arm64'
+    : /x86_64|x64|win64/i.test(ua + platform)
+      ? 'x64'
+      : '';
+  if (/win/i.test(ua) || /win/i.test(platform)) return { os: 'windows', label: 'Windows', arch };
+  if (/mac/i.test(ua) || /mac/i.test(platform)) return { os: 'macos', label: 'macOS', arch };
+  if (/linux/i.test(ua) || /linux/i.test(platform)) return { os: 'linux', label: 'Linux', arch };
+  return { os: 'unknown', label: 'Unknown system', arch };
+}
 
 export interface Dependency {
   id: string;
@@ -66,6 +83,7 @@ async function checkChipCompileStatus(): Promise<boolean> {
 
 export async function scanDependencies(): Promise<Dependency[]> {
   const deps: Dependency[] = [];
+  const host = hostPlatform();
 
   // Backend connectivity
   let backendOnline = false;
@@ -90,25 +108,22 @@ export async function scanDependencies(): Promise<Dependency[]> {
     notes: backendOnline
       ? `Running on port ${new URL(isTauri() ? getEngineUrl() : 'http://localhost:8001').port || '8001'}`
       : isTauri()
-        ? 'The bundled engine is not responding. Restart the app and re-scan.'
-        : 'Start the local engine with: python __main__.py',
+        ? `${host.label}: the bundled engine is not responding. Restart the app and re-scan.`
+        : `${host.label}: start the local engine with python __main__.py inside engine/.`,
   });
 
   // Arduino CLI
   if (backendOnline) {
     const { arduinoCli } = await checkBackendCompileStatus();
-    const isWindows = typeof navigator !== 'undefined' && /win/i.test(navigator.userAgent);
-    const isMac = typeof navigator !== 'undefined' && /mac/i.test(navigator.userAgent);
-    let osNotes = 'Install from arduino.github.io/arduino-cli/installation/';
-    if (!arduinoCli) {
-      if (isWindows) {
-        osNotes = 'Windows: Run "winget install Arduino.ArduinoCLI" in terminal, or download from arduino-cli website.';
-      } else if (isMac) {
-        osNotes = 'macOS: Run "brew install arduino-cli" in terminal.';
-      } else {
-        osNotes = 'Linux: Run "sudo apt install arduino-cli" or "snap install arduino-cli", or use the curl install script.';
-      }
-    }
+    const arduinoCommand =
+      host.os === 'windows' ? 'winget install Arduino.ArduinoCLI' :
+      host.os === 'macos' ? 'brew install arduino-cli' :
+      host.os === 'linux' ? 'sudo apt install arduino-cli' : '';
+    const osNotes = arduinoCli
+      ? `${host.label}: Arduino cores auto-install on first compile.`
+      : arduinoCommand
+        ? `${host.label}: run ${arduinoCommand} in a terminal, or use the install guide.`
+        : `${host.label}: use the install guide for Arduino CLI.`;
     deps.push({
       id: 'arduino-cli',
       name: 'Arduino CLI',
@@ -116,9 +131,8 @@ export async function scanDependencies(): Promise<Dependency[]> {
       required: true,
       status: arduinoCli ? 'installed' : 'missing',
       installUrl: 'https://arduino.github.io/arduino-cli/latest/installation/',
-      notes: arduinoCli
-        ? 'Arduino cores auto-install on first compile'
-        : osNotes,
+      installCommand: arduinoCli ? undefined : arduinoCommand || undefined,
+      notes: osNotes,
     });
   }
 
@@ -133,8 +147,8 @@ export async function scanDependencies(): Promise<Dependency[]> {
       status: espIdf ? 'installed' : 'missing',
       installUrl: 'https://docs.espressif.com/projects/esp-idf/en/v4.4.7/esp32/get-started/',
       notes: espIdf
-        ? 'ESP-IDF v4.4.7 detected'
-        : 'Not needed for most projects: ESP32 boards compile with Arduino CLI. ESP-IDF is a large manual install (about 1.5 GB with git and Python), so it is not installed automatically.',
+        ? `${host.label}: ESP-IDF v4.4.7 detected`
+        : `${host.label}: not needed for most projects, since ESP32 boards compile with Arduino CLI. ESP-IDF is a manual install of about 1.5 GB with git and Python, so the wizard does not download it.`,
     });
   }
 
@@ -146,7 +160,9 @@ export async function scanDependencies(): Promise<Dependency[]> {
     description: 'Emulator for ESP32 and ESP32-S3 boards',
     required: false,
     status: esp32Qemu ? 'installed' : 'missing',
-    notes: esp32Qemu ? 'ESP32 QEMU detected' : 'Click Install to download it (about 15 MB).',
+    notes: esp32Qemu
+      ? `${host.label}: ESP32 QEMU detected`
+      : `${host.label}: click Install to download the matching build (about 15 MB).`,
   });
 
   // STM32 QEMU runtime
@@ -158,15 +174,14 @@ export async function scanDependencies(): Promise<Dependency[]> {
     required: false,
     status: stm32Qemu ? 'installed' : 'missing',
     notes: stm32Qemu
-      ? 'libqemu-arm detected'
-      : 'Automatic install is not available for STM32 in this build.',
+      ? `${host.label}: QEMU Arm runtime detected`
+      : `${host.label}: click Install to download the matching QEMU Arm build (about 35 MB).`,
   });
 
   // Custom chip compile (wasi-sdk). The desktop app can install it; the
   // engine re-checks on each status call, so no restart is needed.
   if (backendOnline || isTauri()) {
     const chipCompile = backendOnline ? await checkChipCompileStatus() : false;
-    const isWindows = typeof navigator !== 'undefined' && /Windows/i.test(navigator.userAgent);
     deps.push({
       id: 'wasi-sdk',
       name: 'WASI SDK',
@@ -175,10 +190,10 @@ export async function scanDependencies(): Promise<Dependency[]> {
       status: chipCompile ? 'installed' : 'missing',
       installUrl: 'https://github.com/WebAssembly/wasi-sdk/releases',
       notes: chipCompile
-        ? 'wasi-sdk detected'
+        ? `${host.label}: wasi-sdk detected`
         : isTauri()
-          ? `Only needed for custom chips. Click Install to download it (about ${isWindows ? '620' : '190'} MB).`
-          : 'Only needed for custom chips.',
+          ? `${host.label}: only needed for custom chips. Click Install to download the matching build (about ${host.os === 'windows' ? '620' : '190'} MB).`
+          : `${host.label}: only needed for custom chips.`,
     });
   }
 
@@ -198,12 +213,12 @@ export interface QemuInstallProgress {
  *  command and the progress event each one uses. */
 const INSTALLERS: Record<string, { command: string; event: string }> = {
   'qemu-esp32': { command: 'esp32_qemu_install', event: 'esp32-qemu-progress' },
+  'qemu-stm32': { command: 'stm32_qemu_install', event: 'stm32-qemu-progress' },
   'wasi-sdk': { command: 'wasi_sdk_install', event: 'wasi-sdk-progress' },
 };
 
 export function canAutoInstall(depId: string): boolean {
-  // STM32 needs libqemu-arm, which the open-source build does not ship, and
-  // ESP-IDF is a multi-step toolchain install.
+  // ESP-IDF is a multi-step toolchain install and remains manual.
   return isTauri() && depId in INSTALLERS;
 }
 
