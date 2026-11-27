@@ -1,0 +1,322 @@
+/* System setup dialog. Uses the shared design tokens so it matches the
+   editor chrome. Opaque surfaces only (no backdrop blur) for low-end GPUs. */
+
+.setup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: var(--color-bg-overlay);
+}
+
+.setup-modal {
+  width: min(560px, 100%);
+  max-height: min(640px, calc(100vh - 32px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-bg-surface-1);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  color: var(--color-fg-default);
+}
+
+.setup-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.setup-header h2 {
+  margin: 0;
+  font: var(--text-title3);
+}
+
+.setup-subtitle {
+  margin: 4px 0 0;
+  font: var(--text-footnote);
+  color: var(--color-fg-muted);
+}
+
+.setup-close {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-fg-muted);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.setup-close:hover {
+  background: var(--color-bg-surface-2);
+  color: var(--color-fg-default);
+}
+
+.setup-loading {
+  padding: 56px 20px;
+  text-align: center;
+  font: var(--text-footnote);
+  color: var(--color-fg-muted);
+}
+
+.setup-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px 8px;
+}
+
+.setup-summary {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--color-feedback-warning) 35%, transparent);
+  background: color-mix(in srgb, var(--color-feedback-warning) 8%, transparent);
+  font: var(--text-footnote);
+}
+
+.setup-summary--ok {
+  border-color: color-mix(in srgb, var(--color-feedback-success) 35%, transparent);
+  background: color-mix(in srgb, var(--color-feedback-success) 8%, transparent);
+}
+
+.setup-section + .setup-section {
+  margin-top: 16px;
+}
+
+.setup-section-title {
+  margin: 0 0 8px;
+  font: 600 12px/16px var(--font-sans);
+  color: var(--color-fg-muted);
+}
+
+.setup-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--color-border-default);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.setup-dep {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+}
+
+.setup-dep + .setup-dep {
+  border-top: 1px solid var(--color-border-default);
+}
+
+.setup-dep--error {
+  background: color-mix(in srgb, var(--color-feedback-error) 6%, transparent);
+}
+
+.setup-dep-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.setup-dep-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.setup-dep-name {
+  font: 500 14px/20px var(--font-sans);
+}
+
+.setup-dep-desc {
+  margin-top: 2px;
+  font: var(--text-caption1);
+  color: var(--color-fg-muted);
+}
+
+.setup-dep-notes {
+  margin-top: 4px;
+  font: var(--text-caption1);
+  color: var(--color-fg-subtle);
+}
+
+.setup-dep-error {
+  margin-top: 8px;
+  font: var(--text-caption1);
+  color: var(--color-feedback-error);
+  overflow-wrap: anywhere;
+}
+
+.setup-state {
+  padding: 1px 8px;
+  border-radius: 999px;
+  font: 500 11px/18px var(--font-sans);
+  white-space: nowrap;
+}
+
+.setup-state--ok {
+  color: var(--color-feedback-success);
+  background: color-mix(in srgb, var(--color-feedback-success) 14%, transparent);
+}
+
+.setup-state--bad {
+  color: var(--color-feedback-error);
+  background: color-mix(in srgb, var(--color-feedback-error) 14%, transparent);
+}
+
+.setup-state--off {
+  color: var(--color-fg-muted);
+  background: var(--color-bg-surface-2);
+}
+
+.setup-state--busy {
+  color: var(--color-fg-default);
+  background: color-mix(in srgb, var(--color-action-primary) 22%, transparent);
+}
+
+.setup-dep-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.setup-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.setup-progress-track {
+  flex: 0 0 140px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-bg-surface-2);
+  overflow: hidden;
+}
+
+.setup-progress-fill {
+  height: 100%;
+  background: var(--color-action-primary);
+  transition: width 0.2s linear;
+}
+
+.setup-progress-label {
+  font: var(--text-caption1);
+  color: var(--color-fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.setup-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.setup-actions-right {
+  display: flex;
+  gap: 8px;
+}
+
+.setup-btn {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font: 500 13px/1 var(--font-sans);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.setup-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.setup-btn--small {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.setup-btn--primary {
+  background: var(--color-action-primary);
+  color: var(--color-action-primary-fg, #fff);
+}
+
+.setup-btn--primary:hover:not(:disabled) {
+  background: var(--color-action-primary-hover);
+}
+
+.setup-btn--secondary {
+  background: transparent;
+  color: var(--color-fg-default);
+  border-color: var(--color-border-strong, var(--color-border-default));
+}
+
+.setup-btn--secondary:hover:not(:disabled),
+.setup-btn--ghost:hover {
+  background: var(--color-bg-surface-2);
+}
+
+.setup-btn--ghost {
+  background: transparent;
+  color: var(--color-fg-muted);
+}
+
+.setup-link {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-fg-muted);
+  font: var(--text-caption1);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.setup-link:hover {
+  color: var(--color-fg-default);
+}
+
+.setup-btn:focus-visible,
+.setup-close:focus-visible,
+.setup-link:focus-visible {
+  outline: 2px solid var(--color-focus-ring, var(--color-action-primary));
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .setup-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .setup-actions-right {
+    flex-direction: column-reverse;
+  }
+
+  .setup-dep {
+    flex-direction: column;
+  }
+
+  .setup-dep-actions {
+    flex-direction: row;
+    align-items: center;
+  }
+}

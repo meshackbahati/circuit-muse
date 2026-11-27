@@ -102,11 +102,16 @@ pub async fn esp32_qemu_install(app: AppHandle, window: tauri::Window) -> Result
         let tarball = dir_clone.join("download.tar.xz");
         let mut file = std::fs::File::create(&tarball).map_err(|e| format!("File creation failed: {}", e))?;
 
-        let mut downloaded = 0;
+        let mut downloaded: usize = 0;
         let mut last_emit = std::time::Instant::now();
         let mut buffer = [0; 16384];
 
-        while let Ok(len) = resp.read(&mut buffer) {
+        loop {
+            // A dropped connection used to end the loop silently and leave a
+            // truncated archive that only failed later, at extraction.
+            let len = resp
+                .read(&mut buffer)
+                .map_err(|e| format!("Download interrupted: {}", e))?;
             if len == 0 {
                 break;
             }
@@ -127,6 +132,15 @@ pub async fn esp32_qemu_install(app: AppHandle, window: tauri::Window) -> Result
                 }));
                 last_emit = std::time::Instant::now();
             }
+        }
+
+        drop(file);
+        if total_size > 0 && (downloaded as u64) < total_size {
+            std::fs::remove_file(&tarball).ok();
+            return Err(format!(
+                "Download incomplete: received {} of {} bytes",
+                downloaded, total_size
+            ));
         }
 
         // Emit final downloading progress
@@ -176,6 +190,19 @@ pub async fn esp32_qemu_install(app: AppHandle, window: tauri::Window) -> Result
 
         if !status.success() {
             return Err("Extraction failed".to_string());
+        }
+
+        let bin_name = if cfg!(target_os = "windows") {
+            "qemu-system-xtensa.exe"
+        } else {
+            "qemu-system-xtensa"
+        };
+        if !dir_clone.join("bin").join(bin_name).exists() {
+            return Err(format!(
+                "Extraction finished but bin/{} is missing in {}",
+                bin_name,
+                dir_clone.display()
+            ));
         }
 
         let _ = window_clone.emit(&event_clone, serde_json::json!({

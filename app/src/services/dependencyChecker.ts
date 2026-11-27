@@ -144,7 +144,7 @@ export async function scanDependencies(): Promise<Dependency[]> {
     description: 'Shared library for ESP32/ESP32-S3 simulation (~42 MB)',
     required: false,
     status: esp32Qemu ? 'installed' : 'missing',
-    notes: esp32Qemu ? 'libqemu-xtensa detected' : 'Download via the ESP32 board prompt or install manually',
+    notes: esp32Qemu ? 'ESP32 QEMU detected' : 'Click Install to download it (about 42 MB).',
   });
 
   // STM32 QEMU runtime
@@ -155,7 +155,9 @@ export async function scanDependencies(): Promise<Dependency[]> {
     description: 'Shared library for STM32 simulation (~30 MB)',
     required: false,
     status: stm32Qemu ? 'installed' : 'missing',
-    notes: stm32Qemu ? 'libqemu-arm detected' : 'Download via the STM32 board prompt or install manually',
+    notes: stm32Qemu
+      ? 'libqemu-arm detected'
+      : 'Automatic install is not available for STM32 in this build.',
   });
 
   // Custom chip compile (wasi-sdk)
@@ -177,9 +179,16 @@ export async function scanDependencies(): Promise<Dependency[]> {
 
 // ─── Auto-install QEMU from Tauri ────────────────────────────────────────
 
+export interface QemuInstallProgress {
+  progress: number;
+  phase: string;
+  bytesDownloaded?: number;
+  totalBytes?: number;
+}
+
 export async function autoInstallQemu(
   arch: 'esp32' | 'stm32',
-  onProgress?: (pct: number, phase: string) => void,
+  onProgress?: (pct: number, phase: string, detail?: QemuInstallProgress) => void,
 ): Promise<void> {
   if (!isTauri()) throw new Error('Tauri runtime not available');
 
@@ -188,8 +197,20 @@ export async function autoInstallQemu(
 
   // Listen for progress
   const { listen } = await import('../desktop/tauriBridge');
-  const unsub = await listen<{ progress: number; phase: string }>(progressEvent, (event) => {
-    onProgress?.(event.payload.progress ?? 0, event.payload.phase);
+  const unsub = await listen<{
+    progress?: number;
+    phase: string;
+    bytes_downloaded?: number;
+    total_bytes?: number;
+  }>(progressEvent, (event) => {
+    const payload = event.payload;
+    const detail: QemuInstallProgress = {
+      progress: payload.progress ?? 0,
+      phase: payload.phase,
+      bytesDownloaded: payload.bytes_downloaded,
+      totalBytes: payload.total_bytes,
+    };
+    onProgress?.(detail.progress, detail.phase, detail);
   });
 
   try {
@@ -197,4 +218,10 @@ export async function autoInstallQemu(
   } finally {
     unsub();
   }
+}
+
+/** Runtimes the desktop app can download and install by itself. */
+export function canAutoInstall(depId: string): boolean {
+  // STM32 needs libqemu-arm, which the open-source build does not ship.
+  return depId === 'qemu-esp32';
 }
