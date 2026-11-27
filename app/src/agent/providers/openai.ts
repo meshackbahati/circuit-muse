@@ -156,9 +156,22 @@ export class OpenAICompatibleProvider implements LLMProvider {
           });
       if (!response.ok) return [];
       const data = await response.json();
-      return (data.data || []).map((m: any) => m.id).sort();
+      return sortChatModels(data.data || []);
     } catch {
       return [];
     }
   }
+}
+
+/** Models that cannot hold a chat with tool calls. */
+const NON_CHAT_MODEL = /(embed|whisper|tts|dall-e|davinci|babbage|moderation|transcribe|image|audio|realtime|search-preview|sora|rerank)/i;
+
+/** Chat models newest first. OpenAI-compatible APIs return models in no useful
+ *  order and mix in embedding, speech and image models; the first entry is
+ *  used when the user has not picked a model. */
+export function sortChatModels(models: Array<{ id?: string; created?: number }>): string[] {
+  return models
+    .filter((m) => typeof m.id === 'string' && m.id && !NON_CHAT_MODEL.test(m.id))
+    .sort((a, b) => (b.created ?? 0) - (a.created ?? 0) || String(a.id).localeCompare(String(b.id)))
+    .map((m) => String(m.id));
 }

@@ -55,7 +55,11 @@ Download a package from [GitHub Releases](https://github.com/meshackbahati/circu
 | Fedora | `.rpm` | `sudo dnf install ./circuit-muse-*.rpm` |
 | Any Linux | `.AppImage` | `chmod +x CircuitMuse_*.AppImage && ./CircuitMuse_*.AppImage` |
 
-The app opens straight into the editor. A setup dialog appears on first launch and reports which tools are present.
+The app opens straight into the editor. A setup dialog appears on first launch and reports which tools are present. The setup wizard can install the WASI SDK for custom chips and the QEMU runtimes for ESP32, STM32, and Raspberry Pi boards. It shows download progress inline and reports failures without leaving the dialog.
+
+A guided tour starts after first-run setup and can be replayed from the menu. It walks through the canvas, file groups, compile, run, serial monitor, oscilloscope, and assistant in fourteen steps. Steps whose target is not visible are skipped, and the tour supports keyboard and screen-reader navigation.
+
+Closing the window stops the engine and its QEMU or worker processes. The engine also watches the desktop process and exits if the app crashes.
 
 The AppImage needs WebKit2GTK 4.1 and GTK 3 on the host. Software rendering is selected automatically when no GPU render device is found. To force it:
 

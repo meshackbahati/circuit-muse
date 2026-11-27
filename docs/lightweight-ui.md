@@ -52,8 +52,15 @@ all run inside one page.
 5. The oscilloscope redraws at 20 fps while capturing instead of driving a
    60 Hz animation frame per sample. Canvases are DPR-aware and resize once
    per layout change rather than once per sample.
-6. Embedded WebKit falls back to software rendering when no GPU render device
+6. Example routes, the AI panel, the oscilloscope, and closed dialogs are
+   lazy-loaded. Startup JavaScript fell from 4.62 MB to 2.09 MB, and the
+   measured JS heap after load fell from 21.0 MB to 16.1 MB. PrismLight
+   replaces the full Prism build.
+7. Embedded WebKit falls back to software rendering when no GPU render device
    is found. `CIRCUIT_MUSE_SOFTWARE_RENDERING=1` forces that path.
+8. Closing the window terminates the engine and emulator processes. The engine
+   checks dependencies with `find_spec` instead of importing them at startup,
+   which lowered idle engine memory from 89 MB to 52 MB.
 
 ## Remaining work
 

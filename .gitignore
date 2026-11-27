@@ -187,3 +187,8 @@ MANIFEST.sha256
 *.sqlite-backup
 
 backend/.venv/*
+
+# Tauri sidecars (arduino-cli, engine) are downloaded or built locally by
+# scripts/download-deps.sh and scripts/build-engine.sh. build.rs creates empty
+# placeholders for dev builds, so nothing here belongs in git.
+src-tauri/binaries/

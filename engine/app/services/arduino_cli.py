@@ -70,9 +70,21 @@ class ArduinoCLIService:
         import sys
         import shutil
 
+        def usable(path: str) -> bool:
+            # Dev builds can carry an empty placeholder for the sidecar;
+            # running it fails with "Permission denied" or "Exec format error".
+            try:
+                return (
+                    os.path.isfile(path)
+                    and os.access(path, os.X_OK)
+                    and os.path.getsize(path) > 0
+                )
+            except OSError:
+                return False
+
         # 1. Tauri passes the bundled sidecar path via env var (most reliable)
         env_path = os.environ.get("ARDUINO_CLI_PATH")
-        if env_path and os.path.isfile(env_path) and os.access(env_path, os.X_OK):
+        if env_path and usable(env_path):
             return env_path
 
         # 2. Check common bundled locations relative to the running executable
@@ -129,7 +141,7 @@ class ArduinoCLIService:
             ]
 
         for path in search_paths:
-            if os.path.isfile(path) and os.access(path, os.X_OK):
+            if usable(path):
                 return path
 
         # 3. Check PATH

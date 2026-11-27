@@ -132,7 +132,9 @@ export async function scanDependencies(): Promise<Dependency[]> {
       required: false,
       status: espIdf ? 'installed' : 'missing',
       installUrl: 'https://docs.espressif.com/projects/esp-idf/en/v4.4.7/esp32/get-started/',
-      notes: espIdf ? 'ESP-IDF v4.4.7 detected' : 'Optional — ESP32 boards work via arduino-cli without it',
+      notes: espIdf
+        ? 'ESP-IDF v4.4.7 detected'
+        : 'Not needed for most projects: ESP32 boards compile with Arduino CLI. ESP-IDF is a large manual install (about 1.5 GB with git and Python), so it is not installed automatically.',
     });
   }
 
@@ -141,10 +143,10 @@ export async function scanDependencies(): Promise<Dependency[]> {
   deps.push({
     id: 'qemu-esp32',
     name: 'ESP32 QEMU Runtime',
-    description: 'Shared library for ESP32/ESP32-S3 simulation (~42 MB)',
+    description: 'Emulator for ESP32 and ESP32-S3 boards',
     required: false,
     status: esp32Qemu ? 'installed' : 'missing',
-    notes: esp32Qemu ? 'libqemu-xtensa detected' : 'Download via the ESP32 board prompt or install manually',
+    notes: esp32Qemu ? 'ESP32 QEMU detected' : 'Click Install to download it (about 15 MB).',
   });
 
   // STM32 QEMU runtime
@@ -152,23 +154,31 @@ export async function scanDependencies(): Promise<Dependency[]> {
   deps.push({
     id: 'qemu-stm32',
     name: 'STM32 QEMU Runtime',
-    description: 'Shared library for STM32 simulation (~30 MB)',
+    description: 'Emulator for STM32 boards',
     required: false,
     status: stm32Qemu ? 'installed' : 'missing',
-    notes: stm32Qemu ? 'libqemu-arm detected' : 'Download via the STM32 board prompt or install manually',
+    notes: stm32Qemu
+      ? 'libqemu-arm detected'
+      : 'Automatic install is not available for STM32 in this build.',
   });
 
-  // Custom chip compile (wasi-sdk)
-  if (backendOnline) {
-    const chipCompile = await checkChipCompileStatus();
+  // Custom chip compile (wasi-sdk). The desktop app can install it; the
+  // engine re-checks on each status call, so no restart is needed.
+  if (backendOnline || isTauri()) {
+    const chipCompile = backendOnline ? await checkChipCompileStatus() : false;
+    const isWindows = typeof navigator !== 'undefined' && /Windows/i.test(navigator.userAgent);
     deps.push({
       id: 'wasi-sdk',
       name: 'WASI SDK',
       description: 'Compiles custom chip C code to WebAssembly',
       required: false,
       status: chipCompile ? 'installed' : 'missing',
-      installUrl: 'https://github.com/aspect-build/toolchains_llvm/releases',
-      notes: chipCompile ? 'wasi-sdk detected' : 'Optional — only needed for custom chip compilation',
+      installUrl: 'https://github.com/WebAssembly/wasi-sdk/releases',
+      notes: chipCompile
+        ? 'wasi-sdk detected'
+        : isTauri()
+          ? `Only needed for custom chips. Click Install to download it (about ${isWindows ? '620' : '190'} MB).`
+          : 'Only needed for custom chips.',
     });
   }
 
@@ -177,23 +187,52 @@ export async function scanDependencies(): Promise<Dependency[]> {
 
 // ─── Auto-install QEMU from Tauri ────────────────────────────────────────
 
-export async function autoInstallQemu(
-  arch: 'esp32' | 'stm32',
-  onProgress?: (pct: number, phase: string) => void,
+export interface QemuInstallProgress {
+  progress: number;
+  phase: string;
+  bytesDownloaded?: number;
+  totalBytes?: number;
+}
+
+/** Tools the desktop app can download and install by itself, with the Tauri
+ *  command and the progress event each one uses. */
+const INSTALLERS: Record<string, { command: string; event: string }> = {
+  'qemu-esp32': { command: 'esp32_qemu_install', event: 'esp32-qemu-progress' },
+  'wasi-sdk': { command: 'wasi_sdk_install', event: 'wasi-sdk-progress' },
+};
+
+export function canAutoInstall(depId: string): boolean {
+  // STM32 needs libqemu-arm, which the open-source build does not ship, and
+  // ESP-IDF is a multi-step toolchain install.
+  return isTauri() && depId in INSTALLERS;
+}
+
+export async function autoInstallTool(
+  depId: string,
+  onProgress?: (detail: QemuInstallProgress) => void,
 ): Promise<void> {
-  if (!isTauri()) throw new Error('Tauri runtime not available');
+  if (!isTauri()) throw new Error('Automatic install needs the desktop app.');
+  const installer = INSTALLERS[depId];
+  if (!installer) throw new Error(`No automatic installer for ${depId}.`);
 
-  const installCmd = arch === 'esp32' ? 'esp32_qemu_install' : 'stm32_qemu_install';
-  const progressEvent = arch === 'esp32' ? 'esp32-qemu-progress' : 'stm32-qemu-progress';
-
-  // Listen for progress
   const { listen } = await import('../desktop/tauriBridge');
-  const unsub = await listen<{ progress: number; phase: string }>(progressEvent, (event) => {
-    onProgress?.(event.payload.progress ?? 0, event.payload.phase);
+  const unsub = await listen<{
+    progress?: number;
+    phase: string;
+    bytes_downloaded?: number;
+    total_bytes?: number;
+  }>(installer.event, (event) => {
+    const payload = event.payload;
+    onProgress?.({
+      progress: payload.progress ?? 0,
+      phase: payload.phase,
+      bytesDownloaded: payload.bytes_downloaded,
+      totalBytes: payload.total_bytes,
+    });
   });
 
   try {
-    await invoke(installCmd);
+    await invoke(installer.command);
   } finally {
     unsub();
   }

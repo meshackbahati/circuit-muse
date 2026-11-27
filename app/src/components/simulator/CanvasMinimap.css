@@ -6,11 +6,12 @@
   z-index: 20;
 
   /* Frame: subtle dark surface that sits one step above the canvas bg. */
-  background: rgba(20, 20, 22, 0.9);
+  /* Opaque, no backdrop blur: the blur was re-computed on every canvas
+   * repaint and cost CPU on machines without GPU compositing. */
+  background: rgb(22, 22, 24);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(6px);
 
   /* Disable text selection during drag — touch-action:none on the
    * canvas-content already prevents browser-level pan/zoom, but we set

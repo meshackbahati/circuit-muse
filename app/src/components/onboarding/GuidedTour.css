@@ -1,0 +1,128 @@
+/* Guided tour. One spotlight element with a large box-shadow dims the rest
+   of the screen; no blur or filters, so it is cheap without a GPU. */
+
+.tour-root {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+}
+
+.tour-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62);
+}
+
+.tour-spotlight {
+  position: fixed;
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 2px var(--color-action-primary),
+    0 0 0 9999px rgba(0, 0, 0, 0.62);
+  transition:
+    top 0.2s ease,
+    left 0.2s ease,
+    width 0.2s ease,
+    height 0.2s ease;
+  pointer-events: none;
+}
+
+.tour-card {
+  position: fixed;
+  padding: 16px;
+  background: var(--color-bg-surface-1);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  color: var(--color-fg-default);
+}
+
+.tour-step-count {
+  font: 500 11px/16px var(--font-sans);
+  color: var(--color-fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.tour-title {
+  margin: 4px 0 6px;
+  font: 600 16px/22px var(--font-sans);
+}
+
+.tour-body {
+  margin: 0;
+  font: var(--text-footnote);
+  color: var(--color-fg-muted);
+}
+
+.tour-progress {
+  display: flex;
+  gap: 4px;
+  margin: 14px 0 12px;
+}
+
+.tour-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-bg-surface-3, var(--color-bg-surface-2));
+}
+
+.tour-dot--active {
+  width: 16px;
+  border-radius: 3px;
+  background: var(--color-action-primary);
+}
+
+.tour-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tour-actions-right {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.tour-btn {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font: 500 13px/1 var(--font-sans);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tour-btn--primary {
+  background: var(--color-action-primary);
+  color: var(--color-action-primary-fg, #fff);
+}
+
+.tour-btn--primary:hover {
+  background: var(--color-action-primary-hover);
+}
+
+.tour-btn--secondary {
+  background: transparent;
+  color: var(--color-fg-default);
+  border-color: var(--color-border-strong, var(--color-border-default));
+}
+
+.tour-btn--secondary:hover,
+.tour-btn--ghost:hover {
+  background: var(--color-bg-surface-2);
+}
+
+.tour-btn--ghost {
+  padding: 0 4px;
+  background: transparent;
+  color: var(--color-fg-muted);
+}
+
+.tour-btn:focus-visible {
+  outline: 2px solid var(--color-focus-ring, var(--color-action-primary));
+  outline-offset: 2px;
+}

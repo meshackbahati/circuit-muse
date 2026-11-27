@@ -27,6 +27,7 @@ Reference upstream IoT projects we test against:
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 from typing import Awaitable, Callable, Dict
@@ -70,6 +71,15 @@ class PicowNetManager:
             return
         await bridge.stop()
         logger.info('[picow:%s] stop', client_id)
+
+    async def shutdown_all(self) -> None:
+        """Stop every bridge. Used when the engine shuts down."""
+        client_ids = list(self._instances)
+        if client_ids:
+            await asyncio.gather(
+                *(self.stop_instance(cid) for cid in client_ids),
+                return_exceptions=True,
+            )
 
     def has_instance(self, client_id: str) -> bool:
         return client_id in self._instances

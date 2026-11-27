@@ -64,18 +64,108 @@ export function summarizeDropped(messages: Message[]): string {
   return `${COMPACTION_PREFIX}\n${summary || 'No prior tool evidence was recorded.'}\nUse the current tool results and live circuit state as the source of truth.`;
 }
 
+function activeModelName(): string {
+  const state = useProviderStore.getState();
+  return state.providers[state.activeProviderId]?.model || 'this model';
+}
+
+/** Make every tool result follow the assistant message that called it.
+ *
+ *  Anthropic and OpenAI reject a request that contains a tool result without
+ *  its tool call ("unexpected tool_use_id found in tool_result blocks") or a
+ *  tool call without its result. Compaction, an abort or a failed tool can
+ *  leave either behind. Orphan results are removed and unanswered calls are
+ *  stripped from their assistant message, which is dropped if nothing is left.
+ *  Mutates `messages` in place. */
+export function repairToolPairs(messages: Message[]): void {
+  const repaired: Message[] = [];
+  let i = 0;
+  while (i < messages.length) {
+    const message = messages[i];
+
+    if (message.role === 'tool') {
+      // Results are only valid directly after the assistant turn that asked
+      // for them; anything reaching here has lost its call.
+      i++;
+      continue;
+    }
+
+    if (message.role === 'assistant' && (message.toolCalls?.length ?? 0) > 0) {
+      const callIds = new Set(message.toolCalls!.map((tc) => tc.id));
+      const results: Message[] = [];
+      let j = i + 1;
+      while (j < messages.length && messages[j].role === 'tool') {
+        const result = messages[j];
+        if (result.toolCallId && callIds.has(result.toolCallId)
+          && !results.some((r) => r.toolCallId === result.toolCallId)) {
+          results.push(result);
+        }
+        j++;
+      }
+      const answered = new Set(results.map((r) => r.toolCallId));
+      const toolCalls = message.toolCalls!.filter((tc) => answered.has(tc.id));
+      if (toolCalls.length > 0) {
+        repaired.push(
+          toolCalls.length === message.toolCalls!.length ? message : { ...message, toolCalls },
+          ...results,
+        );
+      } else if (message.content.trim()) {
+        repaired.push({ ...message, toolCalls: undefined });
+      }
+      i = j;
+      continue;
+    }
+
+    repaired.push(message);
+    i++;
+  }
+  if (repaired.length !== messages.length || repaired.some((m, k) => m !== messages[k])) {
+    messages.splice(0, messages.length, ...repaired);
+  }
+}
+
 /** Keep a bounded provider transcript by replacing the oldest turns with a
- *  factual summary. The full transcript stays in the UI and saved project. */
+ *  factual summary. The full transcript stays in the UI and saved project.
+ *  The cut never separates a tool call from its results: if it would start on
+ *  a tool result, that whole tool round moves into the summary. */
 export function compactMessages(messages: Message[]): void {
-  if (messages.length <= MAX_PROVIDER_MESSAGES) return;
-  const dropped = messages.splice(1, messages.length - MAX_PROVIDER_MESSAGES);
-  const summary = summarizeDropped(dropped);
-  messages.splice(1, 0, {
-    id: `compaction-${Date.now()}`,
-    role: 'user',
-    content: summary,
-    timestamp: Date.now(),
+  if (messages.length > MAX_PROVIDER_MESSAGES) {
+    let cut = messages.length - MAX_PROVIDER_MESSAGES + 1;
+    while (cut < messages.length && messages[cut].role === 'tool') cut++;
+    const dropped = messages.splice(1, cut - 1);
+    const summary = summarizeDropped(dropped);
+    messages.splice(1, 0, {
+      id: `compaction-${Date.now()}`,
+      role: 'user',
+      content: summary,
+      timestamp: Date.now(),
+    });
+  }
+  repairToolPairs(messages);
+}
+
+/** System prompt, the latest user request and the latest complete tool round.
+ *  A blind "keep the last N messages" cut could start on a tool result whose
+ *  call was dropped, which providers reject. */
+export function minimalTranscript(messages: Message[]): Message[] {
+  const system = messages[0]?.role === 'system' ? [messages[0]] : [];
+  let lastUser = -1;
+  let lastRound = -1;
+  messages.forEach((m, index) => {
+    if (m.role === 'user') lastUser = index;
+    if (m.role === 'assistant' && (m.toolCalls?.length ?? 0) > 0) lastRound = index;
   });
+  const kept: Message[] = [];
+  if (lastUser >= 0 && lastUser < lastRound) {
+    kept.push(messages[lastUser], ...messages.slice(lastRound));
+  } else if (lastUser >= 0) {
+    kept.push(...messages.slice(lastUser));
+  } else if (lastRound >= 0) {
+    kept.push(...messages.slice(lastRound));
+  }
+  const result = [...system, ...kept];
+  repairToolPairs(result);
+  return result;
 }
 
 /** Tools that change the canvas or the firmware. A turn that used one of
@@ -157,6 +247,9 @@ async function* streamWithRetry(
   provider: LLMProvider,
   params: ChatParams,
 ): AsyncGenerator<StreamChunk> {
+  // Last check before anything reaches a provider: no tool result without its
+  // call and no call without its result, whatever happened earlier in the turn.
+  repairToolPairs(params.messages);
   for (let attempt = 0; attempt < MAX_STREAM_ATTEMPTS; attempt++) {
     let yielded = false;
     try {
@@ -523,6 +616,8 @@ export async function sendMessage(content: string): Promise<void> {
         }
       }
       if (assistantId) agentStore.updateMessage(assistantId, { content: fullContent });
+      // Same shape for every provider before the calls run or enter history.
+      toolCalls = toolCalls.map(normalizeToolCall);
 
       if (controller.signal.aborted) break;
       if (toolCalls.length === 0) {
@@ -648,7 +743,7 @@ export async function sendMessage(content: string): Promise<void> {
     ) {
       // Strip history to the system prompt, the last user turn and the last
       // tool turn. The live stores still carry the verified circuit state.
-      messages.splice(1, Math.max(0, messages.length - 5));
+      messages.splice(0, messages.length, ...minimalTranscript(messages));
       agentStore.addMessage({
         role: 'assistant',
         content: 'The provider rejected the long transcript. I compacted the history and am continuing with the last tool result.',
@@ -663,7 +758,12 @@ export async function sendMessage(content: string): Promise<void> {
       });
       return;
     }
-    const friendly = /503|429|\b50[02]\b/.test(errorMsg)
+    const retiredModel = /\b404\b/.test(errorMsg) && /(no longer available|not found|does not exist|deprecated)/i.test(errorMsg)
+      ? (/models\/([\w.-]+)/.exec(errorMsg)?.[1] ?? activeModelName())
+      : null;
+    const friendly = retiredModel
+      ? `The model "${retiredModel}" is not available for this API key (it may be retired). Open AI Provider Settings with the gear icon and choose another model from the list. ${errorMsg}`
+      : /503|429|\b50[02]\b/.test(errorMsg)
       ? `The model provider stayed busy after ${MAX_STREAM_ATTEMPTS} attempts. Send again in a moment, or choose another provider or model. ${errorMsg}`
       : /\b40[13]\b/.test(errorMsg)
         ? `The provider rejected the credentials. Check the API key in AI Provider Settings. ${errorMsg}`
@@ -685,24 +785,63 @@ export async function sendMessage(content: string): Promise<void> {
   }
 }
 
-function mergeToolCalls(existing: ToolCall[], incoming: Partial<ToolCall>[]): ToolCall[] {
+/** Stream contract for every provider: each chunk carries the latest full
+ *  state of a tool call, keyed by id. The OpenAI adapter sends the whole
+ *  argument buffer on every delta, so appending (the old behaviour) produced
+ *  invalid JSON such as `{"a"{"a":1}`; Anthropic and Gemini send each call
+ *  once. A call without an id (Ollama) gets one so it is not dropped. */
+export function mergeToolCalls(existing: ToolCall[], incoming: Partial<ToolCall>[]): ToolCall[] {
   const result = [...existing];
   for (const inc of incoming) {
-    if (inc.id) {
-      const idx = result.findIndex(r => r.id === inc.id);
-      if (idx >= 0) {
-        result[idx] = {
-          ...result[idx],
-          function: {
-            ...result[idx].function,
-            name: inc.function?.name || result[idx].function.name,
-            arguments: result[idx].function.arguments + (inc.function?.arguments || ''),
-          },
-        };
-      } else {
-        result.push(inc as ToolCall);
-      }
+    if (!inc?.function?.name && !inc?.id) continue;
+    const id = inc.id || `call_${result.length}_${Math.random().toString(36).slice(2, 10)}`;
+    const idx = inc.id ? result.findIndex((r) => r.id === inc.id) : -1;
+    const args = inc.function?.arguments;
+    if (idx >= 0) {
+      const current = result[idx];
+      result[idx] = {
+        ...current,
+        ...inc,
+        id,
+        function: {
+          name: inc.function?.name || current.function.name,
+          arguments: args === undefined || args === '' ? current.function.arguments : args,
+        },
+      } as ToolCall;
+    } else {
+      result.push({
+        ...inc,
+        id,
+        type: 'function',
+        function: { name: inc.function?.name ?? '', arguments: args ?? '' },
+      } as ToolCall);
     }
   }
   return result;
+}
+
+/** Arguments as a JSON object string. Providers send nothing for tools
+ *  without parameters (Anthropic), an object (Ollama) or a string; some
+ *  reject an empty string when the call is sent back in the history. */
+export function normalizeToolArguments(args: unknown): string {
+  if (args === undefined || args === null) return '{}';
+  if (typeof args !== 'string') {
+    try {
+      return JSON.stringify(args);
+    } catch {
+      return '{}';
+    }
+  }
+  return args.trim() ? args : '{}';
+}
+
+export function normalizeToolCall(call: ToolCall): ToolCall {
+  const args = normalizeToolArguments(call.function?.arguments as unknown);
+  if (args === call.function.arguments && call.id && call.type === 'function') return call;
+  return {
+    ...call,
+    id: call.id || `call_${Math.random().toString(36).slice(2, 12)}`,
+    type: 'function',
+    function: { ...call.function, arguments: args },
+  };
 }

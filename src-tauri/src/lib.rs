@@ -1,4 +1,5 @@
 mod commands;
+mod engine_process;
 
 use tauri::Emitter;
 
@@ -9,6 +10,7 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init())
+        .manage(engine_process::EngineProcess::default())
         .setup(|app| {
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
@@ -23,9 +25,19 @@ pub fn run() {
             commands::qemu::esp32_qemu_install,
             commands::qemu::stm32_qemu_status,
             commands::qemu::stm32_qemu_install,
+            commands::qemu::wasi_sdk_status,
+            commands::qemu::wasi_sdk_install,
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .build(tauri::generate_context!())
+        .expect("error while building tauri application")
+        .run(|app, event| {
+            // Without this the engine and every QEMU process it started keep
+            // running, with their memory, after the window is closed.
+            if let tauri::RunEvent::Exit = event {
+                use tauri::Manager;
+                app.state::<engine_process::EngineProcess>().stop();
+            }
+        });
 }
 
 fn get_target_triple() -> &'static str {
@@ -68,7 +80,14 @@ fn resolve_sidecar_path(_app: &tauri::AppHandle, name: &str) -> Option<String> {
     };
 
     for path in candidates {
-        if path.exists() {
+        // Dev builds carry empty placeholder files for the sidecars (see
+        // build.rs). Running one fails with "Permission denied" or "Exec
+        // format error", so skip them and let the engine fall back to a
+        // system install or report the tool as missing.
+        let usable = std::fs::metadata(&path)
+            .map(|meta| meta.is_file() && meta.len() > 0)
+            .unwrap_or(false);
+        if usable {
             return path.to_str().map(String::from);
         }
     }
@@ -131,6 +150,9 @@ fn spawn_python_fallback(
     use std::process::{Command, Stdio};
 
     let engine_dir_str = engine_dir.to_string_lossy().to_string();
+    let wasi_sdk = commands::qemu::wasi_sdk_path(app)
+        .map(|p| p.to_string_lossy().to_string())
+        .unwrap_or_default();
 
     // Look for virtual environment python executable
     let venv_python = if cfg!(target_os = "windows") {
@@ -145,6 +167,8 @@ fn spawn_python_fallback(
             .arg(&engine_dir_str)
             .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
             .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
+            .env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string())
+            .env("WASI_SDK", &wasi_sdk)
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
@@ -159,6 +183,8 @@ fn spawn_python_fallback(
             .arg(&engine_dir_str)
             .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
             .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
+            .env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string())
+            .env("WASI_SDK", &wasi_sdk)
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
@@ -167,6 +193,8 @@ fn spawn_python_fallback(
                     .arg(&engine_dir_str)
                     .env("ARDUINO_CLI_PATH", arduino_cli_path.as_deref().unwrap_or(""))
                     .env("QEMU_ESP32_BINARY", qemu_xtensa_path.as_deref().unwrap_or("qemu-system-xtensa"))
+                    .env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string())
+                    .env("WASI_SDK", &wasi_sdk)
                     .stdout(Stdio::piped())
                     .stderr(Stdio::piped())
                     .spawn()
@@ -178,6 +206,11 @@ fn spawn_python_fallback(
     let stdout = child.stdout.take()?;
     let stderr = child.stderr.take()?;
     let app_clone = app.clone();
+    {
+        use tauri::Manager;
+        app.state::<engine_process::EngineProcess>()
+            .set(engine_process::EngineChild::Std(child));
+    }
 
     // Read stdout in a background thread
     std::thread::spawn(move || {
@@ -242,12 +275,16 @@ async fn start_engine(app: &tauri::AppHandle) {
 
     match engine_sidecar {
         Ok(command) => {
-            let mut command = command;
+            let mut command =
+                command.env("CIRCUIT_MUSE_PARENT_PID", std::process::id().to_string());
             if let Some(ref cli_path) = arduino_cli_path {
                 command = command.env("ARDUINO_CLI_PATH", cli_path);
             }
             if let Some(ref path) = qemu_xtensa_path {
                 command = command.env("QEMU_ESP32_BINARY", path);
+            }
+            if let Some(path) = commands::qemu::wasi_sdk_path(app) {
+                command = command.env("WASI_SDK", path.to_string_lossy().to_string());
             }
             if let Some(ref path) = qemu_riscv_path {
                 if std::path::Path::new(path).exists() {
@@ -255,7 +292,10 @@ async fn start_engine(app: &tauri::AppHandle) {
                 }
             }
             match command.spawn() {
-                Ok((mut rx, _child)) => {
+                Ok((mut rx, child)) => {
+                    use tauri::Manager;
+                    app.state::<engine_process::EngineProcess>()
+                        .set(engine_process::EngineChild::Sidecar(child));
                     while let Some(event) = rx.recv().await {
                         match event {
                             CommandEvent::Stdout(line_bytes) => {

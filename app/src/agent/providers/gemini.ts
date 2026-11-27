@@ -190,16 +190,19 @@ export class GeminiProvider implements LLMProvider {
       const response = await fetch(url);
       if (!response.ok) return [];
       const data = await response.json();
-      return (data.models || [])
-        .filter((m: any) => {
-          const actions: string[] | undefined = m.supportedActions;
-          if (!actions) return true;
-          return actions.some(a => a.includes('generateContent')) &&
-            !actions.some(a => a.includes('embedContent'));
-        })
-        .map((m: any) => String(m.name || '').replace(/^models\//, ''))
-        .filter(Boolean)
-        .sort();
+      return sortGeminiModels(
+        (data.models || [])
+          .filter((m: any) => {
+            // The API field is supportedGenerationMethods; supportedActions is
+            // kept for older proxies. Without this filter embedding, image and
+            // speech models were offered as chat models.
+            const methods: string[] | undefined = m.supportedGenerationMethods ?? m.supportedActions;
+            if (methods && !methods.some((a) => a.includes('generateContent'))) return false;
+            return true;
+          })
+          .map((m: any) => String(m.name || '').replace(/^models\//, ''))
+          .filter(isGeminiChatModel),
+      );
     } catch {
       return [];
     }
@@ -221,4 +224,32 @@ export class GeminiProvider implements LLMProvider {
       providerId: this.id,
     };
   }
+}
+
+/** Chat-capable Gemini models. Image, speech, embedding and live-audio
+ *  variants cannot run the agent's tool loop. */
+export function isGeminiChatModel(name: string): boolean {
+  if (!/^gemini-/.test(name)) return false;
+  return !/(embedding|image|tts|audio|live|vision-only|aqa|robotics|computer-use)/i.test(name);
+}
+
+function geminiVersion(name: string): number {
+  const match = /^gemini-(\d+(?:\.\d+)?)/.exec(name);
+  return match ? parseFloat(match[1]) : 0;
+}
+
+/** Newest version first, stable before preview or experimental, then flash
+ *  before pro before lite. The first entry is used when the user has not
+ *  picked a model, so an alphabetical sort used to choose an old model that
+ *  Google may already have retired for new keys. */
+export function sortGeminiModels(names: string[]): string[] {
+  const unstable = (n: string) => (/(preview|exp|latest)/i.test(n) ? 1 : 0);
+  const tier = (n: string) => (/flash-lite/i.test(n) ? 2 : /flash/i.test(n) ? 0 : /pro/i.test(n) ? 1 : 3);
+  return [...new Set(names)].sort(
+    (a, b) =>
+      geminiVersion(b) - geminiVersion(a) ||
+      unstable(a) - unstable(b) ||
+      tier(a) - tier(b) ||
+      a.localeCompare(b),
+  );
 }

@@ -229,10 +229,17 @@ function filesForBoard(editor: MutableState, board: MutableState | null): Array<
 export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal): Promise<string> {
   const { name, arguments: argsStr } = toolCall.function;
   let args: Record<string, any> = {};
-  try {
-    args = JSON.parse(argsStr);
-  } catch {
-    return JSON.stringify({ error: 'Invalid tool arguments' });
+  // Tools without parameters arrive with empty arguments from some providers
+  // (Anthropic streams no input_json_delta for them). Treat that as {}.
+  if (argsStr && typeof argsStr === 'object') {
+    args = argsStr as Record<string, any>;
+  } else if (typeof argsStr === 'string' && argsStr.trim()) {
+    try {
+      const parsed = JSON.parse(argsStr);
+      args = parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+    } catch {
+      return JSON.stringify({ error: 'Invalid tool arguments: expected a JSON object' });
+    }
   }
 
   if (signal?.aborted) return abortResult();

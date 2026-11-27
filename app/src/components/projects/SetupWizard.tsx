@@ -1,337 +1,239 @@
 /**
  * Setup wizard — first-run dependency check and installation guide.
+ *
+ * Lists every tool with its state, installs the runtimes the desktop app can
+ * download by itself, and reports progress and failures inline. Errors used
+ * to go through `alert()`, which the desktop WebView can swallow, so a failed
+ * install looked like nothing had happened.
  */
 
-import { useState, useEffect } from 'react';
-import { scanDependencies, type Dependency, autoInstallQemu } from '../../services/dependencyChecker';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  scanDependencies,
+  type Dependency,
+  type QemuInstallProgress,
+  autoInstallTool,
+  canAutoInstall,
+} from '../../services/dependencyChecker';
 import { openExternal } from '../../desktop/tauriBridge';
+import './SetupWizard.css';
 
 interface SetupWizardProps {
   onClose: () => void;
+}
+
+function formatMb(bytes?: number): string {
+  if (!bytes) return '0';
+  return (bytes / (1024 * 1024)).toFixed(1);
+}
+
+function progressLabel(p: QemuInstallProgress | null): string {
+  if (!p) return 'Starting…';
+  switch (p.phase) {
+    case 'downloading':
+      return p.totalBytes
+        ? `Downloading ${formatMb(p.bytesDownloaded)} of ${formatMb(p.totalBytes)} MB`
+        : `Downloading ${formatMb(p.bytesDownloaded)} MB`;
+    case 'extracting':
+      return 'Unpacking…';
+    case 'done':
+      return 'Checking…';
+    default:
+      return 'Starting…';
+  }
 }
 
 export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
   const [deps, setDeps] = useState<Dependency[]>([]);
   const [loading, setLoading] = useState(true);
   const [installing, setInstalling] = useState<string | null>(null);
-  const [installProgress, setInstallProgress] = useState(0);
+  const [progress, setProgress] = useState<QemuInstallProgress | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    scanDependencies().then((d) => {
-      setDeps(d);
-      setLoading(false);
-    });
-  }, []);
-
-  const requiredMissing = deps.filter((d) => d.required && d.status === 'missing');
-  const optionalMissing = deps.filter((d) => !d.required && d.status === 'missing');
-  const allInstalled = requiredMissing.length === 0;
-
-  const handleAutoInstall = async (dep: Dependency) => {
-    setInstalling(dep.id);
-    setInstallProgress(0);
-
-    try {
-      if (dep.id === 'qemu-esp32') {
-        await autoInstallQemu('esp32', (pct) => setInstallProgress(pct));
-      } else if (dep.id === 'qemu-stm32') {
-        await autoInstallQemu('stm32', (pct) => setInstallProgress(pct));
-      }
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      alert(`Installation failed: ${msg}`);
-    }
-
-    // Re-scan
+  const rescan = useCallback(async () => {
     const updated = await scanDependencies();
     setDeps(updated);
+    return updated;
+  }, []);
+
+  useEffect(() => {
+    rescan().finally(() => setLoading(false));
+  }, [rescan]);
+
+  const required = deps.filter((d) => d.required);
+  const optional = deps.filter((d) => !d.required);
+  const requiredMissing = required.filter((d) => d.status === 'missing');
+  const allRequiredReady = requiredMissing.length === 0;
+
+  const handleInstall = async (dep: Dependency) => {
+    setInstalling(dep.id);
+    setProgress(null);
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next[dep.id];
+      return next;
+    });
+
+    let failure: string | null = null;
+    try {
+      await autoInstallTool(dep.id, setProgress);
+    } catch (err) {
+      failure = err instanceof Error ? err.message : String(err);
+    }
+
+    const updated = await rescan();
+    const after = updated.find((d) => d.id === dep.id);
+    if (!failure && after?.status !== 'installed') {
+      failure = 'The download finished but the runtime was not found. Try again or install it manually.';
+    }
+    if (failure) {
+      setErrors((prev) => ({ ...prev, [dep.id]: failure as string }));
+    }
     setInstalling(null);
+    setProgress(null);
+  };
+
+  const renderDep = (dep: Dependency) => {
+    const isInstalling = installing === dep.id;
+    const ready = dep.status === 'installed';
+    const error = errors[dep.id];
+    const stateLabel = isInstalling ? 'Installing' : ready ? 'Ready' : dep.required ? 'Missing' : 'Not installed';
+    const stateClass = isInstalling ? 'busy' : ready ? 'ok' : dep.required ? 'bad' : 'off';
+
+    return (
+      <li key={dep.id} className={`setup-dep${error ? ' setup-dep--error' : ''}`}>
+        <div className="setup-dep-main">
+          <div className="setup-dep-title">
+            <span className="setup-dep-name">{dep.name}</span>
+            <span className={`setup-state setup-state--${stateClass}`}>{stateLabel}</span>
+          </div>
+          <div className="setup-dep-desc">{dep.description}</div>
+          {!ready && dep.notes && !isInstalling && <div className="setup-dep-notes">{dep.notes}</div>}
+
+          {isInstalling && (
+            <div className="setup-progress" role="status" aria-live="polite">
+              <div className="setup-progress-track">
+                <div className="setup-progress-fill" style={{ width: `${progress?.progress ?? 0}%` }} />
+              </div>
+              <span className="setup-progress-label">{progressLabel(progress)}</span>
+            </div>
+          )}
+
+          {error && (
+            <div className="setup-dep-error" role="alert">
+              {error}
+            </div>
+          )}
+        </div>
+
+        {!ready && !isInstalling && (
+          <div className="setup-dep-actions">
+            {canAutoInstall(dep.id) && (
+              <button
+                className="setup-btn setup-btn--primary setup-btn--small"
+                onClick={() => handleInstall(dep)}
+                disabled={installing !== null}
+                type="button"
+              >
+                {error ? 'Retry' : 'Install'}
+              </button>
+            )}
+            {dep.installUrl && (
+              <button
+                className="setup-link"
+                onClick={() => openExternal(dep.installUrl!)}
+                type="button"
+              >
+                Install guide
+              </button>
+            )}
+          </div>
+        )}
+      </li>
+    );
   };
 
   return (
-    <div className="setup-overlay" onClick={onClose}>
-      <div className="setup-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="setup-overlay" onClick={installing ? undefined : onClose}>
+      <div
+        className="setup-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="setup-title"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="setup-header">
-          <h2>System Setup</h2>
-          <button className="setup-close" onClick={onClose} type="button">{'\u2715'}</button>
+          <div>
+            <h2 id="setup-title">System setup</h2>
+            <p className="setup-subtitle">Tools CircuitMuse uses to compile and simulate.</p>
+          </div>
+          <button className="setup-close" onClick={onClose} type="button" aria-label="Close">
+            {'✕'}
+          </button>
         </div>
 
         {loading ? (
-          <div className="setup-loading">Checking dependencies...</div>
+          <div className="setup-loading">Checking your system…</div>
         ) : (
-          <div className="setup-body">
-            {requiredMissing.length > 0 && (
-              <div className="setup-section">
-                <h3 className="setup-section-title setup-section-error">
-                  Required — {requiredMissing.length} missing
-                </h3>
-                {requiredMissing.map((dep) => (
-                  <div key={dep.id} className="setup-dep setup-dep-missing">
-                    <div className="setup-dep-info">
-                      <div className="setup-dep-name">{dep.name}</div>
-                      <div className="setup-dep-desc">{dep.description}</div>
-                      {dep.notes && <div className="setup-dep-notes">{dep.notes}</div>}
-                    </div>
-                    {dep.installUrl && (
-                      <button
-                        className="setup-dep-link-btn"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          openExternal(dep.installUrl!);
-                        }}
-                        type="button"
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#007acc',
-                          cursor: 'pointer',
-                          fontSize: '12px',
-                          padding: 0,
-                          textDecoration: 'underline',
-                        }}
-                      >
-                        Install Guide
-                      </button>
-                    )}
-                  </div>
-                ))}
+          <>
+            <div className="setup-body">
+              <div className={`setup-summary${allRequiredReady ? ' setup-summary--ok' : ''}`}>
+                {allRequiredReady
+                  ? 'Everything required is ready. Optional runtimes add more boards.'
+                  : `${requiredMissing.length} required ${requiredMissing.length === 1 ? 'tool is' : 'tools are'} missing.`}
               </div>
-            )}
 
-            {optionalMissing.length > 0 && (
-              <div className="setup-section">
-                <h3 className="setup-section-title">Optional — {optionalMissing.length} available</h3>
-                {optionalMissing.map((dep) => (
-                  <div key={dep.id} className="setup-dep setup-dep-optional">
-                    <div className="setup-dep-info">
-                      <div className="setup-dep-name">{dep.name}</div>
-                      <div className="setup-dep-desc">{dep.description}</div>
-                      {dep.notes && <div className="setup-dep-notes">{dep.notes}</div>}
-                    </div>
-                    {(dep.id === 'qemu-esp32' || dep.id === 'qemu-stm32') && installing === null && (
-                      <button
-                        className="setup-dep-install"
-                        onClick={() => handleAutoInstall(dep)}
-                        type="button"
-                      >
-                        Install
-                      </button>
-                    )}
-                    {installing === dep.id && (
-                      <div className="setup-dep-progress">
-                        <div className="setup-dep-progress-bar">
-                          <div style={{ width: `${installProgress}%` }} />
-                        </div>
-                        <span>{installProgress}%</span>
-                      </div>
-                    )}
-                    {dep.installUrl && installing !== dep.id && (
-                      <button
-                        className="setup-dep-link-btn"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          openExternal(dep.installUrl!);
-                        }}
-                        type="button"
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#007acc',
-                          cursor: 'pointer',
-                          fontSize: '12px',
-                          padding: 0,
-                          textDecoration: 'underline',
-                        }}
-                      >
-                        Manual
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
+              {required.length > 0 && (
+                <section className="setup-section">
+                  <h3 className="setup-section-title">Required</h3>
+                  <ul className="setup-list">{required.map(renderDep)}</ul>
+                </section>
+              )}
 
-            {allInstalled && (
-              <div className="setup-success">
-                All required dependencies are installed. You're ready to go!
-              </div>
-            )}
+              {optional.length > 0 && (
+                <section className="setup-section">
+                  <h3 className="setup-section-title">Optional</h3>
+                  <ul className="setup-list">{optional.map(renderDep)}</ul>
+                </section>
+              )}
+            </div>
 
             <div className="setup-actions">
-              <button className="setup-btn" onClick={onClose} type="button">
-                {allInstalled ? 'Start Building' : 'Continue Anyway'}
-              </button>
               <button
-                className="setup-btn setup-btn-secondary"
-                onClick={async () => {
-                  setLoading(true);
-                  const updated = await scanDependencies();
-                  setDeps(updated);
-                  setLoading(false);
-                }}
-                type="button"
-              >
-                Re-scan
-              </button>
-              <button
-                className="setup-btn setup-btn-secondary"
+                className="setup-btn setup-btn--ghost"
                 onClick={() => {
-                  localStorage.setItem('circuit-muse_setup_skipped', '1');
+                  try {
+                    localStorage.setItem('circuit-muse_setup_skipped', '1');
+                  } catch {
+                    // Storage can be unavailable; closing is still fine.
+                  }
                   onClose();
                 }}
                 type="button"
               >
-                Don't show again
+                Don&apos;t show again
               </button>
+              <div className="setup-actions-right">
+                <button
+                  className="setup-btn setup-btn--secondary"
+                  onClick={async () => {
+                    setLoading(true);
+                    await rescan();
+                    setLoading(false);
+                  }}
+                  disabled={installing !== null}
+                  type="button"
+                >
+                  Check again
+                </button>
+                <button className="setup-btn setup-btn--primary" onClick={onClose} type="button">
+                  {allRequiredReady ? 'Start building' : 'Continue anyway'}
+                </button>
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
-
-      <style>{`
-        .setup-overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.7);
-          z-index: 10001;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .setup-modal {
-          width: 600px;
-          max-height: 85vh;
-          background: #1e1e23;
-          border: 1px solid #2c2c33;
-          border-radius: 10px;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-        }
-        .setup-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 18px 22px;
-          border-bottom: 1px solid #2c2c33;
-        }
-        .setup-header h2 { margin: 0; font-size: 20px; }
-        .setup-close {
-          background: transparent;
-          border: none;
-          color: #888;
-          cursor: pointer;
-          font-size: 18px;
-        }
-        .setup-close:hover { color: #e6e6e9; }
-        .setup-loading {
-          padding: 60px;
-          text-align: center;
-          color: #888;
-        }
-        .setup-body {
-          flex: 1;
-          overflow-y: auto;
-          padding: 16px 22px;
-        }
-        .setup-section { margin-bottom: 20px; }
-        .setup-section-title {
-          font-size: 13px;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          color: #888;
-          margin: 0 0 10px;
-        }
-        .setup-section-error { color: #ff6b6b; }
-        .setup-dep {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 12px 14px;
-          border: 1px solid #2c2c33;
-          border-radius: 6px;
-          margin-bottom: 8px;
-        }
-        .setup-dep-missing { border-color: #5c3333; background: rgba(220, 50, 50, 0.05); }
-        .setup-dep-optional { border-color: #2c2c33; }
-        .setup-dep-info { flex: 1; }
-        .setup-dep-name { font-size: 14px; font-weight: 500; }
-        .setup-dep-desc { font-size: 12px; color: #aaa; margin-top: 2px; }
-        .setup-dep-notes { font-size: 11px; color: #666; margin-top: 4px; font-style: italic; }
-        .setup-dep-link {
-          font-size: 12px;
-          color: #007acc;
-          text-decoration: none;
-          white-space: nowrap;
-        }
-        .setup-dep-link:hover { text-decoration: underline; }
-        .setup-dep-install {
-          padding: 6px 12px;
-          background: #007acc;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          font-size: 12px;
-          cursor: pointer;
-          white-space: nowrap;
-        }
-        .setup-dep-install:hover { background: #005ea1; }
-        .setup-dep-progress {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 12px;
-          color: #888;
-        }
-        .setup-dep-progress-bar {
-          width: 80px;
-          height: 4px;
-          background: #0c0c11;
-          border-radius: 2px;
-          overflow: hidden;
-        }
-        .setup-dep-progress-bar div {
-          height: 100%;
-          background: #007acc;
-          transition: width 0.2s;
-        }
-        .setup-success {
-          padding: 12px 16px;
-          background: rgba(40, 180, 80, 0.1);
-          border: 1px solid #2a6a2a;
-          color: #66cc66;
-          border-radius: 6px;
-          font-size: 13px;
-          margin-bottom: 16px;
-        }
-        .setup-actions {
-          display: flex;
-          gap: 8px;
-          justify-content: flex-end;
-          padding-top: 12px;
-          border-top: 1px solid #2c2c33;
-        }
-        .setup-btn {
-          padding: 10px 20px;
-          border-radius: 6px;
-          font-size: 14px;
-          cursor: pointer;
-          border: none;
-          font-weight: 500;
-        }
-        .setup-btn:first-child {
-          background: #007acc;
-          color: white;
-        }
-        .setup-btn:first-child:hover { background: #005ea1; }
-        .setup-btn-secondary {
-          background: transparent;
-          color: #aaa;
-          border: 1px solid #2c2c33;
-        }
-        .setup-btn-secondary:hover { background: #2c2c33; color: #e6e6e9; }
-      `}</style>
     </div>
   );
 };

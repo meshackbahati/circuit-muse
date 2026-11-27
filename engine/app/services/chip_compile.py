@@ -66,11 +66,22 @@ class ChipCompileService:
     """Compiles a single CircuitMuse custom-chip C source file to a WASM blob."""
 
     def __init__(self) -> None:
+        self.wasi_sdk: Path | None = None
+        self.sdk_include: Path | None = None
+        self.available = False
+        self._refresh()
+
+    def _refresh(self) -> None:
+        """Look for the toolchain again. The desktop app can install wasi-sdk
+        while the engine is running, so a negative result is not cached."""
+        if self.available:
+            return
         self.wasi_sdk = _resolve_wasi_sdk()
         self.sdk_include = _resolve_sdk_include()
         self.available = self.wasi_sdk is not None and self.sdk_include is not None
 
     def status(self) -> dict:
+        self._refresh()
         return {
             "available": self.available,
             "wasi_sdk": str(self.wasi_sdk) if self.wasi_sdk else None,
@@ -81,6 +92,7 @@ class ChipCompileService:
         """Compile a single .c source into a .wasm. Returns:
             { success, wasm_base64, stdout, stderr, error, byte_size }
         """
+        self._refresh()
         if not self.available or self.wasi_sdk is None or self.sdk_include is None:
             return {
                 "success": False,
@@ -88,8 +100,8 @@ class ChipCompileService:
                 "stdout": "",
                 "stderr": "",
                 "error": (
-                    "wasi-sdk not installed on this host. The backend Docker image "
-                    "needs WASI-SDK 22+ at /opt/wasi-sdk."
+                    "wasi-sdk is not installed. In the desktop app, open Setup and "
+                    "install WASI SDK, or set WASI_SDK to an existing installation."
                 ),
                 "byte_size": 0,
             }
