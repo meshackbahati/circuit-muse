@@ -643,13 +643,20 @@ class ArduinoCLIService:
                     cmd[2] = '--fqbn'
                     cmd.insert(3, fqbn_dio)
                     cmd = cmd[:4]  # trim accidental duplicates
+                    # Extra defines go in the compiler.*.extra_flags hooks,
+                    # which the ESP32 platform leaves empty for this purpose.
+                    # Overriding build.extra_flags (as before) replaced the
+                    # platform's own value, which defines ESP32 and the loop /
+                    # event core: libraries that check `defined(ESP32)` (e.g.
+                    # Adafruit_SSD1306, which then included AVR's util/delay.h)
+                    # failed to build and LoopCore had no effect.
+                    # Adafruit_BusIO 1.17.x dropped BitOrder on ESP32 3.x;
+                    # -DBitOrder=uint8_t restores it as the type it was.
                     cmd = [cli_path_posix, "compile", "--fqbn", fqbn_dio,
                            "--build-property",
-                           "build.extra_flags=-DARDUINO_ESP32_LCGAMBOA=1",
-                           # Adafruit_BusIO 1.17.x dropped BitOrder on ESP32 3.x;
-                           # this define restores it as uint8_t (the type it was).
+                           "compiler.c.extra_flags=-DARDUINO_ESP32_LCGAMBOA=1",
                            "--build-property",
-                           "compiler.cpp.extra_flags=-DBitOrder=uint8_t",
+                           "compiler.cpp.extra_flags=-DARDUINO_ESP32_LCGAMBOA=1 -DBitOrder=uint8_t",
                            "--output-dir", build_dir.as_posix(),
                            sketch_dir.as_posix()]
                 else:
