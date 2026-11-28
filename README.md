@@ -25,6 +25,7 @@ Release packages bundle the desktop shell, the Python engine, and Arduino CLI. B
 - Sound: buzzers play while the simulation runs on any board. `tone()` plays at its real pitch (measured from the pin in simulated time), a pin held HIGH beeps like an active buzzer, `analogWrite` plays a PWM tone, and LOW is silent. A Sound button in the canvas header mutes it.
 - Instruments for voltage and current, plus interactive parts such as pushbuttons, switches, potentiometers, keypads, encoders, and I2C displays that respond to pointer input while the simulation runs.
 - A hardware flash dialog that enumerates USB ports, shows readable board names, supports custom port labels, and streams upload progress. ESP32 boards are written with esptool (merged image at 0x0); AVR, RP2040 and other boards use `arduino-cli upload`.
+- A schematic view (Schematic button next to Code / Both / Circuit) drawn automatically from the wiring, with reference designators, values and net labels, and export to KiCad: a `.kicad_sch` schematic, a `.net` netlist and a `.kicad_pro` project. All 305 gallery examples open in KiCad 10 with no ERC errors. Boards and modules get a generated symbol with the pins in use; resistors, capacitors, LEDs, diodes, switches, potentiometers, transistors and power symbols use the standard KiCad libraries.
 - A guided tour on first launch, a short "What's new" tour after updates, and Menu → Take the tour to replay it.
 - Projects in IndexedDB with autosave, explicit save, history, import, and export.
 - A docked assistant panel that can be resized, minimized, or closed, with searchable history and pasted or dropped attachments.
@@ -114,13 +115,13 @@ The full tool set is `get_circuit_state`, `list_available_boards`, `list_availab
 
 Sub-agent roles are `planner`, `circuit_designer`, `firmware_engineer`, `debugger`, and `verifier`. The assistant continues after tool results, retries provider 503 and busy responses with backoff, compacts long histories into a factual summary, and balances Gemini function call and response parts. Tool calls use native function parts, so Gemini continues executing tools instead of describing them in prose.
 
-Use Attach file in the assistant panel to add text files, images, PDFs, or DOCX documents. The assistant reads them through `list_uploaded_files` and `read_uploaded_file`. Chat history is saved with the project.
+Use Attach file in the assistant panel to add text files, images, PDFs, or DOCX documents. Images go to the model with your next message as real image input (Anthropic, OpenAI-compatible, Gemini and Ollama vision models), so a photo or sketch of a circuit can be described and rebuilt; other files are read through `list_uploaded_files` and `read_uploaded_file`. You can keep typing while the assistant works: a follow-up is shown at once and the assistant reads it at its next step. The panel can be widened by dragging its left edge, and the message list only follows new output while you are at the bottom. Chat history is saved with the project.
 
 ## Projects
 
 Projects are saved locally in IndexedDB. Autosave runs after canvas, code, or chat changes. Use the Projects button in the toolbar for the project list. `Ctrl+S` (`Cmd+S` on macOS) opens the save dialog with the current name. `Ctrl+Shift+S` opens it with a new project id. Each saved entry shows its board count, component count, chat message count, and last change date.
 
-Import accepts `.vlx`, `.zip`, and `.fzz` files. Export writes `.vlx`, `.zip`, `.json`, and `.html` files. The native `.vlx` format keeps boards, file groups, components, wires, and chat history.
+Import accepts `.vlx`, `.zip`, `.json`, and `.fzz` files. Export writes `.vlx`, `.zip`, `.json`, `.html`, and KiCad (`.kicad_sch`, `.net`, `.kicad_pro`) files. The native `.vlx` format keeps boards, file groups, components, wires with waypoints, board options, libraries, baud rate, and chat history. The `.zip` is a Wokwi project (`diagram.json`, sketch, `libraries.txt`) that also carries the full `.vlx`, so a CircuitMuse round trip loses nothing; plain Wokwi zips import from `diagram.json`. Fritzing `.fzz` import reads parts, positions, rotation, resistor and LED values, wires with bends, and the sketch; parts or pins it cannot map are listed as warnings. A file that fails to import shows an error and leaves the open project unchanged; a successful import opens as a new project.
 
 ## Components and simulation
 
