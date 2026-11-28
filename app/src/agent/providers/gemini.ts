@@ -104,7 +104,13 @@ export function buildGeminiContents(messages: Message[]): any[] {
       continue;
     }
 
-    contents.push({ role: 'user', parts: [{ text: m.content || ' ' }] });
+    contents.push({
+      role: 'user',
+      parts: [
+        ...(m.images ?? []).map((img) => ({ inlineData: { mimeType: img.mediaType, data: img.data } })),
+        { text: m.content || ' ' },
+      ],
+    });
   }
 
   flushToolParts();

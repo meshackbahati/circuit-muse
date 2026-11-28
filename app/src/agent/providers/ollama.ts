@@ -112,6 +112,14 @@ export class OllamaProvider implements LLMProvider {
  *  string the OpenAI format uses. */
 function toOllamaMessages(messages: any[]): any[] {
   return messages.map((m) => {
+    if (Array.isArray(m.content)) {
+      // Ollama takes images as a list of base64 strings next to text content.
+      const text = m.content.filter((c: any) => c.type === 'text').map((c: any) => c.text).join('\n');
+      const images = m.content
+        .filter((c: any) => c.type === 'image_url')
+        .map((c: any) => String(c.image_url?.url ?? '').replace(/^data:[^;]+;base64,/, ''));
+      return { ...m, content: text, images };
+    }
     if (!Array.isArray(m.tool_calls)) return m;
     return {
       ...m,

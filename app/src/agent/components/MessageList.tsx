@@ -17,11 +17,31 @@ export const MessageList: React.FC<MessageListProps> = ({
   toolResults = {},
 }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
+  // Follow new output only while the reader is at the bottom. Scrolling up to
+  // read pauses it; scrolling back down or sending a message resumes it.
+  const followRef = useRef(true);
+  const lastUserCount = useRef(0);
 
   useEffect(() => {
     const list = bottomRef.current?.parentElement;
-    list?.scrollTo({ top: list.scrollHeight });
-  }, [messages.length, isStreaming]);
+    if (!list) return;
+    const onScroll = () => {
+      followRef.current = list.scrollHeight - list.scrollTop - list.clientHeight < 80;
+    };
+    list.addEventListener('scroll', onScroll, { passive: true });
+    return () => list.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const userCount = messages.filter((m) => m.role === 'user').length;
+  const lastContentLength = messages.length ? messages[messages.length - 1].content.length : 0;
+
+  useEffect(() => {
+    const list = bottomRef.current?.parentElement;
+    if (!list) return;
+    if (userCount > lastUserCount.current) followRef.current = true; // the user just wrote
+    lastUserCount.current = userCount;
+    if (followRef.current) list.scrollTo({ top: list.scrollHeight });
+  }, [messages.length, isStreaming, userCount, lastContentLength]);
 
   const visibleMessages = messages.filter(
     (m) => m.role !== 'system' && m.role !== 'tool',

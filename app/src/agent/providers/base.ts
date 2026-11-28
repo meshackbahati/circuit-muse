@@ -36,6 +36,19 @@ export function buildOpenAIMessages(messages: Message[]): any[] {
       }
       continue;
     }
+    if (m.role === 'user' && m.images?.length) {
+      result.push({
+        role: 'user',
+        content: [
+          { type: 'text', text: m.content || ' ' },
+          ...m.images.map((img) => ({
+            type: 'image_url',
+            image_url: { url: `data:${img.mediaType};base64,${img.data}` },
+          })),
+        ],
+      });
+      continue;
+    }
     result.push({ role: m.role, content: m.content || '' });
   }
 

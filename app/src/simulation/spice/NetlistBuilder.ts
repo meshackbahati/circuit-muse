@@ -18,7 +18,7 @@ import { UnionFind } from './unionFind';
 import { componentToSpice } from './componentToSpice';
 import type { BuildNetlistInput, WireForSpice } from './types';
 
-const GROUND_PIN_RE = /^(gnd|vss|vee|ground|gnd\.\d+)$/i;
+export const GROUND_PIN_RE = /^(gnd|vss|vee|ground|gnd\.\d+)$/i;
 // Deliberately excludes "V+" / "V-" (which are probe terminals) and
 // "VBB" (non-standard). VCC-like pins on boards are handled via the
 // board.vccPinNames list, not this regex.

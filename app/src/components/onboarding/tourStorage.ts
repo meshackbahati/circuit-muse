@@ -2,7 +2,7 @@
 // loading the tour itself.
 export const TOUR_DONE_KEY = 'circuit-muse_tour_done';
 /** Bump when tour steps are added; earlier finishers get a "What's new" tour. */
-export const TOUR_VERSION = 2;
+export const TOUR_VERSION = 3;
 
 function seenVersion(): number {
   try {

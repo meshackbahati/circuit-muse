@@ -18,6 +18,14 @@ export interface Message {
   toolCallId?: string;
   providerId?: ProviderId;
   timestamp: number;
+  /** Images sent with a user message, as base64 without the data: prefix. */
+  images?: MessageImage[];
+}
+
+export interface MessageImage {
+  mediaType: string;
+  data: string;
+  name?: string;
 }
 
 export interface ToolCall {

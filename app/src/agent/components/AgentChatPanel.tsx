@@ -215,7 +215,6 @@ export const AgentChatPanel: React.FC = () => {
           <ChatInput
             onSend={handleSend}
             onAbort={handleAbort}
-            disabled={isStreaming}
             isStreaming={isStreaming}
           />
         </>

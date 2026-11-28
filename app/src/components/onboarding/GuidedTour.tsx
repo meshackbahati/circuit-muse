@@ -76,6 +76,12 @@ const STEPS: TourStep[] = [
     body: 'Watch the signal on any pin over time, with frequency and duty cycle readouts.',
   },
   {
+    since: 3,
+    target: '.schematic-toggle',
+    title: 'Schematic view',
+    body: 'See the circuit as a schematic, drawn automatically from your wiring. Export it to KiCad to design a PCB.',
+  },
+  {
     target: '[data-tour="sound"]',
     since: 2,
     title: 'Sound',

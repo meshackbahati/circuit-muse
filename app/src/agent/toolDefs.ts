@@ -40,6 +40,30 @@ export const AGENT_TOOLS: ToolDefinition[] = [
   {
     type: 'function',
     function: {
+      name: 'get_schematic',
+      description:
+        'Read the circuit as a schematic, the same data the Schematic view and KiCad export use: parts with reference designators (R1, LED1, U1, A1 for boards), values, which net each pin is on, unconnected pins, and nets with only one connection (usually a wiring mistake). Use it to review a design, explain the circuit in schematic terms, or check connections before compiling.',
+      parameters: { type: 'object', properties: {} },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'export_kicad',
+      description:
+        'Save the circuit for KiCad (the user gets a file download): "zip" is a KiCad project with schematic, netlist and project file; "kicad_sch" the schematic only; "net" the netlist only. Use when the user wants a schematic file or to start a PCB.',
+      parameters: {
+        type: 'object',
+        properties: {
+          format: { type: 'string', enum: ['zip', 'kicad_sch', 'net'], description: 'Default zip' },
+          project_name: { type: 'string', description: 'File name; defaults to the project name' },
+        },
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
       name: 'add_board',
       description: 'Add a microcontroller board to the canvas. Board kind must come from list_available_boards.',
       parameters: {

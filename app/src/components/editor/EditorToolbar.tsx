@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEditorStore, chipFileGroupId } from '../../store/useEditorStore';
-import { useSimulatorStore, type BoardType } from '../../store/useSimulatorStore';
+import { useSimulatorStore } from '../../store/useSimulatorStore';
 import { useElectricalStore } from '../../store/useElectricalStore';
 import { verifyCircuit, type VerificationResult } from '../../simulation/verify/circuitVerifier';
 import { buildInputFromStore } from '../../simulation/spice/storeAdapter';
@@ -28,7 +28,7 @@ import { InstallLibrariesModal } from '../simulator/InstallLibrariesModal';
 import { parseCompileResult } from '../../utils/compilationLogger';
 import type { CompilationLog, CompileTarget } from '../../utils/compilationLogger';
 import { exportToWokwiZip } from '../../utils/wokwiZip';
-import { importProjectFile, PROJECT_FILE_ACCEPT, type ProjectImportResult } from '../../utils/importProject';
+import { importProjectFile, PROJECT_FILE_ACCEPT } from '../../utils/importProject';
 import { readFirmwareFile } from '../../utils/firmwareLoader';
 import {
   trackCompileCode,
@@ -1077,17 +1077,11 @@ export const EditorToolbar = ({
 
   const handleExport = async () => {
     try {
-      const {
-        components,
-        wires,
-        boardPosition,
-        boardType: legacyBoardType,
-      } = useSimulatorStore.getState();
       const projectName =
         files.find((f) => f.name.endsWith('.ino'))?.name.replace('.ino', '') || 'circuit-muse-project';
-      await exportToWokwiZip(files, components, wires, legacyBoardType, projectName, boardPosition);
+      await exportToWokwiZip(projectName);
     } catch (err) {
-      setMessage({ type: 'error', text: 'Export failed.' });
+      setMessage({ type: 'error', text: `Export failed: ${(err as Error)?.message ?? err}` });
     }
   };
 
@@ -1239,32 +1233,18 @@ export const EditorToolbar = ({
     importInputRef.current.value = '';
     if (!file) return;
     try {
+      // Parses + validates first, then replaces the workspace (restoring the
+      // old one if loading fails), for every format.
       const result = await importProjectFile(file);
-      if (result.kind === 'vlx') {
-        // importVlxFile already wrote into the stores.
-        setMessage({ type: 'success', text: `Imported ${file.name}` });
-        return;
-      }
-      // .zip path: apply the parsed payload to the stores ourselves, then
-      // surface any missing libraries via the existing install modal.
-      // The other import kinds write to the stores inside importProjectFile.
-      const zipResult = result as Extract<ProjectImportResult, { kind: 'zip' }>;
-      const { loadFiles } = useEditorStore.getState();
-      const { setComponents, setWires, setBoardType, setBoardPosition, stopSimulation } =
-        useSimulatorStore.getState();
-      stopSimulation();
-      if (zipResult.boardType) setBoardType(zipResult.boardType as BoardType);
-      setBoardPosition(zipResult.boardPosition);
-      setComponents(zipResult.components);
-      setWires(zipResult.wires);
-      if (zipResult.files.length > 0) loadFiles(zipResult.files);
-      setMessage({ type: 'success', text: `Imported ${file.name}` });
-      if (zipResult.libraries.length > 0) {
-        setPendingLibraries(zipResult.libraries);
+      const note = result.warnings.length ? ` (${result.warnings.length} warning(s), see console)` : '';
+      if (result.warnings.length) console.warn(`[import] ${file.name}:`, result.warnings);
+      setMessage({ type: 'success', text: `Imported ${file.name}${note}` });
+      if (result.libraries.length > 0) {
+        setPendingLibraries(result.libraries);
         setInstallModalOpen(true);
       }
-    } catch (err: any) {
-      setMessage({ type: 'error', text: err?.message || 'Import failed.' });
+    } catch (err) {
+      setMessage({ type: 'error', text: (err as Error)?.message || 'Import failed.' });
     }
   };
 

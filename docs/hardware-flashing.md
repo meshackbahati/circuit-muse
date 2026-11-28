@@ -130,6 +130,10 @@ hardware loop.
 The flash endpoint is `POST /api/flash/upload` and returns server-sent events.
 The frontend client is `app/src/services/flashService.ts`, and the dialog is
 `app/src/components/simulator/FlashModal.tsx`. Board FQBNs come from
-`BOARD_KIND_FQBN` in `app/src/types/board.ts`. The engine side is responsible
-for invoking `arduino-cli upload` with the supplied port and temporary program
-file.
+`BOARD_KIND_FQBN` in `app/src/types/board.ts`. The engine writes the program to
+a temporary file and runs the uploader: the bundled esptool for ESP32 boards
+(`write-flash 0x0` for the merged bootloader, partition table and app image the
+compiler produces, or `0x10000` for a plain app image), and `arduino-cli upload`
+for the other families. It finds arduino-cli the same way the compiler does
+(the app's bundled sidecar via `ARDUINO_CLI_PATH`, then PATH, then the copy
+installed from Setup).

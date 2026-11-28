@@ -11,6 +11,8 @@ export interface UploadedFile {
   width?: number;
   height?: number;
   error?: string;
+  /** When the image was sent to the model with a chat message. */
+  sentAt?: number;
 }
 
 interface UploadsState {
@@ -19,6 +21,7 @@ interface UploadsState {
   removeFile: (id: string) => void;
   clearFiles: () => void;
   setFiles: (files: UploadedFile[]) => void;
+  markSent: (ids: string[]) => void;
 }
 
 export const useUploadsStore = create<UploadsState>((set) => ({
@@ -27,4 +30,8 @@ export const useUploadsStore = create<UploadsState>((set) => ({
   removeFile: (id) => set((s) => ({ files: s.files.filter(f => f.id !== id) })),
   clearFiles: () => set({ files: [] }),
   setFiles: (files) => set({ files }),
+  markSent: (ids) =>
+    set((s) => ({
+      files: s.files.map((f) => (ids.includes(f.id) ? { ...f, sentAt: Date.now() } : f)),
+    })),
 }));

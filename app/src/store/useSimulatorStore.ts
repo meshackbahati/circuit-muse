@@ -1301,6 +1301,9 @@ export const useSimulatorStore = create<SimulatorState>((set, get) => {
         if (b.boardOptions) patch.boardOptions = b.boardOptions;
         if (b.spiffsFiles) patch.spiffsFiles = b.spiffsFiles;
         if (b.libraries && b.libraries.length) patch.libraries = b.libraries;
+        if (typeof b.serialBaudRate === 'number' && b.serialBaudRate > 0) {
+          patch.serialBaudRate = b.serialBaudRate;
+        }
         if (Object.keys(patch).length > 0) {
           set((s) => ({
             boards: s.boards.map((bb) => (bb.id === b.id ? { ...bb, ...patch } : bb)),

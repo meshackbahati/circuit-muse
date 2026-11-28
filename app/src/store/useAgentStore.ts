@@ -76,5 +76,11 @@ export const useAgentStore = create<AgentState>()((set) => ({
         : { panelOpen: true, panelMinimized: false },
     ),
   togglePanelMinimized: () => set((state) => ({ panelMinimized: !state.panelMinimized })),
-  setPanelWidth: (width) => set({ panelWidth: Math.max(300, Math.min(800, width)) }),
+  setPanelWidth: (width) => {
+    // Up to the window width minus 360 px of workspace (was a fixed 800 px,
+    // so the panel could not be widened on large screens).
+    const viewport = typeof window !== 'undefined' ? window.innerWidth : 1600;
+    const max = Math.max(300, viewport - 360);
+    set({ panelWidth: Math.max(300, Math.min(max, width)) });
+  },
 }));

@@ -158,7 +158,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onAbort, disabled,
           onChange={(event) => setInput(event.target.value)}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
-          placeholder="Ask CircuitMuse to build a circuit. Paste or drop files here."
+          placeholder={
+            isStreaming
+              ? 'Add a follow-up. The agent reads it at its next step.'
+              : 'Ask CircuitMuse to build a circuit. Paste or drop files here.'
+          }
           disabled={disabled}
           rows={1}
           className="agent-chat-textarea"
@@ -187,19 +191,20 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onAbort, disabled,
               Enter to send. Paste or drop files.
             </span>
           </div>
-          {isStreaming && onAbort ? (
+          {isStreaming && onAbort && (
             <button className="agent-stop-btn" onClick={onAbort} type="button" title="Stop the agent">
               <StopIcon />
               Stop
             </button>
-          ) : (
+          )}
+          {(!isStreaming || input.trim().length > 0) && (
             <button
               className="agent-send-btn"
               onClick={handleSubmit}
               disabled={!canSend}
               type="button"
-              title="Send message"
-              aria-label="Send message"
+              title={isStreaming ? 'Send a follow-up to the working agent' : 'Send message'}
+              aria-label={isStreaming ? 'Send follow-up' : 'Send message'}
             >
               <SendIcon />
             </button>
