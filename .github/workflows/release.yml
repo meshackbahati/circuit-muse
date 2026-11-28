@@ -414,7 +414,7 @@ jobs:
           cat > arch-build/PKGBUILD << 'PKGEOF'
           # Maintainer: Meshack Bahati Ouma <meshackbahati@users.noreply.github.com>
           pkgname=circuit-muse
-          pkgver=1.2.2
+          pkgver=1.2.3
           pkgrel=1
           pkgdesc="AI-powered circuit simulator and embedded board emulator"
           arch=('x86_64')
@@ -475,6 +475,10 @@ jobs:
 
             ### Changes in this release
 
+            - The Linux AppImage and .deb are built on Ubuntu 22.04, so bundled libraries and the engine use glibc 2.35 rather than the newer glibc of ubuntu-latest. This addresses the AppImage catalog failure that reported GLIBC_2.38 and newer symbols missing on older systems.
+            - A schematic view shows the circuit from the netlist with automatic layout, and KiCad export writes a netlist that passes ERC. The agent has tools for schematic inspection and export, and the tour includes the new view.
+            - Project export and import now round-trip safely across vlx, json, zip, fzz and html. Chat images are sent to the model as image input, and follow-up messages can be sent while the agent works. The agent panel can be widened freely.
+            - ESP32 platform defines are preserved when compiling, and the agent loop guard now counts a repeat only when nothing changed. The agent also states what the ESP32 emulator cannot simulate.
             - The engine now binds and holds its port before uvicorn starts, so two app instances cannot collide. The shell supervises it and restarts it with backoff if it exits, and a second launch focuses the existing window. Compiles wait for a restarting engine instead of reporting a network error.
             - Buzzers now sound on every board. Pitch is measured from timed pin transitions, so `tone()` works on AVR, RP2040 and ESP32 families, held HIGH drives an active buzzer, and LOW is silent. A Sound button in the canvas header mutes the shared audio context, and the setting is remembered.
             - The guided tour adds Sound and Flash a real board steps. Returning users get a short What's new tour containing only the new steps.
@@ -554,7 +558,7 @@ jobs:
             |----------|--------|-------|
             | **Linux (x86_64)** | AppImage | Universal, works on Ubuntu, Debian, Fedora, Arch, and derivatives |
             | **Linux (x86_64)** | .deb | Debian/Ubuntu/Mint |
-            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.2.2-1-x86_64.pkg.tar.zst` |
+            | **Linux (x86_64)** | .pkg.tar.zst | Arch Linux / Manjaro, install with `pacman -U circuit-muse-1.2.3-1-x86_64.pkg.tar.zst` |
             | **Windows (x86_64)** | .exe (NSIS) | Windows 10/11 installer |
             | **Windows (x86_64)** | .msi | Windows MSI installer |
             | **macOS (ARM64)** | .dmg | Apple Silicon (M1/M2/M3/M4) |
