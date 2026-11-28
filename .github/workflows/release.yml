@@ -11,7 +11,12 @@ permissions:
 jobs:
   build-linux:
     name: Build Linux
-    runs-on: ubuntu-latest
+    # The AppImage bundles libraries from the build machine, and the
+    # PyInstaller engine links the build machine's glibc. Build on the oldest
+    # supported runner so both run on Ubuntu 22.04 and every newer distro.
+    # On ubuntu-latest the bundled libraries needed GLIBC_2.38-2.43 and the
+    # AppImage exited at once on older systems (AppImage catalog test failed).
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
 
@@ -28,8 +33,8 @@ jobs:
             src-tauri/target
             ~/.cargo/registry
             ~/.cargo/git
-          key: rust-linux-${{ hashFiles('src-tauri/Cargo.lock') }}
-          restore-keys: rust-linux-
+          key: rust-linux-2204-${{ hashFiles('src-tauri/Cargo.lock') }}
+          restore-keys: rust-linux-2204-
 
       - name: Install system dependencies
         run: |
