@@ -109,11 +109,22 @@ function boardOutput(sim: MutableState, boardId?: string): {
 /** Wait for serial output to grow, or for the observation window to expire.
  *  A run followed immediately by get_simulation_output used to read an empty
  *  buffer because the sketch had not reached Serial.begin yet. */
+/** Empty one board's serial buffer (and the flat legacy copy when active). */
+function clearBoardSerial(store: MutableState, boardId: string): void {
+  store.setState((s: MutableState) => ({
+    boards: s.boards.map((b: MutableState) => (b.id === boardId ? { ...b, serialOutput: '' } : b)),
+    ...(s.activeBoardId === boardId ? { serialOutput: '' } : {}),
+  }));
+}
+
 async function observeBoard(
   sim: MutableState,
   boardId: string | undefined,
   waitMs: number,
   signal?: AbortSignal,
+  /** Keep watching at least this long (an ESP32 prints its ROM boot banner
+   *  well before the sketch's own first line). */
+  minMs = 0,
 ): Promise<{ serial_output: string; serial_length: number; running: boolean; crash_board_id: string | null; waited_ms: number }> {
   const start = Date.now();
   const initial = boardOutput(sim, boardId).serial_length;
@@ -123,7 +134,11 @@ async function observeBoard(
       while (Date.now() - start < budget) {
         const state = getSimulatorSnapshot();
         const current = boardOutput(state, boardId);
-        if (current.serial_length > initial && /[\r\n]/.test(current.serial_output)) break;
+        if (
+          Date.now() - start >= minMs &&
+          current.serial_length > initial &&
+          /[\r\n]/.test(current.serial_output)
+        ) break;
         await sleep(Math.min(120, Math.max(20, budget - (Date.now() - start))), signal);
       }
     } catch (error) {
@@ -232,20 +247,59 @@ function filesForBoard(editor: MutableState, board: MutableState | null): Array<
  *  simulated (HC-SR04 echo always LOW, I2C OLED never answering). */
 async function simulatorLimitations(): Promise<Record<string, unknown> | null> {
   const { useSimulatorStore, getEsp32Bridge } = await import('../store/useSimulatorStore');
+  const state = useSimulatorStore.getState();
   const out: Record<string, string[]> = {};
-  for (const b of useSimulatorStore.getState().boards as MutableState[]) {
+  for (const b of state.boards as MutableState[]) {
     const limits = getEsp32Bridge(b.id)?.limitations;
     if (limits && limits.length) out[b.id] = limits;
   }
   if (Object.keys(out).length === 0) return null;
+  const affected = affectedParts(state, new Set(Object.keys(out)));
   return {
     boards: out,
+    ...(affected.length ? { affected_parts: affected } : {}),
     instruction:
-      'These are limits of the simulator, not bugs in the sketch or wiring. Do not rewire, ' +
-      're-power or rewrite firmware to work around them. Tell the user plainly which parts ' +
+      'These are limits of the simulator, not bugs in the sketch or wiring. The parts in ' +
+      'affected_parts will read 0, LOW or stay blank here no matter how they are wired, ' +
+      'powered or coded. Do not rewire, re-power, change their properties or rewrite firmware ' +
+      'to make them work, and do not debug their readings. Tell the user plainly which parts ' +
       'cannot be tested in this simulation, verify everything else (serial output, LEDs, ' +
-      'logic), and note the code should work on real hardware.',
+      'buzzers, logic), and note the code should work on real hardware.',
   };
+}
+
+const BUS_PINS = /^(SDA|SCL|MOSI|MISO|SCK|SCLK|CLK|CS|SS|DIN|DC|RST|RES)$/i;
+const INPUT_PARTS = /hc-?sr04|ultrasonic|dht|pir|button|switch|potentiometer|pot\b|ldr|photo|keypad|encoder|joystick|sensor|mpu|bmp|bme|ds18|rtc|ds1307|ds3231/i;
+const INPUT_PINS = /^(ECHO|OUT|DATA|DOUT|SIG|AO|DO)$/i;
+
+/** Parts wired to a limited board that the emulator cannot exercise. */
+function affectedParts(
+  state: MutableState,
+  limitedBoards: Set<string>,
+): Array<{ id: string; type: string; board_id: string; reason: string }> {
+  const result: Array<{ id: string; type: string; board_id: string; reason: string }> = [];
+  for (const c of state.components as MutableState[]) {
+    const type = String(c.metadataId ?? '');
+    let boardId: string | null = null;
+    let bus = false;
+    let input = false;
+    for (const w of state.wires as MutableState[]) {
+      const mine = w.start.componentId === c.id ? w.start : w.end.componentId === c.id ? w.end : null;
+      if (!mine) continue;
+      const other = mine === w.start ? w.end : w.start;
+      if (!limitedBoards.has(other.componentId)) continue;
+      boardId = other.componentId;
+      if (BUS_PINS.test(String(mine.pinName))) bus = true;
+      if (INPUT_PINS.test(String(mine.pinName))) input = true;
+    }
+    if (!boardId) continue;
+    if (bus) {
+      result.push({ id: c.id, type, board_id: boardId, reason: 'I2C/SPI device: never answers in this simulator' });
+    } else if (input || INPUT_PARTS.test(type)) {
+      result.push({ id: c.id, type, board_id: boardId, reason: 'signal into the ESP32: always reads LOW / 0 in this simulator' });
+    }
+  }
+  return result;
 }
 
 export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal): Promise<string> {
@@ -675,28 +729,44 @@ export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal):
         sim.updateBoard(board.id, { compiledProgram: null });
         return JSON.stringify({ success: false, board_id: board.id, error: 'Compiler produced no program image' });
       }
-      sim.compileBoardProgram(board.id, program);
+      // A board that is still running keeps printing the OLD firmware's
+      // output, and the agent used to read that as the result of its new
+      // build. Stop it, clear its serial, load the new image, then restart.
+      const wasRunning = Boolean(
+        useSimulatorStore.getState().boards.find((b: MutableState) => b.id === board.id)?.running,
+      );
+      if (wasRunning) {
+        useSimulatorStore.getState().stopBoard(board.id);
+        if (isEsp32Kind(board.boardKind)) await sleep(600, signal);
+      }
+      clearBoardSerial(useSimulatorStore, board.id);
+      useSimulatorStore.getState().compileBoardProgram(board.id, program);
 
       let run: MutableState = null;
-      if (args.run_after === true) {
+      if (args.run_after === true || wasRunning) {
         useSimulatorStore.getState().startBoard(board.id);
-        const observed = await observeBoard(
+        run = await observeBoard(
           useSimulatorStore.getState(),
           board.id,
-          Number(args.observe_ms ?? 1500),
+          Number(args.observe_ms ?? (isEsp32Kind(board.boardKind) ? 4000 : 1500)),
           signal,
+          isEsp32Kind(board.boardKind) ? 2500 : 0,
         );
-        run = observed;
       }
+      const limitations = run ? await simulatorLimitations() : null;
 
       return JSON.stringify({
         success: true,
         board_id: board.id,
         board_kind: board.boardKind,
-        message: 'Compilation successful; firmware loaded into the board',
+        message: wasRunning
+          ? 'Compilation successful. The board was running, so it was restarted with the new firmware and its serial output cleared; everything in run.serial_output comes from this build.'
+          : 'Compilation successful; firmware loaded into the board',
+        restarted_with_new_firmware: wasRunning,
         wiring_complete: audit.complete,
         stdout_tail: tail(result.stdout, 2000),
         ...(run ? { run } : {}),
+        ...(limitations ? { simulator_limitations: limitations } : {}),
       });
     }
     case 'compile_all_code': {
@@ -897,7 +967,9 @@ export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal):
     case 'get_circuit_state': {
       const sim = useSimulatorStore.getState();
       const audit = currentAudit(sim);
+      const limitations = await simulatorLimitations();
       return JSON.stringify({
+        ...(limitations ? { simulator_limitations: limitations } : {}),
         active_board_id: sim.activeBoardId,
         wiring_complete: audit.complete,
         wiring_issue_count: audit.blocking_issues.length,
