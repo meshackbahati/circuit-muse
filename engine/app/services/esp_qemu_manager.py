@@ -300,6 +300,24 @@ class EspQemuManager:
 
         inst.running = True
         await inst.emit('system', {'event': 'booting'})
+        # Tell the app (and its agent) what this emulator does not cover, so
+        # a sketch that waits for a sensor is not debugged endlessly.
+        await inst.emit('system', {
+            'event': 'capabilities',
+            'emulator': 'qemu-espressif',
+            'gpio_outputs': True,
+            'gpio_inputs': False,
+            'i2c_devices': False,
+            'limitations': [
+                'Signals into the ESP32 are not simulated: sensor outputs '
+                '(HC-SR04 echo, DHT data, PIR), buttons and switches always '
+                'read LOW, so pulseIn() returns 0 and digitalRead() returns LOW.',
+                'I2C and SPI devices (OLED displays, sensors, RTC) do not '
+                'respond, so the ESP32 logs errors such as '
+                'i2c_master_transmit failed / ESP_ERR_INVALID_RESPONSE.',
+                'Serial output, pin outputs (LEDs, buzzers) and timing work.',
+            ],
+        })
 
         # Give QEMU a moment to open its TCP socket
         await asyncio.sleep(1.0)

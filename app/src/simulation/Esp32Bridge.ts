@@ -134,6 +134,8 @@ export class Esp32Bridge {
    * is invisible on any practical sweep.
    */
   onPinChangeWithTime: ((gpioPin: number, state: boolean, timeMs: number) => void) | null = null;
+  /** What the running emulator does not simulate (reported at boot). */
+  limitations: string[] = [];
   onPinDir: ((gpioPin: number, dir: 0 | 1) => void) | null = null;
   /**
    * Override baud rate used to space synthesized UART bits.  QEMU
@@ -511,6 +513,10 @@ export class Esp32Bridge {
           console.log(`[Esp32Bridge:${this.boardId}] system event: ${evt}`, msg.data);
           if (evt === 'crash') {
             this.onCrash?.(msg.data);
+          }
+          if (evt === 'capabilities') {
+            const limits = (msg.data as { limitations?: unknown }).limitations;
+            this.limitations = Array.isArray(limits) ? limits.map(String) : [];
           }
           this.onSystemEvent?.(evt, msg.data);
           break;

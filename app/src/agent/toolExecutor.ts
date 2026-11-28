@@ -226,6 +226,28 @@ function filesForBoard(editor: MutableState, board: MutableState | null): Array<
   return (source ?? []).map((f: MutableState) => ({ name: f.name, content: f.content }));
 }
 
+/** What the running ESP32 emulators cannot simulate, per board, with an
+ *  instruction for the agent. Without this the agent spent many turns
+ *  rewiring and rewriting a sketch whose sensor input simply is not
+ *  simulated (HC-SR04 echo always LOW, I2C OLED never answering). */
+async function simulatorLimitations(): Promise<Record<string, unknown> | null> {
+  const { useSimulatorStore, getEsp32Bridge } = await import('../store/useSimulatorStore');
+  const out: Record<string, string[]> = {};
+  for (const b of useSimulatorStore.getState().boards as MutableState[]) {
+    const limits = getEsp32Bridge(b.id)?.limitations;
+    if (limits && limits.length) out[b.id] = limits;
+  }
+  if (Object.keys(out).length === 0) return null;
+  return {
+    boards: out,
+    instruction:
+      'These are limits of the simulator, not bugs in the sketch or wiring. Do not rewire, ' +
+      're-power or rewrite firmware to work around them. Tell the user plainly which parts ' +
+      'cannot be tested in this simulation, verify everything else (serial output, LEDs, ' +
+      'logic), and note the code should work on real hardware.',
+  };
+}
+
 export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal): Promise<string> {
   const { name, arguments: argsStr } = toolCall.function;
   let args: Record<string, any> = {};
@@ -721,6 +743,7 @@ export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal):
         });
       }
       const first = runs[0];
+      const limitations = await simulatorLimitations();
       return JSON.stringify({
         success: true,
         board_id: runAll ? null : board.id,
@@ -734,6 +757,7 @@ export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal):
         message: first?.serial_output
           ? 'Simulation running; serial output captured'
           : 'Simulation started; no serial output yet',
+        ...(limitations ? { simulator_limitations: limitations } : {}),
       });
     }
     case 'stop_simulation': {
@@ -777,6 +801,7 @@ export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal):
         serial_length: b.serialOutput?.length ?? 0,
         serial_output: tail(b.serialOutput, 4000),
       }));
+      const limitations = await simulatorLimitations();
       return JSON.stringify({
         active_board_id: sim.activeBoardId,
         serial_output: observed.serial_output,
@@ -786,6 +811,7 @@ export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal):
         baud_rate: sim.serialBaudRate,
         crash_board_id: observed.crash_board_id,
         boards,
+        ...(limitations ? { simulator_limitations: limitations } : {}),
       });
     }
     case 'verify_circuit': {
