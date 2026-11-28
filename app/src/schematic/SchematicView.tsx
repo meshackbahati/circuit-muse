@@ -9,7 +9,7 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSimulatorStore } from '../store/useSimulatorStore';
 import { useWorkspaceStore } from '../store/useWorkspaceStore';
 import { buildSchematicNetlist } from './netlist';
-import { layoutSchematic, pinEnd, type SchematicLayout, type PlacedPart, type PlacedLabel, type PlacedPower } from './layout';
+import { layoutSchematic, netWires, pinEnd, type SchematicLayout, type PlacedPart, type PlacedLabel, type PlacedPower } from './layout';
 import { CHAR_W, pinInnerEnd, powerSymbol, type FieldPos, type SymShape, type SymbolDef } from './symbols';
 import { schematicInputFrom, schematicSignature } from './fromStore';
 import './SchematicView.css';
@@ -36,6 +36,7 @@ export default function SchematicView({ onClose }: Props) {
   }, [signature]);
 
   const [selectedNet, setSelectedNet] = useState<string | null>(null);
+  const [showWires, setShowWires] = useState(true);
   const [exporting, setExporting] = useState(false);
 
   const exportAs = async (format: 'kicad_sch' | 'net' | 'zip') => {
@@ -67,6 +68,17 @@ export default function SchematicView({ onClose }: Props) {
           </button>
         )}
         <span className="schematic-spacer" />
+        {!empty && (
+          <button
+            type="button"
+            className={`schematic-btn${showWires ? ' schematic-btn--on' : ''}`}
+            onClick={() => setShowWires((v) => !v)}
+            aria-pressed={showWires}
+            title={showWires ? 'Show net labels instead of wires' : 'Draw wires between connected pins'}
+          >
+            {showWires ? 'Wires' : 'Labels'}
+          </button>
+        )}
         <button type="button" className="schematic-btn" disabled={empty || exporting} onClick={() => exportAs('kicad_sch')}>
           .kicad_sch
         </button>
@@ -86,7 +98,7 @@ export default function SchematicView({ onClose }: Props) {
           <p className="schematic-empty-body">Add a board or parts on the circuit canvas and wire them up. The schematic follows every change.</p>
         </div>
       ) : (
-        <PanZoomSvg layout={layout} selectedNet={selectedNet} onSelectNet={setSelectedNet} />
+        <PanZoomSvg layout={layout} selectedNet={selectedNet} onSelectNet={setSelectedNet} showWires={showWires} />
       )}
       {netlist.warnings.length > 0 && !empty && (
         <div className="schematic-warnings" title={netlist.warnings.join('\n')}>
@@ -109,17 +121,22 @@ interface ViewBox {
 function fitBox(layout: SchematicLayout): ViewBox {
   const pad = 10;
   const b = layout.bounds;
-  return { x: b.x1 - pad, y: b.y1 - pad, w: b.x2 - b.x1 + pad * 2, h: b.y2 - b.y1 + pad * 2 };
+  // Include the wire channels drawn below the parts.
+  let bottom = b.y2;
+  for (const w of netWires(layout)) for (const [, y] of w.points) bottom = Math.max(bottom, y);
+  return { x: b.x1 - pad, y: b.y1 - pad, w: b.x2 - b.x1 + pad * 2, h: bottom - b.y1 + pad * 2 };
 }
 
 function PanZoomSvg({
   layout,
   selectedNet,
   onSelectNet,
+  showWires,
 }: {
   layout: SchematicLayout;
   selectedNet: string | null;
   onSelectNet: (net: string | null) => void;
+  showWires: boolean;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [vb, setVb] = useState<ViewBox>(() => fitBox(layout));
@@ -205,7 +222,7 @@ function PanZoomSvg({
         onPointerUp={onPointerUp}
         onPointerCancel={() => (drag.current = null)}
       >
-        <SchematicDrawing layout={layout} selectedNet={selectedNet} />
+        <SchematicDrawing layout={layout} selectedNet={selectedNet} showWires={showWires} />
       </svg>
       <div className="schematic-zoom">
         <button type="button" onClick={() => zoomBy(0.8)} aria-label="Zoom in">
@@ -225,18 +242,60 @@ function PanZoomSvg({
 // ── Drawing ───────────────────────────────────────────────────────────────
 
 /** The schematic itself (SVG group), without pan/zoom chrome. */
-export const SchematicDrawing = memo(function SchematicDrawing({ layout, selectedNet }: { layout: SchematicLayout; selectedNet: string | null }) {
+export const SchematicDrawing = memo(function SchematicDrawing({
+  layout,
+  selectedNet,
+  showWires = true,
+}: {
+  layout: SchematicLayout;
+  selectedNet: string | null;
+  showWires?: boolean;
+}) {
+  const wires = useMemo(() => (showWires ? netWires(layout) : []), [layout, showWires]);
+  // With wires drawn, a net's name tags are redundant (pin names show on the
+  // parts); single-pin nets keep their label.
+  const wiredNets = useMemo(() => new Set(wires.map((w) => w.net)), [wires]);
   return (
     <g className="sch-drawing">
+      {wires.map((w, i) => (
+        <polyline
+          key={`n${i}`}
+          className={`sch-net-wire${w.net === selectedNet ? ' sch-net-wire--active' : ''}`}
+          data-net={w.net}
+          points={w.points.map((p) => p.join(',')).join(' ')}
+        />
+      ))}
+      {/* Junction dots where drops meet a channel, and the net name on it. */}
+      {wires
+        .filter((w) => !w.trunk)
+        .map((w, i) => {
+          const [x, y] = w.points[w.points.length - 1];
+          return <circle key={`j${i}`} className="sch-junction" cx={x} cy={y} r={0.4} data-net={w.net} />;
+        })}
+      {wires
+        .filter((w) => w.trunk)
+        .map((w, i) => (
+          <text
+            key={`t${i}`}
+            className="sch-net-name"
+            x={w.points[0][0] + 0.8}
+            y={w.points[0][1] - 0.6}
+            data-net={w.net}
+          >
+            {w.net}
+          </text>
+        ))}
       {layout.stubs.map((s, i) => (
         <line key={`w${i}`} className="sch-wire" x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} />
       ))}
       {layout.parts.map((pp) => (
         <PartGlyph key={pp.part.ref} pp={pp} />
       ))}
-      {layout.labels.map((l, i) => (
-        <NetLabel key={`l${i}`} label={l} active={l.net === selectedNet} />
-      ))}
+      {layout.labels
+        .filter((l) => !wiredNets.has(l.net))
+        .map((l, i) => (
+          <NetLabel key={`l${i}`} label={l} active={l.net === selectedNet} />
+        ))}
       {layout.powers.map((p, i) => (
         <PowerGlyph key={`p${i}`} power={p} active={p.net === selectedNet} />
       ))}

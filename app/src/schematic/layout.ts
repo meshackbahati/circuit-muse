@@ -299,3 +299,67 @@ export function layoutSchematic(netlist: SchematicNetlist): SchematicLayout {
 function offset(r: Rect, x: number, y: number): Rect {
   return { x1: r.x1 + x, y1: r.y1 + y, x2: r.x2 + x, y2: r.y2 + y };
 }
+
+export interface NetWire {
+  net: string;
+  /** Orthogonal polyline through these points (sheet mm). */
+  points: [number, number][];
+  /** The horizontal channel that joins a net's drops. */
+  trunk?: boolean;
+}
+
+/**
+ * Wires for the in-app view. Each signal net gets its own horizontal channel
+ * below all parts; every pin of the net steps outward from its part, drops
+ * to that channel, and the channel joins them. Routes never cross a part,
+ * unlike a straight line between pins on opposite sides of two parts (which
+ * looked like a connection to the wrong pin). The KiCad export keeps net
+ * labels, the KiCad convention. Power nets keep their GND/+5V/+3V3 symbols.
+ */
+export function netWires(layout: SchematicLayout): NetWire[] {
+  const byNet = new Map<string, PlacedLabel[]>();
+  for (const l of layout.labels) {
+    const list = byNet.get(l.net) ?? [];
+    list.push(l);
+    byNet.set(l.net, list);
+  }
+  const wires: NetWire[] = [];
+  let channel = 0;
+  const base = layout.bounds.y2 + 2 * PITCH;
+  for (const [net, labels] of byNet) {
+    if (labels.length < 2) continue;
+    const y = round(base + channel * PITCH);
+    channel++;
+    const drops: number[] = [];
+    for (const l of labels) {
+      const [dx, dy] = dirOf(l.angle);
+      const points: [number, number][] = [[l.x, l.y]];
+      // Leave the pin one grid unit in its direction (side pins step out;
+      // top pins step up so the route can go around their own part).
+      let cx = round(l.x + dx * PITCH);
+      let cy = round(l.y + dy * PITCH);
+      points.push([cx, cy]);
+      const side = dx !== 0 ? dx : -1;
+      // Walk down to the channel; when a part is in the way, stop just above
+      // it (or where we are, if already level with it), step sideways past
+      // it, and continue. Sideways moves happen between rows of parts.
+      for (let guard = 0; guard < 16; guard++) {
+        const blockers = layout.parts.filter(
+          (pp) => cx > pp.bounds.x1 - 1e-6 && cx < pp.bounds.x2 + 1e-6 && pp.bounds.y2 > cy + 1e-6 && pp.bounds.y1 < y,
+        );
+        if (blockers.length === 0) break;
+        const hit = blockers.reduce((a, b2) => (b2.bounds.y1 < a.bounds.y1 ? b2 : a));
+        const stopY = round(Math.max(cy, hit.bounds.y1 - PITCH));
+        if (stopY !== cy) points.push([cx, stopY]);
+        cy = stopY;
+        cx = round((side > 0 ? hit.bounds.x2 : hit.bounds.x1) + side * PITCH);
+        points.push([cx, cy]);
+      }
+      points.push([cx, y]);
+      wires.push({ net, points });
+      drops.push(cx);
+    }
+    wires.push({ net, points: [[Math.min(...drops), y], [Math.max(...drops), y]], trunk: true });
+  }
+  return wires;
+}

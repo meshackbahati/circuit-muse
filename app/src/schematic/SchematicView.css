@@ -235,3 +235,34 @@
   stroke: #6e6e73;
   stroke-width: 0.1524;
 }
+
+/* Wires drawn between connected pins (in-app view only). */
+.sch-net-wire {
+  fill: none;
+  stroke: #4ade80;
+  stroke-width: 0.2;
+  stroke-linejoin: round;
+}
+
+.sch-net-wire--active {
+  stroke: #93c5fd;
+  stroke-width: 0.35;
+}
+
+/* Part boxes hide wires routed underneath them. */
+rect.sch-body {
+  fill: #1f1f24;
+}
+
+.schematic-btn--on {
+  border-color: var(--color-action-primary);
+}
+
+.sch-junction {
+  fill: #4ade80;
+}
+
+.sch-net-name {
+  font: 1.3px var(--font-mono, monospace);
+  fill: #86efac;
+}
