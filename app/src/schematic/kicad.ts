@@ -18,7 +18,7 @@
  */
 import { buildSchematicNetlist, type SchematicInput, type SchematicNetlist, type SchPart } from './netlist';
 import { layoutSchematic, type SchematicLayout } from './layout';
-import { powerSymbol, type FieldPos, type PowerNet, type SymShape, type SymbolDef } from './symbols';
+import { powerSymbol, pwrFlagSymbol, type FieldPos, type PowerNet, type SymShape, type SymbolDef } from './symbols';
 
 export interface KicadExportOptions {
   /** Project / file base name (used in the title block and instance paths). */
@@ -195,6 +195,7 @@ export function generateKicadSchematic(
   for (const pn of ['GND', '+5V', '+3V3'] as PowerNet[]) {
     if (powerNets.has(pn)) out.push(libSymbolSexpr(powerSymbol(pn)));
   }
+  if (powerNets.size > 0) out.push(libSymbolSexpr(pwrFlagSymbol()));
   out.push('  )');
 
   // Wire stubs.
@@ -237,6 +238,34 @@ export function generateKicadSchematic(
       ),
     );
   }
+  // One PWR_FLAG per power net, on the pin of that net's first power
+  // symbol (coincident pins connect), so KiCad's ERC treats the rail as
+  // driven instead of reporting "power pin not driven".
+  const flagged = new Set<PowerNet>();
+  const flag = pwrFlagSymbol();
+  layout.powers.forEach((p) => {
+    if (flagged.has(p.net)) return;
+    flagged.add(p.net);
+    const ref = `#FLG${String(flagged.size).padStart(2, '0')}`;
+    out.push(
+      instanceSexpr(
+        flag.libId,
+        p.x,
+        p.y,
+        0,
+        ref,
+        'PWR_FLAG',
+        '',
+        flag.description,
+        flag,
+        true,
+        project,
+        rootUuid,
+        uuidFrom(`flg:${p.net}`),
+        ['1'],
+      ),
+    );
+  });
   // Power symbols.
   layout.powers.forEach((p, i) => {
     const ref = `#PWR${String(i + 1).padStart(2, '0')}`;

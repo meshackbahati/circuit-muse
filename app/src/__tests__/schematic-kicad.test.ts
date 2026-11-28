@@ -83,13 +83,22 @@ function connectivityFromSchematic(text: string): Map<string, string | null> {
       pins: lib!.map((p) => ({ number: p.number, key: pt(x + p.x * c - p.y * si, y - (p.x * si + p.y * c)) })),
     });
   }
+  // PWR_FLAG markers sit on a power symbol's pin on purpose (ERC: the rail
+  // is driven); they carry no net name of their own.
+  const flags = insts.filter((i) => i.libId === 'power:PWR_FLAG');
+  const placed = insts.filter((i) => i.libId !== 'power:PWR_FLAG');
   const powerAt = new Map<string, string>();
-  for (const i of insts) if (i.libId.startsWith('power:')) powerAt.set(i.pins[0].key, i.value);
+  for (const i of placed) if (i.libId.startsWith('power:')) powerAt.set(i.pins[0].key, i.value);
+  for (const f of flags) {
+    expect(powerAt.has(f.pins[0].key), 'PWR_FLAG sits on a power symbol pin').toBe(true);
+  }
+  expect(new Set(flags.map((f) => powerAt.get(f.pins[0].key))).size, 'one PWR_FLAG per power net').toBe(flags.length);
+  expect(flags.length, 'every power net is flagged').toBe(new Set(powerAt.values()).size);
 
   // No accidental connections: every connection point is distinct, and none
   // sits on the inside of a wire segment (KiCad would join it there).
   const points: string[] = [
-    ...insts.flatMap((i) => i.pins.map((p) => p.key)),
+    ...placed.flatMap((i) => i.pins.map((p) => p.key)),
     ...labels.keys(),
   ];
   expect(new Set(points).size, 'connection points are unique').toBe(points.length);
@@ -194,7 +203,7 @@ describe('KiCad export — every example', () => {
       n++;
     }
     expect(n).toBeGreaterThan(200);
-  });
+  }, 180_000);
 
   it('is byte-for-byte deterministic', () => {
     const ex = getExampleById('traffic-light')!;

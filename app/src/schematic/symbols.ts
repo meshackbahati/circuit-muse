@@ -534,3 +534,23 @@ export function powerSymbol(net: PowerNet): SymbolDef {
 export function powerBaseAngle(net: PowerNet): PinAngle {
   return net === 'GND' ? 270 : 90;
 }
+
+/** KiCad's power:PWR_FLAG. Marks a power net as driven so ERC does not
+ *  report "power pin not driven" for GND and the supply rails. */
+export function pwrFlagSymbol(): SymbolDef {
+  return def({
+    libId: 'power:PWR_FLAG',
+    refPrefix: '#FLG',
+    description: 'Special symbol for telling ERC where power comes from',
+    shapes: [
+      { kind: 'poly', pts: [[0, 0], [0, 1.27], [-1.016, 1.905], [0, 2.54], [1.016, 1.905], [0, 1.27]], width: 0 },
+    ],
+    pins: [{ number: '1', name: 'pwr', x: 0, y: 0, angle: 90, length: 0, type: 'power_out' }],
+    showPinNames: false,
+    showPinNumbers: false,
+    pinNameOffset: 0,
+    power: true,
+    refField: { x: 0, y: 1.905, angle: 0, hide: true },
+    valueField: { x: 0, y: 3.81, angle: 0 },
+  });
+}
