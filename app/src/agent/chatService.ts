@@ -24,6 +24,9 @@ const MAX_PROVIDER_MESSAGES = 20;
 const MAX_TOOL_RESULT_CHARS = 16_000;
 const COMPACTION_PREFIX = 'Earlier session summary:';
 let activeRequest: AbortController | null = null;
+/** Messages the user sent while a turn was running. The loop reads them at
+ *  its next step, so the agent can take a correction without being stopped. */
+let pendingFollowUps: Message[] = [];
 
 /** Turn tool results into a short factual summary. The live stores remain the
  *  source of truth for the completion gate, so this only preserves context. */
@@ -302,6 +305,7 @@ async function* streamWithRetry(
 }
 
 export function abortMessage(): void {
+  pendingFollowUps = [];
   const controller = activeRequest;
   if (!controller) return;
   controller.abort();
@@ -405,7 +409,19 @@ async function completionNudge(progress: RunProgress): Promise<string | null> {
   return null;
 }
 
-export async function sendMessage(content: string): Promise<void> {
+export async function sendMessage(content: string, opts: { resume?: boolean } = {}): Promise<void> {
+  if (!opts.resume && activeRequest && !activeRequest.signal.aborted && useAgentStore.getState().isStreaming) {
+    // The agent is working: show the message now and hand it to the loop at
+    // its next step instead of aborting the turn.
+    const { useUploadsStore } = await import('../store/useUploadsStore');
+    const extra = await imagesForNextMessage(useUploadsStore.getState().files);
+    if (extra.ids.length) useUploadsStore.getState().markSent(extra.ids);
+    const queued = extra.images.length ? { role: 'user' as const, content, images: extra.images } : { role: 'user' as const, content };
+    useAgentStore.getState().addMessage(queued);
+    pendingFollowUps.push({ id: crypto.randomUUID(), timestamp: Date.now(), ...queued });
+    return;
+  }
+  pendingFollowUps = [];
   // A stale request should never leave the Stop button controlling two chats.
   activeRequest?.abort();
   const controller = new AbortController();
@@ -413,14 +429,16 @@ export async function sendMessage(content: string): Promise<void> {
   const agentStore = useAgentStore.getState();
   const providerStore = useProviderStore.getState();
 
-  // Images in the upload tray that the model has not seen yet go with this
-  // message as real image input.
-  const { useUploadsStore } = await import('../store/useUploadsStore');
-  const pending = await imagesForNextMessage(useUploadsStore.getState().files);
-  if (pending.ids.length) useUploadsStore.getState().markSent(pending.ids);
-  agentStore.addMessage(
-    pending.images.length ? { role: 'user', content, images: pending.images } : { role: 'user', content },
-  );
+  if (!opts.resume) {
+    // Images in the upload tray that the model has not seen yet go with this
+    // message as real image input.
+    const { useUploadsStore } = await import('../store/useUploadsStore');
+    const pending = await imagesForNextMessage(useUploadsStore.getState().files);
+    if (pending.ids.length) useUploadsStore.getState().markSent(pending.ids);
+    agentStore.addMessage(
+      pending.images.length ? { role: 'user', content, images: pending.images } : { role: 'user', content },
+    );
+  }
 
   const config = providerStore.providers[providerStore.activeProviderId];
   const provider = createProvider(config);
@@ -615,6 +633,14 @@ export async function sendMessage(content: string): Promise<void> {
     while (iterations < MAX_TOOL_ITERATIONS) {
       iterations++;
       if (controller.signal.aborted || activeRequest !== controller) break;
+      if (pendingFollowUps.length) {
+        messages.push(...pendingFollowUps.map((m) => ({
+          ...m,
+          content: `Follow-up from the user while you were working: ${m.content}`,
+        })));
+        pendingFollowUps = [];
+        nudges = 0;
+      }
       compactMessages(messages);
       let fullContent = '';
       let toolCalls: ToolCall[] = [];
@@ -649,6 +675,8 @@ export async function sendMessage(content: string): Promise<void> {
 
       if (controller.signal.aborted) break;
       if (toolCalls.length === 0) {
+        // The user wrote while this step ran: answer that before stopping.
+        if (pendingFollowUps.length) continue;
         // A model can stop mid-build. Check the live stores before accepting
         // that stop, and send it back with the exact missing stage.
         if (verificationNudges < MAX_VERIFICATION_NUDGES) {
@@ -812,6 +840,12 @@ export async function sendMessage(content: string): Promise<void> {
       activeRequest = null;
       agentStore.setStreaming(false);
       agentStore.setExecutingTool(null);
+      // Follow-ups that arrived after the loop's last step: they are already
+      // in the chat history, so start a new turn without adding them again.
+      if (pendingFollowUps.length && !controller.signal.aborted) {
+        pendingFollowUps = [];
+        setTimeout(() => void sendMessage('', { resume: true }), 0);
+      }
     }
   }
 }
