@@ -107,7 +107,7 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onClose }) => {
     const depProgress = progress[dep.id] ?? null;
     const ready = dep.status === 'installed';
     const error = errors[dep.id];
-    const stateLabel = isInstalling ? 'Installing' : ready ? 'Ready' : dep.required ? 'Missing' : 'Not installed';
+    const stateLabel = isInstalling ? 'Installing' : ready ? 'Ready' : dep.required ? 'Missing' : 'Optional';
     const stateClass = isInstalling ? 'busy' : ready ? 'ok' : dep.required ? 'bad' : 'off';
 
     return (

@@ -123,7 +123,7 @@ export const Esp32QemuPrompt = () => {
         }}
       >
         <h2 style={{ margin: '0 0 8px', fontSize: 18 }}>
-          ESP32 support not installed
+          ESP32 setup required
         </h2>
         <p style={{ margin: '0 0 16px', color: '#aaa', lineHeight: 1.5 }}>
           ESP32 boards need an additional QEMU runtime (~42 MB). One-time download.

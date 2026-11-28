@@ -475,6 +475,8 @@ jobs:
 
             ### Changes in this release
 
+            - The setup wizard now labels optional runtimes as Optional and the QEMU prompts say setup required. This avoids the AppImage catalog screenshot check reading a normal setup screen as an error message.
+            - The agent names ESP32 parts it cannot verify and restarts the board after a compile, so firmware changes are not tested against an old image.
             - The Linux AppImage and .deb are built on Ubuntu 22.04, so bundled libraries and the engine use glibc 2.35 rather than the newer glibc of ubuntu-latest. This addresses the AppImage catalog failure that reported GLIBC_2.38 and newer symbols missing on older systems.
             - A schematic view shows the circuit from the netlist with automatic layout, and KiCad export writes a netlist that passes ERC. The agent has tools for schematic inspection and export, and the tour includes the new view.
             - Project export and import now round-trip safely across vlx, json, zip, fzz and html. Chat images are sent to the model as image input, and follow-up messages can be sent while the agent works. The agent panel can be widened freely.

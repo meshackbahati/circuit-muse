@@ -128,7 +128,7 @@ export const QemuDownloadPrompt = ({ config }: { config: QemuRuntimeConfig }) =>
         }}
       >
         <h2 style={{ margin: '0 0 8px', fontSize: 18 }}>
-          {config.label} support not installed
+          {config.label} setup required
         </h2>
         <p style={{ margin: '0 0 16px', color: '#aaa', lineHeight: 1.5 }}>
           {config.label} boards need an additional QEMU runtime ({config.sizeNote}).
