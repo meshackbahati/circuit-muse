@@ -1120,7 +1120,16 @@ export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal):
         name: f.name,
         kind: f.kind,
         text: f.text ?? null,
-        ...(includeData && f.dataUrl ? { data_url: f.dataUrl } : {}),
+        // Images reach the model as image input with the user's message, not
+        // as base64 text (unreadable to the model and truncated).
+        ...(includeData && f.dataUrl && f.kind !== 'image' ? { data_url: f.dataUrl } : {}),
+        ...(f.kind === 'image'
+          ? {
+              note: f.sentAt
+                ? 'This image was sent to you with a user message; look at it there.'
+                : 'This image is attached and will be sent with the next user message.',
+            }
+          : {}),
         width: f.width ?? null,
         height: f.height ?? null,
         error: f.error ?? null,

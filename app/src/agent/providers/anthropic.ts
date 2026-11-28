@@ -54,6 +54,19 @@ export class AnthropicProvider implements LLMProvider {
         mappedMessages.push({ role: 'assistant', content: contentBlocks });
         continue;
       }
+      if (m.role === 'user' && m.images?.length) {
+        mappedMessages.push({
+          role: 'user',
+          content: [
+            ...m.images.map((img) => ({
+              type: 'image',
+              source: { type: 'base64', media_type: img.mediaType, data: img.data },
+            })),
+            { type: 'text', text: m.content || ' ' },
+          ],
+        });
+        continue;
+      }
       mappedMessages.push({ role: m.role, content: m.content || ' ' });
     }
 

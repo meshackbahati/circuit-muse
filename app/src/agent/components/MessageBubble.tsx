@@ -25,6 +25,19 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, toolResul
         {isUser ? 'You' : 'CircuitMuse'}
       </div>
       <div className="agent-message-content">
+        {message.images && message.images.length > 0 && (
+          <div className="agent-message-images">
+            {message.images.map((img, i) => (
+              <img
+                key={i}
+                src={`data:${img.mediaType};base64,${img.data}`}
+                alt={img.name ?? `Image ${i + 1}`}
+                title={img.name}
+                loading="lazy"
+              />
+            ))}
+          </div>
+        )}
         {message.content && streaming && (
           <div className="agent-stream-text">{message.content}</div>
         )}

@@ -8,6 +8,7 @@ import { AGENT_TOOLS } from './toolDefs';
 import { SYSTEM_PROMPT } from './systemPrompt';
 import { executeToolCall } from './toolExecutor';
 import { auditWiring } from './wiringAudit';
+import { imagesForNextMessage, limitImages } from './messageImages';
 
 // A full build-and-verify cycle takes more than a few tool rounds.
 const MAX_TOOL_ITERATIONS = 30;
@@ -412,7 +413,14 @@ export async function sendMessage(content: string): Promise<void> {
   const agentStore = useAgentStore.getState();
   const providerStore = useProviderStore.getState();
 
-  agentStore.addMessage({ role: 'user', content });
+  // Images in the upload tray that the model has not seen yet go with this
+  // message as real image input.
+  const { useUploadsStore } = await import('../store/useUploadsStore');
+  const pending = await imagesForNextMessage(useUploadsStore.getState().files);
+  if (pending.ids.length) useUploadsStore.getState().markSent(pending.ids);
+  agentStore.addMessage(
+    pending.images.length ? { role: 'user', content, images: pending.images } : { role: 'user', content },
+  );
 
   const config = providerStore.providers[providerStore.activeProviderId];
   const provider = createProvider(config);
@@ -562,7 +570,7 @@ export async function sendMessage(content: string): Promise<void> {
         .map((m) => ({ ...m, content: compactContent(m.content) }));
       messages = [
         { id: 'system', role: 'system', content: SYSTEM_PROMPT, timestamp: Date.now() },
-        ...history,
+        ...limitImages(history),
       ];
       compactMessages(messages);
     }
