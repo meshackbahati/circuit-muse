@@ -25,10 +25,10 @@ Release packages bundle the desktop shell, the Python engine, and Arduino CLI. B
 - Sound: buzzers play while the simulation runs on any board. `tone()` plays at its real pitch (measured from the pin in simulated time), a pin held HIGH beeps like an active buzzer, `analogWrite` plays a PWM tone, and LOW is silent. A Sound button in the canvas header mutes it.
 - Instruments for voltage and current, plus interactive parts such as pushbuttons, switches, potentiometers, keypads, encoders, and I2C displays that respond to pointer input while the simulation runs.
 - A hardware flash dialog that enumerates USB ports, shows readable board names, supports custom port labels, and streams upload progress. ESP32 boards are written with esptool (merged image at 0x0); AVR, RP2040 and other boards use `arduino-cli upload`.
-- A schematic view (Schematic button next to Code / Both / Circuit) drawn automatically from the wiring, with reference designators, values and net labels, and export to KiCad: a `.kicad_sch` schematic, a `.net` netlist and a `.kicad_pro` project. All 305 gallery examples open in KiCad 10 with no ERC errors. Boards and modules get a generated symbol with the pins in use; resistors, capacitors, LEDs, diodes, switches, potentiometers, transistors and power symbols use the standard KiCad libraries.
+- A schematic view (Schematic button next to Code / Both / Circuit) drawn automatically from the wiring, with reference designators, values, wires between connected pins (or net labels, with the Wires / Labels toggle) and power symbols, and export to KiCad: a `.kicad_sch` schematic, a `.net` netlist and a `.kicad_pro` project. All 305 gallery examples open in KiCad 10 with no ERC errors. Boards and modules get a generated symbol with the pins in use; resistors, capacitors, LEDs, diodes, switches, potentiometers, transistors and power symbols use the standard KiCad libraries.
 - A guided tour on first launch, a short "What's new" tour after updates, and Menu → Take the tour to replay it.
 - Projects in IndexedDB with autosave, explicit save, history, import, and export.
-- A docked assistant panel that can be resized, minimized, or closed, with searchable history and pasted or dropped attachments.
+- A docked assistant panel that can be resized, minimized, or closed, with searchable history, pasted or dropped attachments, image input for vision models, and follow-up messages while it works.
 
 ## Supported boards
 
@@ -58,11 +58,11 @@ Download a package from [GitHub Releases](https://github.com/meshackbahati/circu
 | Fedora | `.rpm` | `sudo dnf install ./circuit-muse-*.rpm` |
 | Any Linux | `.AppImage` | `chmod +x CircuitMuse_*.AppImage && ./CircuitMuse_*.AppImage` |
 
-The app opens straight into the editor. A setup dialog appears on first launch and reports which tools are present. The setup wizard detects the host operating system and shows the matching command for manual installs. The Install button downloads the matching build for that system: Arduino CLI from Arduino (when no bundled or system copy works), ESP32 QEMU from Espressif (Xtensa for ESP32/S3 and RISC-V for ESP32-C3), STM32 QEMU Arm from xPack, and the WASI SDK from WebAssembly. Tools install into the app's data folder for the current user, so no administrator rights are needed; Arduino board cores go to the standard `~/.arduino15` folder shared with Arduino IDE. The first compile for a board family installs its core (about 800 MB for ESP32) and shows progress in the output console. It shows download progress inline and reports failures without leaving the dialog. Each Install button works independently, so several runtimes can download at the same time.
+The app opens straight into the editor. A setup dialog appears on first launch and reports which tools are present. It detects the host operating system and shows the matching command for manual installs. The Install button downloads the matching build for that system: Arduino CLI from Arduino (when no bundled or system copy works), ESP32 QEMU from Espressif (Xtensa for ESP32/S3 and RISC-V for ESP32-C3), STM32 QEMU Arm from xPack, and the WASI SDK from WebAssembly. Download progress shows inline, failures are reported without leaving the dialog, and several runtimes can download at the same time. Tools install into the app's data folder for the current user, so no administrator rights are needed; Arduino board cores go to the standard `~/.arduino15` folder shared with Arduino IDE. The first compile for a board family installs its core (about 800 MB for ESP32) and shows progress in the output console.
 
-A guided tour starts after first-run setup and can be replayed from the menu. It walks through the canvas, file groups, compile, run, serial monitor, oscilloscope, and assistant in fourteen steps. Steps whose target is not visible are skipped, and the tour supports keyboard and screen-reader navigation.
+A guided tour starts after first-run setup and can be replayed from the menu. It walks through the views, files, code editor, board picker, parts, canvas, compile, run, serial monitor, oscilloscope, schematic view, sound, flashing, assistant, and menu. Steps whose target is not visible are skipped, and the tour supports keyboard and screen-reader navigation. After an update, people who already took the tour see a short "What's new" with only the new steps.
 
-Closing the window stops the engine and its QEMU or worker processes. The engine also watches the desktop process and exits if the app crashes.
+Closing the window stops the engine and its QEMU or worker processes. The engine also watches the desktop process and exits if the app crashes. Opening the app a second time focuses the window that is already open.
 
 The AppImage needs WebKit2GTK 4.1 and GTK 3 on the host. Software rendering is selected automatically when no GPU render device is found. To force it:
 
@@ -106,12 +106,14 @@ The assistant works in stages: inspect, build and wire, write code, verify elect
 - `compile_code` and `compile_all_code` accept `run_after` and `observe_ms`, which combine compile, start, and serial capture in one call. `get_simulation_output` accepts `wait_ms`.
 - `verify_circuit` runs before the run to catch shorts and overcurrent.
 - A completion gate in the chat service inspects the live stores before accepting a final answer. It sends the assistant back to wiring, compiling, running, or reading serial output when a stage is missing, and it refuses stale firmware after a source change.
-- Repeated inspection tools are limited to three calls per turn, which prevents a compile and verify loop.
+- The same inspection tool (compile, check, verify, read output) called three times without any change to the code, wiring or libraries in between stops the turn, which prevents a compile and verify loop. A change in between starts a new count, so compile, fix, compile works.
+- When the simulator cannot exercise part of a circuit (for example inputs into an ESP32 running on the stock QEMU), `run_simulation` and `get_simulation_output` report `simulator_limitations` and the assistant tells the user instead of trying to work around it.
+- `get_schematic` returns the circuit as a schematic (reference designators, nets, unconnected pins, nets with a single connection) for design review, and `export_kicad` saves the KiCad project, schematic or netlist.
 - Stop aborts the provider stream and any running tool, and clears the streaming state on the same click. Synthetic tool results keep the transcript valid after an abort.
 
 The ordering, hard gates, abort path, and provider handling are described in [docs/agent-workflow.md](docs/agent-workflow.md).
 
-The full tool set is `get_circuit_state`, `list_available_boards`, `list_available_components`, `get_pin_names`, `add_board`, `remove_board`, `add_component`, `build_circuit`, `remove_component`, `set_component_property`, `wire_components`, `remove_wire`, `check_wiring`, `verify_circuit`, `update_code`, `read_code`, `compile_code`, `compile_all_code`, `get_compile_output`, `run_simulation`, `stop_simulation`, `reset_simulation`, `get_simulation_output`, `check_environment`, `install_firmware`, `install_library`, `search_libraries`, `get_installed_libraries`, `set_board_language`, `list_uploaded_files`, `read_uploaded_file`, and `delegate_to_subagent`.
+The full tool set is `get_circuit_state`, `list_available_boards`, `list_available_components`, `get_pin_names`, `add_board`, `remove_board`, `add_component`, `build_circuit`, `remove_component`, `set_component_property`, `wire_components`, `remove_wire`, `check_wiring`, `verify_circuit`, `update_code`, `read_code`, `compile_code`, `compile_all_code`, `get_compile_output`, `get_schematic`, `export_kicad`, `run_simulation`, `stop_simulation`, `reset_simulation`, `get_simulation_output`, `check_environment`, `install_firmware`, `install_library`, `search_libraries`, `get_installed_libraries`, `set_board_language`, `list_uploaded_files`, `read_uploaded_file`, and `delegate_to_subagent`.
 
 Sub-agent roles are `planner`, `circuit_designer`, `firmware_engineer`, `debugger`, and `verifier`. The assistant continues after tool results, retries provider 503 and busy responses with backoff, compacts long histories into a factual summary, and balances Gemini function call and response parts. Tool calls use native function parts, so Gemini continues executing tools instead of describing them in prose.
 
@@ -127,13 +129,13 @@ Import accepts `.vlx`, `.zip`, `.json`, and `.fzz` files. Export writes `.vlx`, 
 
 The catalogue has more than 150 parts, including resistors, capacitors, inductors, transistors, LEDs, NeoPixels, servos, relays, pushbuttons, sensors, displays, logic gates, and communication chips. Wires snap to named pins and support waypoints so they can route around parts.
 
-Analog simulation uses ngspice compiled to WebAssembly. Digital and mixed circuits run with the board simulator and shared pin state. Digital inputs follow SPICE-solved net voltages, so buttons, direct 5 V wires, and dividers reach `digitalRead()`. Parts wired to a non-active board drive that board's pin registers. Simulation frames are time-sliced and serial buffers, transcripts, and sample buffers are bounded, which keeps the app usable on a 4 GB laptop.
+Analog simulation uses ngspice compiled to WebAssembly. Digital and mixed circuits run with the board simulator and shared pin state. Digital inputs follow SPICE-solved net voltages, so buttons, direct 5 V wires, and dividers reach `digitalRead()`. Parts wired to a non-active board drive that board's pin registers. Simulation frames are time-sliced and serial buffers, transcripts, and sample buffers are bounded. Heavy panels (assistant, oscilloscope, schematic, examples, dialogs) load only when opened, so the app stays usable on laptops with 2 GB of RAM.
 
 ## Hardware flashing
 
 A compiled board can be flashed to a physical USB board. The lightning button in the canvas header and the board context menu both open the flash dialog. The dialog enumerates serial ports through the Tauri `list_serial_ports` command, which returns the vendor id, product id, manufacturer, product, and serial number. Ports are shown with readable names such as `Arduino Uno (/dev/ttyACM0)` or `CH340 USB serial (COM3)`, and a `Name this port` control stores a custom label locally.
 
-The frontend posts the compiled program to `/api/flash/upload` on the local engine with the port, FQBN, and program format. The engine writes a temporary file with the extension the uploader expects and runs `arduino-cli upload -p PORT -i FILE --fqbn FQBN -v`. Arduino CLI selects the uploader from the FQBN: avrdude for AVR, picotool for RP2040, and esptool for ESP32. Upload output streams back as server-sent events and drives the progress bar. One flash runs per port at a time. The web build cannot enumerate local serial ports, so flash controls are hidden outside the desktop shell.
+The frontend posts the compiled program to `/api/flash/upload` on the local engine with the port, FQBN, and program format. The engine writes a temporary file with the extension the uploader expects. ESP32 boards are written with the bundled esptool (`write-flash 0x0` for the merged image the compiler produces); other boards use `arduino-cli upload -p PORT -i FILE --fqbn FQBN -v`, which selects avrdude for AVR and picotool for RP2040. Upload output streams back as server-sent events and drives the progress bar. One flash runs per port at a time. The web build cannot enumerate local serial ports, so flash controls are hidden outside the desktop shell.
 
 On Linux, ports appear as `/dev/ttyACM*` or `/dev/ttyUSB*` and the user must belong to the serial group: `dialout` on Debian, Ubuntu and Fedora, `uucp` on Arch. On macOS, ports appear as `/dev/cu.usbmodem*` or `/dev/cu.usbserial*` and adapter chips need a vendor driver. On Windows, ports appear as `COM*` and a vendor driver is required. See [docs/hardware-flashing.md](docs/hardware-flashing.md) for details and limitations.
 
@@ -183,7 +185,7 @@ cd src-tauri && cargo tauri build
 
 Packages appear under `src-tauri/target/release/bundle/`. For development, run `cargo tauri dev` from `src-tauri`.
 
-The sidecar files under `src-tauri/binaries/` are empty placeholders in git. Both `build-engine.sh` and the release workflow populate them before Tauri bundles the app. Restore them with `git checkout -- src-tauri/binaries/...` after a local install. The AppImage step may fail locally when `linuxdeploy` cannot run; the CI release jobs produce the published AppImage.
+`src-tauri/binaries/` is ignored by git. `download-deps.sh` and `build-engine.sh` (and the release workflow) put the real sidecars there; for development builds without them, `build.rs` creates empty placeholders and the app falls back to a system arduino-cli or the Python engine in `engine/`. The AppImage step may fail locally when `linuxdeploy` cannot run; the CI release jobs produce the published AppImage.
 
 ## Project layout
 
@@ -200,7 +202,7 @@ circuit-muse/
 
 White screen on Linux: force software rendering with the environment variable shown in the install section.
 
-Arduino CLI missing: run `bash scripts/download-deps.sh` or open the setup dialog.
+Arduino CLI missing: open Setup from the menu and click Install next to Arduino CLI (no admin rights needed), or run `bash scripts/download-deps.sh` in a source checkout.
 
 Engine not starting: check that Python 3.12 or 3.13 is available, then run `pip install -r requirements.txt` inside `engine/` and restart the app.
 
@@ -208,13 +210,13 @@ Engine port: the engine takes the first free port from 8001 to 8100, or any free
 
 "Could not reach the CircuitMuse engine": the engine is starting or restarting. Compiles wait up to 20 seconds for it. Opening the app a second time focuses the existing window instead of starting another engine.
 
-ESP32 in the open-source build: without the optional `libqemu-xtensa`, ESP32 boards run on Espressif's QEMU. Serial output and pin outputs (LEDs, buzzers) work; Arduino's `loop()` is compiled to run on core 0 for simulation because the second core's timer does not tick in that QEMU build. Pin inputs (buttons into the ESP32) need `libqemu-xtensa`.
+ESP32 in the open-source build: without the optional `libqemu-xtensa`, ESP32 boards run on Espressif's QEMU. Serial output, timing and pin outputs (LEDs, buzzers) work; Arduino's `loop()` is compiled to run on core 0 for simulation because the second core's timer does not tick in that QEMU build. Signals into the ESP32 (buttons, HC-SR04 echo, DHT data) always read LOW, and I2C/SPI devices such as OLED displays do not answer, so `pulseIn()` returns 0 and the ESP32 logs `i2c_master_transmit failed`. These parts need `libqemu-xtensa` or real hardware; the assistant is told about this limit. AVR and RP2040 boards simulate inputs and I2C devices in the app.
 
 QEMU boards not running: ESP32, STM32, and Raspberry Pi targets need their QEMU runtime. Install it from the board prompt or the setup dialog. The STM32 button installs the xPack QEMU Arm runtime, which supplies `qemu-system-arm` for the host platform. STM32 board emulation inside the app still requires the `libqemu-arm` shared library when that path is selected. See [docs/runtime-setup.md](docs/runtime-setup.md) for the per-platform details.
 
 No serial ports in the flash dialog: attach a board by USB. On Linux add the user to `dialout` (`uucp` on Arch) and log out and back in. On macOS and Windows install the adapter driver.
 
-Assistant returns HTTP 400 with `exception parsing response`: start a new chat. Long or corrupted transcripts with mismatched tool turns can be rejected; the app compacts history and retries, but a fresh chat is the reliable recovery. If the error occurs again in a fresh chat with Gemini, confirm that the configured model supports function calling.
+Assistant returns HTTP 400: the app keeps every tool result paired with its tool call (including after history compaction) and retries once with a shorter transcript. If a provider still rejects a request, start a new chat. With Gemini, confirm that the configured model supports function calling; if no model is selected, the newest stable chat model from the provider's list is used.
 
 ## License
 

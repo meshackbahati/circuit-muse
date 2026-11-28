@@ -544,6 +544,48 @@ export async function executeToolCall(toolCall: ToolCall, signal?: AbortSignal):
       sim.recordRemoveWire(args.wire_id);
       return JSON.stringify({ success: true, wire_id: args.wire_id });
     }
+    case 'get_schematic': {
+      const { buildSchematicNetlist } = await import('../schematic/netlist');
+      const { schematicInputFromStore } = await import('../schematic/fromStore');
+      const nl = buildSchematicNetlist(schematicInputFromStore());
+      const parts = nl.parts.map((p) => ({
+        ref: p.ref,
+        canvas_id: p.sourceId,
+        type: p.type,
+        value: p.value,
+        kind: p.kind,
+        pins: p.pins.filter((pin) => pin.net).map((pin) => ({ pin: pin.name || pin.number, net: pin.net })),
+        unconnected_pins: p.pins.filter((pin) => !pin.net).map((pin) => pin.name || pin.number),
+      }));
+      const nets = nl.nets.map((n) => ({
+        name: n.name,
+        power: n.power,
+        nodes: n.nodes.map((node) => `${node.ref}.${node.pinName || node.pin}`),
+      }));
+      const singleConnectionNets = nets.filter((n) => n.nodes.length === 1 && !n.power).map((n) => n.name);
+      return JSON.stringify({
+        parts,
+        nets,
+        single_connection_nets: singleConnectionNets,
+        warnings: nl.warnings,
+        note: 'The user sees this in the Schematic view (button next to Code / Both / Circuit) and can export it to KiCad.',
+      });
+    }
+    case 'export_kicad': {
+      const format = ['zip', 'kicad_sch', 'net'].includes(String(args.format)) ? String(args.format) : 'zip';
+      const { useWorkspaceStore } = await import('../store/useWorkspaceStore');
+      const name = String(args.project_name || useWorkspaceStore.getState().projectName || 'circuit-muse-project');
+      try {
+        const { downloadKicad } = await import('../schematic/download');
+        await downloadKicad(format as 'zip' | 'kicad_sch' | 'net', name);
+        const { kicadSafeName } = await import('../schematic/kicad');
+        const safe = kicadSafeName(name);
+        const file = format === 'zip' ? `${safe}-kicad.zip` : `${safe}.${format}`;
+        return JSON.stringify({ success: true, format, file, message: `Saved ${file} for KiCad.` });
+      } catch (error) {
+        return JSON.stringify({ success: false, error: error instanceof Error ? error.message : String(error) });
+      }
+    }
     case 'get_pin_names': {
       let pins: Array<{ name: string; signals: string[] }> = [];
       if (typeof document !== 'undefined') {
